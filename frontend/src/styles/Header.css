@@ -1,0 +1,46 @@
+header {
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5vh 2vw;
+  color: #3C95A9;
+  font-size: 1.2rem;
+}
+
+header>img {
+  width: 90px;
+  height: 30px;
+}
+
+header .linkContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  flex: 1;
+  max-width: 70vw;
+}
+
+
+header .actionContainer .actionIcon {
+  width: 2.4rem;
+  height: 2.4rem;
+}
+
+header .actionContainer .actionIcon:last-child {
+  margin-left: 1.5vw;
+}
+
+header a{
+  text-decoration: none;
+  color: #3C95A9;
+}
+
+header a:hover{
+  color: #F3B801;
+}
+
+header a.active{
+  color: #F3B801;
+}

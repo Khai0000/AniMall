@@ -1,0 +1,9 @@
+.body {
+    flex: 1;
+    overflow-y: auto; /* Enable vertical scrolling for content exceeding viewport height */
+    background-color: red;
+}
+
+.spacer {
+    height: 90vh; 
+}
