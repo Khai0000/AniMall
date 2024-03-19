@@ -1,10 +1,12 @@
+import ForumHome from '../ginkhai/pages/ForumHome'
+
 function Community(){
 
     return(
         <div>
-            <h1>This is Community page</h1>
+            <ForumHome/>
         </div>
-    )
+    );
 }
 
 export default Community;

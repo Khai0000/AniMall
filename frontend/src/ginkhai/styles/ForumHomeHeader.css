@@ -1,0 +1,87 @@
+.forumFilterContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.inputContainer{
+    display: flex;
+    align-items: center;
+    flex: 1;
+    max-width: 34vw;
+    position: relative;
+    margin-right: 6%;
+}
+
+input[type="text"] {
+    border: 1px solid #3C95A9;
+    border-radius: 15px;
+    filter: drop-shadow(0 2px 4px rgba(60, 149, 169, 0.5));
+    font-size: 1.125rem;
+    padding: 3px 40px 3px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.10);
+    transition: border-color 0.3s ease, filter 0.3s ease;
+    flex: 1;
+    position: relative;
+}
+
+input[type="text"]:focus {
+    border-color: #f4b701;
+    --shadow-color: rgba(244, 183, 1, 0.5);
+    filter: drop-shadow(0 2px 4px rgba(244, 183, 1, 0.5));
+    outline: none;
+}
+
+
+.searchIcon {
+    position: absolute;
+    right: 10px;
+    color: #3C95A9;
+    z-index: 1;
+}
+
+.inputContainer:focus-within .searchIcon {
+    color: #f4b701; /* Change color to yellow when input container is focused */
+}
+
+.searchIcon:hover{
+    cursor: pointer;
+}
+
+
+.forumButtonContainer {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    max-width: 50vw;
+    justify-content: space-evenly;
+}
+
+.forumButtonContainer button {
+    padding: 3px 32px;
+    border-radius: 20px;
+    border: 3px solid #3C95A9;
+    color: #3C95A9;
+    background-color: transparent;
+    font-size: 1.125rem;
+    height: fit-content;
+    transition: padding 0.3s ease;
+}
+
+.forumButtonContainer button:hover{
+    color: #f4b701;
+    border: 3px solid #f4b701;
+    cursor: pointer;
+}
+
+.forumButtonContainer .selected{
+    background-color: #3C95A9;
+    border: 3px solid #3C95A9;
+    color: white;
+    padding: 3px 32px 3px 60px;
+}
+
+.forumButtonContainer .selected:hover {
+    color: white;
+    border: 3px solid #3C95A9;
+}
