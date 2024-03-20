@@ -21,8 +21,9 @@ input[type="text"] {
     padding: 3px 40px 3px 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.10);
     transition: border-color 0.3s ease, filter 0.3s ease;
-    flex: 1;
+    width: 100%;
     position: relative;
+    color: #666;
 }
 
 input[type="text"]:focus {
@@ -30,6 +31,7 @@ input[type="text"]:focus {
     --shadow-color: rgba(244, 183, 1, 0.5);
     filter: drop-shadow(0 2px 4px rgba(244, 183, 1, 0.5));
     outline: none;
+    color: #666;
 }
 
 
@@ -51,13 +53,14 @@ input[type="text"]:focus {
 
 .forumButtonContainer {
     display: flex;
-    align-items: center;
     flex: 1;
     max-width: 50vw;
     justify-content: space-evenly;
+    align-items: center;
 }
 
 .forumButtonContainer button {
+    position: relative;
     padding: 3px 32px;
     border-radius: 20px;
     border: 3px solid #3C95A9;
@@ -74,11 +77,21 @@ input[type="text"]:focus {
     cursor: pointer;
 }
 
+.forumButtonContainer .selected::before{
+    content: "\2714";
+    position: absolute;
+    color: #fff;
+    font-size: 1.125rem;
+    font-weight: bold;
+    left: 8px;
+    bottom: 8%;
+}
+
 .forumButtonContainer .selected{
     background-color: #3C95A9;
     border: 3px solid #3C95A9;
     color: white;
-    padding: 3px 32px 3px 60px;
+    padding: 3px 32px 3px 50px;
 }
 
 .forumButtonContainer .selected:hover {

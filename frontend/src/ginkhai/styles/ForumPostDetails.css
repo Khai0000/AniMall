@@ -1,0 +1,145 @@
+.postContainer {
+    padding: 3vh 5vw;
+    color: #000;
+}
+
+.postContainer .postDetailsContainer {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid #3C95A9;
+    padding-bottom: 16px;
+}
+
+.postContainer .postDetailsContainer .title {
+    font-size: 2.25rem;
+    font-weight: 700;
+    margin: 8px 0;
+}
+
+
+.postContainer .postDetailsContainer .author {
+    font-size: 2rem;
+    font-weight: 500;
+    margin: 8px 0;
+}
+
+.postContainer .postDetailsContainer .authorName {
+    color: #7A7A7A;
+    font-size: 2rem;
+    font-weight: 400;
+}
+
+.postContainer .postDetailsContainer img {
+    width: 40vw;
+    height: 60vh;
+    object-fit: cover;
+    border-radius: 40px;
+    border: 1px solid #EFEFEF;
+    box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.10);
+    margin: 16px 0;
+    align-self: center;
+}
+
+.postContainer .postDetailsContainer .content {
+    color: #7B7979;
+    font-size: 2rem;
+    font-weight: 500;
+    line-height: 4rem;
+}
+
+.postContainer .feedbackContainer {
+    display: flex;
+    padding: 16px 8px;
+}
+
+.postContainer .reactionContainer {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.postContainer .reactionContainer .goodReactionContainer,
+.postContainer .reactionContainer .badReactionContainer {
+    display: flex;
+    align-items: center;
+}
+
+.postContainer .reactionContainer span,
+.postContainer .reactionContainer span{
+    color: #000;
+    font-size: 1.15rem;
+    font-weight: 500;
+}
+
+.postContainer .reactionContainer .reactionButton{
+
+}
+
+.postContainer .reactionContainer .reactionIcon{
+    width: 32px;
+    height: 32px;
+}
+
+.postContainer .commentContainer {
+    flex: 4;
+    border-left: 1px solid #3C95A9;
+    padding-left: 2vw;
+}
+
+.postContainer .reactionContainer .reactionTitle,
+.postContainer .commentContainer .commentTitle {
+    color: #3C95A9;
+    font-size: 2.25rem;
+    font-weight: 500;
+    margin-bottom: 12px;
+}
+
+.postContainer .commentContainer .commentHeader{
+    margin-bottom: 12px;
+}
+
+.postContainer .addPostButton{
+    background-color: #3C95A9;
+    border: none;
+    border-radius: 15px;
+    height: fit-content;
+    width: fit-content;
+    text-align: center;
+    color: #fff;
+    font-size: 2.5rem;
+    padding: 2px 14px;
+    margin-left: 2vw;
+}
+
+.postContainer .addPostButton:hover{
+    cursor: pointer;
+    background-color: #F3B801;
+}
+
+.postContainer .commentContainer .commentBody{
+    max-height: 47vh;
+    overflow-y: scroll;
+}
+
+
+.postContainer ::-webkit-scrollbar{
+    padding: 20px;
+    width: 0.2vw;
+
+}
+.postContainer ::-webkit-scrollbar-track {
+    background-color: transparent;
+    border-radius: 20px;
+}
+
+
+.postContainer ::-webkit-scrollbar-thumb {
+    background-color: #F3B801;
+    border-radius: 20px;
+}
+
+
+.postContainer ::-webkit-scrollbar-thumb:hover {
+    cursor: pointer;
+}

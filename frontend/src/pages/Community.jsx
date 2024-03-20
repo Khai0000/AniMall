@@ -1,10 +1,13 @@
-import ForumHome from '../ginkhai/pages/ForumHome'
+
+import ForumHome from '../ginkhai/pages/ForumHome';
+import ForumPostDetails from '../ginkhai/pages/ForumPostDetails';
 
 function Community(){
 
     return(
         <div>
-            <ForumHome/>
+            {/* <ForumHome/> */}
+            <ForumPostDetails/>
         </div>
     );
 }

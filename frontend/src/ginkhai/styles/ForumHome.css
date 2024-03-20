@@ -1,3 +1,56 @@
 .forumContainer{
     padding: 3vh 5vw;
 }
+
+.forumContainer .forumBody{
+    margin-top: 16px;
+    padding-top: 8px;
+    max-height: 70vh;
+    overflow-y: scroll;
+    padding-right: 1vw;
+}
+
+.forumContainer .forumBody::-webkit-scrollbar{
+    padding: 20px;
+    width: 0.2vw;
+
+}
+.forumContainer .forumBody::-webkit-scrollbar-track {
+    background-color: transparent;
+    border-radius: 20px;
+}
+
+
+.forumContainer .forumBody::-webkit-scrollbar-thumb {
+    background-color: #F3B801;
+    border-radius: 20px;
+}
+
+
+.forumContainer .forumBody::-webkit-scrollbar-thumb:hover {
+    cursor: pointer;
+}
+
+.forumContainer .buttonContainer{
+    display: flex;
+    flex:1;
+    margin-top: 3.5vh;  
+}
+
+.forumContainer .addPostButton{
+    background-color: #3C95A9;
+    border: none;
+    border-radius: 15px;
+    height: fit-content;
+    width: fit-content;
+    text-align: center;
+    color: #fff;
+    font-size: 2.5rem;
+    padding: 2px 14px;
+    margin-left: auto;
+}
+
+.forumContainer .addPostButton:hover{
+    background-color: #F3B801;
+    cursor: pointer;
+}
