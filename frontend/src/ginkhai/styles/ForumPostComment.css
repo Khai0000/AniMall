@@ -1,9 +1,9 @@
 .commentDetailsContainer {
     display: flex;
     align-items: flex-start;
-    padding-bottom: 12px;
+    padding-bottom: 1.5vw;
     border-bottom: 1px solid #3C95A9;
-    margin-bottom: 12px;
+    margin-bottom: 2vw;
 }
 
 .commentDetailsContainer>.imageContainer {

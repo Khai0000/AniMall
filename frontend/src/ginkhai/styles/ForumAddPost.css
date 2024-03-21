@@ -25,10 +25,11 @@
     outline: none;
     resize: none;
     width: 100%;
+    color: #000;
+
     border-radius: 26px;
     border: 2px solid #3C95A9;
     padding: 32px;
-    color: #959494;
     font-size: 1.25rem;
     font-family: Overpass;
     font-weight: 400;

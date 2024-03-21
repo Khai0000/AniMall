@@ -37,7 +37,7 @@
     margin-top: 3.5vh;  
 }
 
-.forumContainer .addPostButton{
+.forumContainer .addPostButton {
     background-color: #3C95A9;
     border: none;
     border-radius: 15px;
@@ -53,4 +53,8 @@
 .forumContainer .addPostButton:hover{
     background-color: #F3B801;
     cursor: pointer;
+}
+
+.forumPostLink{
+    text-decoration: none;
 }

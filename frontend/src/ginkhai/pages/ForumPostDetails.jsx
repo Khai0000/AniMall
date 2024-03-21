@@ -5,8 +5,21 @@ import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
 import IconButton from "@mui/material/IconButton";
 import ForumPostComment from "../components/ForumPostComment";
+import { useState } from "react";
+import PopupDialog from "../components/PopupDialog";
+import { useLocation } from "react-router-dom";
+
 
 const ForumPostDetails = () => {
+  const state = useLocation();
+  console.log(state.state.title);
+
+  const [showPopup, setShowPopup] = useState(false);
+
+  const handleAddComment = () => {
+    setShowPopup(true);
+  };
+
   return (
     <div className="postContainer">
       <div className="postDetailsContainer">
@@ -14,7 +27,7 @@ const ForumPostDetails = () => {
         <p className="author">
           By: <span className="authorName">Khai</span>
         </p>
-        <img src={dog1} alt="Post"/>
+        <img src={dog1} alt="Post" />
         <p className="content">
           Petting dogs has always been a source of immense joy and comfort for
           me. There's something incredibly therapeutic about running your
@@ -49,22 +62,26 @@ const ForumPostDetails = () => {
         <div className="commentContainer">
           <div className="commentHeader">
             <span className="commentTitle">Comment</span>
-            <button className="addPostButton">+</button>
+            <button className="addPostButton" onClick={handleAddComment}>
+              +
+            </button>
           </div>
           <div className="commentBody">
-            <ForumPostComment/>
-            <ForumPostComment/>
-            <ForumPostComment/>
-            <ForumPostComment/>
-            <ForumPostComment/>
-            <ForumPostComment/>
-            <ForumPostComment/>
-            <ForumPostComment/>
-            <ForumPostComment/>
-            <ForumPostComment/>
+            <ForumPostComment />
+            <ForumPostComment />
+            <ForumPostComment />
+            <ForumPostComment />
+            <ForumPostComment />
+            <ForumPostComment />
+            <ForumPostComment />
+            <ForumPostComment />
+            <ForumPostComment />
+            <ForumPostComment />
           </div>
         </div>
       </div>
+
+      {showPopup && <PopupDialog setShowPopup={setShowPopup} />}
     </div>
   );
 };

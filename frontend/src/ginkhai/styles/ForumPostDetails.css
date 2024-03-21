@@ -66,17 +66,15 @@
 }
 
 .postContainer .reactionContainer span,
-.postContainer .reactionContainer span{
+.postContainer .reactionContainer span {
     color: #000;
     font-size: 1.15rem;
     font-weight: 500;
 }
 
-.postContainer .reactionContainer .reactionButton{
+.postContainer .reactionContainer .reactionButton {}
 
-}
-
-.postContainer .reactionContainer .reactionIcon{
+.postContainer .reactionContainer .reactionIcon {
     width: 32px;
     height: 32px;
 }
@@ -93,13 +91,14 @@
     font-size: 2.25rem;
     font-weight: 500;
     margin-bottom: 12px;
+    margin-right: 2vw;
 }
 
-.postContainer .commentContainer .commentHeader{
+.postContainer .commentContainer .commentHeader {
     margin-bottom: 12px;
 }
 
-.postContainer .addPostButton{
+.postContainer .addPostButton {
     background-color: #3C95A9;
     border: none;
     border-radius: 15px;
@@ -109,23 +108,27 @@
     color: #fff;
     font-size: 2.5rem;
     padding: 2px 14px;
-    margin-left: 2vw;
 }
 
-.postContainer .addPostButton:hover{
+.postContainer .addPostButton:hover {
     cursor: pointer;
     background-color: #F3B801;
 }
 
-.postContainer .commentContainer .commentBody{
+.postContainer .commentContainer .commentBody {
+    /* padding-right: 20px; */
+    max-height: 60vh;
+    overflow-y: auto;
+
 }
 
 
-.postContainer ::-webkit-scrollbar{
+.postContainer ::-webkit-scrollbar {
     padding: 20px;
     width: 0.2vw;
 
 }
+
 .postContainer ::-webkit-scrollbar-track {
     background-color: transparent;
     border-radius: 20px;
@@ -141,3 +144,9 @@
 .postContainer ::-webkit-scrollbar-thumb:hover {
     cursor: pointer;
 }
+
+.buttonContainer>a{
+    margin-left: auto;
+}
+
+

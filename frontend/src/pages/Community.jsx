@@ -7,9 +7,7 @@ function Community(){
 
     return(
         <div>
-            {/* <ForumHome/> */}
-            {/* <ForumPostDetails/> */}
-            <ForumAddPost/>
+            <ForumHome/>
         </div>
     );
 }

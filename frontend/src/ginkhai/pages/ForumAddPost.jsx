@@ -70,13 +70,11 @@ const ForumAddPost = () => {
       setUploadedImages(newImages);
     } else {
       const newImages = [...uploadedImages];
-      newImages.filter((image,imageIndex)=>imageIndex!==index)
+      newImages.splice(index, 1);
       setUploadedImages(newImages);
       setButtonCount(buttonCount - 1);
     }
   };
-  
-  
 
   return (
     <div className="forumAddPostContainer">
@@ -111,11 +109,14 @@ const ForumAddPost = () => {
                   alt={`Selected image ${index + 1}`}
                 />
                 {uploadedImages[index] && (
-                  <button className="deleteButton" onClick={(e)=>{
-                    e.stopPropagation();
-                    handleDelete(index);
-                  }}>
-                    <ClearIcon onClick={()=>handleDelete(index)}/>
+                  <button
+                    className="deleteButton"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDelete(index);
+                    }}
+                  >
+                    <ClearIcon onClick={() => handleDelete(index)} />
                   </button>
                 )}
               </button>
