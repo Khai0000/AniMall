@@ -70,7 +70,7 @@ const ForumAddPost = () => {
       setUploadedImages(newImages);
     } else {
       const newImages = [...uploadedImages];
-      newImages.splice(index, 1);
+      newImages.filter((image,imageIndex)=>imageIndex!==index)
       setUploadedImages(newImages);
       setButtonCount(buttonCount - 1);
     }
