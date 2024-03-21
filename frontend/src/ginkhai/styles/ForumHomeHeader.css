@@ -4,7 +4,7 @@
     justify-content: space-between;
 }
 
-.inputContainer{
+.forumFilterContainer .inputContainer{
     display: flex;
     align-items: center;
     flex: 1;
@@ -13,7 +13,7 @@
     margin-right: 6%;
 }
 
-input[type="text"] {
+.forumFilterContainer input[type="text"] {
     border: 1px solid #3C95A9;
     border-radius: 15px;
     filter: drop-shadow(0 2px 4px rgba(60, 149, 169, 0.5));
@@ -26,7 +26,7 @@ input[type="text"] {
     color: #666;
 }
 
-input[type="text"]:focus {
+.forumFilterContainer input[type="text"]:focus {
     border-color: #f4b701;
     --shadow-color: rgba(244, 183, 1, 0.5);
     filter: drop-shadow(0 2px 4px rgba(244, 183, 1, 0.5));
@@ -35,7 +35,7 @@ input[type="text"]:focus {
 }
 
 
-.searchIcon {
+.forumFilterContainer .searchIcon {
     position: absolute;
     right: 10px;
     color: #3C95A9;
@@ -46,7 +46,7 @@ input[type="text"]:focus {
     color: #f4b701; /* Change color to yellow when input container is focused */
 }
 
-.searchIcon:hover{
+.forumFilterContainer .searchIcon:hover{
     cursor: pointer;
 }
 
@@ -96,5 +96,11 @@ input[type="text"]:focus {
 
 .forumButtonContainer .selected:hover {
     color: white;
-    border: 3px solid #3C95A9;
+    background-color: #f4b701;
+}
+
+.forumButtonContainer .buttonContainer {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
 }

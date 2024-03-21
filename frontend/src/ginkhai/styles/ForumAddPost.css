@@ -1,0 +1,222 @@
+.forumAddPostContainer {
+    padding: 3vh 5vw;
+}
+
+.forumAddPostContainer input {
+
+    width: 100%;
+    color: #000;
+    font-size: 2.25rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    border: none;
+    margin-bottom: 4vh;
+}
+
+
+.forumAddPostContainer input:focus {
+
+    outline: none;
+    border: none;
+}
+
+.forumAddPostContainer>textarea {
+    outline: none;
+    resize: none;
+    width: 100%;
+    border-radius: 26px;
+    border: 2px solid #3C95A9;
+    padding: 32px;
+    color: #959494;
+    font-size: 1.25rem;
+    font-family: Overpass;
+    font-weight: 400;
+    filter: drop-shadow(0 2px 4px rgba(60, 149, 169, 0.5));
+    transition: border-color 0.3s ease, filter 0.3s ease;
+    margin-bottom: 3vh;
+}
+
+.forumAddPostContainer>textarea:focus {
+    outline: none;
+    border-color: #f4b701;
+    filter: drop-shadow(0 2px 4px rgba(244, 183, 1, 0.5));
+}
+
+.forumAddPostContainer .addPostDetailsContainer {
+    display: flex;
+    width: 100%;
+    align-items: center;
+}
+
+.addPostDetailsContainer .imageContainer {
+    flex: 2;
+    overflow-x: auto;
+    white-space: nowrap;
+    position: relative;
+}
+
+.addPostDetailsContainer .imageButtonContainer {
+    max-width: 35vw;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.addPostDetailsContainer .imageButtonContainer .carouselLeftButton{
+    padding: 0;
+    border: none;
+    font-size: 3rem;
+    position: absolute;
+    left: 0;
+    top: 40%;
+    z-index: 100;
+}
+
+.addPostDetailsContainer .imageButtonContainer .carouselRightButton{
+    padding: 0;
+    border: none;
+    font-size: 3rem;
+    position: absolute;
+    top: 40%;
+    right: 37%;
+    z-index: 100;
+}
+
+.addPostDetailsContainer .imageButtonContainer::-webkit-scrollbar{
+    display: none;
+}
+
+
+.addPostDetailsContainer .tagContainer {
+    flex: 1;
+}
+
+
+.addPostDetailsContainer .tagContainer p {
+    color: #3C95A9;
+    font-family: Overpass;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+    margin-bottom: 3vh;
+}
+
+.addPostDetailsContainer button {
+    position: relative;
+    padding: 3px 32px;
+    border-radius: 20px;
+    border: 3px solid #3C95A9;
+    color: #3C95A9;
+    background-color: transparent;
+    font-size: 1.125rem;
+    height: fit-content;
+    transition: padding 0.3s ease;
+}
+
+.addPostDetailsContainer button:hover {
+    color: #f4b701;
+    border: 3px solid #f4b701;
+    cursor: pointer;
+}
+
+.addPostDetailsContainer .selected::before {
+    content: "\2714";
+    position: absolute;
+    color: #fff;
+    font-size: 1.125rem;
+    font-weight: bold;
+    left: 8px;
+    bottom: 8%;
+}
+
+.addPostDetailsContainer .selected {
+    background-color: #3C95A9;
+    border: 3px solid #3C95A9;
+    color: white;
+    padding: 3px 32px 3px 50px;
+}
+
+.addPostDetailsContainer .selected:hover {
+    color: white;
+    background-color: #f4b701;
+}
+
+.addPostDetailsContainer .tagButtonContainer {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5vh;
+}
+
+.addPostDetailsContainer .actionButtonContainer {
+    padding: 0 15%;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 3vh;
+}
+
+.addPostDetailsContainer .actionButtonContainer>button {
+    border-radius: 5px;
+    border: 1px solid #3c95A9;
+}
+
+.addPostDetailsContainer .addButton {
+    padding: 5px 64px;
+    color: white;
+    background-color: #3C95A9;
+    border: none;
+}
+
+.addPostDetailsContainer .addButton:hover {
+    border: none;
+    color: white;
+    background-color: #f4b701;
+}
+
+.addPostDetailsContainer .backButton {
+    padding: 5px 32px;
+    border: 1px solid #3C95A9;
+    color: #3C95A9
+}
+
+.addPostDetailsContainer .backButton:hover {
+    color: #f4b701;
+    border: 1px solid #f4b701;
+    text-shadow: 0 0 0px #f4b701, 0 0 1px #f4b701, 0 0 30px #f4b701;
+}
+
+.addPostDetailsContainer .imageButton{
+    border: none;
+    width: 15vw;
+    height: 25vh;
+    margin-right: -4vw;
+    position: relative;
+}
+
+.addPostDetailsContainer .imageButton:hover{
+    border: none;
+}
+
+.addPostDetailsContainer .imageButton>img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.addPostDetailsContainer .imageButton .deleteButton{
+    border: none;
+    top: 10%;
+    color: red;
+    position: absolute;
+    right: 5%;
+}
+
+.addPostDetailsContainer .imageButton .deleteButton {
+    border: none;
+    top: 10%;
+    color: red;
+    position: absolute;
+    right: 5%;
+    z-index: 100;
+}

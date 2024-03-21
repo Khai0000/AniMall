@@ -118,8 +118,6 @@
 }
 
 .postContainer .commentContainer .commentBody{
-    max-height: 47vh;
-    overflow-y: scroll;
 }
 
 

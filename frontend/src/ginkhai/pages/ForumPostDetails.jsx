@@ -14,7 +14,7 @@ const ForumPostDetails = () => {
         <p className="author">
           By: <span className="authorName">Khai</span>
         </p>
-        <img src={dog1} />
+        <img src={dog1} alt="Post"/>
         <p className="content">
           Petting dogs has always been a source of immense joy and comfort for
           me. There's something incredibly therapeutic about running your
