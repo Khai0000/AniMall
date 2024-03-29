@@ -2,12 +2,18 @@ import React, { useState, useRef, useEffect } from "react";
 import "../styles/ForumAddPost.css";
 import imageBackground from "../assets/images/imageBackground.png";
 import ClearIcon from "@mui/icons-material/Clear";
+import {useNavigate} from 'react-router-dom';
 
 const ForumAddPost = () => {
   const [selectedButtons, setSelectedButtons] = useState([]);
   const [uploadedImages, setUploadedImages] = useState([null, null, null]);
   const [buttonCount, setButtonCount] = useState(3);
   const inputRefs = useRef([]);
+  const navigate = useNavigate();
+
+  const handleOnBackClick= ()=>{
+    navigate(-1);
+  }
 
   useEffect(() => {
     const allButtonsOccupied = uploadedImages.every((image) => image !== null);
@@ -155,7 +161,7 @@ const ForumAddPost = () => {
           </div>
           <div className="actionButtonContainer">
             <button className="addButton">Add</button>
-            <button className="backButton">Back</button>
+            <button className="backButton" onClick={handleOnBackClick}>Back</button>
           </div>
         </div>
       </div>

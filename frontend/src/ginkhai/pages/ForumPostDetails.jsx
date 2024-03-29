@@ -1,18 +1,24 @@
-import React from "react";
 import "../styles/ForumPostDetails.css";
-import dog1 from "../assets/images/dog1.jpg";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
 import IconButton from "@mui/material/IconButton";
-import ForumPostComment from "../components/ForumPostComment";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation,useNavigate } from "react-router-dom";
 import PopupDialog from "../components/PopupDialog";
-import { useLocation } from "react-router-dom";
-
+import ForumPostComment from "../components/ForumPostComment";
 
 const ForumPostDetails = () => {
   const state = useLocation();
-  console.log(state.state.title);
+  let post = state.state;
+  const navigate = useNavigate();
+
+  const [image, setImage] = useState(null);
+
+  useEffect(() => {
+    import(`../assets/images/${post.image}.jpg`).then((image) => {
+      setImage(image.default);
+    });
+  }, []);
 
   const [showPopup, setShowPopup] = useState(false);
 
@@ -20,26 +26,24 @@ const ForumPostDetails = () => {
     setShowPopup(true);
   };
 
+  const handleOnBackClick= ()=>{
+    navigate(-1);
+  };
+
   return (
     <div className="postContainer">
       <div className="postDetailsContainer">
-        <p className="title">My experience in taking care of a dog</p>
-        <p className="author">
-          By: <span className="authorName">Khai</span>
-        </p>
-        <img src={dog1} alt="Post" />
-        <p className="content">
-          Petting dogs has always been a source of immense joy and comfort for
-          me. There's something incredibly therapeutic about running your
-          fingers through their soft fur, feeling their warmth, and witnessing
-          the pure happiness in their eyes as they receive affection. Each dog
-          has its own unique personality, from the playful pup who eagerly
-          nudges your hand for more scratches to the gentle older dog who leans
-          into your touch with a sense of contentment. Regardless of breed or
-          size, every encounter leaves me with a deep sense of connection and
-          gratitude for the unconditional love and companionship that dogs
-          offer.
-        </p>
+        <div className="headerContainer">
+          <div>
+            <p className="title">{post.title}</p>
+            <p className="author">
+              By: <span className="authorName">{post.author}</span>
+            </p>
+          </div>
+          <button className="backButton" onClick={handleOnBackClick}>Back</button>
+        </div>
+        <img src={image} alt="Post" />
+        <p className="content">{post.content}</p>
       </div>
 
       <div className="feedbackContainer">

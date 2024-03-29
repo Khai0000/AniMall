@@ -2,10 +2,11 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     border-bottom: 1px solid #3C95A9;
     margin-bottom: 8px;
     cursor: pointer;
+    padding: 2vh 0;
 }
 
 .cardContainer img {
@@ -15,45 +16,44 @@
     border-radius: 15px;
 }
 
+.cardContainer .cardDetails{
+    flex: 1;
+}
+
 .cardContainer .imageContainer {
-    margin-right: 6vw;
-    width: 38vw;
-    height: 16vh;
+    flex: 1;
+    margin-right: 5vw;
+    height: 18vh;
+    max-width: 10vw;
 }
 
 .cardContainer .cardDetails .title {
     color: #000;
     font-size: 24px;
-    font-style: normal;
     font-weight: 500;
-    line-height: normal;
+    margin-top: 0;
 }
 
 .cardContainer .cardDetails .author {
     color: #000;
     font-size: 20px;
-    font-style: normal;
     font-weight: 500;
-    line-height: normal;
 }
 
 .cardContainer .cardDetails .authorDetails {
     color: #868686;
     font-size: 20px;
-    font-style: normal;
     font-weight: 500;
-    line-height: normal;
 }
 
 .cardContainer .cardDetails .content {
     color: #868686;
-    font-size: 16px;
-    font-style: normal;
+    font-size: 1rem;
     font-weight: 500;
-    line-height: normal;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 2; /* Number of lines to show */
     -webkit-box-orient: vertical;
+    margin-bottom: 0;
 }

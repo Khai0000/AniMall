@@ -1,48 +1,62 @@
-import { useState } from 'react';
+import { useState, useEffect } from "react";
 import "../styles/ForumHomeHeader.css";
-import SearchIcon from '@mui/icons-material/Search';
+import SearchIcon from "@mui/icons-material/Search";
 
-const ForumHomeHeader = () => {
-
+const ForumHomeHeader = ({ selectedCategory, setSelectedCategory,searchText,setSearchText }) => {
   const [selectedButtons, setSelectedButtons] = useState([]);
 
   const toggleButton = (button) => {
+    const updatedCategories = selectedCategory.includes(button)
+      ? selectedCategory.filter((category) => category !== button)
+      : [...selectedCategory, button];
+
+    setSelectedCategory(updatedCategories);
+
     if (selectedButtons.includes(button)) {
-      setSelectedButtons(selectedButtons.filter(item => item !== button));
+      setSelectedButtons(selectedButtons.filter((item) => item !== button));
     } else {
       setSelectedButtons([...selectedButtons, button]);
     }
   };
 
+  const handleOnTextChange = (e) => {
+    setSearchText(e.target.value);
+  };
+
   return (
     <div className="forumFilterContainer">
       <div className="inputContainer">
-        <input type="text" placeholder="Search for a discussion..." />
+        <input
+          type="text"
+          placeholder="Search for a discussion..."
+          onChange={handleOnTextChange}
+          value={searchText}
+        />
         <SearchIcon className="searchIcon" />
       </div>
       <div className="forumButtonContainer">
         <button
-          className={selectedButtons.includes('Cat') ? 'selected' : ''}
-          onClick={() => toggleButton('Cat')}
+          className={selectedButtons.includes("cat") ? "selected" : ""}
+          onClick={() => toggleButton("cat")}
         >
           Cat
         </button>
         <button
-          className={selectedButtons.includes('Dog') ? 'selected' : ''}
-          onClick={() => toggleButton('Dog')}
+          className={selectedButtons.includes("dog") ? "selected" : ""}
+          onClick={() => toggleButton("dog")}
         >
           Dog
         </button>
         <button
-          className={selectedButtons.includes('Others') ? 'selected' : ''}
-          onClick={() => toggleButton('Others')}
+          className={selectedButtons.includes("others") ? "selected" : ""}
+          onClick={() => toggleButton("others")}
         >
           Others
         </button>
-        
+
         <button
-          className={selectedButtons.includes('Others') ? 'selected' : ''}
-          onClick={() => toggleButton('Others')}
+          className={selectedButtons.includes("others") ? "selected" : ""}
+          onClick={() => toggleButton("others")}
         >
           Others
         </button>
