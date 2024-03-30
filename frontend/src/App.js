@@ -8,6 +8,7 @@ import Services from "./pages/Services";
 import Home from "./pages/Home";
 import Register from "./shuhui/pages/Register";
 import ResetPassword from "./shuhui/pages/ResetPassword";
+import Login from "./shuhui/pages/Login";
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
     createRoutesFromElements(
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/pet" element={<Pet />} />

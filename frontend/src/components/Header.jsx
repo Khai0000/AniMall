@@ -19,7 +19,7 @@ function Header() {
       </div>
 
       <div className="actionContainer">
-        <AccountCircleIcon className="actionIcon" />
+        <NavLink to={"/login"}><AccountCircleIcon className="actionIcon" /></NavLink>
         <LogoutIcon className="actionIcon" />
       </div>
     </header>

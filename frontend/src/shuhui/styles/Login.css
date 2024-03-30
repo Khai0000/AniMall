@@ -49,12 +49,13 @@ body{
 
 .login-container input{
     border: none;
-    border-radius: 15px;
+    border-radius: 20px;
     padding: 4.5%;
     min-width: 100%;
     padding-left: 7%;
     margin-top: 8%;
     font-size: 90%;
+    color: #3C95A9;
 }
 
 .login-container input::placeholder{
@@ -64,6 +65,14 @@ body{
 .login-container input:focus{
     outline: none;
     border-color: transparent;
+}
+
+.login-container input:hover{
+    background-image: url('../assets/images/input_paw.png');
+    background-color: transparent;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center right;
 }
 
 .login-reset{
@@ -82,6 +91,12 @@ body{
     padding: 3%;
     border-radius: 50px;
     width: 30%;
+}
+
+.login-button:hover{
+    background-color: #F3B801;
+    color: white;
+    cursor: pointer;
 }
 
 .dog-paw{

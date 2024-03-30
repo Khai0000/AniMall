@@ -33,13 +33,14 @@
 
 .register-container input{
     border: none;
-    border-radius: 15px;
+    border-radius: 20px;
     padding: 2.5%;
     width: 50%;
     padding-left: 3%;
     margin-bottom: 5%;
     font-size: 90%;
     margin-left: 25%;
+    color: #3C95A9;
 }
 
 .register-container input::placeholder{
@@ -49,6 +50,14 @@
 .register-container input:focus{
     outline: none;
     border-color: transparent;
+}
+
+.register-container input:hover{
+    background-image: url('../assets/images/input_paw.png');
+    background-color: transparent;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center right;
 }
 
 .register-button{
@@ -62,6 +71,13 @@
 
     margin-bottom: 33%;
 }
+
+.register-button:hover{
+    background-color: #F3B801;
+    color: white;
+    cursor: pointer;
+}
+
 .reset-button{
     background-color: white;
     color: #3C95A9;
@@ -72,6 +88,12 @@
     margin-left: 41.5%;
 
     margin-bottom: 45%;
+}
+
+.reset-button:hover{
+    background-color: #F3B801;
+    color: white;
+    cursor: pointer;
 }
 
 
@@ -120,6 +142,11 @@
     text-align: center;
 }
 
+.verification-code-container input:hover{
+    border: 1px solid#F3B801;
+    color: #F3B801;
+}
+
 .verification-code-container input::placeholder{
     color: #3C95A9;
 }
@@ -150,4 +177,8 @@ input[type="number"]::-webkit-outer-spin-button {
     margin-left: 2%;
     padding: 1%;
     margin-bottom: 20%;
+}
+
+.resend-button:hover{
+    background-color: #F3B801;
 }

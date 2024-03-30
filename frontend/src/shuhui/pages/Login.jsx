@@ -1,11 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import '../styles/Login.css';
 import DogPaw from '../assets/images/dog_paw.png';
 import YellowCircle from '../assets/images/yellow_circle.png';
 import AnimalPic from '../assets/images/animal_pic.png';
 
 function Login(){
+
+    const navigate = useNavigate();
+
+    const handleLoginClick = () => {
+        navigate('/product');
+    };
 
     return(
         <div className='login-pages'>
@@ -19,7 +26,7 @@ function Login(){
                 {/* <label>Password:</label> */}
                     <input className='login-password' type="password" placeholder="Password" />
                     <p className='login-reset'><Link className='login-reset-link' to="/reset-password">Forgot password?</Link></p>
-                    <button className='login-button' type="submit">LOGIN</button>
+                    <button className='login-button' type="submit" onClick={handleLoginClick}>LOGIN</button>
                 </form>
                 <img className='dog-paw' src={DogPaw} alt='dogpaw'/></div>
             </div>
