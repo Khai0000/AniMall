@@ -1,27 +1,13 @@
-.register-pages-container{
-    display: block;
-  width: 100%;
-  height: 100%;
-  background-image: url('../assets/images/yellow_top.png'); /* Set the background image */
-  background-size: cover; /* Cover the entire background */
-  background-position: center; /* Center the background image */
-  background-repeat: no-repeat;
-  border: 0.001rem solid transparent;
-}
-
-
 .register-component{
     display: block;
     justify-content: center;
     position: relative;
 }
 
-
-
 .yellow-top{
     width: 100%;
     height: auto;
-    position: relative;
+    position: absolute;
     z-index: -1;
     margin-top: -8%;
 }
@@ -74,7 +60,7 @@
     width: 17%;
     margin-left: 41.5%;
 
-    margin-bottom: 39.2%;
+    margin-bottom: 33%;
 }
 .reset-button{
     background-color: white;
@@ -95,4 +81,73 @@
     height: 90%;
     margin-left: 5%;
     margin-top: 5%;
+    display: grid;
+    justify-content: center;
+    margin-bottom: 9.5%;
+    border: 2px solid #3C95A9;
+}
+
+.verify-icon{
+    width: 30%;
+    height: auto;
+    margin-left: 35%;
+    margin-top: 20%;
+}
+
+.verify-text{
+    text-align: center;
+    color: #3C95A9;
+    font-size: 200%;
+    margin-top: 5%;
+}
+
+.verification-code-container{
+    display: flex;
+    justify-content: center;
+    margin-left: 1.5%;
+    margin-top: 3%;
+}
+
+.verification-code-container input{
+    border-radius: 10px;
+    height: 100%;
+    font-size: 200%;
+    width: 8%;
+    margin-right: 3%;
+    border: 1px solid #3C95A9;
+    color: #3C95A9;
+    padding: 1%;
+    text-align: center;
+}
+
+.verification-code-container input::placeholder{
+    color: #3C95A9;
+}
+
+.verification-code-container input:focus{
+    outline: none;
+}
+
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.re-send{
+    color: #3C95A9;
+    text-align: center;
+    margin-top: 10%;
+}
+
+.resend-button{
+    background-color: #3C95A9;
+    color: white;
+    width: 25%;
+    border-radius: 7px;
+    border: none;
+    margin-left: 2%;
+    padding: 1%;
+    margin-bottom: 20%;
 }
