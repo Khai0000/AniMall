@@ -58,3 +58,30 @@
 .forumPostLink{
     text-decoration: none;
 }
+
+.forumContainer .forumNoDiscussionContainer{
+    height: 66vh;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}
+
+.forumContainer .forumNoDiscussionContainer p{
+    font-size: 2rem;
+    color: #868686;
+}
+
+
+.forumContainer .circularProgress{
+    color: #3C95A9 !important;
+}
+
+.forumContainer .loadingContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 66vh;
+    row-gap: 0;
+    gap: 0;
+}

@@ -1,22 +1,41 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/ForumPostComment.css";
-import dog1 from "../assets/images/dog1.jpg";
+import ForumPostCommentSkeleton from "./ForumPostCommentSkeleton";
 
-const ForumPostComment = () => {
-  return (
+const ForumPostComment = ({ comment }) => {
+  const [imageSource, setImageSource] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    setIsLoading(true);
+
+    const fetchImage = async () => {
+      try {
+        const response = await fetch("https://picsum.photos/300/300");
+        const blob = await response.blob();
+        const imageUrl = URL.createObjectURL(blob);
+        setImageSource(imageUrl);
+        setIsLoading(false);
+      } catch (error) {
+        setIsLoading(false);
+        console.log(error);
+      }
+    };
+
+    fetchImage();
+  }, []);
+
+  return isLoading ? (
+    <ForumPostCommentSkeleton />
+  ) : (
     <div className="commentDetailsContainer">
       <div className="imageContainer">
-        <img src={dog1} />
+        <img src={imageSource} alt="userIcon" />
       </div>
 
       <div className="authorContainer">
-        <p className="author">Khai</p>
-        <p className="content">
-          Petting dogs has always been a source of immense joy and comfort for
-          me. There's something incredibly therapeutic about running your
-          fingers through their soft fur, feeling their warmth, and witnessing
-          the pure happiness in their eyes as they receive affection.
-        </p>
+        <p className="author">{comment.name}</p>
+        <p className="content">{comment.content}</p>
       </div>
     </div>
   );

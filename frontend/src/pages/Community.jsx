@@ -1,15 +1,19 @@
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setInitialPost } from "../ginkhai/slices/postSlice";
+import { combineData } from "../ginkhai/data/dummyData";
+import {Outlet} from 'react-router-dom'
 
-import ForumAddPost from '../ginkhai/pages/ForumAddPost';
-import ForumHome from '../ginkhai/pages/ForumHome';
-import ForumPostDetails from '../ginkhai/pages/ForumPostDetails';
+function Community() {
+  const dispatch = useDispatch();
 
-function Community(){
+  useEffect(() => {
+    dispatch(setInitialPost(combineData));
+  });
 
-    return(
-        <div>
-            <ForumHome/>
-        </div>
-    );
+  return (
+    <Outlet/>
+  );
 }
 
 export default Community;

@@ -1,6 +1,6 @@
 import "./App.css";
 import Layout from "./Layout/Layout";
-import { createBrowserRouter, RouterProvider,createRoutesFromElements,Route } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Pet from "./pages/Pet";
 import Community from "./pages/Community";
 import Product from "./pages/Product";
@@ -8,26 +8,32 @@ import Services from "./pages/Services";
 import Home from "./pages/Home";
 import ForumPostDetails from "./ginkhai/pages/ForumPostDetails";
 import ForumAddPost from "./ginkhai/pages/ForumAddPost";
+import ForumHome from "./ginkhai/pages/ForumHome";
+
 function App() {
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Layout />,
+      children: [
+        { path: "/", element: <Home /> },
+        { path: "/pet", element: <Pet /> },
+        {
+          path: "/community",
+          element: <Community />,
+          children: [
+            { path: "/community", element: <ForumHome /> },
+            { path: "/community/post/:postId", element: <ForumPostDetails /> },
+            { path: "/community/post/add", element: <ForumAddPost /> },
+          ],
+        },
+        { path: "/product", element: <Product /> },
+        { path: "/services", element: <Services /> },
+      ],
+    },
+  ]);
 
-  const router = createBrowserRouter(
-    createRoutesFromElements(
-      <Route path="/" element={<Layout/>}>
-        <Route index element={<Home/>}/>
-        <Route path="/pet" element={<Pet/>}/>
-        <Route path="/community" element={<Community/>}/>
-        <Route path="/community/post/:postId" element={<ForumPostDetails/>}/> 
-        <Route path="/community/post/add" element={<ForumAddPost/>}/> 
-        <Route path="/product" element={<Product/>}/>
-        <Route path="/community" element={<Community/>}/>
-        <Route path="/services" element={<Services/>}/>
-      </Route>
-    )
-  );
-
-  return (
-    <RouterProvider router={router}/>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;

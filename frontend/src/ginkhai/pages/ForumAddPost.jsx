@@ -2,18 +2,19 @@ import React, { useState, useRef, useEffect } from "react";
 import "../styles/ForumAddPost.css";
 import imageBackground from "../assets/images/imageBackground.png";
 import ClearIcon from "@mui/icons-material/Clear";
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addPost } from "../slices/postSlice";
 
 const ForumAddPost = () => {
+  const [titleText, setTitleText] = useState("");
+  const [bodyText, setBodyText] = useState("");
+  const [buttonCount, setButtonCount] = useState(3);
   const [selectedButtons, setSelectedButtons] = useState([]);
   const [uploadedImages, setUploadedImages] = useState([null, null, null]);
-  const [buttonCount, setButtonCount] = useState(3);
   const inputRefs = useRef([]);
   const navigate = useNavigate();
-
-  const handleOnBackClick= ()=>{
-    navigate(-1);
-  }
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const allButtonsOccupied = uploadedImages.every((image) => image !== null);
@@ -38,10 +39,16 @@ const ForumAddPost = () => {
     const file = event.target.files[0];
     const reader = new FileReader();
 
-    reader.onload = (e) => {
-      const newImages = [...uploadedImages];
-      newImages[index] = e.target.result;
-      setUploadedImages(newImages);
+    // reader.onload = (e) => {
+    //   const newImages = [...uploadedImages];
+    //   newImages[index] = e.target.result;
+    //   setUploadedImages(newImages);
+    // };
+
+    reader.onloadend = () => {
+      const newImages=[...uploadedImages];
+      newImages[index]=reader.result;
+      setUploadedImages(newImages)
     };
 
     if (file) {
@@ -82,10 +89,47 @@ const ForumAddPost = () => {
     }
   };
 
+  const handleOnBackClick = () => {
+    navigate(-1);
+  };
+
+  const handleOnTitleChange = (e) => {
+    setTitleText(e.target.value);
+  };
+
+  const handleOnBodyChange = (e) => {
+    setBodyText(e.target.value);
+  };
+
+  const handleOnAddPostClick = () => {
+
+    const newPost = {
+      title: titleText,
+      author: "Khai",
+      content: bodyText,
+      tag: [...selectedButtons],
+      image: uploadedImages.filter((image) => image !== null),
+      comments: [],
+    };
+
+    dispatch(addPost(newPost));
+    navigate(-1);
+  };
+
   return (
     <div className="forumAddPostContainer">
-      <input type="text" placeholder="Add your title here!" />
-      <textarea rows={10} placeholder="Leave your text here!" />
+      <input
+        type="text"
+        placeholder="Add your title here!"
+        value={titleText}
+        onChange={handleOnTitleChange}
+      />
+      <textarea
+        rows={10}
+        placeholder="Leave your text here!"
+        value={bodyText}
+        onChange={handleOnBodyChange}
+      />
       <div className="addPostDetailsContainer">
         <div className="imageContainer">
           <div className="imageButtonContainer">
@@ -112,7 +156,7 @@ const ForumAddPost = () => {
                 />
                 <img
                   src={uploadedImages[index] || imageBackground}
-                  alt={`Selected image ${index + 1}`}
+                  alt={`Post Cover`}
                 />
                 {uploadedImages[index] && (
                   <button
@@ -141,27 +185,31 @@ const ForumAddPost = () => {
           <p>Select Your Tag!</p>
           <div className="tagButtonContainer">
             <button
-              className={selectedButtons.includes("Cat") ? "selected" : ""}
-              onClick={() => toggleSelectButton("Cat")}
+              className={selectedButtons.includes("cat") ? "selected" : ""}
+              onClick={() => toggleSelectButton("cat")}
             >
               Cat
             </button>
             <button
-              className={selectedButtons.includes("Dog") ? "selected" : ""}
-              onClick={() => toggleSelectButton("Dog")}
+              className={selectedButtons.includes("dog") ? "selected" : ""}
+              onClick={() => toggleSelectButton("dog")}
             >
               Dog
             </button>
             <button
-              className={selectedButtons.includes("Others") ? "selected" : ""}
-              onClick={() => toggleSelectButton("Others")}
+              className={selectedButtons.includes("others") ? "selected" : ""}
+              onClick={() => toggleSelectButton("others")}
             >
               Others
             </button>
           </div>
           <div className="actionButtonContainer">
-            <button className="addButton">Add</button>
-            <button className="backButton" onClick={handleOnBackClick}>Back</button>
+            <button className="addButton" onClick={handleOnAddPostClick}>
+              Add
+            </button>
+            <button className="backButton" onClick={handleOnBackClick}>
+              Back
+            </button>
           </div>
         </div>
       </div>

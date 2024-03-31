@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import "../styles/ForumHomeHeader.css";
 import SearchIcon from "@mui/icons-material/Search";
 
@@ -12,11 +12,6 @@ const ForumHomeHeader = ({ selectedCategory, setSelectedCategory,searchText,setS
 
     setSelectedCategory(updatedCategories);
 
-    if (selectedButtons.includes(button)) {
-      setSelectedButtons(selectedButtons.filter((item) => item !== button));
-    } else {
-      setSelectedButtons([...selectedButtons, button]);
-    }
   };
 
   const handleOnTextChange = (e) => {
@@ -36,19 +31,19 @@ const ForumHomeHeader = ({ selectedCategory, setSelectedCategory,searchText,setS
       </div>
       <div className="forumButtonContainer">
         <button
-          className={selectedButtons.includes("cat") ? "selected" : ""}
+          className={selectedCategory.includes("cat") ? "selected" : ""}
           onClick={() => toggleButton("cat")}
         >
           Cat
         </button>
         <button
-          className={selectedButtons.includes("dog") ? "selected" : ""}
+          className={selectedCategory.includes("dog") ? "selected" : ""}
           onClick={() => toggleButton("dog")}
         >
           Dog
         </button>
         <button
-          className={selectedButtons.includes("others") ? "selected" : ""}
+          className={selectedCategory.includes("others") ? "selected" : ""}
           onClick={() => toggleButton("others")}
         >
           Others

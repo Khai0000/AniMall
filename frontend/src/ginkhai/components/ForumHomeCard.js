@@ -1,19 +1,41 @@
 import { useState, useEffect } from "react";
 import "../styles/ForumHomeCard.css";
+import ForumHomeCardSkeleton from "./ForumHomeCardSkeleton";
 
 const ForumHomeCard = ({ post }) => {
   const [image, setImage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    import(`../assets/images/${post.image}.jpg`).then((image) => {
-      setImage(image.default);
-    });
+    setIsLoading(true);
+
+    if (post.image[0].includes("jpg")) {
+      let imageDir = post.image[0].substring(0, post.image[0].indexOf("."));
+      import(`../assets/images/${imageDir}.jpg`)
+        .then((image) => {
+          setImage(image.default);
+        })
+        .catch((error) => {
+          console.error("Error loading image:", error);
+          setIsLoading(false);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    } else {
+      console.log(post.image[0]);
+      setImage(post.image[0]);
+      setIsLoading(false);
+    }
+
   }, [post]);
 
-  return (
+  return isLoading ? (
+    <ForumHomeCardSkeleton />
+  ) : (
     <div className="cardContainer">
-      <div className="imageContainer">
-        <img src={image} alt="cover" />
+      <div className="imageContainer ">
+        <img src={image} alt="" />
       </div>
 
       <div className="cardDetails">
