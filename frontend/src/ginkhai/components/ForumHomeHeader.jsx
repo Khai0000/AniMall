@@ -1,9 +1,7 @@
-import { useState} from "react";
 import "../styles/ForumHomeHeader.css";
 import SearchIcon from "@mui/icons-material/Search";
 
 const ForumHomeHeader = ({ selectedCategory, setSelectedCategory,searchText,setSearchText }) => {
-  const [selectedButtons, setSelectedButtons] = useState([]);
 
   const toggleButton = (button) => {
     const updatedCategories = selectedCategory.includes(button)
@@ -50,7 +48,7 @@ const ForumHomeHeader = ({ selectedCategory, setSelectedCategory,searchText,setS
         </button>
 
         <button
-          className={selectedButtons.includes("others") ? "selected" : ""}
+          className={selectedCategory.includes("others") ? "selected" : ""}
           onClick={() => toggleButton("others")}
         >
           Others

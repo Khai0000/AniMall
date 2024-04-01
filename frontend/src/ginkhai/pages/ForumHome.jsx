@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useEffect, useState, lazy, Suspense, useRef } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import ForumHomeHeader from "../components/ForumHomeHeader";
@@ -9,7 +9,6 @@ import ForumHomeCardSkeleton from "../components/ForumHomeCardSkeleton";
 const ForumHomeCard = lazy(() => import("../components/ForumHomeCard"));
 
 function ForumHome() {
-  const location = useLocation();
   const posts = useSelector((state) => state.posts);
   const dispatch = useDispatch();
   const [selectedCategory, setSelectedCategory] = useState([]);

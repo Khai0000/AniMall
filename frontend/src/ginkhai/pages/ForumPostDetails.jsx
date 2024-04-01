@@ -1,17 +1,31 @@
 import "../styles/ForumPostDetails.css";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import ThumbDownAltIcon from "@mui/icons-material/ThumbDownAlt";
 import IconButton from "@mui/material/IconButton";
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import PopupDialog from "../components/PopupDialog";
 import ForumPostComment from "../components/ForumPostComment";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  removeDislike,
+  removeLike,
+  addDislike,
+  addLike,
+} from "../slices/postSlice";
 
 const ForumPostDetails = () => {
   const state = useLocation();
+  const dispatch = useDispatch();
 
-  let post = state.state;
   const navigate = useNavigate();
+
+  const postTitle = state.state.title;
+  const post = useSelector((state) =>
+    state.posts.find((post) => post.title === postTitle)
+  );
 
   const [image, setImage] = useState(null);
 
@@ -41,6 +55,22 @@ const ForumPostDetails = () => {
     navigate(-1);
   };
 
+  const handleOnLikeClick = () => {
+    if (post.peopleWhoLikes.includes("Khai")) {
+      dispatch(removeLike({ postTitle, userUid: "Khai" }));
+    } else {
+      dispatch(addLike({ postTitle, userUid: "Khai" }));
+    }
+  };
+
+  const handleOnDislikeClick = () => {
+    if (post.peopleWhoDislikes.includes("Khai")) {
+      dispatch(removeDislike({ postTitle, userUid: "Khai" }));
+    } else {
+      dispatch(addDislike({ postTitle, userUid: "Khai" }));
+    }
+  };
+
   return (
     <div className="postContainer">
       <div className="postDetailsContainer">
@@ -63,14 +93,25 @@ const ForumPostDetails = () => {
         <div className="reactionContainer">
           <span className="reactionTitle">Reaction</span>
           <div className="goodReactionContainer">
-            <IconButton className="reactionButton">
-              <ThumbUpOffAltIcon className="reactionIcon" color="success" />
+            <IconButton className="reactionButton" onClick={handleOnLikeClick}>
+              {post.peopleWhoLikes.includes("Khai") ? (
+                <ThumbUpIcon className="reactionIcon" color="success" />
+              ) : (
+                <ThumbUpOffAltIcon className="reactionIcon" color="success" />
+              )}
             </IconButton>
             <span style={{ color: "#2e7d32" }}>{post.likes}</span>
           </div>
           <div className="badReactionContainer">
-            <IconButton className="reactionButton">
-              <ThumbDownOffAltIcon className="reactionIcon" color="error" />
+            <IconButton
+              className="reactionButton"
+              onClick={handleOnDislikeClick}
+            >
+              {post.peopleWhoDislikes.includes("Khai") ? (
+                <ThumbDownAltIcon className="reactionIcon" color="error" />
+              ) : (
+                <ThumbDownOffAltIcon className="reactionIcon" color="error" />
+              )}
             </IconButton>
             <span style={{ color: "#d32f2f" }}>{post.dislikes}</span>
           </div>
@@ -85,13 +126,15 @@ const ForumPostDetails = () => {
           </div>
           <div className="commentBody">
             {post.comments.map((comment, index) => {
-              return <ForumPostComment comment={comment} />;
+              return <ForumPostComment comment={comment} key={index} />;
             })}
           </div>
         </div>
       </div>
 
-      {showPopup && <PopupDialog setShowPopup={setShowPopup} />}
+      {showPopup && (
+        <PopupDialog setShowPopup={setShowPopup} postTitle={post.title} />
+      )}
     </div>
   );
 };

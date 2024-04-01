@@ -50,6 +50,8 @@ export const dogData = [
         content: "Poodles are so smart! Lily sounds like a wonderful comp",
       },
     ],
+    peopleWhoLikes: [],
+    peopleWhoDislikes: [],
   },
   {
     title: "Training a German Shepherd",
@@ -86,6 +88,8 @@ export const dogData = [
           "Rocky's story is so inspiring. German Shepherds truly are remarkable animals.",
       },
     ],
+    peopleWhoLikes: [],
+    peopleWhoDislikes: [],
   },
   {
     title: "Caring for a Golden Retriever",
@@ -132,6 +136,8 @@ export const dogData = [
           "Golden Retrievers are such beautiful and loving companions. Bailey sounds like a treasure.",
       },
     ],
+    peopleWhoLikes: [],
+    peopleWhoDislikes: [],
   },
   {
     title: "Life with a Bulldog",
@@ -159,6 +165,8 @@ export const dogData = [
           "Bruno's story is heartwarming. Bulldogs may look tough, but they're big softies at heart.",
       },
     ],
+    peopleWhoLikes: [],
+    peopleWhoDislikes: [],
   },
   {
     title: "Adventures with a Poodle",
@@ -170,6 +178,8 @@ export const dogData = [
     likes: 654,
     dislikes: 120,
     comments: [],
+    peopleWhoLikes: [],
+    peopleWhoDislikes: [],
   },
 ];
 
@@ -203,6 +213,8 @@ export const catData = [
           "Siamese cats are known for their vocal personalities. Luna must bring a lot of life to your home!",
       },
     ],
+    peopleWhoLikes: [],
+    peopleWhoDislikes: [],
   },
   {
     title: "Living with a Maine Coon",
@@ -272,6 +284,8 @@ export const catData = [
           "Maine Coons are such majestic creatures. Simba must be a beautiful cat.",
       },
     ],
+    peopleWhoLikes: [],
+    peopleWhoDislikes: [],
   },
   {
     title: "Adopting a Persian Cat",
@@ -376,6 +390,8 @@ export const catData = [
           "Persian cats are known for their beauty and grace. Bella must be a stunning cat.",
       },
     ],
+    peopleWhoLikes: [],
+    peopleWhoDislikes: [],
   },
   {
     title: "Bonding with a Ragdoll",
@@ -387,6 +403,8 @@ export const catData = [
     likes: 748,
     dislikes: 45,
     comments: [],
+    peopleWhoLikes: [],
+    peopleWhoDislikes: [],
   },
   {
     title: "The Playful Bengal",
@@ -421,6 +439,8 @@ export const catData = [
         content: "Bengal cats are such intelligent and curious creatures.",
       },
     ],
+    peopleWhoLikes: [],
+    peopleWhoDislikes: [],
   },
 ];
 
