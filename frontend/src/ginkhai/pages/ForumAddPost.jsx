@@ -46,9 +46,9 @@ const ForumAddPost = () => {
     // };
 
     reader.onloadend = () => {
-      const newImages=[...uploadedImages];
-      newImages[index]=reader.result;
-      setUploadedImages(newImages)
+      const newImages = [...uploadedImages];
+      newImages[index] = reader.result;
+      setUploadedImages(newImages);
     };
 
     if (file) {
@@ -102,6 +102,25 @@ const ForumAddPost = () => {
   };
 
   const handleOnAddPostClick = () => {
+    if (!titleText.trim()) {
+      alert("Please provide a title for your post.");
+      return;
+    }
+
+    if (!bodyText.trim()) {
+      alert("Please provide the body text for your post.");
+      return;
+    }
+
+    if (uploadedImages.every((image) => image === null)) {
+      alert("Please upload at least one image for your post.");
+      return;
+    }
+
+    if (selectedButtons.length === 0) {
+      alert("Please select at least one tag for your post.");
+      return;
+    }
 
     const newPost = {
       title: titleText,

@@ -68,7 +68,7 @@ function ForumHome() {
     }
   });
 
-  const handleOnLinkClick = (index) => {
+  const handleOnLinkClick = (index,post) => {
     const stateToSave = {
       selectedCategory,
       searchText,
@@ -93,12 +93,13 @@ function ForumHome() {
         ) : filteredPosts.length !== 0 ? (
           <Suspense fallback={<ForumHomeCardSkeleton />}>
             {filteredPosts.map((post, index) => (
+
               <Link
                 to={`post/${index}`}
                 className="forumPostLink"
                 key={index}
                 state={post}
-                onClick={() => handleOnLinkClick(index)}
+                onClick={() => handleOnLinkClick(index,post)}
               >
                 <ForumHomeCard post={post} />
               </Link>

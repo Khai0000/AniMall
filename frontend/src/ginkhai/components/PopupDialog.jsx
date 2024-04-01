@@ -4,25 +4,27 @@ import "../styles/PopupDialog.css";
 import { useDispatch } from "react-redux";
 import { addComment } from "../slices/postSlice";
 
-const PopupDialog = ({ setShowPopup,postTitle }) => {
-
+const PopupDialog = ({ setShowPopup, postTitle }) => {
   const dispatch = useDispatch();
 
-  const [bodyText, setBodyText] = useState([""]);
+  const [bodyText, setBodyText] = useState("");
 
   const handleOnBodyTextChange = (e) => {
     setBodyText(e.target.value);
-    
   };
 
   const handleOnSubmitClick = () => {
-    const newComment={
-      image:null,
-      name:"Khai",
-      content:bodyText
+    if (bodyText.trim()==="") {
+      alert("Body can't be empty");
+      return;
     }
+    const newComment = {
+      image: null,
+      name: "Khai",
+      content: bodyText,
+    };
 
-    dispatch(addComment({postTitle,comment:newComment}))
+    dispatch(addComment({ postTitle, comment: newComment }));
     setShowPopup(false);
   };
 

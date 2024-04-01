@@ -24,6 +24,7 @@ const ForumPostDetails = () => {
   const navigate = useNavigate();
 
   const postTitle = state.state.title;
+
   const post = useSelector((state) =>
     state.posts.find((post) => post.title === postTitle)
   );
@@ -50,8 +51,7 @@ const ForumPostDetails = () => {
     };
 
     loadImageUrls();
-    console.log(loadedImageUrls);
-  }, [post.image]);
+  },[post.image]);
 
   const [showPopup, setShowPopup] = useState(false);
 
@@ -96,7 +96,6 @@ const ForumPostDetails = () => {
         <div className="imageContainer">
           <ImageSlider images={loadedImageUrls} />
         </div>
-        {/* <img src={loadedImageUrls}/> */}
         <p className="content">{post.content}</p>
       </div>
 
