@@ -2,11 +2,17 @@ import SearchBar from "../components/SearchBar";
 import "../styles/ProductHome.css";
 import React, { useState } from "react";
 import MyCartButton from "../components/MyCartButton";
+import ProductCard from "../components/ProductCard";
 
 const ProductHome=()=>{
     const [showPriceRange,setShowPriceRange]=useState(false);
     const [minPrice, setMinPrice] = useState('');
     const [maxPrice, setMaxPrice] = useState('');
+    const Product={
+        imageUrl:"https://th.bing.com/th/id/OIP.9WasPpl84we8tW8rErJWrQHaHa?rs=1&pid=ImgDetMain",
+        name:"Dog 1",
+        description:"Cute, 2 months old"
+    }
 
     const handlePriceRangeSubmit = (event) => {
         event.preventDefault(); // Prevent form submission
@@ -55,6 +61,7 @@ const ProductHome=()=>{
                 ):(<button className="Upper-section-price-range-button" onClick={togglePriceRange}>Price Range</button>)}
                 <MyCartButton/>
             </div>
+            <ProductCard product={Product}/>
         </div>
     )
 }
