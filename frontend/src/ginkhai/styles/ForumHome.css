@@ -47,17 +47,36 @@
     color: #fff;
     font-size: 2.5rem;
     padding: 2px 14px;
-    margin-left: auto;
 }
 
 .forumContainer .addPostButton:hover{
     background-color: #F3B801;
     cursor: pointer;
+    
+}
+
+
+.forumContainer>.forumBody>.deleteContainer{
+    position: relative;
 }
 
 .forumPostLink{
     text-decoration: none;
 }
+
+.forumContainer>.forumBody>.deleteContainer>.deleteButton {
+    position: absolute;
+    right: 0;
+    top: 0;
+    border: none;
+    cursor: pointer;
+    background-color: transparent;
+    color: red;
+    margin-top: 2vh;
+    z-index: 100;
+}
+
+
 
 .forumContainer .forumNoDiscussionContainer{
     height: 66vh;

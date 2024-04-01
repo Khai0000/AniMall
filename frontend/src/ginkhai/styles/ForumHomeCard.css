@@ -55,6 +55,13 @@
     font-size: 24px;
     font-weight: 500;
     margin-top: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    /* Number of lines to show */
+    -webkit-box-orient: vertical;
+    max-width: 60vw;
 }
 
 .cardContainer .cardDetails .author {
@@ -80,6 +87,7 @@
     /* Number of lines to show */
     -webkit-box-orient: vertical;
     margin-bottom: 0;
+    max-width: 72vw;
 }
 
 .cardContainer>.deleteButton {

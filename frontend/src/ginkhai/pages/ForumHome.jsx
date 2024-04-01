@@ -5,6 +5,8 @@ import ForumHomeHeader from "../components/ForumHomeHeader";
 import { useSelector, useDispatch } from "react-redux";
 import "../styles/ForumHome.css";
 import ForumHomeCardSkeleton from "../components/ForumHomeCardSkeleton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { removePost } from "../slices/postSlice";
 
 const ForumHomeCard = lazy(() => import("../components/ForumHomeCard"));
 
@@ -56,8 +58,8 @@ function ForumHome() {
 
   useEffect(() => {
     if (containerRef.current) {
-      if (scrollIndex !== null && scrollIndex>0) { // Check if scrollIndex is not null or undefined
-        const lastScroll = containerRef.current.children[scrollIndex-1];
+      if (scrollIndex !== null && scrollIndex > 0) {
+        const lastScroll = containerRef.current.children[scrollIndex - 1];
         if (lastScroll) {
           const containerTop = containerRef.current.getBoundingClientRect().top;
           const lastScrollTop = lastScroll.getBoundingClientRect().top;
@@ -68,13 +70,18 @@ function ForumHome() {
     }
   });
 
-  const handleOnLinkClick = (index,post) => {
+  const handleOnLinkClick = (index) => {
+    console.log("hi");
     const stateToSave = {
       selectedCategory,
       searchText,
       scrollIndex: index,
     };
     localStorage.setItem("forumHomeState", JSON.stringify(stateToSave));
+  };
+
+  const handleOnDeleteClick = (title) => {
+    dispatch(removePost(title));
   };
 
   return (
@@ -93,16 +100,25 @@ function ForumHome() {
         ) : filteredPosts.length !== 0 ? (
           <Suspense fallback={<ForumHomeCardSkeleton />}>
             {filteredPosts.map((post, index) => (
-
-              <Link
-                to={`post/${index}`}
-                className="forumPostLink"
-                key={index}
-                state={post}
-                onClick={() => handleOnLinkClick(index,post)}
-              >
-                <ForumHomeCard post={post} />
-              </Link>
+              <div className="deleteContainer">
+                <Link
+                  to={`post/${index}`}
+                  className="forumPostLink"
+                  key={index}
+                  state={post}
+                  onClick={() => handleOnLinkClick(index, post)}
+                >
+                  <ForumHomeCard post={post} />
+                </Link>
+                {post.author==="Khai"&&
+                  <button
+                    className="deleteButton"
+                    onClick={() => handleOnDeleteClick(post.title)}
+                  >
+                    <DeleteIcon />
+                  </button>
+                }
+              </div>
             ))}
           </Suspense>
         ) : (

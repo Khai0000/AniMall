@@ -62,7 +62,7 @@ export const postSlice = createSlice({
       return [action.payload, ...state];
     },
     removePost: (state, action) => {
-      return state.filter((post) => post.title !== action.payload.title);
+      return state.filter((post) => post.title !== action.payload);
     },
     setInitialPost: (state, action) => {
       return [...action.payload];

@@ -14,6 +14,8 @@
     font-size: 2.25rem;
     font-weight: 700;
     margin: 8px 0;
+    max-width: 65vw;
+    word-wrap: break-word;
 }
 
 
@@ -52,6 +54,7 @@
     font-size: 2rem;
     font-weight: 500;
     line-height: 4rem;
+    word-wrap: break-word;
 }
 
 .postContainer .feedbackContainer {
