@@ -1,8 +1,11 @@
+import ServiceHome from "../ZongMing/pages/ServiceHome";
+
+
 function Services(){
 
     return(
         <div>
-            <h1>This is services page</h1>
+            <ServiceHome />
         </div>
     )
 }

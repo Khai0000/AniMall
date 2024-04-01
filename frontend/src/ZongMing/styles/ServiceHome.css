@@ -1,0 +1,43 @@
+.service-home {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.service-container {
+  display: flex;
+  flex-direction: column; 
+}
+
+.service-container > .odd-row,
+.service-container > .even-row {
+  display: flex; 
+  width: 100%;
+}
+
+.service-container > .odd-row {
+  background-color: #dcebeb;
+  margin-bottom: 1.5rem; 
+  padding: 1rem;
+}
+
+.service-container > .even-row {
+  background-color: white;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+}
+
+.service-container > .odd-row > *,
+.service-container > .even-row > * {
+  flex: 0 0 calc(33.33% - 20px);
+  margin: 10px;
+}
+
+.service-card-link {
+  text-decoration: none; 
+  color: black; 
+}
+
+.service-card-link:hover {
+  color: black; 
+}
+

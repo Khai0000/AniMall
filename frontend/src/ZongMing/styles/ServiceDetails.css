@@ -1,0 +1,134 @@
+.serviceDetailsContainer {
+    padding: 3vh 5vw;
+    color: #000;
+}
+
+.serviceDetailsContainer .topSideContainer {
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid #3C95A9;
+    padding-bottom: 16px;
+}
+
+.serviceDetailsContainer .topSideContainer .leftSide {
+    flex: 0 0 60%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.serviceDetailsContainer .topSideContainer .leftSide .imageSlider {
+    width: 80%;
+}
+
+.serviceDetailsContainer .topSideContainer .rightSide {
+    flex: 1;
+}
+
+@media screen and (max-width: 768px) {
+    .serviceDetailsContainer .topSideContainer .leftSide .imageSlider {
+        width: 100%;
+    }
+
+    .serviceDetailsContainer .feedbackContainer {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .serviceDetailsContainer .ratingContainer {
+        margin-bottom: 1.5rem;
+    }
+
+    .serviceDetailsContainer .ratingContainer .ratingTitle,
+    .serviceDetailsContainer .commentContainer .commentTitle {
+        color: #3C95A9;
+        font-size: 1.5rem;
+        font-weight: 200;
+        margin-bottom: 12px;
+        margin-right: 2vw;
+    }
+}
+
+
+.serviceDetailsContainer .feedbackContainer {
+    display: flex;
+    padding: 16px 8px;
+}
+
+.serviceDetailsContainer .ratingContainer {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-right: 1.5rem;
+}
+
+
+.serviceDetailsContainer .commentContainer {
+    flex: 4;
+    border-left: 1px solid #3C95A9;
+    padding-left: 2vw;
+}
+
+.serviceDetailsContainer .ratingContainer .ratingTitle,
+.serviceDetailsContainer .commentContainer .commentTitle {
+    color: #3C95A9;
+    font-size: 2rem;
+    font-weight: 500;
+    margin-bottom: 12px;
+    margin-right: 2vw;
+}
+
+.serviceDetailsContainer .commentContainer .commentHeader {
+    margin-bottom: 12px;
+}
+
+.serviceDetailsContainer .addPostButton {
+    background-color: #3C95A9;
+    border: none;
+    border-radius: 15px;
+    height: fit-content;
+    width: fit-content;
+    text-align: center;
+    color: #fff;
+    font-size: 2.5rem;
+    padding: 2px 14px;
+}
+
+.serviceDetailsContainer .addPostButton:hover {
+    cursor: pointer;
+    background-color: #F3B801;
+}
+
+.serviceDetailsContainer .commentContainer .commentBody {
+    max-height: 60vh;
+    overflow-y: auto;
+
+}
+
+
+.serviceDetailsContainer ::-webkit-scrollbar {
+    padding: 20px;
+    width: 0.2vw;
+
+}
+
+.serviceDetailsContainer ::-webkit-scrollbar-track {
+    background-color: transparent;
+    border-radius: 20px;
+}
+
+
+.serviceDetailsContainer ::-webkit-scrollbar-thumb {
+    background-color: #F3B801;
+    border-radius: 20px;
+}
+
+
+.serviceDetailsContainer ::-webkit-scrollbar-thumb:hover {
+    cursor: pointer;
+}
+
+.buttonContainer>a {
+    margin-left: auto;
+}

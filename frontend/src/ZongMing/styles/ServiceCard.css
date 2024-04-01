@@ -1,0 +1,86 @@
+.cardContainer {
+    display: flex;
+    align-items: center;
+    margin: 17px;
+    border: 1px solid #ccc;
+    border-radius: 30px;
+    overflow: hidden;
+    background-color: white;
+    filter: drop-shadow(0 2px 8px rgba(47, 164, 190, 0.5));
+}
+
+.cardContainer:hover{
+    border-color: #f4b701;
+    --shadow-color: rgba(244, 183, 1, 0.5);
+    filter: drop-shadow(0 2px 4px rgba(244, 183, 1, 0.5));
+    outline: none;
+    color: #3C95A9;
+}
+
+.imageContainer {
+    flex: 0 0 50%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+}
+
+.imageContainer img {
+    width: 60%;
+    height: auto;
+    display: block;
+    border-radius: 25%;
+}
+
+.cardContent {
+    flex: 1;
+    padding: 10px;
+}
+
+.cardContent > div {
+    margin-bottom: 10px;
+}
+
+.title {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.descriptionWord {
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.description {
+    font-size: 0.80rem;
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+/* Media queries for responsive design */
+@media screen and (max-width: 768px) {
+    .cardContainer {
+        width: calc(50% - 20px); 
+    }
+    
+    .imageContainer {
+        flex: 0 0 40%; 
+    }
+    
+    .imageContainer img {
+        width: 60%;
+        border-radius: 10px; 
+    }
+    
+    .title {
+        font-size: 0.9rem; 
+    }
+    
+    .descriptionWord,
+    .description {
+        font-size: 0.75rem; 
+    }
+}
