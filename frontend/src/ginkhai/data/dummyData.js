@@ -6,7 +6,7 @@ export const dogData = [
     author: "John Doe",
     content:
       "Labrador Retrievers are known for their friendly and outgoing nature. My Labrador, Max, was no exception. From the moment we brought him home, he filled our lives with joy and laughter. Whether it was playing fetch in the backyard or going for long walks in the park, Max was always by our side. Training him was a rewarding experience, as he was quick to learn new tricks and commands. His loyalty knew no bounds, and he was always there to comfort us during difficult times. Max truly became a cherished member of our family, and I will forever be grateful for the time we spent together.",
-    image: ["dog1.jpg"],
+    image: ["dog1.jpg","dog2.jpg","dog3.jpg"],
     tag: ["dog"],
     likes: 10,
     dislikes: 0,

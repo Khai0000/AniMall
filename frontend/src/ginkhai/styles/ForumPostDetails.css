@@ -40,6 +40,13 @@
     align-self: center;
 }
 
+.postContainer>.postDetailsContainer>.imageContainer{
+    width: 40vw;
+    height: 60vh;
+    margin-bottom: 7vh;
+    align-self: center;   
+}
+
 .postContainer .postDetailsContainer .content {
     color: #7B7979;
     font-size: 2rem;
@@ -72,7 +79,6 @@
     font-weight: 500;
 }
 
-.postContainer .reactionContainer .reactionButton {}
 
 .postContainer .reactionContainer .reactionIcon {
     width: 32px;
@@ -116,10 +122,9 @@
 }
 
 .postContainer .commentContainer .commentBody {
-    /* padding-right: 20px; */
+    padding-right: 20px;
     max-height: 60vh;
     overflow-y: auto;
-
 }
 
 
@@ -145,11 +150,11 @@
     cursor: pointer;
 }
 
-.buttonContainer>a{
+.buttonContainer>a {
     margin-left: auto;
 }
 
-.postContainer .backButton{
+.postContainer .backButton {
     background-color: transparent;
     border: 1px solid #3C95A9;
     color: #3C95A9;
@@ -168,10 +173,19 @@
     text-shadow: 0 0 0px #f4b701, 0 0 1px #f4b701, 0 0 30px #f4b701;
 }
 
-.postContainer .headerContainer{
+.postContainer .headerContainer {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
 }
 
+.postContainer .noCommentContainer {
+    padding: 16px;
+}
+
+.postContainer .noCommentContainer p {
+    font-size: 1.5rem;
+    text-align: center;
+    color: #868686;
+}

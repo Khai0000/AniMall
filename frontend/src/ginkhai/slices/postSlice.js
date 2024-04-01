@@ -145,6 +145,17 @@ export const postSlice = createSlice({
         post.dislikes -= 1;
       }
     },
+    removeComment: (state, action) => {
+      const { postTitle, commentBody } = action.payload;
+      const postIndex = state.findIndex((post) => post.title === postTitle);
+      if (postIndex !== -1) {
+        const post = state[postIndex];
+        post.comments = post.comments.filter((comment) => {
+          return comment.content !== commentBody;
+        });
+      }
+
+    },
   },
 });
 
@@ -157,5 +168,6 @@ export const {
   addDislike,
   removeLike,
   removeDislike,
+  removeComment,
 } = postSlice.actions;
 export default postSlice.reducer;

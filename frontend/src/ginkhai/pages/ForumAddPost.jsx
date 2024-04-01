@@ -108,8 +108,12 @@ const ForumAddPost = () => {
       author: "Khai",
       content: bodyText,
       tag: [...selectedButtons],
+      likes: 0,
+      dislikes: 0,
       image: uploadedImages.filter((image) => image !== null),
       comments: [],
+      peopleWhoLikes: [],
+      peopleWhoDislikes: [],
     };
 
     dispatch(addPost(newPost));

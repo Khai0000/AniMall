@@ -15,6 +15,7 @@ import {
   addDislike,
   addLike,
 } from "../slices/postSlice";
+import ImageSlider from "../components/ImageSlider";
 
 const ForumPostDetails = () => {
   const state = useLocation();
@@ -27,22 +28,29 @@ const ForumPostDetails = () => {
     state.posts.find((post) => post.title === postTitle)
   );
 
-  const [image, setImage] = useState(null);
+  const [loadedImageUrls, setLoadedImageUrls] = useState([]);
 
   useEffect(() => {
-    if (post.image[0].includes("jpg")) {
-      let imageDir = post.image[0].substring(0, post.image[0].indexOf("."));
-      import(`../assets/images/${imageDir}.jpg`)
-        .then((image) => {
-          setImage(image.default);
-        })
-        .catch((error) => {
+    const loadImageUrls = async () => {
+      const loadedImages = [];
+      for (const image of post.image) {
+        try {
+          if (image.includes("jpg")) {
+            let imageDir = image.substring(0, image.indexOf("."));
+            const imageData = await import(`../assets/images/${imageDir}.jpg`);
+            loadedImages.push(imageData.default);
+          } else {
+            loadedImages.push(image);
+          }
+        } catch (error) {
           console.error("Error loading image:", error);
-        })
-        .finally(() => {});
-    } else {
-      setImage(post.image[0]);
-    }
+        }
+      }
+      setLoadedImageUrls(loadedImages);
+    };
+
+    loadImageUrls();
+    console.log(loadedImageUrls);
   }, [post.image]);
 
   const [showPopup, setShowPopup] = useState(false);
@@ -85,7 +93,10 @@ const ForumPostDetails = () => {
             Back
           </button>
         </div>
-        <img src={image} alt="Post" />
+        <div className="imageContainer">
+          <ImageSlider images={loadedImageUrls} />
+        </div>
+        {/* <img src={loadedImageUrls}/> */}
         <p className="content">{post.content}</p>
       </div>
 
@@ -125,9 +136,21 @@ const ForumPostDetails = () => {
             </button>
           </div>
           <div className="commentBody">
-            {post.comments.map((comment, index) => {
-              return <ForumPostComment comment={comment} key={index} />;
-            })}
+            {post.comments.length === 0 ? (
+              <div className="noCommentContainer">
+                <p>The topic have no comment yet! Add yours here!</p>
+              </div>
+            ) : (
+              post.comments.map((comment, index) => {
+                return (
+                  <ForumPostComment
+                    comment={comment}
+                    key={index}
+                    postTitle={postTitle}
+                  />
+                );
+              })
+            )}
           </div>
         </div>
       </div>
