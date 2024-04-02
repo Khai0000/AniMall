@@ -1,0 +1,29 @@
+#Upper-section {
+    margin-top: 2.5%;
+    margin-left: 4.5%;
+    display: flex;
+    align-items: center; 
+}
+
+#Upper-section-warehouse {
+    color: #3C95A9;
+    text-align: center;
+    font-family: Inter;
+    font-size: 1.12em;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+#Upper-section-icon {
+    margin-right: 1%;
+}
+
+#Upper-section-add-product {
+    background-color: white;
+    border: none;
+    display: flex;
+    margin-left: 1.5%;
+    align-items: center; 
+}
+

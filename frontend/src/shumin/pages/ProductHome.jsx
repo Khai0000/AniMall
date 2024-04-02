@@ -3,6 +3,7 @@ import "../styles/ProductHome.css";
 import React, { useState } from "react";
 import MyCartButton from "../components/MyCartButton";
 import ProductCard from "../components/ProductCard";
+import { NavLink } from "react-router-dom";
 
 const ProductHome=()=>{
     const [showPriceRange,setShowPriceRange]=useState(false);
@@ -62,8 +63,12 @@ const ProductHome=()=>{
                 <MyCartButton/>
             </div>
             <ProductCard product={Product}/>
+            <NavLink to="/SellerProduct" className="seller-link">
+                <button id="Seller-product">Seller</button>
+            </NavLink>
         </div>
     )
 }
 
 export default ProductHome;
+

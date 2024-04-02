@@ -6,6 +6,9 @@ import Community from "./pages/Community";
 import Product from "./pages/Product";
 import Services from "./pages/Services";
 import Home from "./pages/Home";
+import SellerProduct from "./shumin/pages/SellerProduct";
+import AddProduct from "./shumin/pages/AddProduct";
+
 function App() {
 
   const router = createBrowserRouter(
@@ -17,6 +20,8 @@ function App() {
         <Route path="/product" element={<Product/>}/>
         <Route path="/community" element={<Community/>}/>
         <Route path="/services" element={<Services/>}/>
+        <Route path="/sellerProduct" element={<SellerProduct/>}/>
+        <Route path="/AddProduct" element={<AddProduct/>}/>
       </Route>
     )
   );

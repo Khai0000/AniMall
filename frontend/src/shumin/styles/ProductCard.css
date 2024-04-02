@@ -12,7 +12,8 @@
     box-shadow: 0px 4px 10px 1px #3C95A9;
 }
 
-.product-button:active{
+.product-button:active,
+.product-button:hover{
     box-shadow: 0px 4px 10px 1px #F3B801;
 }
 

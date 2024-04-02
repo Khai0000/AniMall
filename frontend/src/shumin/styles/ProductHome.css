@@ -19,6 +19,11 @@
     padding: 0.6%;
 }
   
+.Upper-section-price-range-button:hover,
+.Upper-section-price-range-button:active{
+    background-color: #F3B801;
+}
+
 .Upper-section-cart-button {
     background-color: white;
     color: #3C95A9;
@@ -39,11 +44,13 @@
     margin-left: 8%;
 }
 
-.Upper-section-cart-button:active svg path {
+.Upper-section-cart-button:active svg path,
+.Upper-section-cart-button:hover svg path{
   fill: #F3B801;
 }
 
-.Upper-section-cart-button:active #Upper-section-cart-button-text {
+.Upper-section-cart-button:active #Upper-section-cart-button-text,
+.Upper-section-cart-button:hover #Upper-section-cart-button-text {
   color:#F3B801;
 }
 
@@ -85,7 +92,7 @@
 }
   
 .Upper-section-search-container.focused,
-.Upper-section-search-container:focus-within {
+.Upper-section-search-container:hover {
     filter: drop-shadow(0px 0px 4px #F3B801);
 }
 
@@ -117,6 +124,8 @@
 }
 
 .Upper-section-min-price:focus,
+.Upper-section-max-price:hover,
+.Upper-section-min-price:hover,
 .Upper-section-max-price:focus{    
     border-color: #F3B801;
     outline: none;
