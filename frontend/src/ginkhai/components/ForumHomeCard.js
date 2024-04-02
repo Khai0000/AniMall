@@ -6,7 +6,7 @@ import { removePost } from "../slices/postSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-const ForumHomeCard = ({ post, handleOnLinkClick, index }) => {
+const ForumHomeCard = ({ post,index }) => {
   const [image, setImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -47,7 +47,6 @@ const ForumHomeCard = ({ post, handleOnLinkClick, index }) => {
     <div
       className="cardContainer"
       onClick={() => {
-        handleOnLinkClick(index);
         navigate(`post/${index}`,{state:post});
       }}
     >

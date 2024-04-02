@@ -2,25 +2,28 @@ import "../styles/ForumHomeHeader.css";
 import SearchIcon from "@mui/icons-material/Search";
 import Datepicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
-const ForumHomeHeader = ({
-  selectedCategory,
+import { useSelector, useDispatch } from "react-redux";
+import {
   setSelectedCategory,
-  searchText,
   setSearchText,
-  selectedDate,
   setSelectedDate,
-}) => {
+} from "../slices/forumHistorySlice";
+
+const ForumHomeHeader = () => {
+  const dispatch = useDispatch();
+  const forumHistory = useSelector((state) => state.forumHistory);
+  const { selectedCategory, searchText, selectedDate } = forumHistory;
+
   const toggleButton = (button) => {
     const updatedCategories = selectedCategory.includes(button)
       ? selectedCategory.filter((category) => category !== button)
       : [...selectedCategory, button];
 
-    setSelectedCategory(updatedCategories);
+    dispatch(setSelectedCategory(updatedCategories));
   };
 
   const handleOnTextChange = (e) => {
-    setSearchText(e.target.value);
+    dispatch(setSearchText(e.target.value));
   };
 
   return (
@@ -61,16 +64,19 @@ const ForumHomeHeader = ({
           Others
         </button>
 
-        <button className={`datePickerButton ${selectedDate?"dateButtonSelected":""}`}>
+        <button
+          className={`datePickerButton ${
+            selectedDate ? "dateButtonSelected" : ""
+          }`}
+        >
           <Datepicker
             className="datePicker"
-            selected={selectedDate? selectedDate:new Date()}
+            selected={selectedDate ? selectedDate : new Date()}
             onChange={(date) => {
-              console.log("Date:",date);
-              setSelectedDate(date);
+              dispatch(setSelectedDate(date));
             }}
             dateFormat="dd/M/yyyy"
-            isClearable={selectedDate&&true}
+            isClearable={selectedDate ? true : false}
           />
         </button>
       </div>

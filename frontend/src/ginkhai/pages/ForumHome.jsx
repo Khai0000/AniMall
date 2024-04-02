@@ -1,42 +1,38 @@
-import { Link } from "react-router-dom";
-import { useEffect, useState, lazy, Suspense, useRef } from "react";
+import React from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import ForumHomeHeader from "../components/ForumHomeHeader";
-import { useSelector, useDispatch } from "react-redux";
-import "../styles/ForumHome.css";
 import ForumHomeCardSkeleton from "../components/ForumHomeCardSkeleton";
+import "../styles/ForumHome.css";
+
+import { Link } from "react-router-dom";
+import { useEffect, useState, lazy, Suspense, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { setScrollPosition } from "../slices/forumHistorySlice";
 
 const ForumHomeCard = lazy(() => import("../components/ForumHomeCard"));
 
 function ForumHome() {
-  const posts = useSelector((state) => state.posts);
   const dispatch = useDispatch();
-  const [selectedCategory, setSelectedCategory] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(null);
+
+  const posts = useSelector((state) => state.posts);
+  const forumHistory = useSelector((state) => state.forumHistory);
+
+  const { selectedCategory, searchText, selectedDate, scrollPosition } =
+    forumHistory;
+
   const [filteredPosts, setFilteredPosts] = useState([]);
-  const [searchText, setSearchText] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [scrollIndex, setScrollIndex] = useState(null);
   const containerRef = useRef(null);
 
+  // useEffect for restoring last scrolling position
   useEffect(() => {
-    const loadSavedState = () => {
-      const savedState = localStorage.getItem("forumHomeState");
-      if (savedState) {
-        const { selectedCategory, searchText, scrollIndex, selectedDate } =
-          JSON.parse(savedState);
+    if (containerRef.current && scrollPosition) {
+      containerRef.current.scrollTop = scrollPosition;
+    }
+  });
 
-        setSelectedCategory(selectedCategory);
-        setSearchText(searchText);
-        setScrollIndex(scrollIndex);
-        if(selectedDate)
-          setSelectedDate(new Date(selectedDate));
-        localStorage.removeItem("forumHomeState");
-      }
-    };
-
-    loadSavedState();
-
+  // useEffect for filtering data
+  useEffect(() => {
     let filteredData = posts;
     setIsLoading(true);
 
@@ -55,7 +51,6 @@ function ForumHome() {
     }
 
     if (selectedDate) {
-      console.log("userWantDate:",selectedDate);
       const selectedDateString = selectedDate.toLocaleDateString(undefined, {
         day: "2-digit",
         month: "2-digit",
@@ -77,42 +72,27 @@ function ForumHome() {
 
     setIsLoading(false);
     setFilteredPosts(filteredData);
-  }, [searchText, selectedCategory, dispatch, posts, selectedDate]);
+  }, [searchText, selectedCategory, posts, selectedDate, dispatch]);
 
   useEffect(() => {
-    if (containerRef.current) {
-      if (scrollIndex !== null && scrollIndex > 0) {
-        const lastScroll = containerRef.current.children[scrollIndex - 1];
-        if (lastScroll) {
-          const containerTop = containerRef.current.getBoundingClientRect().top;
-          const lastScrollTop = lastScroll.getBoundingClientRect().top;
-          const offset = lastScrollTop - containerTop;
-          containerRef.current.scrollTop += offset;
-        }
+    const handleScroll = () => {
+      if (containerRef.current) {
+        dispatch(setScrollPosition(containerRef.current.scrollTop));
       }
-    }
-  });
-
-  const handleOnLinkClick = (index) => {
-    const stateToSave = {
-      selectedCategory,
-      searchText,
-      scrollIndex: index,
-      selectedDate,
     };
-    localStorage.setItem("forumHomeState", JSON.stringify(stateToSave));
-  };
+
+    const container = containerRef.current;
+    container.addEventListener("scroll", handleScroll);
+
+    return () => {
+      container.removeEventListener("scroll", handleScroll);
+    };
+  }, [dispatch, containerRef]);
+
 
   return (
     <div className="forumContainer">
-      <ForumHomeHeader
-        setSelectedCategory={setSelectedCategory}
-        selectedCategory={selectedCategory}
-        searchText={searchText}
-        setSearchText={setSearchText}
-        selectedDate={selectedDate}
-        setSelectedDate={setSelectedDate}
-      />
+      <ForumHomeHeader />
       <div className="forumBody" ref={containerRef}>
         {isLoading ? (
           <div className="loadingContainer">
@@ -121,12 +101,7 @@ function ForumHome() {
         ) : filteredPosts.length !== 0 ? (
           <Suspense fallback={<ForumHomeCardSkeleton />}>
             {filteredPosts.map((post, index) => (
-              <ForumHomeCard
-                post={post}
-                handleOnLinkClick={handleOnLinkClick}
-                index={index}
-                key={index}
-              />
+              <ForumHomeCard post={post} index={index} key={index} />
             ))}
           </Suspense>
         ) : (
