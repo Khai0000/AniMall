@@ -47,7 +47,7 @@ const ForumHomeCard = ({ post, handleOnLinkClick, index }) => {
     <div
       className="cardContainer"
       onClick={() => {
-        handleOnLinkClick();
+        handleOnLinkClick(index);
         navigate(`post/${index}`,{state:post});
       }}
     >

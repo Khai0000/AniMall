@@ -12,6 +12,7 @@ function ForumHome() {
   const posts = useSelector((state) => state.posts);
   const dispatch = useDispatch();
   const [selectedCategory, setSelectedCategory] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(null);
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [searchText, setSearchText] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -22,11 +23,14 @@ function ForumHome() {
     const loadSavedState = () => {
       const savedState = localStorage.getItem("forumHomeState");
       if (savedState) {
-        const { selectedCategory, searchText, scrollIndex } =
+        const { selectedCategory, searchText, scrollIndex, selectedDate } =
           JSON.parse(savedState);
+
         setSelectedCategory(selectedCategory);
         setSearchText(searchText);
         setScrollIndex(scrollIndex);
+        if(selectedDate)
+          setSelectedDate(new Date(selectedDate));
         localStorage.removeItem("forumHomeState");
       }
     };
@@ -50,9 +54,30 @@ function ForumHome() {
       );
     }
 
+    if (selectedDate) {
+      console.log("userWantDate:",selectedDate);
+      const selectedDateString = selectedDate.toLocaleDateString(undefined, {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      });
+
+      filteredData = filteredData.filter((post) => {
+        const postDateString = new Date(post.createdAt).toLocaleDateString(
+          undefined,
+          {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+          }
+        );
+        return postDateString === selectedDateString;
+      });
+    }
+
     setIsLoading(false);
     setFilteredPosts(filteredData);
-  }, [searchText, selectedCategory, dispatch, posts]);
+  }, [searchText, selectedCategory, dispatch, posts, selectedDate]);
 
   useEffect(() => {
     if (containerRef.current) {
@@ -73,10 +98,10 @@ function ForumHome() {
       selectedCategory,
       searchText,
       scrollIndex: index,
+      selectedDate,
     };
     localStorage.setItem("forumHomeState", JSON.stringify(stateToSave));
   };
-
 
   return (
     <div className="forumContainer">
@@ -85,6 +110,8 @@ function ForumHome() {
         selectedCategory={selectedCategory}
         searchText={searchText}
         setSearchText={setSearchText}
+        selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
       />
       <div className="forumBody" ref={containerRef}>
         {isLoading ? (
@@ -94,11 +121,12 @@ function ForumHome() {
         ) : filteredPosts.length !== 0 ? (
           <Suspense fallback={<ForumHomeCardSkeleton />}>
             {filteredPosts.map((post, index) => (
-                <ForumHomeCard
-                  post={post}
-                  handleOnLinkClick={handleOnLinkClick}
-                  index={index}
-                />
+              <ForumHomeCard
+                post={post}
+                handleOnLinkClick={handleOnLinkClick}
+                index={index}
+                key={index}
+              />
             ))}
           </Suspense>
         ) : (

@@ -23,7 +23,6 @@ const ForumPostDetails = () => {
 
   const navigate = useNavigate();
 
-  console.log(state.state);
   const postTitle = state.state.title;
 
   const post = useSelector((state) =>

@@ -6,7 +6,7 @@ export const dogData = [
     author: "John Doe",
     content:
       "Labrador Retrievers are known for their friendly and outgoing nature. My Labrador, Max, was no exception. From the moment we brought him home, he filled our lives with joy and laughter. Whether it was playing fetch in the backyard or going for long walks in the park, Max was always by our side. Training him was a rewarding experience, as he was quick to learn new tricks and commands. His loyalty knew no bounds, and he was always there to comfort us during difficult times. Max truly became a cherished member of our family, and I will forever be grateful for the time we spent together.",
-    image: ["dog1.jpg","dog2.jpg","dog3.jpg"],
+    image: ["dog1.jpg", "dog2.jpg", "dog3.jpg"],
     tag: ["dog"],
     likes: 10,
     dislikes: 0,
@@ -52,6 +52,7 @@ export const dogData = [
     ],
     peopleWhoLikes: [],
     peopleWhoDislikes: [],
+    createdAt: "2024-04-08T07:00:51.000Z",
   },
   {
     title: "Training a German Shepherd",
@@ -90,6 +91,7 @@ export const dogData = [
     ],
     peopleWhoLikes: [],
     peopleWhoDislikes: [],
+    createdAt: "2024-04-08T07:00:51.000Z",
   },
   {
     title: "Caring for a Golden Retriever",
@@ -138,6 +140,7 @@ export const dogData = [
     ],
     peopleWhoLikes: [],
     peopleWhoDislikes: [],
+    createdAt: "2024-04-08T07:00:51.000Z",
   },
   {
     title: "Life with a Bulldog",
@@ -167,6 +170,7 @@ export const dogData = [
     ],
     peopleWhoLikes: [],
     peopleWhoDislikes: [],
+    createdAt: "2024-04-07T07:00:51.000Z"
   },
   {
     title: "Adventures with a Poodle",
@@ -180,6 +184,7 @@ export const dogData = [
     comments: [],
     peopleWhoLikes: [],
     peopleWhoDislikes: [],
+    createdAt: "2024-04-07T07:00:51.000Z"
   },
 ];
 
@@ -215,12 +220,14 @@ export const catData = [
     ],
     peopleWhoLikes: [],
     peopleWhoDislikes: [],
+    createdAt: "2024-04-06T07:00:51.000Z"
+    
   },
   {
     title: "Living with a Maine Coon",
     author: "Ethan Miller",
     content:
-      "Maine Coons are one of the largest domesticated breeds, known for their friendly disposition and impressive size. When I adopted my Maine Coon, Simba, I was immediately struck by his majestic appearance and gentle demeanor. Despite his large size, Simba was a gentle giant, always eager to cuddle and play. His long, flowing coat required regular grooming, but it was a small price to pay for his companionship. Whether we were lounging on the couch or exploring the great outdoors, Simba was always by my side, ready for the next adventure. Through his unwavering loyalty and affection, Simba taught me valuable lessons about love, friendship, and the true meaning of family.",
+    "Maine Coons are one of the largest domesticated breeds, known for their friendly disposition and impressive size. When I adopted my Maine Coon, Simba, I was immediately struck by his majestic appearance and gentle demeanor. Despite his large size, Simba was a gentle giant, always eager to cuddle and play. His long, flowing coat required regular grooming, but it was a small price to pay for his companionship. Whether we were lounging on the couch or exploring the great outdoors, Simba was always by my side, ready for the next adventure. Through his unwavering loyalty and affection, Simba taught me valuable lessons about love, friendship, and the true meaning of family.",
     image: ["cat2.jpg"],
     tag: ["cat"],
     likes: 25,
@@ -233,7 +240,7 @@ export const catData = [
       {
         name: "Emma",
         content:
-          "Simba sounds like a gentle giant. Maine Coons are known for their friendly nature.",
+        "Simba sounds like a gentle giant. Maine Coons are known for their friendly nature.",
       },
       {
         name: "Olivia",
@@ -242,22 +249,22 @@ export const catData = [
       {
         name: "Jack",
         content:
-          "I've always wanted a Maine Coon. Simba sounds like the perfect companion!",
+        "I've always wanted a Maine Coon. Simba sounds like the perfect companion!",
       },
       {
         name: "Sophia",
         content:
-          "Simba's story is heartwarming. Maine Coons are such loving and loyal cats.",
+        "Simba's story is heartwarming. Maine Coons are such loving and loyal cats.",
       },
       {
         name: "Noah",
         content:
-          "Maine Coons are such wonderful pets. Simba must bring so much joy to your life!",
+        "Maine Coons are such wonderful pets. Simba must bring so much joy to your life!",
       },
       {
         name: "Isabella",
         content:
-          "Maine Coons are known for their playful personalities. Simba sounds like a lot of fun!",
+        "Maine Coons are known for their playful personalities. Simba sounds like a lot of fun!",
       },
       {
         name: "James",
@@ -266,32 +273,33 @@ export const catData = [
       {
         name: "Charlotte",
         content:
-          "I've always admired Maine Coons. Simba sounds like a true gentle giant.",
+        "I've always admired Maine Coons. Simba sounds like a true gentle giant.",
       },
       {
         name: "William",
         content:
-          "Maine Coons are known for their intelligence and affectionate nature.",
+        "Maine Coons are known for their intelligence and affectionate nature.",
       },
       {
         name: "Amelia",
         content:
-          "Simba's story touched my heart. Maine Coons truly make wonderful companions.",
+        "Simba's story touched my heart. Maine Coons truly make wonderful companions.",
       },
       {
         name: "Benjamin",
         content:
-          "Maine Coons are such majestic creatures. Simba must be a beautiful cat.",
+        "Maine Coons are such majestic creatures. Simba must be a beautiful cat.",
       },
     ],
     peopleWhoLikes: [],
     peopleWhoDislikes: [],
+    createdAt: "2024-04-06T07:00:51.000Z"
   },
   {
     title: "Adopting a Persian Cat",
     author: "Olivia Davis",
     content:
-      "Persian cats have long been cherished for their elegant appearance and sweet temperament. When I decided to adopt a Persian cat, I knew I was in for a rewarding experience. My Persian cat, Bella, quickly stole my heart with her luxurious fur and affectionate nature. From the moment she entered my life, Bella brought joy and laughter into my home with her playful antics and loving purrs. Despite her regal appearance, Bella was a gentle soul who thrived on affection and companionship. As we navigated through life together, Bella became not only my loyal companion but also my closest confidant. Through her unwavering love and devotion, Bella taught me the true meaning of unconditional love and brought immeasurable happiness into my life.",
+    "Persian cats have long been cherished for their elegant appearance and sweet temperament. When I decided to adopt a Persian cat, I knew I was in for a rewarding experience. My Persian cat, Bella, quickly stole my heart with her luxurious fur and affectionate nature. From the moment she entered my life, Bella brought joy and laughter into my home with her playful antics and loving purrs. Despite her regal appearance, Bella was a gentle soul who thrived on affection and companionship. As we navigated through life together, Bella became not only my loyal companion but also my closest confidant. Through her unwavering love and devotion, Bella taught me the true meaning of unconditional love and brought immeasurable happiness into my life.",
     image: ["cat3.jpg"],
     tag: ["cat"],
     likes: 469,
@@ -304,7 +312,7 @@ export const catData = [
       {
         name: "Sophia",
         content:
-          "Bella sounds like a wonderful companion. Persian cats have such sweet personalities.",
+        "Bella sounds like a wonderful companion. Persian cats have such sweet personalities.",
       },
       {
         name: "Elijah",
@@ -313,7 +321,7 @@ export const catData = [
       {
         name: "Grace",
         content:
-          "I've always loved Persian cats. Bella must bring so much joy to your life!",
+        "I've always loved Persian cats. Bella must bring so much joy to your life!",
       },
       {
         name: "Mia",
@@ -322,12 +330,12 @@ export const catData = [
       {
         name: "Ethan",
         content:
-          "Persian cats are known for their gentle nature. Bella sounds like a true sweetheart.",
+        "Persian cats are known for their gentle nature. Bella sounds like a true sweetheart.",
       },
       {
         name: "Ava",
         content:
-          "Bella's story is heartwarming. Persian cats are such loving companions.",
+        "Bella's story is heartwarming. Persian cats are such loving companions.",
       },
       {
         name: "Liam",
@@ -336,7 +344,7 @@ export const catData = [
       {
         name: "Charlotte",
         content:
-          "I've always wanted a Persian cat. Bella sounds like the perfect pet!",
+        "I've always wanted a Persian cat. Bella sounds like the perfect pet!",
       },
       {
         name: "William",
@@ -345,7 +353,7 @@ export const catData = [
       {
         name: "Emily",
         content:
-          "Bella's loyalty and affection shine through in your story. Persian cats are truly special.",
+        "Bella's loyalty and affection shine through in your story. Persian cats are truly special.",
       },
       {
         name: "Isabella",
@@ -354,7 +362,7 @@ export const catData = [
       {
         name: "James",
         content:
-          "Bella's story touched my heart. Persian cats are known for their loving nature.",
+        "Bella's story touched my heart. Persian cats are known for their loving nature.",
       },
       {
         name: "Ella",
@@ -363,17 +371,17 @@ export const catData = [
       {
         name: "Noah",
         content:
-          "Bella must be a beautiful Persian cat. Persian cats are such elegant creatures.",
+        "Bella must be a beautiful Persian cat. Persian cats are such elegant creatures.",
       },
       {
         name: "Sophie",
         content:
-          "Persian cats are known for their calm demeanor and affectionate nature.",
+        "Persian cats are known for their calm demeanor and affectionate nature.",
       },
       {
         name: "Lucas",
         content:
-          "Bella's story is so heartwarming. Persian cats truly bring so much joy into our lives.",
+        "Bella's story is so heartwarming. Persian cats truly bring so much joy into our lives.",
       },
       {
         name: "Mia",
@@ -382,22 +390,23 @@ export const catData = [
       {
         name: "Henry",
         content:
-          "I've always admired Persian cats. Bella sounds like a wonderful friend.",
+        "I've always admired Persian cats. Bella sounds like a wonderful friend.",
       },
       {
         name: "Ella",
         content:
-          "Persian cats are known for their beauty and grace. Bella must be a stunning cat.",
+        "Persian cats are known for their beauty and grace. Bella must be a stunning cat.",
       },
     ],
     peopleWhoLikes: [],
     peopleWhoDislikes: [],
+    createdAt: "2024-04-06T07:00:51.000Z"
   },
   {
     title: "Bonding with a Ragdoll",
     author: "Sophia Wilson",
     content:
-      "Ragdoll cats are known for their affectionate nature and striking blue eyes. When I first brought home my Ragdoll cat, Oliver, I was immediately captivated by his stunning appearance and gentle demeanor. From the moment he entered my life, Oliver became a cherished member of my family, bringing joy and laughter into every day. Despite his large size, Oliver was incredibly gentle and affectionate, always eager to curl up in my lap for a cuddle. His playful antics never failed to brighten my mood, and his soothing purrs provided comfort during difficult times. As we bonded over shared experiences and adventures, Oliver became not only my loyal companion but also my closest friend. Through his unwavering love and companionship, Oliver taught me valuable lessons about empathy, patience, and the importance of living in the moment.",
+    "Ragdoll cats are known for their affectionate nature and striking blue eyes. When I first brought home my Ragdoll cat, Oliver, I was immediately captivated by his stunning appearance and gentle demeanor. From the moment he entered my life, Oliver became a cherished member of my family, bringing joy and laughter into every day. Despite his large size, Oliver was incredibly gentle and affectionate, always eager to curl up in my lap for a cuddle. His playful antics never failed to brighten my mood, and his soothing purrs provided comfort during difficult times. As we bonded over shared experiences and adventures, Oliver became not only my loyal companion but also my closest friend. Through his unwavering love and companionship, Oliver taught me valuable lessons about empathy, patience, and the importance of living in the moment.",
     image: ["cat4.jpg"],
     tag: ["cat"],
     likes: 748,
@@ -405,6 +414,8 @@ export const catData = [
     comments: [],
     peopleWhoLikes: [],
     peopleWhoDislikes: [],
+    createdAt: "2024-04-05T07:00:51.000Z"
+
   },
   {
     title: "The Playful Bengal",
@@ -441,6 +452,8 @@ export const catData = [
     ],
     peopleWhoLikes: [],
     peopleWhoDislikes: [],
+    createdAt: "2024-04-04T07:00:51.000Z"
+
   },
 ];
 
