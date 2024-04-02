@@ -10,7 +10,7 @@ function Layout() {
   const [spacing,setSpacing]=useState(0);
 
   const location = useLocation();
-  let bodyHeight = document.querySelector('main').clientHeight;
+  let body = document.querySelector('main');
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -41,7 +41,7 @@ function Layout() {
 
     calculateSpacerHeight();
 
-  },[location,bodyHeight]);
+  },[location,body]);
 
   return (
     <div className="App">
