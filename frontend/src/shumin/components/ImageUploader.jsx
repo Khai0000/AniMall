@@ -54,11 +54,11 @@ const ImageUploader = () => {
     <div className="image-uploader-container" onClick={triggerFileInput}>
       <div className="image-container">
         {displayContent()}
-        {currentImageIndex !== -1 && (
-        <div className="image-overlay">
-          <button className="delete-button" onClick={handleDeleteImage}>Delete Image</button>
-        </div>
-      )}
+        {currentImageIndex !==-1 && 
+          <div className="image-overlay">
+             <button className="delete-button" onClick={handleDeleteImage}>Delete Image</button>
+          </div>
+        }
       </div>
       <div className="overlay-controls">
         <button className="nav-button prev-button" onClick={(e) => navigateImage('prev', e)} disabled={images.length === 0 && currentImageIndex === -1}>{'<'}</button>

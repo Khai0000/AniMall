@@ -1,0 +1,159 @@
+.Product-details-form-container {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding-left: 4%;
+    padding-top: 6%;
+    padding-right: 4%;
+}
+
+.Product-details-form-title-input{
+    width: 50%;
+}
+
+.Product-details-form-description-input{
+    width: 70%;
+}
+
+.Product-details-form-price-input{
+    width: 30%;
+}
+
+.Product-details-form-title-input,
+.Product-details-form-description-input,
+.Product-details-form-price-input{
+    padding: 1%;
+    margin-bottom: 1%;
+    border: 1px solid #3C95A9;
+    border-radius: 5px;
+    outline: none;
+}
+
+.Product-details-form-title-input:hover,
+.Product-details-form-description-input:hover,
+.Product-details-form-price-input:hover{
+    border: 1px solid #F3B801;
+}
+
+.Product-details-form-title{
+    font-size: 140%;
+    font-weight: bold;
+}
+
+.Product-details-form-description-content{
+    color: gray;
+    word-wrap: break-word;
+    padding-right: 5%;
+}
+
+.Product-details-form-product-categories-container {
+    margin-top: 5%;
+}
+
+.Product-details-form-product-categories-button.accessories {
+    margin-bottom: 5%;
+}
+
+.Product-details-form-product-categories-button {
+    border-radius: 113px;
+    border: 3px solid #3C95A9;
+    background-color: white;
+    padding-left: 4%;
+    padding-right: 4%;
+    margin-right: 2%;
+    color:#3C95A9;
+    padding-top: 0.6%;
+    padding-bottom: 0.6%;
+    transition: padding 0.3s ease;
+    margin-left: 2%;
+}
+
+.Product-details-form-product-categories-button:hover{
+    border: 3px solid #F3B801;
+    color:#F3B801;
+}
+
+.Product-details-form-product-categories-button.focused::before {
+    content: "\2714";
+    position: absolute;
+    color: white;
+    font-size: 1.125rem;
+    font-weight: bold;
+    margin-left: -2.5%;
+    margin-top: -0.41%;
+}
+
+
+.Product-details-form-product-categories-button.focused {
+    background-color: #3C95A9;
+    border: 3px solid #3C95A9;
+    color: white;
+    padding: 3px 32px 3px 50px;
+}
+
+.Product-details-form-product-categories-button.focused:hover{
+    color: white;
+    background-color: #f4b701;
+    border-color: #f4b701;
+}
+
+
+.Product-details-form-price,
+.Product-details-form-price-content  {
+    color: #3C95A9;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+#Product-details-form-add-button {
+    background-color: #3C95A9;
+    border: none;
+    border-radius: 10px;
+    padding: 2%;
+    width: 20%;
+}
+
+.Product-details-form-add-back-button{
+    margin-top: 10%;
+    display: inline-flex;
+    align-items: center;
+}
+
+#Product-details-form-add-button{
+    margin-right: 3%;
+    width: 26%;
+    display: inline-flex;
+    align-items: center; 
+}
+
+#Product-details-form-add-button:hover{
+    background-color: #f4b701;
+}
+
+#Product-details-form-add-button-text{
+    color: white;
+    margin-left: 20%;
+}
+
+#Product-details-form-add-button-icon{
+    margin-left: 10%;
+}
+
+#Product-details-form-back-button {
+    background-color:white;
+    color: #3C95A9;
+    border: 1.3px solid #3C95A9;
+    padding-left: 5%;
+    padding-right:5%;
+    padding-top: 2%;
+    border-radius: 10px;
+    font-size: smaller;
+    padding-bottom: 2%;
+    text-decoration: none;
+}
+
+#Product-details-form-back-button:hover {
+    border: 1.3px solid #f4b701;
+    color:#f4b701;
+}
