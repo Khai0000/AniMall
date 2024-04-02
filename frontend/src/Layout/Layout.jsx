@@ -10,7 +10,7 @@ function Layout() {
   const [spacing,setSpacing]=useState(0);
 
   const location = useLocation();
-  let body = document.querySelector('main');
+  const bodyRef = useRef(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -41,12 +41,12 @@ function Layout() {
 
     calculateSpacerHeight();
 
-  },[location,body]);
+  },[location,bodyRef.current?.clientHeight]);
 
   return (
     <div className="App">
       <Header />
-      <main>
+      <main ref={bodyRef}>
         <Outlet />
       </main>
       <div style={{height:spacing}}></div>

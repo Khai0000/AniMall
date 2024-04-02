@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import React from "react";
+import { Link} from "react-router-dom";
 import { useEffect, useState, lazy, Suspense, useRef } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import ForumHomeHeader from "../components/ForumHomeHeader";
@@ -9,8 +10,9 @@ import ForumHomeCardSkeleton from "../components/ForumHomeCardSkeleton";
 const ForumHomeCard = lazy(() => import("../components/ForumHomeCard"));
 
 function ForumHome() {
-  const posts = useSelector((state) => state.posts);
   const dispatch = useDispatch();
+
+  const posts = useSelector((state) => state.posts);
   const [selectedCategory, setSelectedCategory] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
   const [filteredPosts, setFilteredPosts] = useState([]);
@@ -29,14 +31,27 @@ function ForumHome() {
         setSelectedCategory(selectedCategory);
         setSearchText(searchText);
         setScrollIndex(scrollIndex);
-        if(selectedDate)
-          setSelectedDate(new Date(selectedDate));
+        if (selectedDate) setSelectedDate(new Date(selectedDate));
         localStorage.removeItem("forumHomeState");
       }
     };
 
     loadSavedState();
 
+    if (containerRef.current) {
+      if (scrollIndex !== null && scrollIndex > 0) {
+        const lastScroll = containerRef.current.children[scrollIndex - 1];
+        if (lastScroll) {
+          const containerTop = containerRef.current.getBoundingClientRect().top;
+          const lastScrollTop = lastScroll.getBoundingClientRect().top;
+          const offset = lastScrollTop - containerTop;
+          containerRef.current.scrollTop += offset;
+        }
+      }
+    }
+  });
+
+  useEffect(() => {
     let filteredData = posts;
     setIsLoading(true);
 
@@ -55,7 +70,7 @@ function ForumHome() {
     }
 
     if (selectedDate) {
-      console.log("userWantDate:",selectedDate);
+      console.log("userWantDate:", selectedDate);
       const selectedDateString = selectedDate.toLocaleDateString(undefined, {
         day: "2-digit",
         month: "2-digit",
@@ -79,20 +94,6 @@ function ForumHome() {
     setFilteredPosts(filteredData);
   }, [searchText, selectedCategory, dispatch, posts, selectedDate]);
 
-  useEffect(() => {
-    if (containerRef.current) {
-      if (scrollIndex !== null && scrollIndex > 0) {
-        const lastScroll = containerRef.current.children[scrollIndex - 1];
-        if (lastScroll) {
-          const containerTop = containerRef.current.getBoundingClientRect().top;
-          const lastScrollTop = lastScroll.getBoundingClientRect().top;
-          const offset = lastScrollTop - containerTop;
-          containerRef.current.scrollTop += offset;
-        }
-      }
-    }
-  });
-
   const handleOnLinkClick = (index) => {
     const stateToSave = {
       selectedCategory,
@@ -102,6 +103,7 @@ function ForumHome() {
     };
     localStorage.setItem("forumHomeState", JSON.stringify(stateToSave));
   };
+
 
   return (
     <div className="forumContainer">
