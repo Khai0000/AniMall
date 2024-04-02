@@ -76,4 +76,44 @@
     color: #3C95A9;
   }
   
+  .delete-button {
+    position: absolute;
+    align-items: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color:#3C95A9; 
+    color: white; /* Button text color */
+    border:none;
+    padding: 2%;
+    border-radius: 5px;
+    cursor: pointer;
+    opacity: 0; /* Initially hidden */
+    transition: opacity 0.3s ease;
+  }
   
+  .delete-button:hover{
+    background-color:#F3B801; 
+  }
+
+  .image-container:hover .delete-button {
+    opacity: 1; /* Show delete button on hover */
+  }
+
+  .image-overlay {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.5);/* Gray transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0; /* Initially hidden */
+    transition: opacity 0.3s ease;
+    width: 33em;
+    height: 28em;
+    padding: 0.1%;
+    border-radius: 41px;
+  }
+  
+  .image-container:hover .image-overlay {
+    opacity: 1; /* Show gray transparent background on hover */
+  }

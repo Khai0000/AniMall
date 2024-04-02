@@ -42,10 +42,23 @@ const ImageUploader = () => {
     return <img src={images[currentImageIndex]} alt={`Image ${currentImageIndex + 1}`} style={{ maxWidth: '100%', maxHeight: '100%' }} />;
   };
 
+  const handleDeleteImage=()=>{
+    if (currentImageIndex !== -1) {
+      const updatedImages = images.filter((image, index) => index !== currentImageIndex);
+      setImages(updatedImages);
+      setCurrentImageIndex(updatedImages.length > 0 ? 0 : -1); // Set current index to the first image if there are remaining images, otherwise to -1
+    }
+  }
+
   return (
     <div className="image-uploader-container" onClick={triggerFileInput}>
       <div className="image-container">
         {displayContent()}
+        {currentImageIndex !== -1 && (
+        <div className="image-overlay">
+          <button className="delete-button" onClick={handleDeleteImage}>Delete Image</button>
+        </div>
+      )}
       </div>
       <div className="overlay-controls">
         <button className="nav-button prev-button" onClick={(e) => navigateImage('prev', e)} disabled={images.length === 0 && currentImageIndex === -1}>{'<'}</button>
@@ -62,4 +75,4 @@ const ImageUploader = () => {
   );
 };
 
-export default ImageUploader;
+export default ImageUploader; 
