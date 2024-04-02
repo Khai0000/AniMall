@@ -94,13 +94,11 @@ function ForumHome() {
         ) : filteredPosts.length !== 0 ? (
           <Suspense fallback={<ForumHomeCardSkeleton />}>
             {filteredPosts.map((post, index) => (
-              <div className="deleteContainer">
                 <ForumHomeCard
                   post={post}
                   handleOnLinkClick={handleOnLinkClick}
                   index={index}
                 />
-              </div>
             ))}
           </Suspense>
         ) : (

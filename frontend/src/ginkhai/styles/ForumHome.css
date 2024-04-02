@@ -56,28 +56,6 @@
 }
 
 
-.forumContainer>.forumBody>.deleteContainer{
-    position: relative;
-}
-
-.forumPostLink{
-    text-decoration: none;
-}
-
-.forumContainer>.forumBody>.deleteContainer>.deleteButton {
-    position: absolute;
-    right: 0;
-    top: 0;
-    border: none;
-    cursor: pointer;
-    background-color: transparent;
-    color: red;
-    margin-top: 2vh;
-    z-index: 100;
-}
-
-
-
 .forumContainer .forumNoDiscussionContainer{
     height: 66vh;
     display: grid;
