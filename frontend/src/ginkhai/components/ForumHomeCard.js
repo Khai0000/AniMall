@@ -1,10 +1,22 @@
 import { useState, useEffect } from "react";
 import "../styles/ForumHomeCard.css";
 import ForumHomeCardSkeleton from "./ForumHomeCardSkeleton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { removePost } from "../slices/postSlice";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
-const ForumHomeCard = ({ post }) => {
+const ForumHomeCard = ({ post, handleOnLinkClick, index }) => {
   const [image, setImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleOnDeleteClick = (e,title) => {
+    e.stopPropagation();
+    dispatch(removePost(title));
+  };
 
   useEffect(() => {
     setIsLoading(true);
@@ -32,7 +44,13 @@ const ForumHomeCard = ({ post }) => {
   return isLoading ? (
     <ForumHomeCardSkeleton />
   ) : (
-    <div className="cardContainer" style={{ zIndex: 100 }}>
+    <div
+      className="cardContainer"
+      onClick={() => {
+        handleOnLinkClick();
+        navigate(`post/${index}`,{state:post});
+      }}
+    >
       <div className="imageContainer ">
         <img src={image} alt="" />
       </div>
@@ -44,6 +62,17 @@ const ForumHomeCard = ({ post }) => {
         </p>
         <p className="content">{post.content}</p>
       </div>
+      {
+        <button
+        style={{zIndex:100}}
+          className="deleteButton"
+          onClick={(e) => {
+            handleOnDeleteClick(e,post.title);
+          }}
+        >
+          <DeleteIcon />
+        </button>
+      }
     </div>
   );
 };

@@ -5,8 +5,6 @@ import ForumHomeHeader from "../components/ForumHomeHeader";
 import { useSelector, useDispatch } from "react-redux";
 import "../styles/ForumHome.css";
 import ForumHomeCardSkeleton from "../components/ForumHomeCardSkeleton";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { removePost } from "../slices/postSlice";
 
 const ForumHomeCard = lazy(() => import("../components/ForumHomeCard"));
 
@@ -71,7 +69,6 @@ function ForumHome() {
   });
 
   const handleOnLinkClick = (index) => {
-    console.log("hi");
     const stateToSave = {
       selectedCategory,
       searchText,
@@ -80,9 +77,6 @@ function ForumHome() {
     localStorage.setItem("forumHomeState", JSON.stringify(stateToSave));
   };
 
-  const handleOnDeleteClick = (title) => {
-    dispatch(removePost(title));
-  };
 
   return (
     <div className="forumContainer">
@@ -101,23 +95,11 @@ function ForumHome() {
           <Suspense fallback={<ForumHomeCardSkeleton />}>
             {filteredPosts.map((post, index) => (
               <div className="deleteContainer">
-                <Link
-                  to={`post/${index}`}
-                  className="forumPostLink"
-                  key={index}
-                  state={post}
-                  onClick={() => handleOnLinkClick(index, post)}
-                >
-                  <ForumHomeCard post={post} />
-                </Link>
-                {post.author==="Khai"&&
-                  <button
-                    className="deleteButton"
-                    onClick={() => handleOnDeleteClick(post.title)}
-                  >
-                    <DeleteIcon />
-                  </button>
-                }
+                <ForumHomeCard
+                  post={post}
+                  handleOnLinkClick={handleOnLinkClick}
+                  index={index}
+                />
               </div>
             ))}
           </Suspense>
