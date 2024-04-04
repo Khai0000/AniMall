@@ -58,6 +58,9 @@
     font-style: normal;
     font-weight: 500;
     line-height: normal;
+    max-width: 60vw;
+    word-wrap: break-word;
+    
 }
 
 .commentDetailsContainer .deleteButton{
