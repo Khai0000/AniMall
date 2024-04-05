@@ -24,7 +24,7 @@ function App() {
         <Route path="/community" element={<Community/>}/>
         <Route path="/product" element={<Product/>}/>
         <Route path="/services" element={<Services/>}/> {/* Link to Services component */}
-        <Route path="/serviceDetails/:id" element={<ServiceDetail/>}/> {/* Define route for ServiceDetail */}
+        <Route path="/serviceDetails/:title" element={<ServiceDetail/>}/> {/* Define route for ServiceDetail */}
       </Route>
     )
   );

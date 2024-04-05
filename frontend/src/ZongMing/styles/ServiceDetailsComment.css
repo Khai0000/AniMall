@@ -1,0 +1,39 @@
+.commentServiceDetailsContainer {
+    display: flex;
+    align-items: flex-start;
+    padding-bottom: 1.5vw;
+    border-bottom: 1px solid #3C95A9;
+    margin-bottom: 2vw;
+}
+
+.commentServiceDetailsContainer>.imageContainerSDC {
+    margin-right: 1.5vw;
+}
+
+.commentServiceDetailsContainer img {
+    width: 84px;
+    height: 84px;
+    object-fit: cover;
+    border-radius: 13px;
+    border: 1px solid #EFEFEF;
+    box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.10);
+}
+
+.commentServiceDetailsContainer>.authorContainerSDC>p {
+    margin: 0;
+}
+
+.commentServiceDetailsContainer>.authorContainerSDC>.authorNameSDC {
+    color: #000;
+    font-family: Inter;
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+.commentServiceDetailsContainer>.authorContainerSDC>.contentSDC {
+    color: #868686;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}

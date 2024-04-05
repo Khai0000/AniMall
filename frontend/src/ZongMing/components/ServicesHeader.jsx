@@ -1,21 +1,24 @@
+// ServicesHeader.jsx
+
 import React, { useState } from "react";
 import "../styles/SearchBar.css";
 import SearchIcon from "@mui/icons-material/Search";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import PriceRangeSlider from "./PriceRangeSlider"; // Import the PriceRangeSlider component
 
-const ServicesHeader = () => {
-  // State to track if the price range slider is open or closed
+const ServicesHeader = ({ onSearch, onPriceRangeChange }) => { // Pass onPriceRangeChange as a prop
   const [isPriceRangeOpen, setIsPriceRangeOpen] = useState(false);
 
-  // Function to handle the click event of the "Price Range" button
   const handlePriceRangeClick = () => {
     setIsPriceRangeOpen(true);
   };
 
-  // Function to handle closing the price range slider
   const handleClosePriceRangeSlider = () => {
     setIsPriceRangeOpen(false);
+  };
+
+  const handleSearchInputChange = (e) => {
+    onSearch(e.target.value); 
   };
 
   return (
@@ -25,6 +28,7 @@ const ServicesHeader = () => {
           className="search-bar"
           type="text"
           placeholder="Search for services..."
+          onChange={handleSearchInputChange}
         />
         <SearchIcon className="searchIcon" />
       </div>
@@ -35,7 +39,7 @@ const ServicesHeader = () => {
         <ShoppingCartIcon className="cart-icon" />
         My Cart
       </button>
-      {isPriceRangeOpen && <PriceRangeSlider onClose={handleClosePriceRangeSlider} />}
+      {isPriceRangeOpen && <PriceRangeSlider onClose={handleClosePriceRangeSlider} onPriceRangeChange={onPriceRangeChange} />} {/* Pass onPriceRangeChange as a prop */}
     </div>
   );
 };

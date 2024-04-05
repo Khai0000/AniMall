@@ -1,14 +1,15 @@
+// PriceRangeSlider.jsx
+
 import React, { useState, useEffect, useRef } from "react";
 import "../styles/PriceRangeSlider.css";
 import logo from "../assets/image/logo.png";
 
-const PriceRangeSlider = ({ onClose }) => {
-  // State for minimum and maximum prices
-  const [minPrice, setMinPrice] = useState(2500);
-  const [maxPrice, setMaxPrice] = useState(8500);
+const PriceRangeSlider = ({ onClose, onPriceRangeChange }) => { // Pass onPriceRangeChange as a prop
+  const [minPrice, setMinPrice] = useState(200);
+  const [maxPrice, setMaxPrice] = useState(1000);
   const [isOpen] = useState(true);
 
-  const priceGap = 500;
+  const priceGap = 50;
 
   const minRangeRef = useRef(null);
   const maxRangeRef = useRef(null);
@@ -30,16 +31,14 @@ const PriceRangeSlider = ({ onClose }) => {
 
       const diff = maxPrice - minPrice;
 
-      // Check if the price gap is exceeded
       if (diff < priceGap) {
-        if (maxPrice + priceGap <= 10000) {
+        if (maxPrice + priceGap <= 1000) {
           setMinPrice(maxPrice - priceGap);
         } else {
           setMaxPrice(minPrice + priceGap);
         }
       }
 
-      // Update price inputs and range progress
       minRangeRef.current.value = minPrice;
       maxRangeRef.current.value = maxPrice;
       rangevalue.style.left = `${(minPrice / minRangeRef.current.max) * 100}%`;
@@ -64,10 +63,12 @@ const PriceRangeSlider = ({ onClose }) => {
       setMinPrice(minVal);
       setMaxPrice(maxVal);
     }
+
+    // Pass the selected price range to the parent component
+    onPriceRangeChange(minVal, maxVal); // Call the onPriceRangeChange function
   };
 
   const handleClose = () => {
-    // Close the price range slider
     onClose();
   };
 
@@ -114,7 +115,7 @@ const PriceRangeSlider = ({ onClose }) => {
             type="range"
             className="min-range"
             min="0"
-            max="10000"
+            max="500"
             value={minPrice}
             step="1"
             onChange={handleRangeChange}
@@ -124,7 +125,7 @@ const PriceRangeSlider = ({ onClose }) => {
             type="range"
             className="max-range"
             min="0"
-            max="10000"
+            max="1000"
             value={maxPrice}
             step="1"
             onChange={handleRangeChange}

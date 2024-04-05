@@ -1,21 +1,51 @@
-import React from "react";
+import React, { useState } from "react";
 import "../styles/RatingChart.css";
 import star from "../assets/image/star.png";
 
-const RatingChart = () => {
-  // Define ratings data (just for demonstration)
-  const ratingsData = [
-    { stars: 5, percentage: 20 },
-    { stars: 4, percentage: 50 },
-    { stars: 3, percentage: 30 },
-    { stars: 2, percentage: 10 },
-    { stars: 1, percentage: 70 },
-  ];
+const Tooltip = ({ count, position }) => {
+  const style = {
+    position: "fixed",
+    top: `${position.y}px`,
+    left: `${position.x + 20}px`, // Adjust the offset from the cursor
+    background: "white",
+    border: "1px solid black",
+    padding: "5px",
+  };
+
+  return <div style={style}>{count} people rated</div>;
+};
+
+const RatingChart = ({ ratings }) => {
+  const transformRatingsData = (ratings) => {
+    const ratingsData = [];
+    for (let i = 5; i >= 1; i--) {
+      const percentage = (ratings[i] / ratings.total) * 100;
+      ratingsData.push({ stars: i, percentage });
+    }
+    return ratingsData;
+  };
+
+  const [hoveredStarCount, setHoveredStarCount] = useState(null);
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+
+  const ratingsData = transformRatingsData(ratings);
+
+  const handleMouseMove = (e) => {
+    setTooltipPosition({ x: e.clientX, y: e.clientY });
+  };
 
   return (
-    <div className="rating-chart">
+    <div
+      className="rating-chart"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={() => setHoveredStarCount(null)}
+    >
       {ratingsData.map((item, index) => (
-        <div key={index} className="rating-item">
+        <div
+          key={index}
+          className="rating-item"
+          onMouseEnter={() => setHoveredStarCount(item.stars)}
+        >
           <div className="container-star">
             {Array(item.stars)
               .fill()
@@ -38,6 +68,12 @@ const RatingChart = () => {
           </div>
         </div>
       ))}
+      {hoveredStarCount !== null && (
+        <Tooltip
+          count={ratings[hoveredStarCount]}
+          position={tooltipPosition}
+        />
+      )}
     </div>
   );
 };

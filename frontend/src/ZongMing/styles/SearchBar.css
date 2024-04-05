@@ -20,7 +20,7 @@
     border-radius: 15px;
     filter: drop-shadow(0 2px 4px rgba(60, 149, 169, 0.5));
     font-family: Inter;
-    font-size: 1rem; 
+    font-size: 1rem;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
@@ -29,7 +29,7 @@
     transition: border-color 0.3s ease, filter 0.3s ease;
     width: 100%;
     position: relative;
-    color: #3C95A9; 
+    color: #3C95A9;
 }
 
 .search-bar:hover {
@@ -37,7 +37,7 @@
     --shadow-color: rgba(244, 183, 1, 0.5);
     filter: drop-shadow(0 2px 4px rgba(244, 183, 1, 0.5));
     outline: none;
-    color: #3C95A9; 
+    color: #3C95A9;
 }
 
 .search-bar:focus {
@@ -45,7 +45,8 @@
     --shadow-color: rgba(244, 183, 1, 0.5);
     filter: drop-shadow(0 2px 4px rgba(244, 183, 1, 0.5));
     outline: none;
-    color: #3C95A9; /* Adjusted text color */
+    color: #3C95A9;
+    /* Adjusted text color */
 }
 
 .header-container .searchIcon {
@@ -57,20 +58,20 @@
     z-index: 1;
 }
 
-.header-container .searchIcon:hover{
+.header-container .searchIcon:hover {
     cursor: pointer;
 }
 
 .price-range-btn {
     padding: 5px 40px;
-    background-color: #3C95A9; 
-    color: white; 
+    background-color: #3C95A9;
+    color: white;
     border: none;
     border-radius: 25px;
     cursor: pointer;
     transition: background-color 0.3s;
     font-family: Inter;
-    font-size: 1rem; 
+    font-size: 1rem;
     font-style: normal;
     line-height: normal;
 }
@@ -83,17 +84,30 @@
     display: flex;
     align-items: center;
     padding: 8px 15px;
-    color: #3C95A9; /* Adjusted text color */
+    color: #3C95A9;
+    /* Adjusted text color */
     border: none;
-    background: none; /* Removed background color */
+    background: none;
+    /* Removed background color */
     cursor: pointer;
     transition: color 0.3s;
 }
 
 .cart-btn:hover {
-    color: #F3B801; /* Adjusted hover color */
+    color: #F3B801;
+    /* Adjusted hover color */
 }
 
 .cart-icon {
     margin-right: 5px;
+}
+
+@media screen and (max-width: 768px) {
+    .header-container .input-container {
+        max-width: 50vw;
+    }
+
+    .price-range-btn {
+        font-size: 0.85rem;
+    }
 }

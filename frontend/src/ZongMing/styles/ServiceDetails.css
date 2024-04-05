@@ -8,6 +8,8 @@
     flex-direction: row;
     border-bottom: 1px solid #3C95A9;
     padding-bottom: 16px;
+    margin: 3vw;
+    align-items: center;
 }
 
 .serviceDetailsContainer .topSideContainer .leftSide {
@@ -18,7 +20,8 @@
 }
 
 .serviceDetailsContainer .topSideContainer .leftSide .imageSlider {
-    width: 80%;
+    width: 100%; 
+    height: auto; 
 }
 
 .serviceDetailsContainer .topSideContainer .rightSide {
@@ -131,4 +134,14 @@
 
 .buttonContainer>a {
     margin-left: auto;
+}
+
+.serviceDetailsContainer .noCommentContainer {
+    padding: 16px;
+}
+
+.serviceDetailsContainer .noCommentContainer p {
+    font-size: 1.5rem;
+    text-align: center;
+    color: #868686;
 }

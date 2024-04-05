@@ -1,17 +1,17 @@
 import React from "react";
-import images from "../data/images";
-import CustomSlider from "./Slider";
-import "../styles/ImageSlider.css";
+import Slider from "./Slider";
+import "../styles/ImageSlider.css"
 
-export default function ImageSlider() {
+const ImageSlider = ({ images }) => {
   return (
     <div className="imageSlider-container">
-      <CustomSlider>
+      <Slider>
         {images.map((image, index) => {
-          return <img key={index} src={image.imgURL} alt={image.imgAlt} />;
+          return <img key={index} src={image} alt={`Images ${index}`} className="imageSlider"/>;
         })}
-      </CustomSlider>
-      
+      </Slider>
     </div>
   );
-}
+};
+
+export default ImageSlider;

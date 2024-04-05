@@ -16,7 +16,11 @@ function Slider({ children }) {
         }, 5000)
       );
     }
-  }, [slideDone]); 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [slideDone]);
+  
+
+
   const slideNext = () => {
     setActiveIndex((val) => {
       if (val >= Children.count(children) - 1) {

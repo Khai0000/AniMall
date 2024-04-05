@@ -1,17 +1,17 @@
 import React from "react";
-import "../styles/ForumPostComment.css";
-import dog1 from "../assets/images/dog1.jpg";
+import "../styles/ServiceDetailsComment.css";
+import dog1 from "../assets/image/dog1.jpg";
 
-const ForumPostComment = () => {
+const ServiceDetailsComment = () => {
   return (
-    <div className="commentDetailsContainer">
-      <div className="imageContainer">
-        <img src={dog1} />
+    <div className="commentServiceDetailsContainer">
+      <div className="imageContainerSDC">
+        <img src={dog1} alt="author" className="authorimg"/>
       </div>
 
-      <div className="authorContainer">
-        <p className="author">Khai</p>
-        <p className="content">
+      <div className="authorContainerSDC">
+        <p className="authorNameSDC">Ali</p>
+        <p className="contentSDC">
           Petting dogs has always been a source of immense joy and comfort for
           me. There's something incredibly therapeutic about running your
           fingers through their soft fur, feeling their warmth, and witnessing
@@ -22,4 +22,4 @@ const ForumPostComment = () => {
   );
 };
 
-export default ForumPostComment;
+export default ServiceDetailsComment;

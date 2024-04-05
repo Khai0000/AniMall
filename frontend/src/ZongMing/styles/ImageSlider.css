@@ -1,14 +1,4 @@
-/* .imageSlider-container {
-  
-  width: 100%; 
-  height: 100%; 
-  display: flex;
-  justify-content: flex-start; 
-  align-items: flex-start; 
+.imageSlider-container{
+    width: 100%;
+    height: 100%;
 }
-
-
-.imageSlider-container img {
-  max-width: 100%; 
-  height: auto; 
-} */
