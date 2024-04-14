@@ -7,6 +7,7 @@ import {lazy} from "react";
 import "../styles/ProductCategorized.css";
 import { ProductData } from "../data/DummyProductData";
 import { addProduct } from "../slices/ProductSlice";
+import { useNavigate } from "react-router-dom";
 
 const ProductCard=lazy(()=>import("../components/ProductCard"));
 
@@ -21,6 +22,7 @@ const ProductCategorized=()=>{
     const productHistory=useSelector((state)=>state.productHistory);
 
     const dispatch=useDispatch();
+    const navigate=useNavigate();
 
     const {searchText,scrollPosition,minPriceRange,maxPriceRange,selectedProductType}=productHistory;
 
@@ -79,14 +81,14 @@ const ProductCategorized=()=>{
         setFilteredProducts(filteredData);
     }, [searchTerm, products,minPrice,maxPrice, dispatch]);
 
-    // useEffect(() => {
-    //     if ( products.length === 0) {
-    //         ProductData.forEach((product) => {
-    //             dispatch(addProduct(product));
-    //         }
-    //     );
-    //     }
-    // }, [dispatch, products]);
+    useEffect(() => {
+        if ( products.length === 0) {
+            ProductData.forEach((product) => {
+                dispatch(addProduct(product));
+            }
+        );
+        }
+    }, [dispatch, products]);
 
     function chunkArray(arr, size) {
         return arr.reduce(
@@ -94,6 +96,10 @@ const ProductCategorized=()=>{
           []
         );
     }
+
+    const handleMyCartButtonClick=()=>{
+        navigate("/mycart");
+    };
 
     return(
         <div>
@@ -128,7 +134,7 @@ const ProductCategorized=()=>{
                         />
                     </form>
                 ):(<button className="Upper-section-price-range-button" onClick={togglePriceRange}>Price Range</button>)}
-                <MyCartButton/>
+                <MyCartButton onClick={handleMyCartButtonClick}/>
             </div>
             <div className="product-container">
                 {chunkArray(filteredProducts, 3).map((row, rowIndex) => (

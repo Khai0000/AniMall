@@ -12,6 +12,9 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 const PetCard=lazy(()=>import("../components/PetCard"));
+let num=1;
+
+let isAdoptionFilterActive=false;
 
 const PetHome=()=>{
     const [showPriceRange,setShowPriceRange]=useState(false);
@@ -53,23 +56,22 @@ const PetHome=()=>{
         setSearchTerm(value);
     };
 
-    //useEffect for filtering data
-    useEffect(()=>{
+    const filterPets = () => {
         let filteredData = [...pets];;
         setIsLoading(true);
-        
+        if(isAdoptionFilterActive){
+            filteredData = filteredData.filter((pet) => !pet.hidden);
+            filteredData = filteredData.filter((pet) => pet.price==0);
+        }else{
         filteredData = filteredData.filter((pet) => !pet.hidden);
-        filteredData = filteredData.filter((pet) => pet.price>0);
-
-        console.log(searchTerm);
+        filteredData = filteredData.filter((pet) => pet.price>0);}
+        
         if(searchTerm.length !== 0){
             filteredData=filteredData.filter(
                 (pet)=>
                 pet.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 pet.description.toLowerCase().includes(searchTerm.toLowerCase())
             );
-            console.log("search",searchTerm);
-        console.log("loading?",isLoading);
         }
 
         if(minPrice.length!==0 && maxPrice.length===0){
@@ -92,7 +94,26 @@ const PetHome=()=>{
 
         setIsLoading(false);
         setFilteredPets(filteredData);
-    }, [searchTerm, pets,minPrice,maxPrice, dispatch]);
+    };
+
+    // useEffect for filtering data
+    useEffect(() => {
+        filterPets();
+    }, [searchTerm, pets, minPrice, maxPrice]); // Dependencies array
+
+
+    const toggleAdoptionFilter = () => {
+        if(num%2==1){
+            isAdoptionFilterActive=true;
+        }
+        else{
+            isAdoptionFilterActive=false;
+        };
+        num+=1;
+
+        filterPets();
+        console.log(isAdoptionFilterActive);
+    };
 
     useEffect(() => {
         const handleScroll = () => {
@@ -154,7 +175,7 @@ const PetHome=()=>{
     return (
         <div>
             <div className="Upper-section">
-                <SearchBar id="Upper-section-search-bar" onSearch={handleSearch} page="pet"/>
+                <SearchBar id="Upper-section-search-bar" onSearch={handleSearch} page="pet" showPriceRange={showPriceRange} />
                 {showPriceRange?(
                     <div className="Upper-section-price-range-container pet">
                         <form onSubmit={handlePriceRangeSubmit}>
@@ -186,7 +207,9 @@ const PetHome=()=>{
                         </form>
                     </div>
                 ):(<button className="Upper-section-price-range-button pet" onClick={togglePriceRange}>Price Range</button>)}
-                <button className="Upper-section-adoption-button">Adoption</button>
+                <button className={`Upper-section-adoption-button ${isAdoptionFilterActive? "selected" : ""}`} onClick={toggleAdoptionFilter}>
+                    {isAdoptionFilterActive ? "✓ Adoption" : "Adoption"}
+                </button>
                 <MyCartButton page="pet" onClick={handleMyCartButtonClick}/>
             </div>
             <div ref={containerRef}>
