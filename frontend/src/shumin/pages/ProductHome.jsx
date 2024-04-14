@@ -59,7 +59,7 @@ const ProductHome=()=>{
         let filteredData = [...products];;
         setIsLoading(true);
         
-        filteredData = products.filter((product) => !product.hidden);
+        filteredData = filteredData.filter((product) => !product.hidden);
 
         console.log(searchTerm);
         if(searchTerm.length !== 0){
@@ -68,8 +68,6 @@ const ProductHome=()=>{
                 product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 product.description.toLowerCase().includes(searchTerm.toLowerCase())
             );
-            console.log("search",searchTerm);
-        console.log("loading?",isLoading);
         }
 
         if(minPrice.length!==0 && maxPrice.length===0){
@@ -92,7 +90,7 @@ const ProductHome=()=>{
 
         setIsLoading(false);
         setFilteredProducts(filteredData);
-    }, [searchText, products,minPrice,maxPrice, dispatch]);
+    }, [searchTerm, products,minPrice,maxPrice, dispatch]);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -166,7 +164,7 @@ const ProductHome=()=>{
                                     }
                                 }}
                             />
-                            <span id="Upper-section-to">  to  </span>
+                            <span className="Upper-section-to">  to  </span>
                             <input
                                 type="number"
                                 className="Upper-section-max-price"
@@ -182,7 +180,7 @@ const ProductHome=()=>{
                         </form>
                     </div>
                 ):(<button className="Upper-section-price-range-button" onClick={togglePriceRange}>Price Range</button>)}
-                <MyCartButton/>
+                <MyCartButton page="product"/>
             </div>
             <div ref={containerRef}>
                 {isLoading?(
@@ -201,10 +199,6 @@ const ProductHome=()=>{
             
                 <Link to={`/seller/productwarehouse`} className="seller-link">
                     <button id="Seller-product">Seller</button>
-                </Link>
-
-                <Link to={`/seller/servicewarehouse`} className="seller-link">
-                    <button id="Seller-product">Seller service</button>
                 </Link>
             </div>
         </div>

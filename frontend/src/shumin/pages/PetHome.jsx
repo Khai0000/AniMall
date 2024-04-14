@@ -92,7 +92,7 @@ const PetHome=()=>{
 
         setIsLoading(false);
         setFilteredPets(filteredData);
-    }, [searchText, pets,minPrice,maxPrice, dispatch]);
+    }, [searchTerm, pets,minPrice,maxPrice, dispatch]);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -166,7 +166,7 @@ const PetHome=()=>{
                                     }
                                 }}
                             />
-                            <span id="Upper-section-to">  to  </span>
+                            <span className="Upper-section-to pet">  to  </span>
                             <input
                                 type="number"
                                 className="Upper-section-max-price pet"
@@ -183,7 +183,7 @@ const PetHome=()=>{
                     </div>
                 ):(<button className="Upper-section-price-range-button pet" onClick={togglePriceRange}>Price Range</button>)}
                 <button className="Upper-section-adoption-button">Adoption</button>
-                <MyCartButton/>
+                <MyCartButton page="pet"/>
             </div>
             <div ref={containerRef}>
                 {isLoading?(

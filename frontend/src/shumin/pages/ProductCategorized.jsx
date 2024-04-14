@@ -15,6 +15,7 @@ const ProductCategorized=()=>{
     const [showPriceRange,setShowPriceRange]=useState(false);
     const [minPrice, setMinPrice] = useState('');
     const [maxPrice, setMaxPrice] = useState(''); 
+    const [searchTerm,setSearchTerm]=useState('');
 
     const products = useSelector((state)=> state.products);
     const productHistory=useSelector((state)=>state.productHistory);
@@ -35,20 +36,24 @@ const ProductCategorized=()=>{
     const [filteredProducts,setFilteredProducts]=useState([]);
     const [isLoading,setIsLoading]=useState(true);
 
+    const handleSearch = (value) => {
+        setSearchTerm(value);
+    };
+
     //useEffect for filtering data
     useEffect(()=>{
         let filteredData = [...products];
-        console.log('Filtered Data:', filteredData);
         setIsLoading(true);
         
         filteredData = filteredData.filter((product) => product.animaltag == category);
         filteredData = filteredData.filter((product) => !product.hidden);
 
-        if(searchText.length !==0){
+        console.log(searchTerm);
+        if(searchTerm.length !==0){
             filteredData=filteredData.filter(
-                (products)=>
-                products.title.toLowerCase().includes(searchText.trim().toLowerCase()) ||
-                products.description.toLowerCase().includes(searchText.trim().toLowerCase())
+                (product)=>
+                product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                product.description.toLowerCase().includes(searchTerm.toLowerCase())
             );
         }
 
@@ -72,16 +77,16 @@ const ProductCategorized=()=>{
 
         setIsLoading(false);
         setFilteredProducts(filteredData);
-    }, [searchText, products,minPrice,maxPrice, dispatch]);
+    }, [searchTerm, products,minPrice,maxPrice, dispatch]);
 
-    useEffect(() => {
-        if ( products.length === 0) {
-            ProductData.forEach((product) => {
-                dispatch(addProduct(product));
-            }
-        );
-        }
-    }, [dispatch, products]);
+    // useEffect(() => {
+    //     if ( products.length === 0) {
+    //         ProductData.forEach((product) => {
+    //             dispatch(addProduct(product));
+    //         }
+    //     );
+    //     }
+    // }, [dispatch, products]);
 
     function chunkArray(arr, size) {
         return arr.reduce(
@@ -93,7 +98,7 @@ const ProductCategorized=()=>{
     return(
         <div>
             <div className="Upper-section">
-                <SearchBar id="Upper-section-search-bar" showPriceRange={showPriceRange} />
+                <SearchBar id="Upper-section-search-bar" onSearch={handleSearch} showPriceRange={showPriceRange}  />
                 {showPriceRange?(
                     <form onSubmit={handlePriceRangeSubmit}>
                         <input

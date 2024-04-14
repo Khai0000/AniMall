@@ -168,3 +168,9 @@
     color: #F3B801;
     border: 1.3px solid #F3B801;
 }
+
+@media screen and (max-width: 1100px) {
+    .back-button{
+        padding-right: 40px;
+    }
+}

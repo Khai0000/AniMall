@@ -10,6 +10,7 @@
     box-sizing: border-box; /* Include padding in the width calculation */
 }
 
+
 .image-container {
     width: 33em;
     height: 28em;
@@ -21,17 +22,6 @@
     border: 1px solid #EFEFEF;
     box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.10);
   }
-
-  /* Media query for smaller screens */
-@media (max-width: 588px) {
-    .image-uploader-container {
-        margin-left: 0; /* Remove left margin on smaller screens */
-    }
-
-    .image-container {
-        max-width: 90%; /* Use full width on smaller screens */
-    }
-}
   
   .placeholder {
     background-image: url('../assets/images/imageplaceholder.png');
@@ -293,4 +283,20 @@
 
 .Product-details-form-birthdate-content{
   color: gray;
+}
+
+/* Media query for smaller screens */
+@media screen and (max-width: 768px){
+  .image-uploader-container {
+      margin-left: 0; /* Remove left margin on smaller screens */
+  }
+
+  .image-container {
+      max-width: 100%; /* Use full width on smaller screens */
+  }
+
+  #Product-details-form-add-button{
+    margin-right: 10%;
+    width: fit-content;
+  }
 }

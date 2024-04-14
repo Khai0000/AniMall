@@ -4,6 +4,7 @@ import useToggle from "../hooks/useToggle";
 
 const SellerProductCardSkeleton=()=>{
     const[isClicked,toggleIsClicked]=useToggle(false);
+    const truncateText = (text, maxLength) => (text.length > maxLength ? text.slice(0, maxLength > 9 ? maxLength : 9) + (maxLength > 9 ? "..." : "") : text);
 
     return(
         <div>
@@ -21,7 +22,7 @@ const SellerProductCardSkeleton=()=>{
                     
                 </button>
                 <img alt='' className="seller-product-card-image" />
-                <button className="seller-product-card-product-name"><h4>Product name</h4></button>
+                <button className="seller-product-card-product-name"><h4 className="seller-product-card-product-name-content">Product name</h4></button>
                 <button className="seller-product-card-minus-button">-</button>
                 <input type="number" className="seller-product-card-quantity-input"></input>
                 <button className="seller-product-card-plus-button">+</button>

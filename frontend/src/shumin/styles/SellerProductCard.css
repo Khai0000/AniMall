@@ -114,4 +114,63 @@
     padding-right: 3%;
 }
 
+@media screen and (max-width: 768px) {
+    .seller-product-card-container {
+        flex-direction: column;
+        align-items: center;
+        padding: 1.5% 0;
+    }
+
+    .seller-product-card-image {
+        width: 30%;
+        height: auto;
+        margin-left: 0;
+        margin-bottom: 1.5%;
+    }
+
+    .seller-product-card-product-name {
+        width: 100%;
+        margin-left: 0;
+        padding-right: 7%;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        padding-left: 7%;
+    }
+
+    .seller-product-card-quantity-input {
+        margin-top: 1.5%;
+        margin-bottom: 1.5%;
+        margin-left: 0;
+        margin-right: 0;
+        width: 10%;
+        padding-top: 1%;
+        padding-bottom: 1%;
+    }
+
+    .seller-product-card-price {
+        margin-top: 1.5%;
+        margin-left: 0;
+        width: 100%;
+        text-align: center;
+    }
+
+    #horizontal-line {
+        margin-left: 0;
+        padding-right: 0;
+    }
+
+    .seller-product-card-minus-button,
+    .seller-product-card-plus-button,
+    .seller-product-card-remove-button {
+        margin-top: 1.5%;
+        margin-bottom: 1.5%;
+    }
+
+    .seller-product-card-checkbox-clicked,
+    .seller-product-card-checkbox-unclicked{
+        margin-bottom: 3%;
+    }
+}
+
     

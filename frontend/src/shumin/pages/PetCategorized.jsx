@@ -15,6 +15,8 @@ const PetCategorized=()=>{
     const [showPriceRange,setShowPriceRange]=useState(false);
     const [minPrice, setMinPrice] = useState('');
     const [maxPrice, setMaxPrice] = useState(''); 
+    const [searchTerm,setSearchTerm]=useState('');
+
 
     const pets = useSelector((state)=> state.pets);
     const productHistory=useSelector((state)=>state.productHistory);
@@ -35,6 +37,10 @@ const PetCategorized=()=>{
     const [filteredPets,setFilteredPets]=useState([]);
     const [isLoading,setIsLoading]=useState(true);
 
+    const handleSearch = (value) => {
+        setSearchTerm(value);
+    };
+
     //useEffect for filtering data
     useEffect(()=>{
         let filteredData = [...pets];
@@ -44,11 +50,11 @@ const PetCategorized=()=>{
         filteredData = filteredData.filter((pet) => !pet.hidden);
         filteredData = filteredData.filter((pet) => pet.price>0);
 
-        if(searchText.length !==0){
+        if(searchTerm.length !==0){
             filteredData=filteredData.filter(
                 (pets)=>
-                pets.title.toLowerCase().includes(searchText.trim().toLowerCase()) ||
-                pets.description.toLowerCase().includes(searchText.trim().toLowerCase())
+                pets.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                pets.description.toLowerCase().includes(searchTerm.toLowerCase())
             );
         }
 
@@ -72,7 +78,7 @@ const PetCategorized=()=>{
 
         setIsLoading(false);
         setFilteredPets(filteredData);
-    }, [searchText, pets,minPrice,maxPrice, dispatch]);
+    }, [searchTerm, pets,minPrice,maxPrice, dispatch]);
 
     useEffect(() => {
         if ( pets.length === 0) {
@@ -93,7 +99,7 @@ const PetCategorized=()=>{
     return(
         <div>
             <div className="Upper-section">
-                <SearchBar id="Upper-section-search-bar" showPriceRange={showPriceRange} />
+                <SearchBar id="Upper-section-search-bar" onSearch={handleSearch} showPriceRange={showPriceRange} />
                 {showPriceRange?(
                     <form onSubmit={handlePriceRangeSubmit}>
                         <input

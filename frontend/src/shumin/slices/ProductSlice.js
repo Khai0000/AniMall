@@ -43,7 +43,7 @@ export const ProductSlice =createSlice({
     initialState:[],
     reducers:{
         setInitialProduct(state, action) {
-          state.products = action.payload.filter(product => !product.hidden);
+          return [...action.payload];
         },
         addProduct(state, action) {
           const newProduct = action.payload;

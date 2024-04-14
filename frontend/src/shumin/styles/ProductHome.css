@@ -9,6 +9,51 @@
     justify-content: space-between;
 }
   
+.Upper-section-search-container {
+    display: flex;
+    align-items: center; 
+    border-radius: 20px; 
+    overflow: hidden; 
+    background-color: #fff;
+    fill: #FFF;
+    filter: drop-shadow(0px 0px 2px #3C95A9);
+    margin-left: 2.2%;
+    margin-right:9.4%;
+    width: 36%;
+    height:30px;  /* cannot use percentage */
+  }
+
+.Upper-section-search-container.pet{
+    margin-right: 3.1%;
+}
+
+.Upper-section-search-input {
+    flex: 1;  
+    border: none;
+    border-radius: 20px; 
+    outline: none;
+}
+  
+.Upper-section-search-button {
+    background-color: transparent;
+    border: none;
+    padding: 2%;
+    cursor: pointer;
+}
+  
+.Upper-section-search-icon {
+    width: 10%; 
+    height: 10%; 
+    color: #555; 
+    display: flex;
+    align-items: end;
+}
+  
+.Upper-section-search-container.focused,
+.Upper-section-search-container:hover {
+    filter: drop-shadow(0px 0px 4px #F3B801);
+}
+
 .Upper-section-price-range-button {
     width: 17%;
     margin-right: 23%;
@@ -59,52 +104,6 @@
   color:#F3B801;
 }
 
-
-.Upper-section-search-container {
-    display: flex;
-    align-items: center; 
-    border-radius: 20px; 
-    overflow: hidden; 
-    background-color: #fff;
-    fill: #FFF;
-    filter: drop-shadow(0px 0px 2px #3C95A9);
-    margin-left: 2.2%;
-    margin-right:9.4%;
-    width: 36%;
-    padding: -2%;
-    height:30px;  /* cannot use percentage */
-  }
-
-.Upper-section-search-container.pet{
-    margin-right: 3.1%;
-}
-
-.Upper-section-search-input {
-    flex: 1; 
-    padding: -2%; 
-    border: none;
-    border-radius: 20px; 
-    outline: none;
-}
-  
-.Upper-section-search-button {
-    background-color: transparent;
-    border: none;
-    padding: 2%;
-    cursor: pointer;
-}
-  
-.Upper-section-search-icon {
-    width: 10%; 
-    height: 10%; 
-    color: #555; 
-}
-  
-.Upper-section-search-container.focused,
-.Upper-section-search-container:hover {
-    filter: drop-shadow(0px 0px 4px #F3B801);
-}
-
 .Upper-section-min-price,
 .Upper-section-max-price{
     width: 19%;
@@ -125,7 +124,7 @@
     margin-right: -14.3%;
 }
 
-#Upper-section-to{
+.Upper-section-to{
     color: #3C95A9;
 }
 
@@ -239,4 +238,22 @@
     height: 66vh;
     row-gap: 0;
     gap: 0;
+}
+
+@media screen and (max-width: 1068px) {
+    .Upper-section-search-container.product{
+        width: 83%;
+    }
+
+    .Upper-section-cart-button.product{
+        margin-left: -15%;
+    }
+
+    .Upper-section-search-container.pet{
+        width: 75%;
+    }
+
+    .Upper-section-price-range-container.pet{
+       margin-right: -22%;
+    }
 }

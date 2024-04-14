@@ -1,9 +1,9 @@
 import React from 'react';
 import "../styles/ProductHome.css";
 
-const MyCartButton = () => {
+const MyCartButton = ({page}) => {
   return (
-    <button className="Upper-section-cart-button">
+    <button className={`Upper-section-cart-button ${page=="product"?"product":"pet"}`}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="15"

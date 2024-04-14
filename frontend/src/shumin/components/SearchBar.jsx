@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import "../styles/ProductHome.css"
-import SearchIcon from './SearchButton';
+import SearchIcon from './SearchIcon';
 
 const SearchBar = ({ showPriceRange, onSearch ,page}) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -11,7 +11,7 @@ const SearchBar = ({ showPriceRange, onSearch ,page}) => {
   };
 
   return (
-    <div className={`Upper-section-search-container ${isFocused ? 'focused' : ''} ${showPriceRange ? 'show-price-range' : ''} ${page=="pet"?'pet':''}`}
+    <div className={`Upper-section-search-container ${isFocused ? 'focused' : ''} ${showPriceRange ? 'show-price-range' : ''} ${page=="pet"?'pet':'product'}`}
       onFocus={() => setIsFocused(true)}
       onBlur={() => setIsFocused(false)}
       onMouseEnter={() => setIsHovered(true)}
@@ -27,7 +27,7 @@ const SearchBar = ({ showPriceRange, onSearch ,page}) => {
         className="Upper-section-search-button"
         onClick={handleSearchInputChange}
       >
-        <SearchIcon focused={isFocused} hover={isHovered} />
+        <SearchIcon focused={isFocused} hover={isHovered}/>
       </button>
     </div>
   );
