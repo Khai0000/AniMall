@@ -24,8 +24,7 @@ const SearchBar = ({ showPriceRange, onSearch ,page}) => {
       />
       <button
         type="button"
-        className="Upper-section-search-button"
-        onClick={handleSearchInputChange}
+        className={`Upper-section-search-button ${page=="pet"?'pet':'product'}`}
       >
         <SearchIcon focused={isFocused} hover={isHovered}/>
       </button>

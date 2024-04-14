@@ -61,7 +61,6 @@ const ProductHome=()=>{
         
         filteredData = filteredData.filter((product) => !product.hidden);
 
-        console.log(searchTerm);
         if(searchTerm.length !== 0){
             filteredData=filteredData.filter(
                 (product)=>
