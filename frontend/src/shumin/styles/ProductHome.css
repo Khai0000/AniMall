@@ -3,6 +3,7 @@
     display: flex; 
     height:6%;
     padding: 2%;
+    margin-bottom: 1%;
     background-color: white;
     align-items: center;
     justify-content: space-between;
@@ -10,13 +11,17 @@
   
 .Upper-section-price-range-button {
     width: 17%;
-    margin-right: 25%;
+    margin-right: 23%;
     background-color: #3C95A9;
     border: transparent;
     color: #FFF;
     border-radius: 10px;
     font-size: 96%;
     padding: 0.6%;
+}
+
+.Upper-section-price-range-button.pet{
+    margin-right: 3.5%;
 }
   
 .Upper-section-price-range-button:hover,
@@ -70,6 +75,10 @@
     height:30px;  /* cannot use percentage */
   }
 
+.Upper-section-search-container.pet{
+    margin-right: 3.1%;
+}
+
 .Upper-section-search-input {
     flex: 1; 
     padding: -2%; 
@@ -107,6 +116,15 @@
     height: 15%;
 }
 
+.Upper-section-price-range-container.product{
+    margin-left:-5.8%;
+}
+
+.Upper-section-price-range-container.pet{
+    margin-left: 1%;
+    margin-right: -14.3%;
+}
+
 #Upper-section-to{
     color: #3C95A9;
 }
@@ -129,4 +147,96 @@
 .Upper-section-max-price:focus{    
     border-color: #F3B801;
     outline: none;
+}
+
+.Upper-section-adoption-button{
+    background-color: white;
+    border: 2px solid #3C95A9;
+    color: #3C95A9;
+    border-radius: 40px;
+    font-size: 96%;
+    padding-left: 1%;
+    padding-right: 1%;
+    padding-top: 0.5%;
+    padding-bottom: 0.5%;
+}
+
+.Upper-section-adoption-button:hover{
+    border: 2px solid #F3B801;
+    color: #F3B801;
+}
+
+.Product-category-row.dog,
+.Product-category-row.others,
+.Product-category-row.cat{
+    padding-left: 1%;
+    padding-top: 2%;
+    padding-bottom:3%;
+}
+
+.Product-category-row-content{
+    display: flex;
+    justify-content:start;
+    overflow-x: auto;
+    gap: 3%;
+    padding-right: 3%;
+}
+
+.Product-category-row-content::-webkit-scrollbar {
+    width: 0px; 
+}
+
+.Product-category-row.dog,
+.Product-category-row.others{
+    background-color: #DCEAEB;
+}
+
+.Product-category-row-caption-container{
+    padding-left: 2.5%;
+    margin-bottom: 2%;
+    font-weight: bold;
+    font-size: 1.25em;
+    align-items: center;
+    display: flex;
+}
+
+.Product-category-button{
+    background-color: transparent;
+    border: none;
+}
+
+.Product-category-button:hover svg path{
+    stroke: #F3B801; 
+    stroke-width: 2; 
+    stroke-linecap: round; 
+    filter: drop-shadow(0px 0px 4px #F3B801);
+}
+
+.Product-category-row-content-noproduct{
+    margin-left: 1%;
+    margin-top: 6%;
+    margin-bottom: 6%;
+    justify-content: center;
+    display: flex;
+}
+
+.NoProductContainer{
+    height: 66vh;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}
+
+.circularProgress {
+    color: #3C95A9 !important;
+}
+
+.loadingContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 66vh;
+    row-gap: 0;
+    gap: 0;
 }

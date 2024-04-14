@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/ProductCard.css";
 
-const ProductCard=({ product })=>{
+const ProductCardSkeleton=()=>{
 
     // Function to truncate text to a maximum length
     const truncateText = (text, maxLength) => {
@@ -16,15 +16,15 @@ const ProductCard=({ product })=>{
     return(
         <div>
             <button className="product-button">
-                <img src={product.imageUrl} alt={product.name} className="product-image" />
+                <img alt='' className="product-image" />
                 <div className="product-info">
-                    <h3 className="product-name">{product.name}</h3>
+                    <h3 className="product-name">Product title</h3>
                     <p className="product-description">
                         <span>Description: </span>
                         <span id="product-description-content">
-                            {truncateText(product.description, 7)}
+                            {truncateText("Product description", 9)}
                             <br />
-                            {truncateText(product.description.slice(7),12)}
+                            {truncateText("Product description".slice(9),14)}
                         </span>
                         
                     </p>
@@ -34,4 +34,4 @@ const ProductCard=({ product })=>{
     )
 }
 
-export default ProductCard;
+export default ProductCardSkeleton;
