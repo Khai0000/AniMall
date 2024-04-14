@@ -123,6 +123,10 @@ const PetHome=()=>{
         navigate(`/pet/PetCategorized/${category}`);
     };
 
+    const handleMyCartButtonClick=()=>{
+        navigate("/mycart");
+    };
+
     const dog=filteredPets.filter(pet=>pet.animaltag=="dog");
     const cat=filteredPets.filter(pet=>pet.animaltag=="cat");
     const other=filteredPets.filter(pet=>pet.animaltag=="others");
@@ -183,7 +187,7 @@ const PetHome=()=>{
                     </div>
                 ):(<button className="Upper-section-price-range-button pet" onClick={togglePriceRange}>Price Range</button>)}
                 <button className="Upper-section-adoption-button">Adoption</button>
-                <MyCartButton page="pet"/>
+                <MyCartButton page="pet" onClick={handleMyCartButtonClick}/>
             </div>
             <div ref={containerRef}>
                 {isLoading?(

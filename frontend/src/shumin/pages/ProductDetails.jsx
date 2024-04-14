@@ -58,7 +58,25 @@ const ProductDetails=()=>{
     };
 
     const handleOnAddToCartButtonClick=()=>{
-        dispatch(addItemToCart({ ...product, quantity: 1 }));
+        const productDetails = {
+            id: product.id,
+            title: product.title,
+            description:product.description,
+            image:product.image,
+            animaltag: product.animaltag,
+            producttag:product.producttag,
+            price: product.price,
+            ratings:product.ratings,
+            comments:product.comments,
+            stockLevel:product.stockLevel,
+            hidden: product.hidden,
+            type:"product",
+            quantity:1,
+            checked:true,
+        };
+        
+        dispatch(addItemToCart(productDetails));
+        navigate(-1);
     }
 
     return(

@@ -11,13 +11,6 @@ import { createSlice } from "@reduxjs/toolkit";
 //     hidden:false,
 // }
 
-const initialState={
-    pets:[],
-    selectedPet:null, 
-    selectedCategory:[],
-    searchText:"",
-};
-
 export const PetSlice =createSlice({
     name: "pet",
     initialState:[],

@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import "../styles/ProductDetails.css";
-import { addItemToCart } from "../slices/CartSlice"; 
+import {addItemToCart} from "../slices/CartSlice";
 
 const PetDetails=()=>{
     const dispatch=useDispatch();
@@ -48,7 +48,23 @@ const PetDetails=()=>{
     };
 
     const handleOnAddToCartButtonClick=()=>{
-        dispatch(addItemToCart({ ...pet, quantity: 1 }));
+        const petDetails = {
+            id: pet.id,
+            title: pet.title,
+            description:pet.description,
+            image:pet.image,
+            birthdate: pet.birthdate,
+            animaltag: pet.animaltag,
+            price: pet.price,
+            stockLevel:pet.stockLevel,
+            hidden: pet.hidden,
+            type:"pet",
+            quantity:1,
+            checked:true,
+        };
+        
+        dispatch(addItemToCart(petDetails));
+        navigate(-1);
     }
 
     return(

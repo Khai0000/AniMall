@@ -31,12 +31,6 @@ import { createSlice } from "@reduxjs/toolkit";
 //
 // }
 
-const initialState={
-    products:[],//array to hold all products
-    selectedProduct:null,  //hold details of the selected product
-    selectedCategory:[],
-    searchText:"",
-};
 
 export const ProductSlice =createSlice({
     name: "product",

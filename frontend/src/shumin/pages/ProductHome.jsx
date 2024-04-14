@@ -120,6 +120,10 @@ const ProductHome=()=>{
         navigate(`/product/ProductCategorized/${category}`);
     };
 
+    const handleMyCartButtonClick=()=>{
+        navigate("/mycart");
+    };
+
     const dogProducts=filteredProducts.filter(product=>product.animaltag=="dog");
     const catProducts=filteredProducts.filter(product=>product.animaltag=="cat");
     const otherProducts=filteredProducts.filter(product=>product.animaltag=="others");
@@ -179,7 +183,7 @@ const ProductHome=()=>{
                         </form>
                     </div>
                 ):(<button className="Upper-section-price-range-button" onClick={togglePriceRange}>Price Range</button>)}
-                <MyCartButton page="product"/>
+                <MyCartButton page="product" onClick={handleMyCartButtonClick}/>
             </div>
             <div ref={containerRef}>
                 {isLoading?(

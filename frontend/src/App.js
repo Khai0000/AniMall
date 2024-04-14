@@ -19,6 +19,7 @@ import PetDetails from "./shumin/pages/PetDetails";
 import PetCategorized from "./shumin/pages/PetCategorized";
 import AddPet from "./shumin/pages/AddPet";
 import SellerPet from "./shumin/pages/SellerPet";
+import MyCart from "./shumin/pages/MyCart";
 
 function App() {
   const router = createBrowserRouter(
@@ -39,6 +40,7 @@ function App() {
         <Route path="/pet/PetCategorized/:category" element={<PetCategorized/>}/>
         <Route path="/seller/productwarehouse/:id" element={<AddProduct/>}/>
         <Route path="/seller/petwarehouse/:id" element={<AddPet/>}/>
+        <Route path="/mycart" element={<MyCart/>}/>
       </Route>
     )
   );
