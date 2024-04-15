@@ -62,7 +62,7 @@ const ForumHomeCard = ({ post,index }) => {
         <p className="content">{post.content}</p>
       </div>
       {
-        <button
+        post.author==="Khai" && <button
         style={{zIndex:100}}
           className="deleteButton"
           onClick={(e) => {
