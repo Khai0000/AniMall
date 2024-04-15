@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import "../styles/SellerProductCard.css";
 import SellerProductCardSkeleton from "./SellerProductCardSkeleton";
 import { useDispatch } from "react-redux";
-// import { useNavigate } from "react-router-dom";
 import { editService, removeService } from "../slices/serviceSlice";
 import { Link } from "react-router-dom";
 
@@ -11,7 +10,6 @@ const SellerServiceCard = ({ service, index }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isHidden, setIsHidden] = useState(service.hidden);
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
 
   useEffect(() => {
     if (service.serviceImages && service.serviceImages.length > 0) {
@@ -48,13 +46,12 @@ const SellerServiceCard = ({ service, index }) => {
   };
 
   const handleCheckboxClick = () => {
-    if (!isHidden) {
-      const newHiddenValue = !isHidden;
-      setIsHidden(newHiddenValue);
+    setIsHidden(!isHidden);
+    if (isHidden) {
       dispatch(
         editService({
           serviceTitle: service.serviceTitle,
-          hidden: newHiddenValue,
+          hidden: isHidden,
         })
       );
     }

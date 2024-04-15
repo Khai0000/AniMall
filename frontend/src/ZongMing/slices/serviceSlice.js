@@ -55,9 +55,7 @@ export const serviceSlice = createSlice({
       }
     },
     removeService: (state, action) => {
-      console.log("hi");
-      const { serviceTitle } = action.payload;
-      return state.filter((service) => service.serviceTitle !== serviceTitle);
+      return state.filter((service) => service.serviceTitle !== action.payload);
     },
   },
 });
