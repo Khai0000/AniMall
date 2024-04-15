@@ -18,24 +18,38 @@ const ServiceHome = () => {
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(1000);
 
-  // Retrieve services from Redux store
-  useEffect(() => {
-    console.log('All services:', allServices);
+  // // Retrieve services from Redux store
+  // useEffect(() => {
+  //   console.log('All services:', allServices);
 
-    if (!Array.isArray(allServices)) {
-      console.error('All services is not an array:', allServices);
-      return;
-    }
-    // Filter services based on the search term
-    const filtered = allServices
+  //   if (!Array.isArray(allServices)) {
+  //     console.error('All services is not an array:', allServices);
+  //     return;
+  //   }
+  //   // Filter services based on the search term
+  //   const filtered = allServices
+  //     .filter((service) =>
+  //       service.serviceTitle.toLowerCase().includes(searchTerm.toLowerCase())
+  //     )
+  //     .filter(
+  //       (service) => service.price >= minPrice && service.price <= maxPrice
+  //     );
+  //   setFilteredServices(filtered);
+  // }, [searchTerm, minPrice, maxPrice]);
+  useEffect(() => {
+    let filteredData = allServices;
+
+    filteredData = filteredData
       .filter((service) =>
         service.serviceTitle.toLowerCase().includes(searchTerm.toLowerCase())
       )
+    filteredData = filteredData
       .filter(
         (service) => service.price >= minPrice && service.price <= maxPrice
       );
-    setFilteredServices(filtered);
-  }, [searchTerm, minPrice, maxPrice]);
+    setFilteredServices(filteredData);
+
+  }, [searchTerm, minPrice, maxPrice])
 
   const handleBeforeUnload = () => {
     localStorage.setItem("scrollPosition", window.pageYOffset);

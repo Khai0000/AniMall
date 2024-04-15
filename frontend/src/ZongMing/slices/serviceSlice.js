@@ -5,15 +5,13 @@ import { createSelector } from "reselect";
 // Create slice
 export const serviceSlice = createSlice({
   name: "services",
-  initialState: {
-    services: [],
-  },
+  initialState: null,
   reducers: {
-    addService: (state, action) => {
-      return [action.payload, ...state];
-    },
     setInitialServices: (state, action) => {
       return [...action.payload];
+    },
+    addService: (state, action) => {
+      return [action.payload, ...state];
     },
     addComment: (state, action) => {
       const { serviceTitle, comment } = action.payload;
