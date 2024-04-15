@@ -2,7 +2,11 @@ import { useState, useEffect } from "react";
 import "../styles/SellerProductCard.css";
 import SellerProductCardSkeleton from "./SellerProductCardSkeleton";
 import { useDispatch } from "react-redux";
-import { editService, removeService } from "../slices/serviceSlice";
+import {
+  editService,
+  removeService,
+  hideService,
+} from "../slices/serviceSlice";
 import { Link } from "react-router-dom";
 
 const SellerServiceCard = ({ service, index }) => {
@@ -47,14 +51,11 @@ const SellerServiceCard = ({ service, index }) => {
 
   const handleCheckboxClick = () => {
     setIsHidden(!isHidden);
-    if (isHidden) {
-      dispatch(
-        editService({
-          serviceTitle: service.serviceTitle,
-          hidden: isHidden,
-        })
-      );
-    }
+    dispatch(
+      hideService({
+        serviceTitle: service.serviceTitle,
+      })
+    );
   };
 
   return isLoading ? (

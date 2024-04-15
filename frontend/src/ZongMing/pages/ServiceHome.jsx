@@ -36,8 +36,11 @@ const ServiceHome = () => {
   //     );
   //   setFilteredServices(filtered);
   // }, [searchTerm, minPrice, maxPrice]);
+
   useEffect(() => {
     let filteredData = allServices;
+
+    filteredData= filteredData.filter((service)=>service.hidden ===false);
 
     filteredData = filteredData
       .filter((service) =>
@@ -49,7 +52,7 @@ const ServiceHome = () => {
       );
     setFilteredServices(filteredData);
 
-  }, [searchTerm, minPrice, maxPrice])
+  }, [searchTerm, minPrice, maxPrice,allServices])
 
   const handleBeforeUnload = () => {
     localStorage.setItem("scrollPosition", window.pageYOffset);
