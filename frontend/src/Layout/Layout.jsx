@@ -27,7 +27,7 @@ function Layout() {
       <main >
         <Outlet/>
       </main>
-      <div className='spacer'></div>
+      {/* <div className='spacer'></div> */}
       <div>
         <Footer
           footerRef={footerRef}
