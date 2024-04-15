@@ -3,7 +3,6 @@ import "../styles/SellerProductCard.css";
 import SellerProductCardSkeleton from "./SellerProductCardSkeleton";
 import { useDispatch } from "react-redux";
 import {
-  editService,
   removeService,
   hideService,
 } from "../slices/serviceSlice";

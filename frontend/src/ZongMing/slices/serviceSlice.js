@@ -46,12 +46,12 @@ export const serviceSlice = createSlice({
     },
 
     editService: (state, action) => {
-      const { serviceTitle, updates } = action.payload;
+      const { serviceTitle, updatedService } = action.payload;
       const index = state.findIndex(
         (service) => service.serviceTitle === serviceTitle
       );
       if (index !== -1) {
-        state[index] = { ...state[index], ...updates };
+        state[index] = { ...state[index], ...updatedService };
       }
     },
     removeService: (state, action) => {

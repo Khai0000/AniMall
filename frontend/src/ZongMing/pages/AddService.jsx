@@ -108,7 +108,7 @@ const AddService = () => {
         createdAt,
       };
 
-      dispatch(editService(updatedService));
+      dispatch(editService({serviceTitle,updatedService}));
     } else {
       const newService = {
         serviceTitle: title,
