@@ -44,6 +44,7 @@ const AddService = () => {
       }
     }
   }, [serviceTitle, service]);
+
   function generateTimestamp() {
     return new Date().toISOString();
   }
@@ -108,7 +109,7 @@ const AddService = () => {
         createdAt,
       };
 
-      dispatch(editService({serviceTitle,updatedService}));
+      dispatch(editService({ serviceTitle, updatedService }));
     } else {
       const newService = {
         serviceTitle: title,
@@ -148,8 +149,8 @@ const AddService = () => {
         currentImageIndex === -1
           ? images.length - 1
           : currentImageIndex > 0
-            ? currentImageIndex - 1
-            : images.length - 1;
+          ? currentImageIndex - 1
+          : images.length - 1;
     } else if (direction === "next") {
       newIndex =
         currentImageIndex < images.length - 1 ? currentImageIndex + 1 : -1;
@@ -160,10 +161,13 @@ const AddService = () => {
     if (currentImageIndex === -1) {
       return <div className="placeholder">Click to add image</div>;
     }
+
     // Check if the image source is from the file explorer or already a URL
     const isImageFromFileExplorer =
       images[currentImageIndex].startsWith("blob:"); // Assuming file explorer URLs start with 'blob:'
-    if (isImageFromFileExplorer) {
+
+    // If the image is from a URL
+    if (!isImageFromFileExplorer) {
       return (
         <img
           src={images[currentImageIndex]}
@@ -172,46 +176,17 @@ const AddService = () => {
         />
       );
     } else {
-      if (images.length === 0) {
-        return null;
-      } else if (images.length === 1) {
-        return (
-          <img
-            src={require(`../assets/image/${images[0]}`)}
-            alt=""
-            style={{ maxWidth: "100%", maxHeight: "100%" }}
-          />
-        );
-      } else if (images.length === 2) {
-        return (
-          <>
-            {currentImageIndex === 0 && (
-              <img
-                src={require(`../assets/image/${images[0]}`)}
-                alt=""
-                style={{ maxWidth: "100%", maxHeight: "100%" }}
-              />
-            )}
-            {currentImageIndex === 1 && (
-              <img
-                src={require(`../assets/image/${images[1]}`)}
-                alt=""
-                style={{ maxWidth: "100%", maxHeight: "100%" }}
-              />
-            )}
-          </>
-        );
-      } else {
-        return (
-          <img
-            src={require(`../assets/image/${images[currentImageIndex]}`)}
-            alt=""
-            style={{ maxWidth: "100%", maxHeight: "100%" }}
-          />
-        );
-      }
+      // If the image is from file explorer, you can use the URL directly
+      return (
+        <img
+          src={images[currentImageIndex]}
+          alt="imgA"
+          style={{ maxWidth: "100%", maxHeight: "100%" }}
+        />
+      );
     }
   };
+
   const handleDeleteImage = () => {
     if (currentImageIndex !== -1) {
       const updatedImages = images.filter(
@@ -247,8 +222,9 @@ const AddService = () => {
             {images.map((_, index) => (
               <span
                 key={index}
-                className={`pagination-indicator ${index === currentImageIndex ? "current" : ""
-                  }`}
+                className={`pagination-indicator ${
+                  index === currentImageIndex ? "current" : ""
+                }`}
                 onClick={() => setCurrentImageIndex(index)}
               >
                 •

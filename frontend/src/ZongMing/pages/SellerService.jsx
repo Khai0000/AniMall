@@ -1,15 +1,17 @@
 import "../styles/SellerProduct.css";
+// useDispatch
 import { useSelector, useDispatch } from "react-redux";
+// useEffect, useState
 import React, { useEffect, useState, lazy, Suspense } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
-import { addService } from "../slices/serviceSlice";
+// import { addService } from "../slices/serviceSlice";
 import { useNavigate } from "react-router-dom";
 
 const SellerServiceCard = lazy(() => import("../components/SellerServiceCard"));
 
 function SellerService() {
   const services = useSelector((state) => state.services);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
 
   // useEffect(() => {

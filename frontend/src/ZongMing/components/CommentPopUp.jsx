@@ -3,7 +3,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import "../styles/CommentPopUp.css";
 import { useDispatch } from "react-redux";
 import { addComment ,addRating} from "../slices/serviceSlice";
-import { dummyServiceData } from "../data/dummyServiceData";
 
 const CommentPopUp = ({ setShowPopup, serviceTitle }) => {
   const dispatch = useDispatch();
