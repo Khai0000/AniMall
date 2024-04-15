@@ -56,7 +56,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export const postSlice = createSlice({
   name: "post",
-  initialState: [],
+  initialState: null,
   reducers: {
     addPost: (state, action) => {
       return [action.payload, ...state];
