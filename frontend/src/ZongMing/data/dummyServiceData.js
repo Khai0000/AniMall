@@ -1,5 +1,4 @@
 import images from "./images";
-import dog1 from "../assets/image/dog1.jpg";
 import dog2 from "../assets/image/dog2.jpg";
 import dog3 from "../assets/image/dog3.jpeg";
 import dog4 from "../assets/image/dog4.jpeg";
@@ -54,7 +53,7 @@ export const dummyServiceData = [
     },
     {
       serviceTitle: "Massage Therapy",
-      serviceImages: [dog1,dog2],
+      serviceImages: [dog3,dog2],
       description: "Relax and unwind with our massage therapy service",
       price: "50",
       ratings: {
@@ -148,5 +147,9 @@ export const dummyServiceData = [
       createdAt: "2024-04-08T18:00:00.000Z",
     },
   ];
+
+  dummyServiceData.forEach(service => {
+    service.hidden = false;
+  });
   
   export default dummyServiceData;

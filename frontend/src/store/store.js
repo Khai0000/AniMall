@@ -3,6 +3,6 @@ import serviceSlice from "../ZongMing/slices/serviceSlice";
 
 export default configureStore({
   reducer: {
-    service: serviceSlice,
+    services: serviceSlice,
   },
 });

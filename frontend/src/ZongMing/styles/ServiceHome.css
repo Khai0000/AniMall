@@ -41,3 +41,10 @@
   color: black; 
 }
 
+.service-container .serviceNotFound {
+  height: 66vh;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+}
+

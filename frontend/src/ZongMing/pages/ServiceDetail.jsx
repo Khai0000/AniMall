@@ -10,14 +10,12 @@ import CommentPopUp from "../components/CommentPopUp";
 
 const ServiceDetail = () => {
   const { title } = useParams(); // Retrieve the service title from URL parameter
-  console.log('Title:', title);
-
   const [showPopup, setShowPopup] = useState(false);
 
   // Retrieve service data from Redux store using selector
   const serviceData = useSelector(state => {
     // Assuming your service data is stored in an array called 'services' in your Redux state
-    return state.service.find(service => service.serviceTitle === title);
+    return state.services.find(service => service.serviceTitle === title);
   });
 
   // If serviceData is not found, return null to prevent errors

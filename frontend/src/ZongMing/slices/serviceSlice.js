@@ -1,17 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createSelector } from "reselect";
-import dummyServiceData from "../data/dummyServiceData";
+// import dummyServiceData from "../data/dummyServiceData";
 
 // Create slice
 export const serviceSlice = createSlice({
-  name: "service",
-  initialState: [],
+  name: "services",
+  initialState: {
+    services: [],
+  },
   reducers: {
     addService: (state, action) => {
-      console.log("Payload received in addService:", action.payload);
-      state.services.unshift(action.payload);
+      return [action.payload, ...state];
     },
-    setInitialPost: (state, action) => {
+    setInitialServices: (state, action) => {
       return [...action.payload];
     },
     addComment: (state, action) => {
@@ -45,19 +46,40 @@ export const serviceSlice = createSlice({
         );
       }
     },
+
+    editService: (state, action) => {
+      const { serviceTitle, updates } = action.payload;
+      const index = state.findIndex(
+        (service) => service.serviceTitle === serviceTitle
+      );
+      if (index !== -1) {
+        state[index] = { ...state[index], ...updates };
+      }
+    },
+    removeService: (state, action) => {
+      console.log("hi");
+      const { serviceTitle } = action.payload;
+      return state.filter((service) => service.serviceTitle !== serviceTitle);
+    },
   },
 });
 
 // Export actions
-export const { setInitialPost, addService, addComment, removeComment,addRating } =
-  serviceSlice.actions;
+export const {
+  setInitialServices,
+  addService,
+  addComment,
+  removeComment,
+  addRating,
+  editService,
+  removeService,
+} = serviceSlice.actions;
 
 export const selectServiceSlice = (state) => state.service;
 
 export const selectServices = createSelector(
   selectServiceSlice,
   (serviceSlice) => {
-    console.log("State received in selectServices:", serviceSlice);
     return serviceSlice.services;
   }
 );

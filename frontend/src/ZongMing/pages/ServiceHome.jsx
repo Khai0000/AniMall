@@ -3,22 +3,22 @@ import { Link } from "react-router-dom";
 import ServiceCard from "../components/ServiceCard";
 import "../styles/ServiceHome.css";
 import ServicesHeader from "../components/ServicesHeader";
-import { useSelector } from "react-redux"; 
+import { useSelector } from "react-redux";
 
 const CustomLink = ({ to, serviceTitle, children }) => (
-  <Link to={`/serviceDetails/${encodeURIComponent(serviceTitle)}`} className="service-card-link">
+  <Link to={`/services/serviceDetails/${encodeURIComponent(serviceTitle)}`} className="service-card-link">
     {children}
   </Link>
 );
 
 const ServiceHome = () => {
+  const allServices = useSelector((state) => state.services);
   const [searchTerm, setSearchTerm] = useState(""); // State to store the search term
   const [filteredServices, setFilteredServices] = useState([]); // State to store the filtered services
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(1000);
 
   // Retrieve services from Redux store
-  const allServices = useSelector(((state) => state.service));
   useEffect(() => {
     console.log('All services:', allServices);
 
@@ -35,7 +35,7 @@ const ServiceHome = () => {
         (service) => service.price >= minPrice && service.price <= maxPrice
       );
     setFilteredServices(filtered);
-  }, [searchTerm, minPrice, maxPrice, allServices]);
+  }, [searchTerm, minPrice, maxPrice]);
 
   const handleBeforeUnload = () => {
     localStorage.setItem("scrollPosition", window.pageYOffset);
@@ -73,23 +73,34 @@ const ServiceHome = () => {
         onPriceRangeChange={handlePriceRangeChange}
       />
       <div className="service-container">
-        {chunkArray(filteredServices, 3).map((row, index) => (
-          <div key={index} className={index % 2 === 0 ? "odd-row" : "even-row"}>
-            {row.map((service) => (
-              <CustomLink key={service.serviceTitle} to={service.serviceTitle} serviceTitle={service.serviceTitle}>
-                <ServiceCard
-                  key={service.serviceTitle}
-                  title={service.serviceTitle}
-                  image={service.serviceImages[0]} // Assuming you want to display the first image
-                  description={service.description}
-                />
-              </CustomLink>
-            ))}
+        {filteredServices.length === 0 ? (
+          <div className="serviceNotFound">
+            <p>No Service Found.</p>
           </div>
-        ))}
+        ) : (
+          chunkArray(filteredServices, 3).map((row, index) => (
+            <div key={index} className={index % 2 === 0 ? "odd-row" : "even-row"}>
+              {row.map((service) => (
+                <CustomLink key={service.serviceTitle} to={service.serviceTitle} serviceTitle={service.serviceTitle}>
+                  <ServiceCard
+                    key={service.serviceTitle}
+                    title={service.serviceTitle}
+                    image={service.serviceImages[0]}
+                    description={service.description}
+                  />
+                </CustomLink>
+              ))}
+            </div>
+          ))
+        )}
       </div>
+
+      {filteredServices.length > 0 && filteredServices.every(service => service.price < minPrice || service.price > maxPrice)}
+
+      <Link to="/services/sellerService" className="seller-service-page-link">Seller Service</Link>
     </div>
   );
+
 };
 
 export default ServiceHome;
