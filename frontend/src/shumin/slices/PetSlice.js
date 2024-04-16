@@ -57,7 +57,7 @@ export const PetSlice =createSlice({
             }
         },
         hidePet(state,action){
-            const {id,hidden}=action.payload;
+            const {id}=action.payload;
             const existingPet= state.find(pet=>pet.id===id);
             if(existingPet){
                 existingPet.hidden=true;

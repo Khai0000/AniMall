@@ -107,8 +107,6 @@ export const CartSlice = createSlice({
       }
     },
     checkoutItems: (state, action) => {
-      const checkedItems = state.filter(item => item.checked);
-      // Perform checkout logic for checkedItems, such as updating orders, etc.
       
       return state.filter(item => !item.checked);
     },

@@ -1,13 +1,11 @@
-import { useState, useEffect,useRef } from "react";
+import { useState, useEffect } from "react";
 import "../styles/SellerProductCard.css";
 import SellerProductCardSkeleton from "./SellerProductCardSkeleton";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import useToggle from "../hooks/useToggle";
 import { editPet, removePet } from "../slices/PetSlice";
 import { Link } from "react-router-dom";
 
-const SellerPetCard = ({pet,index})=>{
+const SellerPetCard = ({pet})=>{
     const [image,setImage]=useState(null);
     const [isLoading,setIsLoading]=useState(false);
     const [isHidden, setIsHidden] = useState(pet.hidden);
@@ -15,7 +13,6 @@ const SellerPetCard = ({pet,index})=>{
     const [quantity,setQuantity]=useState(initialQuantity);
 
     const dispatch=useDispatch();
-    const navigate=useNavigate();
 
     useEffect(()=>{
         if(pet.image &&pet.image[0].includes("jpg")){
@@ -31,7 +28,6 @@ const SellerPetCard = ({pet,index})=>{
                     setIsLoading(false);
                 })
         } else if (pet.image && pet.image[0]) {
-            console.log(pet.image[0]);
             setImage(pet.image[0]);
             setIsLoading(false);
         } else {
@@ -58,22 +54,20 @@ const SellerPetCard = ({pet,index})=>{
     useEffect(() => {
         // Automatically set isHidden to true if quantity is 0 or less
         if (quantity <= 0 && !isHidden) {
+            console.log("Hi(from seller pet card");
             setIsHidden(true);
             dispatch(editPet({ id: pet.id, hidden: true }));
         }
-    }, [quantity]);
+    }, [quantity,isHidden,pet.id,dispatch]);
 
-    const handleQuantityChange=(event)=>{
-        if(event.target.value!=NaN){
+    const handleQuantityChange = (event) => {
+        if (!isNaN(event.target.value)) {
             const newQuantity = parseInt(event.target.value, 10);
             setQuantity(newQuantity);
-            dispatch(editPet({ id: pet.id, stockLevel: newQuantity}));
+            dispatch(editPet({ id: pet.id, stockLevel: newQuantity }));
         }
     }
-
-    // useEffect(() => {
-    //     console.log('Updated product:', product);
-    // }, [product]);
+    
 
     const handleKeyPress = (event) => {
         if (event.key === "Enter") {

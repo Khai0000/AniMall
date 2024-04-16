@@ -1,6 +1,6 @@
 import "../styles/ProductHome.css";
 
-const EnterButtonIcon=(focused)=>{
+const EnterButtonIcon=()=>{
   return(
     <svg className="Product-category-button-icon" xmlns="http://www.w3.org/2000/svg" width="30" height="27" viewBox="0 0 36 33" fill="none">
       <g filter="url(#filter0_d_74_1550)">

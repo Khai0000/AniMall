@@ -4,7 +4,7 @@ import useToggle from "../hooks/useToggle";
 
 const SellerProductCardSkeleton=()=>{
     const[isClicked,toggleIsClicked]=useToggle(false);
-    const truncateText = (text, maxLength) => (text.length > maxLength ? text.slice(0, maxLength > 9 ? maxLength : 9) + (maxLength > 9 ? "..." : "") : text);
+    // const truncateText = (text, maxLength) => (text.length > maxLength ? text.slice(0, maxLength > 9 ? maxLength : 9) + (maxLength > 9 ? "..." : "") : text);
 
     return(
         <div>

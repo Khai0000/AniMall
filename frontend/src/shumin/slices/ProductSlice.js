@@ -71,7 +71,7 @@ export const ProductSlice =createSlice({
           return state;
         },
         hideProduct(state,action){
-            const {id,hidden}=action.payload;
+            const {id}=action.payload;
             const existingProduct= state.find(product=>product.id===id);
             if(existingProduct){
                 existingProduct.hidden=true;

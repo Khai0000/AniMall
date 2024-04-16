@@ -163,5 +163,16 @@ export const PetData=[
         price: 60.00,
         stockLevel:1,
         hidden: false,
-    }
+    },
+    {
+        id: "A00016",
+        title: "Fluffy Cat",
+        description: "Adorable fluffy cat",
+        image:["cat1.jpg"],
+        birthdate: "2/14/2023",
+        animaltag: ["cat"],
+        price: 0.00,
+        stockLevel:1,
+        hidden: false,
+    },
 ]

@@ -1,7 +1,7 @@
 import React from "react";
 import ImageSlider from "../components/ImageSlider";
 import { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import RatingChart from "../components/RatingChart";
@@ -11,7 +11,6 @@ import "../styles/ProductDetails.css";
 import { addItemToCart } from "../slices/CartSlice"; 
 
 const ProductDetails=()=>{
-    const state=useLocation();
     const dispatch=useDispatch();
     const navigate=useNavigate();
 
