@@ -108,13 +108,23 @@ footer .ratingButtonContainer button:nth-child(4) {
 /* Styling for button 5 */
 footer .ratingButtonContainer button:nth-child(5) {
     background-color: #F3B801;
-    color: black;
+    color: white;
     /* Adjust text color as needed */
 }
 
 
 footer .ratingButtonContainer button:not(:last-child) {
     margin-right: 12px;
+}
+
+footer .ratingButton{
+    cursor: pointer;
+    transition:  color 0.3s ease;
+}
+
+footer .selected{
+    background-color: white !important;
+    color:black !important;
 }
 
 footer .submitButton {
@@ -125,6 +135,12 @@ footer .submitButton {
     min-width: 15%;
     height: fit-content;
     padding: 4px 0;
+    cursor: pointer;
+}
+
+footer .submitButton:hover{
+    color: #F3B801;
+    background-color: white;
 }
 
 footer p {
