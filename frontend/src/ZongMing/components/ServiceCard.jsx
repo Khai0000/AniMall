@@ -3,16 +3,16 @@ import "../styles/ServiceCard.css";
 
 const ServiceCard = ({ title, image, description }) => {
   return (
-    <div className="cardContainer">
-      <div className="imageContainer">
+    <div className="serviceCardContainer">
+      <div className="serviceImageContainer">
         <img src={image} alt="servicePicture" />
       </div>
 
-      <div className="cardContent">
+      <div className="serviceCardContent">
         <h2 className="title">{title}</h2>
-        <p className="descriptionWord">Description:</p>
-        <div className="descriptionContainer">
-          <p className="description">{description}</p>
+        <p className="serviceDescriptionWord">Description:</p>
+        <div className="serviceDescriptionContainer">
+          <p className="serviceDescription">{description}</p>
         </div>
       </div>
     </div>

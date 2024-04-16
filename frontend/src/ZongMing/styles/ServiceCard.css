@@ -1,4 +1,4 @@
-.cardContainer {
+.serviceCardContainer {
     display: flex;
     align-items: center;
     margin: 17px;
@@ -12,7 +12,7 @@
     height: 23vh; 
 }
 
-.cardContainer:hover {
+.serviceCardContainer:hover {
     border-color: #f4b701;
     --shadow-color: rgba(244, 183, 1, 0.5);
     filter: drop-shadow(0 2px 4px rgba(244, 183, 1, 0.5));
@@ -20,7 +20,7 @@
     color: #3C95A9;
 }
 
-.imageContainer {
+.serviceImageContainer {
     flex: 0 0 50%;
     overflow: hidden;
     display: flex;
@@ -30,7 +30,7 @@
     height: 20vh;
 }
 
-.imageContainer img {
+.serviceImageContainer img {
     width: 70%;
     height: 90%;
     object-fit: cover;
@@ -41,27 +41,27 @@
 
 
 
-.cardContent {
+.serviceCardContent {
     flex: 1;
     padding: 10px;
 }
 
-.cardContent>div {
+.serviceCardContent>div {
     margin-bottom: 10px;
 }
 
-.cardContent .title {
+.serviceCardContent .title {
     font-size: 1rem;
     font-weight: bold;
 }
 
-.cardContent .descriptionWord {
+.serviceCardContent .serviceDescriptionWord {
     font-weight: bold;
     font-size: 0.75rem;
     margin: 0;
 }
 
-.description {
+.serviceDescription{
     font-size: 0.65rem;
     line-height: 1.4;
     overflow: hidden;
@@ -80,11 +80,11 @@
         width: calc(90% - 20px);
     }
 
-    .imageContainer {
+    .serviceImageContainer {
         flex: 0 0 auto;
     }
 
-    .imageContainer img {
+    .serviceImageContainer img {
         width: 100%;
         border-radius: 0;
     }
@@ -94,8 +94,8 @@
         text-align: center;
     }
 
-    .descriptionWord,
-    .description {
+    .serviceDescriptionWord,
+    .serviceDescription {
         font-size: 0.75rem;
         text-align: center;
     }

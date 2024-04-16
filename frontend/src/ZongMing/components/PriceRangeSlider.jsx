@@ -1,13 +1,17 @@
-// PriceRangeSlider.jsx
-
 import React, { useState, useEffect, useRef } from "react";
 import "../styles/PriceRangeSlider.css";
 import logo from "../assets/image/logo.png";
 
-const PriceRangeSlider = ({ onClose, onPriceRangeChange }) => { // Pass onPriceRangeChange as a prop
-  const [minPrice, setMinPrice] = useState(20);
-  const [maxPrice, setMaxPrice] = useState(210);
-  const [isOpen] = useState(true);
+const PriceRangeSlider = ({ onClose, onPriceRangeChange }) => {
+  const [minPrice, setMinPrice] = useState(() => {
+    const storedMinPrice = localStorage.getItem("minPrice");
+    return storedMinPrice ? parseInt(storedMinPrice) : 20;
+  });
+
+  const [maxPrice, setMaxPrice] = useState(() => {
+    const storedMaxPrice = localStorage.getItem("maxPrice");
+    return storedMaxPrice ? parseInt(storedMaxPrice) : 210;
+  });
 
   const priceGap = 50;
 
@@ -22,6 +26,11 @@ const PriceRangeSlider = ({ onClose, onPriceRangeChange }) => { // Pass onPriceR
       setMaxPrice(parseInt(value));
     }
   };
+
+  useEffect(() => {
+    localStorage.setItem("minPrice", minPrice);
+    localStorage.setItem("maxPrice", maxPrice);
+  }, [minPrice, maxPrice]);
 
   useEffect(() => {
     if (minRangeRef.current && maxRangeRef.current) {
@@ -64,20 +73,15 @@ const PriceRangeSlider = ({ onClose, onPriceRangeChange }) => { // Pass onPriceR
       setMaxPrice(maxVal);
     }
 
-    // Pass the selected price range to the parent component
-    onPriceRangeChange(minVal, maxVal); // Call the onPriceRangeChange function
+    onPriceRangeChange(minVal, maxVal);
   };
 
   const handleClose = () => {
     onClose();
   };
 
-  useEffect(() => {
-    console.log("isOpen:", isOpen);
-  }, [isOpen]);
-
   return (
-    <div className={`range-box ${isOpen ? "open" : "closed"}`}>
+    <div className="range-box open">
       <div className="animallLogo">
         <img src={logo} alt="AniMall logo" />
       </div>
