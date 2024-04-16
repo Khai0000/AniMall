@@ -1,18 +1,17 @@
 import '../styles/SellerProduct.css';
 import {useSelector,useDispatch} from 'react-redux';
-import React, { useEffect,useState,lazy,Suspense,useRef } from 'react';
-import CircularProgress from "@mui/material/CircularProgress";
-import { setScrollPosition } from "../slices/ProductHistorySlice";
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect,useState,lazy,Suspense } from 'react';
+import { checkoutItems } from '../slices/CartSlice';
 
 const CartCard=lazy(()=>import("../components/CartCard"));
 
 function MyCart(){
     const item = useSelector((state)=> state.cart);
+    const dispatch=useDispatch();
+
     const [totalPrice,setTotalPrice]=useState(0);
 
     useEffect(() => {
-        console.log(item);
         // Calculate total price when items change
         let newTotalPrice = 0;
 
@@ -24,6 +23,21 @@ function MyCart(){
         setTotalPrice(newTotalPrice);
     }, [item]);
 
+    const handleOnCheckoutButtonClick=()=>{
+        let numOfCheckedItem=0;
+        if(item.length===0){
+            alert("No item to checkout!")
+        }else if(item.length!==0){
+            item.forEach((item) => {
+                if (item.checked) {
+                    numOfCheckedItem+=1;
+                    dispatch(checkoutItems(item.checked));
+                }                
+            });
+            alert(`${numOfCheckedItem} item checkout successfully!`);
+        }
+        
+    }
 
     return(
         <div>
@@ -50,7 +64,7 @@ function MyCart(){
             </div>
             <div className='checkout-container'>
                 <span className="total-price">Total : RM {totalPrice.toFixed(2)} </span>
-                <button className="checkout-button">CHECK OUT</button>
+                <button className="checkout-button" onClick={handleOnCheckoutButtonClick}>CHECK OUT</button>
             </div>
         </div>
     )

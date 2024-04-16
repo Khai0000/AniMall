@@ -478,7 +478,7 @@ const AddProduct =()=>{
             </svg>
           <span id="Product-details-form-add-button-text">Add</span>
           </button>
-          <Link to={`/seller/productwarehouse`} id="Product-details-form-back-button">
+          <Link to={`/product/sellerProduct`} id="Product-details-form-back-button">
               Go Back
           </Link>
         </div>

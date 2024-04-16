@@ -2,8 +2,7 @@ import { useState, useEffect} from "react";
 import "../styles/SellerProductCard.css";
 import SellerProductCardSkeleton from "./SellerProductCardSkeleton";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { removeItemFromCart, updateQuantity,editCartItem, updateChecked} from "../slices/CartSlice";
+import { removeItemFromCart, updateQuantity, updateChecked} from "../slices/CartSlice";
 
 const CartCard = ({product,index})=>{
     const [image,setImage]=useState(null);
@@ -14,7 +13,6 @@ const CartCard = ({product,index})=>{
     const [isChecked,setIsChecked]=useState(initialChecked);
 
     const dispatch=useDispatch();
-    const navigate=useNavigate();
 
     useEffect(()=>{
         if(product.image &&product.image[0].includes("jpg")){

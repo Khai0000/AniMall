@@ -1,9 +1,9 @@
-import ProductHome from '../shumin/pages/ProductHome';
+import { Outlet } from 'react-router-dom';
 
 function Product(){
     return(
         <div>
-            <ProductHome/>
+            <Outlet/>
         </div>
     )
 }

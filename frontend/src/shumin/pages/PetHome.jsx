@@ -1,10 +1,9 @@
 import SearchBar from "../components/SearchBar";
 import "../styles/ProductHome.css";
-import React, { useState,useEffect,lazy,Suspense,useRef} from "react";
+import React, { useState,useEffect,lazy,Suspense} from "react";
 import MyCartButton from "../components/MyCartButton";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useSelector, useDispatch } from "react-redux";
-import { setScrollPosition } from "../slices/ProductHistorySlice";
 import EnterButtonIcon from "../components/EnterButtonIcon";
 import { addPet } from "../slices/PetSlice";
 import { PetData } from "../data/DummyPetData";
@@ -26,22 +25,10 @@ const PetHome=()=>{
     const navigate = useNavigate();
 
     const pets = useSelector((state)=> state.pets);
-    const productHistory=useSelector((state)=>state.productHistory);
-
-    const {searchText,scrollPosition,minPriceRange,maxPriceRange,selectedProductType}=productHistory;
 
     const [filteredPets,setFilteredPets]=useState([]);
     const [isLoading,setIsLoading]=useState(true);
     const [searchTerm,setSearchTerm]=useState("");
-
-    const containerRef=useRef(null);
-
-    //useEffect for restoring last scrolling position
-    useEffect(()=>{
-        if(containerRef.current&& scrollPosition){
-            containerRef.current.scrollTop=scrollPosition;
-        }
-    });
 
     useEffect(() => {
         if ( pets.length === 0) {
@@ -99,11 +86,10 @@ const PetHome=()=>{
     // useEffect for filtering data
     useEffect(() => {
         filterPets();
-    }, [searchTerm, pets, minPrice, maxPrice]); // Dependencies array
-
+    }, [searchTerm, pets, minPrice, maxPrice,filterPets]); // Dependencies array
 
     const toggleAdoptionFilter = () => {
-        if(num%2==1){
+        if(num%2===1){
             isAdoptionFilterActive=true;
         }
         else{
@@ -114,22 +100,6 @@ const PetHome=()=>{
         filterPets();
         console.log(isAdoptionFilterActive);
     };
-
-    useEffect(() => {
-        const handleScroll = () => {
-          if (containerRef.current) {
-            dispatch(setScrollPosition(containerRef.current.scrollTop));
-          }
-        };
-    
-        const container = containerRef.current;
-        container.addEventListener("scroll", handleScroll);
-    
-        return () => {
-          container.removeEventListener("scroll", handleScroll);
-        };
-    }, [dispatch, containerRef]);
-
 
     const handlePriceRangeSubmit = (event) => {
         event.preventDefault(); // Prevent form submission
@@ -148,9 +118,9 @@ const PetHome=()=>{
         navigate("/mycart");
     };
 
-    const dog=filteredPets.filter(pet=>pet.animaltag=="dog");
-    const cat=filteredPets.filter(pet=>pet.animaltag=="cat");
-    const other=filteredPets.filter(pet=>pet.animaltag=="others");
+    const dog = filteredPets.filter(pet => pet.animaltag.includes("dog"));
+    const cat = filteredPets.filter(pet => pet.animaltag.includes("cat"));
+    const other = filteredPets.filter(pet => pet.animaltag.includes("others"));
     
     const renderPetsForCategory=(pets,category)=>(
         <div className={`Product-category-row ${category}`}>
@@ -160,7 +130,7 @@ const PetHome=()=>{
                     <EnterButtonIcon/>
                 </button>
             </div>
-            {pets.length==0?
+            {pets.length===0?
                 <p className="Product-category-row-content-noproduct">{`No ${category} matched!`}</p>
                 :<div className="Product-category-row-content">
                     <Suspense fallback={<div>Loading...</div>}>
@@ -212,7 +182,7 @@ const PetHome=()=>{
                 </button>
                 <MyCartButton page="pet" onClick={handleMyCartButtonClick}/>
             </div>
-            <div ref={containerRef}>
+            <div>
                 {isLoading?(
                     <div className="loadingContainer">
                         <CircularProgress className="circularProgress" />
@@ -224,10 +194,10 @@ const PetHome=()=>{
                     {renderPetsForCategory(other, 'others')}
                     </>
                 ):<div className="NoProductContainer">
-                    <p>No product matched!</p>
+                    <p>No pet matched!</p>
                 </div>}
             
-                <Link to={`/seller/petwarehouse`} className="seller-link">
+                <Link to={`/pet/sellerPet`} className="seller-link">
                     <button id="Seller-product">Seller</button>
                 </Link>
             </div>

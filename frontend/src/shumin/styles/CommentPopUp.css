@@ -128,9 +128,8 @@
 .servicePopupCommentContainer .ratingButtonContainer button.selected {
     border: 4px solid #3C95A9;
     color:#3C95A9;
-  }
+}
   
-
 
 .servicePopupCommentContainer>.buttonContainer>button{
     background-color: #F3B801;

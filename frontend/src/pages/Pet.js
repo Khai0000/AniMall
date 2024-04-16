@@ -1,11 +1,10 @@
-import PetHome from "../shumin/pages/PetHome";
-
+import { Outlet } from 'react-router-dom';
 
 function Pet(){
 
     return(
         <div>
-            <PetHome/>
+            <Outlet/>
         </div>
     )
 }

@@ -5,6 +5,8 @@ import { useState,useEffect } from "react";
 import MyCartButton from "../components/MyCartButton";
 import {lazy} from "react";
 import "../styles/ProductCategorized.css";
+import "../styles/ProductHome.css";
+import CircularProgress from "@mui/material/CircularProgress";
 import { PetData } from "../data/DummyPetData";
 import { addPet } from "../slices/PetSlice";
 import { useNavigate } from "react-router-dom";
@@ -22,14 +24,10 @@ const PetCategorized=()=>{
     const [maxPrice, setMaxPrice] = useState(''); 
     const [searchTerm,setSearchTerm]=useState('');
 
-
     const pets = useSelector((state)=> state.pets);
-    const productHistory=useSelector((state)=>state.productHistory);
 
     const dispatch=useDispatch();
     const navigate=useNavigate();
-
-    const {searchText,scrollPosition,minPriceRange,maxPriceRange,selectedProductType}=productHistory;
 
     const handlePriceRangeSubmit = (event) => {
         event.preventDefault(); // Prevent form submission
@@ -48,7 +46,7 @@ const PetCategorized=()=>{
     };
 
     const toggleAdoptionFilter = () => {
-        if(num%2==1){
+        if(num%2===1){
             isAdoptionFilterActive=true;
         }
         else{
@@ -65,10 +63,14 @@ const PetCategorized=()=>{
         setIsLoading(true);
         if(isAdoptionFilterActive){
             filteredData = filteredData.filter((pet) => !pet.hidden);
-            filteredData = filteredData.filter((pet) => pet.price==0);
+            filteredData = filteredData.filter((pet) => pet.price===0);
         }else{
-        filteredData = filteredData.filter((pet) => !pet.hidden);
-        filteredData = filteredData.filter((pet) => pet.price>0);}
+            filteredData = filteredData.filter((pet) => !pet.hidden);
+            filteredData = filteredData.filter((pet) => pet.price>0);
+            filteredData = filteredData.filter((pet) => {
+                const animalTags = pet.animaltag || [];
+                const categoryExists = animalTags.includes(category);
+                return categoryExists;});}
         
         if(searchTerm.length !== 0){
             filteredData=filteredData.filter(
@@ -103,7 +105,7 @@ const PetCategorized=()=>{
     // useEffect for filtering data
     useEffect(() => {
         filterPets();
-    }, [searchTerm, pets, minPrice, maxPrice]); // Dependencies array
+    }, [searchTerm, pets, minPrice, maxPrice]); 
 
     useEffect(() => {
         if ( pets.length === 0) {
@@ -165,15 +167,27 @@ const PetCategorized=()=>{
                 </button>
                 <MyCartButton page="pet" onClick={handleMyCartButtonClick}/>
             </div>
-            <div className="product-container">
-                {chunkArray(filteredPets, 3).map((row, rowIndex) => (
-                    <div key={rowIndex} className={rowIndex % 2 === 0 ? "odd-row" : "even-row"}>
-                        {row.map((pet, petIndex) => (
-                            <PetCard key={petIndex} pet={pet}/>
+            {isLoading?(
+                <div className="loadingContainer">
+                    <CircularProgress className="circularProgress" />
+                </div>):
+                filteredPets.length!==0?(
+                    <div className="product-container">
+                        {chunkArray(filteredPets, 3).map((row, rowIndex) => (
+                            <div key={rowIndex} className={rowIndex % 2 === 0 ? "odd-row" : "even-row"}>
+                                {row.map((pet, petIndex) => (
+                                    <PetCard key={petIndex} pet={pet}/>
+                                ))}
+                            </div>
                         ))}
                     </div>
-                ))}
-            </div>
+                ):(
+                    <div className="NoProductContainer">
+                        <p>No pet matched!</p>
+                    </div>
+                )
+            }
+            
         </div>
     )
 }

@@ -5,6 +5,8 @@ import { useState,useEffect } from "react";
 import MyCartButton from "../components/MyCartButton";
 import {lazy} from "react";
 import "../styles/ProductCategorized.css";
+import "../styles/ProductHome.css";
+import CircularProgress from "@mui/material/CircularProgress";
 import { ProductData } from "../data/DummyProductData";
 import { addProduct } from "../slices/ProductSlice";
 import { useNavigate } from "react-router-dom";
@@ -19,12 +21,9 @@ const ProductCategorized=()=>{
     const [searchTerm,setSearchTerm]=useState('');
 
     const products = useSelector((state)=> state.products);
-    const productHistory=useSelector((state)=>state.productHistory);
 
     const dispatch=useDispatch();
     const navigate=useNavigate();
-
-    const {searchText,scrollPosition,minPriceRange,maxPriceRange,selectedProductType}=productHistory;
 
     const handlePriceRangeSubmit = (event) => {
         event.preventDefault(); // Prevent form submission
@@ -47,7 +46,12 @@ const ProductCategorized=()=>{
         let filteredData = [...products];
         setIsLoading(true);
         
-        filteredData = filteredData.filter((product) => product.animaltag == category);
+        filteredData = filteredData.filter((product) => {
+            const animalTags = product.animaltag || [];
+            const categoryExists = animalTags.includes(category);
+            return categoryExists;
+        });
+        
         filteredData = filteredData.filter((product) => !product.hidden);
 
         console.log(searchTerm);
@@ -79,7 +83,7 @@ const ProductCategorized=()=>{
 
         setIsLoading(false);
         setFilteredProducts(filteredData);
-    }, [searchTerm, products,minPrice,maxPrice, dispatch]);
+    }, [searchTerm, products,minPrice,maxPrice,category, dispatch]);
 
     useEffect(() => {
         if ( products.length === 0) {
@@ -136,15 +140,24 @@ const ProductCategorized=()=>{
                 ):(<button className="Upper-section-price-range-button" onClick={togglePriceRange}>Price Range</button>)}
                 <MyCartButton onClick={handleMyCartButtonClick}/>
             </div>
-            <div className="product-container">
-                {chunkArray(filteredProducts, 3).map((row, rowIndex) => (
-                    <div key={rowIndex} className={rowIndex % 2 === 0 ? "odd-row" : "even-row"}>
-                        {row.map((product, productIndex) => (
-                            <ProductCard key={productIndex} product={product}/>
+            {isLoading?
+                <div className="loadingContainer">
+                    <CircularProgress className="circularProgress" />
+                </div>:
+                filteredProducts.length!==0?(
+                    <div className="product-container">
+                        {chunkArray(filteredProducts, 3).map((row, rowIndex) => (
+                            <div key={rowIndex} className={rowIndex % 2 === 0 ? "odd-row" : "even-row"}>
+                                {row.map((product, productIndex) => (
+                                    <ProductCard key={productIndex} product={product}/>
+                                ))}
+                            </div>
                         ))}
                     </div>
-                ))}
-            </div>
+                ):
+                <div className="NoProductContainer">
+                    <p>No product matched!</p>
+                </div>}
         </div>
     )
 }

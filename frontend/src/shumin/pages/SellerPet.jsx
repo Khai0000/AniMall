@@ -1,74 +1,35 @@
 import '../styles/SellerProduct.css';
 import {useSelector,useDispatch} from 'react-redux';
-import React, { useEffect,useState,lazy,Suspense,useRef } from 'react';
+import React, { useEffect,lazy,Suspense, useState} from 'react';
 import CircularProgress from "@mui/material/CircularProgress";
 import "../styles/ProductCard.css";
-import SellerProductCardSkeleton from '../components/SellerProductCardSkeleton';
-import { setScrollPosition } from "../slices/ProductHistorySlice";
-import PetSlice, { addPet } from "../slices/PetSlice";
+import { addPet } from "../slices/PetSlice";
 import { PetData } from "../data/DummyPetData";
-import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
 const SellerPetCard=lazy(()=>import("../components/SellerPetCard"));
 
 function SellerPet(){
     const pets = useSelector((state)=> state.pets);
-    const productHistory=useSelector((state)=>state.productHistory);
 
-    const {scrollPosition,selectedProductType}=productHistory;
     const dispatch=useDispatch();
+    const [isLoading,setIsLoading]=useState();
 
-    const [filteredPets,setFilteredPets]=useState([]);
-    const [isLoading,setIsLoading]=useState(true);
-    const containerRef=useRef(null);
-
-    //useEffect for restoring last scrolling position
-    useEffect(()=>{
-        if(containerRef.current&& scrollPosition){
-            containerRef.current.scrollTop=scrollPosition;
-        }
-    });
-    
-    //useEffect for filtering data
-    useEffect(()=>{
-        let filteredData = [...pets];;
+    useEffect(() => {
         setIsLoading(true);
-
-        //add ----------------------------------------------------------------------------------------
-
-        setIsLoading(false);
-        setFilteredPets(filteredData);
-    }, [pets]);
-
-    useEffect(() => {
-        const handleScroll = () => {
-          if (containerRef.current) {
-            dispatch(setScrollPosition(containerRef.current.scrollTop));
-          }
-        };
-    
-        const container = containerRef.current;
-        container.addEventListener("scroll", handleScroll);
-    
-        return () => {
-          container.removeEventListener("scroll", handleScroll);
-        };
-    }, [dispatch, containerRef]);
-
-    useEffect(() => {
         if ( pets.length === 0) {
             PetData.forEach((pet) => {
                 dispatch(addPet(pet));
             }
         );
         }
+        setIsLoading(false);
     }, [dispatch, pets]);
 
     const navigate = useNavigate();
 
     const handleNavigateToAddProduct = () => {
-        navigate('/seller/addpet');
+        navigate("/pet/sellerPet/add-pet");
     };
 
     return(
@@ -85,12 +46,12 @@ function SellerPet(){
                     </svg>
                 </button>
             </div>
-            <div ref={containerRef}>
+            <div>
                 {isLoading?(
                     <div className="loadingContainer">
                         <CircularProgress className="circularProgress" />
                   </div>
-                ): filteredPets.length !== 0 ? (
+                ): pets.length !== 0 ? (
                     <>
                     <div>
                         <Suspense fallback={<div>Loading...</div>}>

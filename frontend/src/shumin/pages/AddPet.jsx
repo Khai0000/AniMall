@@ -100,7 +100,7 @@ const AddPet =()=>{
 
   const generatePetId = () => {
     if (pets.length === 0) {
-      return "A0001"; // If no products, start with P0001
+      return "A0001"; // If no pets, start with A0001
     }
 
     const lastPetId = pets[pets.length - 1].id;
@@ -437,7 +437,7 @@ const AddPet =()=>{
             </svg>
           <span id="Product-details-form-add-button-text">Add</span>
           </button>
-          <Link to={`/seller/petwarehouse`} id="Product-details-form-back-button">
+          <Link to={`/pet/sellerPet`} id="Product-details-form-back-button">
               Go Back
           </Link>
         </div>

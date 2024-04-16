@@ -1,11 +1,9 @@
 import SearchBar from "../components/SearchBar";
 import "../styles/ProductHome.css";
-import React, { useState,useEffect,lazy,Suspense,useRef} from "react";
+import React, { useState,useEffect,lazy,Suspense} from "react";
 import MyCartButton from "../components/MyCartButton";
-import ProductCardSkeleton from "../components/ProductCardSkeleton";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useSelector, useDispatch } from "react-redux";
-import { setScrollPosition } from "../slices/ProductHistorySlice";
 import EnterButtonIcon from "../components/EnterButtonIcon";
 import { addProduct } from "../slices/ProductSlice";
 import { ProductData } from "../data/DummyProductData";
@@ -18,28 +16,15 @@ const ProductHome=()=>{
     const [showPriceRange,setShowPriceRange]=useState(false);
     const [minPrice, setMinPrice] = useState('');
     const [maxPrice, setMaxPrice] = useState(''); 
-    // const [productsAdded, setProductsAdded] = useState(false);
 
     const dispatch=useDispatch();
     const navigate = useNavigate();
 
     const products = useSelector((state)=> state.products);
-    const productHistory=useSelector((state)=>state.productHistory);
-
-    const {searchText,scrollPosition,minPriceRange,maxPriceRange,selectedProductType}=productHistory;
 
     const [filteredProducts,setFilteredProducts]=useState([]);
     const [isLoading,setIsLoading]=useState(true);
     const [searchTerm,setSearchTerm]=useState("");
-
-    const containerRef=useRef(null);
-
-    //useEffect for restoring last scrolling position
-    useEffect(()=>{
-        if(containerRef.current&& scrollPosition){
-            containerRef.current.scrollTop=scrollPosition;
-        }
-    });
 
     useEffect(() => {
         if ( products.length === 0) {
@@ -90,22 +75,6 @@ const ProductHome=()=>{
         setIsLoading(false);
         setFilteredProducts(filteredData);
     }, [searchTerm, products,minPrice,maxPrice, dispatch]);
-
-    useEffect(() => {
-        const handleScroll = () => {
-          if (containerRef.current) {
-            dispatch(setScrollPosition(containerRef.current.scrollTop));
-          }
-        };
-    
-        const container = containerRef.current;
-        container.addEventListener("scroll", handleScroll);
-    
-        return () => {
-          container.removeEventListener("scroll", handleScroll);
-        };
-    }, [dispatch, containerRef]);
-
 
     const handlePriceRangeSubmit = (event) => {
         event.preventDefault(); // Prevent form submission
@@ -185,7 +154,7 @@ const ProductHome=()=>{
                 ):(<button className="Upper-section-price-range-button" onClick={togglePriceRange}>Price Range</button>)}
                 <MyCartButton page="product" onClick={handleMyCartButtonClick}/>
             </div>
-            <div ref={containerRef}>
+            <div>
                 {isLoading?(
                     <div className="loadingContainer">
                         <CircularProgress className="circularProgress" />
@@ -200,7 +169,7 @@ const ProductHome=()=>{
                     <p>No product matched!</p>
                 </div>}
             
-                <Link to={`/seller/productwarehouse`} className="seller-link">
+                <Link to={`/product/sellerProduct`} className="seller-link">
                     <button id="Seller-product">Seller</button>
                 </Link>
             </div>

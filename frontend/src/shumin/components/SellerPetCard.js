@@ -114,7 +114,7 @@ const SellerPetCard = ({pet,index})=>{
                     }    
                 </button>
                 <img src={image} alt='' className="seller-product-card-image" />
-                <Link to={`/seller/petwarehouse/${pet.id}`} className="seller-product-card-product-name" style={{ textDecoration: 'none' }}>
+                <Link to={`/pet/sellerPet/add-pet/${pet.id}`} className="seller-product-card-product-name" style={{ textDecoration: 'none' }}>
                     <h4 className="seller-product-card-product-name-content">{pet.title}</h4>
                 </Link>
                 <button className="seller-product-card-minus-button" onClick={()=>setNewQuantity("minus")}>-</button>
