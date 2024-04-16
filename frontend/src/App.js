@@ -6,6 +6,10 @@ import Community from "./pages/Community";
 import Product from "./pages/Product";
 import Services from "./pages/Services";
 import Home from "./pages/Home";
+import ServiceDetail from "./ZongMing/pages/ServiceDetail"; 
+import ServiceHome from "./ZongMing/pages/ServiceHome";
+import AddServiceComponent from "./ZongMing/pages/AddService";
+import SellerService from "./ZongMing/pages/SellerService"
 import PetDetails from "./shumin/pages/PetDetails";
 import ProductDetails from "./shumin/pages/ProductDetails";
 import MyCart from "./shumin/pages/MyCart";
@@ -62,7 +66,26 @@ function App() {
           ]
         },
 
-        { path: "/services", element: <Services /> },
+        {
+          path: "/services",
+          element: <Services />,
+          children: [
+            { path: "/services", element: <ServiceHome /> },
+            { path: "/services/sellerService", element: <SellerService /> },
+            {
+              path: "/services/serviceDetails/:title",
+              element: <ServiceDetail />,
+            },
+            {
+              path: "/services/sellerService/add-service",
+              element: <AddServiceComponent />,
+            },
+            {
+              path: "/services/sellerService/add-service/:serviceTitle",
+              element: <AddServiceComponent />,
+            },
+          ],
+        },        
         { path: "/mycart", element:<MyCart/>},
       ],
     },
