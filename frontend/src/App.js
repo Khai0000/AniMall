@@ -17,9 +17,9 @@ import SellerPet from "./shumin/pages/SellerPet";
 import AddPet from "./shumin/pages/AddPet";
 import ProductHome from "./shumin/pages/ProductHome";
 import PetHome from "./shumin/pages/PetHome";
-// import ForumPostDetails from "./ginkhai/pages/ForumPostDetails";
-// import ForumAddPost from "./ginkhai/pages/ForumAddPost";
-// import ForumHome from "./ginkhai/pages/ForumHome";
+import ForumPostDetails from "./ginkhai/pages/ForumPostDetails";
+import ForumAddPost from "./ginkhai/pages/ForumAddPost";
+import ForumHome from "./ginkhai/pages/ForumHome";
 
 function App() {
   const router = createBrowserRouter([
@@ -44,9 +44,9 @@ function App() {
           path: "/community",
           element: <Community />,
           children: [
-            // { path: "/community", element: <ForumHome /> },
-            // { path: "/community/post/:postId", element: <ForumPostDetails /> },
-            // { path: "/community/post/add", element: <ForumAddPost /> },
+            { path: "/community", element: <ForumHome /> },
+            { path: "/community/post/:postId", element: <ForumPostDetails /> },
+            { path: "/community/post/add", element: <ForumAddPost /> },
           ],
         },
         { 
