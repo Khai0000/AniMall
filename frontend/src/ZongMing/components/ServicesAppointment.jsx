@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, forwardRef } from "react";
 import "../styles/ServicesAppointment.css";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Datepicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import {useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const ServicesAppointment = ({title,description,price}) => {
+const ServicesAppointment = ({ title, description, price }) => {
   const [selectedButtons, setSelectedButtons] = useState([]);
 
   const [selectedDate, setSelectedDate] = useState(() => {
@@ -30,7 +30,7 @@ const ServicesAppointment = ({title,description,price}) => {
   const handleBack = () => {
     navigate(-1);
   };
-  
+
 
   useEffect(() => {
     setSelectedButtons([]);
@@ -104,13 +104,14 @@ const ServicesAppointment = ({title,description,price}) => {
     alert(`Added to cart: ${selectedDateTime} Total price:RM ${totalPrice}`);
   };
 
-  const CustomDatePickerInput = ({ value, onClick }) => (
-    <button className="customDatePickerInput" onClick={onClick}>
+  const CustomDatePickerInput = forwardRef(({ value, onClick }, ref) => (
+    <div ref={ref} className="customDatePickerInput" onClick={onClick}>
       {value ? value : "Select Date"}
-    </button>
-  );
+    </div>
+  ));
 
-  
+
+
   const totalPrice =
     selectedButtons.length === 0 ? 0 : selectedButtons.length * price;
 
@@ -123,9 +124,8 @@ const ServicesAppointment = ({title,description,price}) => {
         </div>
         <div className="appointmentDate">
           <button
-            className={`datePickerButton ${
-              selectedDate ? "dateButtonSelected" : ""
-            }`}
+            className={`datePickerButton ${selectedDate ? "dateButtonSelected" : ""
+              }`}
           >
             <Datepicker
               className="datePicker"
@@ -158,9 +158,8 @@ const ServicesAppointment = ({title,description,price}) => {
             {Object.keys(slotsAvailability).map((slot) => (
               <button
                 key={slot}
-                className={`${
-                  selectedButtons.includes(slot) ? "selected" : ""
-                } ${!isSlotAvailable(slot) ? "unavailable" : ""}`}
+                className={`${selectedButtons.includes(slot) ? "selected" : ""
+                  } ${!isSlotAvailable(slot) ? "unavailable" : ""}`}
                 onClick={() => toggleButton(slot)}
               >
                 {slot}

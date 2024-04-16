@@ -1,11 +1,9 @@
 import React from "react";
-import "../styles/SellerProductCard.css";
-import useToggle from "../components/useToggle";
+import "../styles/SellerServiceCard.css";
+import useToggle from "./useToggle";
 
 const SellerProductCardSkeleton=()=>{
     const[isClicked,toggleIsClicked]=useToggle(false);
-    const truncateText = (text, maxLength) => (text.length > maxLength ? text.slice(0, maxLength > 9 ? maxLength : 9) + (maxLength > 9 ? "..." : "") : text);
-
     return(
         <div>
             <div className="seller-product-card-container">

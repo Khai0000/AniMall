@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../styles/ProductDetailsInputForm.css";
+import "../styles/ServicesDetailsInputForm.css";
 import useToggle from "../components/useToggle.js";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -15,8 +15,15 @@ const AddService = () => {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [hidden, setHidden] = useState();
-  const [rating, setRating] = useState();
-  const [comment, setComment] = useState();
+  const [rating, setRating] = useState({
+    total:0,
+    1:0,
+    2:0,
+    3:0,
+    4:0,
+    5:0,
+  });
+  const [comment, setComment] = useState([]);
   const [createdAt, setCreatedAt] = useState();
   const service = useSelector((state) => state.services);
   const { serviceTitle } = useParams();
@@ -50,20 +57,6 @@ const AddService = () => {
   }
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   console.log("Service data length:", service.length);
-
-  //   if (serviceTitle && serviceTitle.length === 0) {
-  //     dummyServiceData.forEach((service) => {
-  //       dispatch(addService(service));
-  //     });
-  //   }
-  //   // dummyServiceData.forEach((service) => {
-  //   //   dispatch(addService(service));
-  //   // });
-
-  // }, [dispatch]);
 
   const handleKeyPress = (e, fieldType) => {
     if (e.key === "Enter") {
@@ -116,8 +109,8 @@ const AddService = () => {
         description: description,
         serviceImages: images.filter((image) => image !== null),
         price: price,
-        ratings: [],
-        comments: [],
+        ratings: rating,
+        comments: comment,
         hidden: false,
         createdAt: generateTimestamp(),
       };

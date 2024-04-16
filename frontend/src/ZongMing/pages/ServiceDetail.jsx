@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux"; 
+import { useSelector } from "react-redux";
 import ImageSlider from "../components/ImageSlider";
 import "../styles/ServiceDetails.css";
 import RatingChart from "../components/RatingChart";
@@ -62,7 +62,9 @@ const ServiceDetail = () => {
             </button>
           </div>
           <div className="commentBody">
-            {comments.map((comment, index) => (
+            {comments.length === 0 ? (<div className="commentNotFound">
+              <p>No comments for this service yet.</p>
+            </div>) : comments.map((comment, index) => (
               <ServicePostComment
                 comment={comment}
                 key={index}

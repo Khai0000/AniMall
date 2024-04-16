@@ -1,33 +1,18 @@
-import "../styles/SellerProduct.css";
-// useDispatch
-import { useSelector, useDispatch } from "react-redux";
-// useEffect, useState
-import React, { useEffect, useState, lazy, Suspense } from "react";
+import "../styles/SellerService.css";
+
+import { useSelector } from "react-redux";
+
+import React, {useState, lazy, Suspense } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
-// import { addService } from "../slices/serviceSlice";
+
 import { useNavigate } from "react-router-dom";
 
 const SellerServiceCard = lazy(() => import("../components/SellerServiceCard"));
 
 function SellerService() {
   const services = useSelector((state) => state.services);
-  // const dispatch = useDispatch();
+
   const [isLoading, setIsLoading] = useState(false);
-
-  // useEffect(() => {
-  //   setIsLoading(true);
-  //   if (services.length === 0) {
-  //     services.forEach((service) => {
-  //       dispatch(addService(service));
-  //     });
-  //     setIsLoading(false);
-  //   } else {
-  //     console.log("Services are already loaded.");
-  //     setIsLoading(false);
-  //   }
-
-  //   console.log("Available services", services);
-  // }, [dispatch, services]);
 
 
   const navigate = useNavigate();

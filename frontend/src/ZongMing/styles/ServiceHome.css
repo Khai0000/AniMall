@@ -48,3 +48,19 @@
   align-items: center;
 }
 
+
+.seller-service-page-link {
+  border-radius: 20px;
+  background-color: antiquewhite;
+  width: 8rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+  text-decoration: none;
+  color: black; 
+  font-weight: bold;
+  margin-left: 50%;
+}
+
+

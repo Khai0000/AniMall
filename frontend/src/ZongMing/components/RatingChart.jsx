@@ -18,9 +18,16 @@ const Tooltip = ({ count, position }) => {
 const RatingChart = ({ ratings }) => {
   const transformRatingsData = (ratings) => {
     const ratingsData = [];
-    for (let i = 5; i >= 1; i--) {
-      const percentage = (ratings[i] / ratings.total) * 100;
-      ratingsData.push({ stars: i, percentage });
+    if (ratings.total === 0) {
+      for (let i = 5; i >= 1; i--) {
+        ratingsData.push({ stars: 5, percentage: 0 })
+      }
+    } else {
+      for (let i = 5; i >= 1; i--) {
+        const percentage = (ratings[i] / ratings.total) * 100;
+        ratingsData.push({ stars: i, percentage });
+      }
+
     }
     return ratingsData;
   };

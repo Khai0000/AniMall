@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import "../styles/SellerProductCard.css";
-import SellerProductCardSkeleton from "./SellerProductCardSkeleton";
+import "../styles/SellerServiceCard.css";
+import SellerProductCardSkeleton from "./SellerServiceCardSkeleton";
 import { useDispatch } from "react-redux";
 import {
   removeService,
@@ -150,7 +150,7 @@ const SellerServiceCard = ({ service, index }) => {
           x2="100%"
           y2="25"
           stroke="#3C95A9"
-          stroke-width="1"
+          strokeWidth="1"
         />
       </svg>
     </div>

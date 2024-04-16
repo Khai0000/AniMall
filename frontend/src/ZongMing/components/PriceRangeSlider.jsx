@@ -5,8 +5,8 @@ import "../styles/PriceRangeSlider.css";
 import logo from "../assets/image/logo.png";
 
 const PriceRangeSlider = ({ onClose, onPriceRangeChange }) => { // Pass onPriceRangeChange as a prop
-  const [minPrice, setMinPrice] = useState(200);
-  const [maxPrice, setMaxPrice] = useState(1000);
+  const [minPrice, setMinPrice] = useState(20);
+  const [maxPrice, setMaxPrice] = useState(210);
   const [isOpen] = useState(true);
 
   const priceGap = 50;

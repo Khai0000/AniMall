@@ -145,3 +145,10 @@
     text-align: center;
     color: #868686;
 }
+
+.commentContainer .commentNotFound{
+    height: 66vh;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}
