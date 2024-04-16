@@ -1,8 +1,10 @@
+import { Outlet } from 'react-router-dom';
+
 function Pet(){
 
     return(
         <div>
-            <h1>This is Pet page</h1>
+            <Outlet/>
         </div>
     )
 }
