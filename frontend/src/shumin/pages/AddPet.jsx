@@ -2,11 +2,9 @@ import React, { useState,useEffect } from "react";
 import "../styles/ProductDetailsInputForm.css";
 import useToggle from "../hooks/useToggle.js";
 import { useDispatch, useSelector } from "react-redux";
-import { addPet } from "../slices/PetSlice.js";
-import { useNavigate } from "react-router-dom";
+import { addPet,editPet } from "../slices/PetSlice.js";
 import { PetData } from "../data/DummyPetData.js";
-import { Link ,useParams} from "react-router-dom";
-import { editPet } from "../slices/PetSlice.js";
+import { Link ,useParams,useNavigate} from "react-router-dom";
 
 const AddPet =()=>{
   const [showTitleInput, toggleTitle] = useToggle();
@@ -197,7 +195,7 @@ const AddPet =()=>{
         id: newPetId,
         description:description,
         image:images.filter((image) => image !== null),
-        animaltag:[selectedAnimalTag],
+        animaltag:selectedAnimalTag,
         price:price,
         birthdate:birthdate,
         stockLevel:1,
@@ -250,7 +248,7 @@ const AddPet =()=>{
         return (
           <img
             src={images[currentImageIndex]}
-            alt={`Image ${currentImageIndex + 1}`}
+            alt="Pet for sales"
             style={{ maxWidth: '100%', maxHeight: '100%' }}
           />
         );
@@ -261,7 +259,7 @@ const AddPet =()=>{
             return (
               <img
                 src={require(`../assets/images/${images[0]}`)}
-                alt={`Image 1`}
+                alt="Pet for sales"
                 style={{ maxWidth: "100%", maxHeight: "100%" }}
               />
             );
@@ -271,14 +269,14 @@ const AddPet =()=>{
                 {currentImageIndex === 0 && (
                   <img
                     src={require(`../assets/images/${images[0]}`)}
-                    alt={`Image 1`}
+                    alt="Pet for sales"
                     style={{ maxWidth: "100%", maxHeight: "100%" }}
                   />
                 )}
                 {currentImageIndex === 1 && (
                   <img
                     src={require(`../assets/images/${images[1]}`)}
-                    alt={`Image 2`}
+                    alt="Pet for sales"
                     style={{ maxWidth: "100%", maxHeight: "100%" }}
                   />
                 )}
@@ -288,7 +286,7 @@ const AddPet =()=>{
             return (
               <img
                 src={require(`../assets/images/${images[currentImageIndex]}`)}
-                alt={`Image ${currentImageIndex + 1}`}
+                alt="Pet for sales"
                 style={{ maxWidth: "100%", maxHeight: "100%" }}
               />
             );

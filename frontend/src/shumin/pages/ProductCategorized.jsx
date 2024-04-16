@@ -44,6 +44,7 @@ const ProductCategorized=()=>{
     //useEffect for filtering data
     useEffect(()=>{
         let filteredData = [...products];
+        console.log(...products);
         setIsLoading(true);
         
         filteredData = filteredData.filter((product) => {

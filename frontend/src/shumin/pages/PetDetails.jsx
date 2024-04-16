@@ -1,7 +1,7 @@
 import React from "react";
 import ImageSlider from "../components/ImageSlider";
 import { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import "../styles/ProductDetails.css";

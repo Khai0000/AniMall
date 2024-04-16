@@ -1,13 +1,10 @@
 import React, { useState,useEffect } from "react";
 import "../styles/ProductDetailsInputForm.css";
 import useToggle from "../hooks/useToggle.js";
-import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { addProduct, selectProducts } from "../slices/ProductSlice.js";
-import { useNavigate } from "react-router-dom";
+import { addProduct,editProduct} from "../slices/ProductSlice.js";
 import { ProductData } from "../data/DummyProductData.js";
-import { Link ,useParams} from "react-router-dom";
-import { editProduct } from "../slices/ProductSlice.js";
+import { Link ,useParams,useNavigate} from "react-router-dom";
 
 const AddProduct =()=>{
   const [showTitleInput, toggleTitle] = useToggle();
@@ -232,7 +229,7 @@ const AddProduct =()=>{
         id: newProductId,
         description:description,
         image:images.filter((image) => image !== null),
-        animaltag:[selectedAnimalTag],
+        animaltag:selectedAnimalTag,
         producttag:[selectedProductTag],
         price:price,
         ratings:[],
@@ -287,7 +284,7 @@ const AddProduct =()=>{
         return (
           <img
             src={images[currentImageIndex]}
-            alt={`Image ${currentImageIndex + 1}`}
+            alt="Product for sales"
             style={{ maxWidth: '100%', maxHeight: '100%' }}
           />
         );
@@ -298,7 +295,7 @@ const AddProduct =()=>{
             return (
               <img
                 src={require(`../assets/images/${images[0]}`)}
-                alt={`Image 1`}
+                alt="Product for sales"
                 style={{ maxWidth: "100%", maxHeight: "100%" }}
               />
             );
@@ -308,14 +305,14 @@ const AddProduct =()=>{
                 {currentImageIndex === 0 && (
                   <img
                     src={require(`../assets/images/${images[0]}`)}
-                    alt={`Image 1`}
+                    alt="Product for sales"
                     style={{ maxWidth: "100%", maxHeight: "100%" }}
                   />
                 )}
                 {currentImageIndex === 1 && (
                   <img
                     src={require(`../assets/images/${images[1]}`)}
-                    alt={`Image 2`}
+                    alt="Product for sales"
                     style={{ maxWidth: "100%", maxHeight: "100%" }}
                   />
                 )}
@@ -325,7 +322,7 @@ const AddProduct =()=>{
             return (
               <img
                 src={require(`../assets/images/${images[currentImageIndex]}`)}
-                alt={`Image ${currentImageIndex + 1}`}
+                alt="Product for sales"
                 style={{ maxWidth: "100%", maxHeight: "100%" }}
               />
             );
