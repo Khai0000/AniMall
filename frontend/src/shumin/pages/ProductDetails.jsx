@@ -14,7 +14,7 @@ const ProductDetails=()=>{
     const dispatch=useDispatch();
     const navigate=useNavigate();
 
-    const { title } = useParams(); // Retrieve the service title from URL parameter
+    const { title } = useParams(); 
 
     const [imagesLoading, setImagesLoading] = useState(true);
 
@@ -53,7 +53,7 @@ const ProductDetails=()=>{
     };
 
     const handleNavigateBack = () => {
-        navigate(-1); // Navigate back one step in history
+        navigate(-1); 
     };
 
     const handleOnAddToCartButtonClick=()=>{
@@ -123,7 +123,7 @@ const ProductDetails=()=>{
                     <div className="comment-body">
                         {product.comments.map((comment, index) => (
                             <ProductPostComment
-                                comment={comment}
+                                comments={comment}
                                 key={index}
                                 title={title}
                             />

@@ -4,7 +4,7 @@ import SellerProductCardSkeleton from "./SellerProductCardSkeleton";
 import { useDispatch } from "react-redux";
 import { removeItemFromCart, updateQuantity, updateChecked} from "../slices/CartSlice";
 
-const CartCard = ({product,index})=>{
+const CartCard = ({product})=>{
     const [image,setImage]=useState(null);
     const [isLoading,setIsLoading]=useState(false);
     const initialQuantity = product.quantity;

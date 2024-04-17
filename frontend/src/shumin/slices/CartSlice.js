@@ -107,7 +107,6 @@ export const CartSlice = createSlice({
       }
     },
     checkoutItems: (state, action) => {
-      
       return state.filter(item => !item.checked);
     },
   },

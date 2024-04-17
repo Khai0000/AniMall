@@ -3,7 +3,7 @@ import "../styles/ProductHome.css";
 
 const MyCartButton = ({page,onClick}) => {
   return (
-    <button className={`Upper-section-cart-button ${page=="product"?"product":"pet"}`} onClick={onClick}>
+    <button className={`Upper-section-cart-button ${page==="product"?"product":"pet"}`} onClick={onClick}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="15"

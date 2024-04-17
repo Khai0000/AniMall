@@ -55,7 +55,6 @@ const ProductCategorized=()=>{
         
         filteredData = filteredData.filter((product) => !product.hidden);
 
-        console.log(searchTerm);
         if(searchTerm.length !==0){
             filteredData=filteredData.filter(
                 (product)=>
@@ -109,7 +108,7 @@ const ProductCategorized=()=>{
     return(
         <div>
             <div className="Upper-section">
-                <SearchBar id="Upper-section-search-bar" onSearch={handleSearch} showPriceRange={showPriceRange}  />
+                <SearchBar id="Upper-section-search-bar" onSearch={handleSearch} showPriceRange={showPriceRange} placeholder={"Search for a product..."} />
                 {showPriceRange?(
                     <form onSubmit={handlePriceRangeSubmit}>
                         <input

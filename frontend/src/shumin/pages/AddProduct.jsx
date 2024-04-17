@@ -14,9 +14,9 @@ const AddProduct =()=>{
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
-  const [selectedAnimalTag, setSelectedAnimalTag]=useState([]);
-  const [selectedProductTag,setSelectedProductTag]=useState([]);
+  const [price, setPrice] = useState();
+  const [selectedAnimalTag, setSelectedAnimalTag]=useState();
+  const [selectedProductTag,setSelectedProductTag]=useState();
   const [hidden,setHidden]=useState();
   const [stockLevel, setStockLevel]=useState();
   const [rating,setRating]=useState();
@@ -45,21 +45,20 @@ const AddProduct =()=>{
         setTitle(productToEdit.title);
         setDescription(productToEdit.description);
         setPrice(productToEdit.price);
-        if(productToEdit.animaltag=="dog"){
+        if(productToEdit.animaltag==="dog"){
           setIsDogFocused(true);
-        }else if(productToEdit.animaltag=="cat"){
+        }else if(productToEdit.animaltag==="cat"){
           setIsCatFocused(true);
-        }else if(productToEdit.animaltag=="others"){
+        }else if(productToEdit.animaltag==="others"){
           setIsOthersFocused(true);
         }
 
-        if(productToEdit.producttag=="food"){
+        if(productToEdit.producttag==="food"){
           setIsFoodFocused(true);
         }else{
           setIsAccessoriesFocused(true);
         }
         setImages(productToEdit.image);
-        console.log(productToEdit.image);
 
         setHidden(productToEdit.hidden);
         setStockLevel(productToEdit.stockLevel);
@@ -82,49 +81,46 @@ const AddProduct =()=>{
   }, [dispatch, products]);
 
   const toggleSelectedAnimalTag= (button) => {
-    if (selectedAnimalTag.includes(button)) {
-      setSelectedAnimalTag(
-        selectedAnimalTag.filter((currentButton) => {
-          return currentButton !== button;
-        })
-      );
+    if (selectedAnimalTag === button) {
+      setSelectedAnimalTag(null);
+      switch (button) {
+        case "dog":
+          setIsDogFocused(false); 
+          break;
+        case "cat":
+          setIsCatFocused(false);
+          break;
+        case "others":
+          setIsOthersFocused(false);
+          break;
+        default:
+          break;
+      }
     } else {
-      setSelectedAnimalTag([...selectedAnimalTag, button]);
-    }
-    switch (button) {
-      case "dog":
-        setIsDogFocused((prev) => !prev); // Toggle the focus state
-        break;
-      case "cat":
-        setIsCatFocused((prev) => !prev);
-        break;
-      case "others":
-        setIsOthersFocused((prev) => !prev);
-        break;
-      default:
-        break;
+      setSelectedAnimalTag(button);
+      setIsDogFocused(button === "dog");
+      setIsCatFocused(button === "cat");
+      setIsOthersFocused(button === "others");
     }
   };
 
   const toggleSelectedProductTag= (button) => {
-    if (selectedProductTag.includes(button)) {
-      setSelectedProductTag(
-        selectedProductTag.filter((currentButton) => {
-          return currentButton !== button;
-        })
-      );
+    if (selectedProductTag === button) {
+      setSelectedProductTag(null);
+      switch (button) {
+        case "food":
+          setIsFoodFocused(false); 
+          break;
+        case "accessories":
+          setIsAccessoriesFocused(false);
+          break;
+        default:
+          break;
+      }
     } else {
-      setSelectedProductTag([...selectedProductTag, button]);
-    }
-    switch (button) {
-      case "food":
-        setIsFoodFocused((prev) => !prev);
-        break;
-      case "accessories":
-        setIsAccessoriesFocused((prev) => !prev);
-        break;
-      default:
-        break;
+      setSelectedProductTag(button);
+      setIsFoodFocused(button === "food");
+      setIsAccessoriesFocused(button === "accessories");
     }
   };
 
@@ -180,30 +176,30 @@ const AddProduct =()=>{
   };
   
 
-  const handleOnAddProductClick=()=>{
+  const handleOnAddProductClick = () => {
     const priceString = String(price);
     if (!title.trim()) {
       alert("Please provide a title for your product.");
       return;
     }
-
+  
     if (!description.trim()) {
       alert("Please provide the description for your product.");
       return;
     }
-
-    if (!priceString.trim()) {
+  
+    if (!priceString.trim() || isNaN(price)) { 
       alert("Please provide the price for your product.");
       return;
     }
-
+  
     if (images.every((image) => image === null)) {
-        alert("Please upload at least one image for your product.");
-        return;
+      alert("Please upload at least one image for your product.");
+      return;
     }
-
+  
     const { animalTag, productTag } = getSelectedTags();
-
+  
     if (editMode) {
       const updatedProduct = {
         id,
@@ -211,37 +207,38 @@ const AddProduct =()=>{
         description,
         image: images.filter((image) => image !== null),
         animaltag: animalTag,
-        producttag:productTag,
-        price,
-        ratings:rating,
+        producttag: productTag,
+        price:parseInt(price),
+        ratings: rating,
         comments: comment,
-        stockLevel:stockLevel,
-        hidden:hidden,
+        stockLevel: stockLevel,
+        hidden: hidden,
       };
       // Dispatch editProduct action
       dispatch(editProduct(updatedProduct));
     } else {
       // Generate ID for the new product
       const newProductId = generateProductId();
-
+  
       const newProduct = {
         title: title,
         id: newProductId,
-        description:description,
-        image:images.filter((image) => image !== null),
-        animaltag:selectedAnimalTag,
-        producttag:[selectedProductTag],
-        price:price,
-        ratings:[],
-        comments:[],
-        stockLevel:1,
-        hidden:false,
+        description: description,
+        image: images.filter((image) => image !== null),
+        animaltag: selectedAnimalTag,
+        producttag: selectedProductTag,
+        price: parseInt(price),
+        ratings: [],
+        comments: [],
+        stockLevel: 1,
+        hidden: false,
       };
-
+  
       dispatch(addProduct(newProduct));
     }
     navigate(-1);
-  }
+  };
+  
 
   const triggerFileInput = () => {
     if (currentImageIndex === -1 || images.length === 0) {
@@ -473,7 +470,9 @@ const AddProduct =()=>{
                 fill="white"
               />
             </svg>
-          <span id="Product-details-form-add-button-text">Add</span>
+            {editMode?
+              <span id="Product-details-form-add-button-text">Save</span>
+              :<span id="Product-details-form-add-button-text">Add</span>}
           </button>
           <Link to={`/product/sellerProduct`} id="Product-details-form-back-button">
               Go Back

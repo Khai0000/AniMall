@@ -4,6 +4,7 @@
     left: 50%;
     width: 90vw;
     transform: translate(-50%, -50%);
+    z-index: 10;
 }
 
 .servicePopupContainer {
@@ -96,40 +97,41 @@
 
 /* Styling for button 1 */
 .servicePopupCommentContainer .ratingButtonContainer button:nth-child(1) {
-    background: #252D37;
+    background: linear-gradient(135deg, #ffff6a, #FFD700);
     color: white;
 }
 
 /* Styling for button 2 */
 .servicePopupCommentContainer .ratingButtonContainer button:nth-child(2) {
-    background: #252D37;
+    background: linear-gradient(135deg, #ffff64, #FFD700);
     color: white;
 }
 
 /* Styling for button 3 */
 .servicePopupCommentContainer .ratingButtonContainer button:nth-child(3) {
-    background: #252D37;
+    background: linear-gradient(135deg, #ffff4d, #FFD700);
     color: white;
 }
 
 /* Styling for button 4 */
 .servicePopupCommentContainer .ratingButtonContainer button:nth-child(4) {
-    background: #6A6D71;
+    background: linear-gradient(135deg, #D4AF37, #FFD700);
     color: white;
 }
 
 /* Styling for button 5 */
 .servicePopupCommentContainer .ratingButtonContainer button:nth-child(5) {
-    background: #F3B801;
+    background: linear-gradient(135deg, #FFD700, #D4AF37);
     color: white;
 }
 
 
 .servicePopupCommentContainer .ratingButtonContainer button.selected {
-    border: 4px solid #3C95A9;
-    color:#3C95A9;
-}
+    border: 3px solid #2F4F4F;
+    color: #8A572D;
+  }
   
+
 
 .servicePopupCommentContainer>.buttonContainer>button{
     background-color: #F3B801;
