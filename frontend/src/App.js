@@ -1,37 +1,49 @@
 import "./App.css";
 import Layout from "./Layout/Layout";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  createRoutesFromElements,
+  Route,
+} from "react-router-dom";
 import Pet from "./pages/Pet";
 import Community from "./pages/Community";
 import Product from "./pages/Product";
 import Services from "./pages/Services";
 import Home from "./pages/Home";
-import ForumPostDetails from "./ginkhai/pages/ForumPostDetails";
-import ForumAddPost from "./ginkhai/pages/ForumAddPost";
-import ForumHome from "./ginkhai/pages/ForumHome";
+import SellerProduct from "./shumin/pages/SellerProduct";
+import AddProduct from "./shumin/pages/AddProduct";
+import ProductDetails from "./shumin/pages/ProductDetails";
+import ProductCategorized from "./shumin/pages/ProductCategorized";
+import PetDetails from "./shumin/pages/PetDetails";
+import PetCategorized from "./shumin/pages/PetCategorized";
+import AddPet from "./shumin/pages/AddPet";
+import SellerPet from "./shumin/pages/SellerPet";
+import MyCart from "./shumin/pages/MyCart.jsx";
 
 function App() {
-  const router = createBrowserRouter([
-    {
-      path: "/",
-      element: <Layout />,
-      children: [
-        { path: "/", element: <Home /> },
-        { path: "/pet", element: <Pet /> },
-        {
-          path: "/community",
-          element: <Community />,
-          children: [
-            { path: "/community", element: <ForumHome /> },
-            { path: "/community/post/:postId", element: <ForumPostDetails /> },
-            { path: "/community/post/add", element: <ForumAddPost /> },
-          ],
-        },
-        { path: "/product", element: <Product /> },
-        { path: "/services", element: <Services /> },
-      ],
-    },
-  ]);
+  const router = createBrowserRouter(
+    createRoutesFromElements(
+      <Route path="/" element={<Layout/>}>
+        <Route index element={<Home/>}/>
+        <Route path="/pet" element={<Pet/>}/>
+        <Route path="/community" element={<Community/>}/>
+        <Route path="/product" element={<Product/>}/>
+        <Route path="/services" element={<Services/>}/> 
+        <Route path="/seller/productwarehouse" element={<SellerProduct/>}/>
+        <Route path="/seller/petwarehouse" element={<SellerPet/>}/>
+        <Route path="/seller/addpet" element={<AddPet/>}/>
+        <Route path="/seller/addproduct" element={<AddProduct/>}/>
+        <Route path="/product/:title" element={<ProductDetails/>}/>
+        <Route path="/pet/:title" element={<PetDetails/>}/>
+        <Route path="/product/ProductCategorized/:category" element={<ProductCategorized/>}/>
+        <Route path="/pet/PetCategorized/:category" element={<PetCategorized/>}/>
+        <Route path="/seller/productwarehouse/:id" element={<AddProduct/>}/>
+        <Route path="/seller/petwarehouse/:id" element={<AddPet/>}/>
+        <Route path="/mycart" element={<MyCart/>}/>
+      </Route>
+    )
+  );
 
   return <RouterProvider router={router} />;
 }

@@ -1,0 +1,44 @@
+.rating-chart {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .rating-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    margin-top: 20px;
+  }
+  
+  .container-star {
+    display: flex;
+  }
+  
+  .star {
+    width: 15.96px;
+    height: 15.96px;
+    margin-right: 5px;
+  }
+  
+  .empty-star {
+    width: 15.96px;
+    height: 15.96px;
+    margin-right: 5px;
+  }
+  
+  
+  .bar {
+    
+    width: 200px;
+    height: 10px;
+    border-radius: 5px;
+    margin-top: 5px;
+  }
+  
+  .bg {
+    background-color: #f2f2f2;
+  }
+  
+  .fg {
+    background-color: gold;
+  }

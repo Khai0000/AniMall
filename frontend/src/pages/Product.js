@@ -1,8 +1,9 @@
-function Product(){
+import ProductHome from '../shumin/pages/ProductHome';
 
+function Product(){
     return(
         <div>
-            <h1>This is Product page</h1>
+            <ProductHome/>
         </div>
     )
 }
