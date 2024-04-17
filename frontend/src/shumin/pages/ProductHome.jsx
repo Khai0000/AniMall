@@ -1,11 +1,9 @@
 import SearchBar from "../components/SearchBar";
 import "../styles/ProductHome.css";
-import React, { useState,useEffect,lazy,Suspense,useRef} from "react";
+import React, { useState,useEffect,lazy,Suspense} from "react";
 import MyCartButton from "../components/MyCartButton";
-import ProductCardSkeleton from "../components/ProductCardSkeleton";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useSelector, useDispatch } from "react-redux";
-import { setScrollPosition } from "../slices/ProductHistorySlice";
 import EnterButtonIcon from "../components/EnterButtonIcon";
 import { addProduct } from "../slices/ProductSlice";
 import { ProductData } from "../data/DummyProductData";
@@ -18,28 +16,15 @@ const ProductHome=()=>{
     const [showPriceRange,setShowPriceRange]=useState(false);
     const [minPrice, setMinPrice] = useState('');
     const [maxPrice, setMaxPrice] = useState(''); 
-    // const [productsAdded, setProductsAdded] = useState(false);
 
     const dispatch=useDispatch();
     const navigate = useNavigate();
 
     const products = useSelector((state)=> state.products);
-    const productHistory=useSelector((state)=>state.productHistory);
-
-    const {searchText,scrollPosition,minPriceRange,maxPriceRange,selectedProductType}=productHistory;
 
     const [filteredProducts,setFilteredProducts]=useState([]);
     const [isLoading,setIsLoading]=useState(true);
     const [searchTerm,setSearchTerm]=useState("");
-
-    const containerRef=useRef(null);
-
-    //useEffect for restoring last scrolling position
-    useEffect(()=>{
-        if(containerRef.current&& scrollPosition){
-            containerRef.current.scrollTop=scrollPosition;
-        }
-    });
 
     useEffect(() => {
         if ( products.length === 0) {
@@ -61,7 +46,6 @@ const ProductHome=()=>{
         
         filteredData = filteredData.filter((product) => !product.hidden);
 
-        console.log(searchTerm);
         if(searchTerm.length !== 0){
             filteredData=filteredData.filter(
                 (product)=>
@@ -92,22 +76,6 @@ const ProductHome=()=>{
         setFilteredProducts(filteredData);
     }, [searchTerm, products,minPrice,maxPrice, dispatch]);
 
-    useEffect(() => {
-        const handleScroll = () => {
-          if (containerRef.current) {
-            dispatch(setScrollPosition(containerRef.current.scrollTop));
-          }
-        };
-    
-        const container = containerRef.current;
-        container.addEventListener("scroll", handleScroll);
-    
-        return () => {
-          container.removeEventListener("scroll", handleScroll);
-        };
-    }, [dispatch, containerRef]);
-
-
     const handlePriceRangeSubmit = (event) => {
         event.preventDefault(); // Prevent form submission
         setShowPriceRange(false); // Hide the price range inputs after submission
@@ -121,9 +89,13 @@ const ProductHome=()=>{
         navigate(`/product/ProductCategorized/${category}`);
     };
 
-    const dogProducts=filteredProducts.filter(product=>product.animaltag=="dog");
-    const catProducts=filteredProducts.filter(product=>product.animaltag=="cat");
-    const otherProducts=filteredProducts.filter(product=>product.animaltag=="others");
+    const handleMyCartButtonClick=()=>{
+        navigate("/mycart");
+    };
+
+    const dogProducts=filteredProducts.filter(product=>product.animaltag==="dog");
+    const catProducts=filteredProducts.filter(product=>product.animaltag==="cat");
+    const otherProducts=filteredProducts.filter(product=>product.animaltag==="others");
     
     const renderProductsForCategory=(products,category)=>(
         <div className={`Product-category-row ${category}`}>
@@ -133,7 +105,7 @@ const ProductHome=()=>{
                     <EnterButtonIcon/>
                 </button>
             </div>
-            {products.length==0?
+            {products.length===0?
                 <p className="Product-category-row-content-noproduct">{`No ${category} product matched!`}</p>
                 :<div className="Product-category-row-content">
                     <Suspense fallback={<div>Loading...</div>}>
@@ -148,7 +120,7 @@ const ProductHome=()=>{
     return (
         <div>
             <div className="Upper-section">
-                <SearchBar id="Upper-section-search-bar" onSearch={handleSearch} page="product"/>
+                <SearchBar id="Upper-section-search-bar" onSearch={handleSearch} page="product" placeholder={"Search for a product..."}/>
                 {showPriceRange?(
                     <div className="Upper-section-price-range-container product">
                         <form onSubmit={handlePriceRangeSubmit}>
@@ -180,9 +152,9 @@ const ProductHome=()=>{
                         </form>
                     </div>
                 ):(<button className="Upper-section-price-range-button" onClick={togglePriceRange}>Price Range</button>)}
-                <MyCartButton page="product"/>
+                <MyCartButton page="product" onClick={handleMyCartButtonClick}/>
             </div>
-            <div ref={containerRef}>
+            <div>
                 {isLoading?(
                     <div className="loadingContainer">
                         <CircularProgress className="circularProgress" />
@@ -197,9 +169,11 @@ const ProductHome=()=>{
                     <p>No product matched!</p>
                 </div>}
             
-                <Link to={`/seller/productwarehouse`} className="seller-link">
-                    <button id="Seller-product">Seller</button>
-                </Link>
+                <div className="Seller-product">
+                    <Link to={`/product/sellerProduct`} className="seller-link">
+                        Seller
+                    </Link>
+                </div>
             </div>
         </div>
     )

@@ -1,7 +1,7 @@
 import React from "react";
 import ImageSlider from "../components/ImageSlider";
 import { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import RatingChart from "../components/RatingChart";
@@ -11,11 +11,10 @@ import "../styles/ProductDetails.css";
 import { addItemToCart } from "../slices/CartSlice"; 
 
 const ProductDetails=()=>{
-    const state=useLocation();
     const dispatch=useDispatch();
     const navigate=useNavigate();
 
-    const { title } = useParams(); // Retrieve the service title from URL parameter
+    const { title } = useParams(); 
 
     const [imagesLoading, setImagesLoading] = useState(true);
 
@@ -54,11 +53,29 @@ const ProductDetails=()=>{
     };
 
     const handleNavigateBack = () => {
-        navigate(-1); // Navigate back one step in history
+        navigate(-1); 
     };
 
     const handleOnAddToCartButtonClick=()=>{
-        dispatch(addItemToCart({ ...product, quantity: 1 }));
+        const productDetails = {
+            id: product.id,
+            title: product.title,
+            description:product.description,
+            image:product.image,
+            animaltag: product.animaltag,
+            producttag:product.producttag,
+            price: product.price,
+            ratings:product.ratings,
+            comments:product.comments,
+            stockLevel:product.stockLevel,
+            hidden: product.hidden,
+            type:"product",
+            quantity:1,
+            checked:true,
+        };
+        
+        dispatch(addItemToCart(productDetails));
+        navigate(-1);
     }
 
     return(
@@ -106,7 +123,7 @@ const ProductDetails=()=>{
                     <div className="comment-body">
                         {product.comments.map((comment, index) => (
                             <ProductPostComment
-                                comment={comment}
+                                comments={comment}
                                 key={index}
                                 title={title}
                             />

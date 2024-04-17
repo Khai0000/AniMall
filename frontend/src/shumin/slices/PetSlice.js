@@ -11,13 +11,6 @@ import { createSlice } from "@reduxjs/toolkit";
 //     hidden:false,
 // }
 
-const initialState={
-    pets:[],
-    selectedPet:null, 
-    selectedCategory:[],
-    searchText:"",
-};
-
 export const PetSlice =createSlice({
     name: "pet",
     initialState:[],
@@ -64,7 +57,7 @@ export const PetSlice =createSlice({
             }
         },
         hidePet(state,action){
-            const {id,hidden}=action.payload;
+            const {id}=action.payload;
             const existingPet= state.find(pet=>pet.id===id);
             if(existingPet){
                 existingPet.hidden=true;

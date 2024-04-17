@@ -2,11 +2,9 @@ import React, { useState,useEffect } from "react";
 import "../styles/ProductDetailsInputForm.css";
 import useToggle from "../hooks/useToggle.js";
 import { useDispatch, useSelector } from "react-redux";
-import { addPet } from "../slices/PetSlice.js";
-import { useNavigate } from "react-router-dom";
+import { addPet,editPet } from "../slices/PetSlice.js";
 import { PetData } from "../data/DummyPetData.js";
-import { Link ,useParams} from "react-router-dom";
-import { editPet } from "../slices/PetSlice.js";
+import { Link ,useParams,useNavigate} from "react-router-dom";
 
 const AddPet =()=>{
   const [showTitleInput, toggleTitle] = useToggle();
@@ -17,9 +15,9 @@ const AddPet =()=>{
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
+  const [price, setPrice] = useState();
   const [birthdate,setBirthdate]=useState("");
-  const [selectedAnimalTag, setSelectedAnimalTag]=useState([]);
+  const [selectedAnimalTag, setSelectedAnimalTag]=useState("");
   const [hidden,setHidden]=useState();
   const [stockLevel, setStockLevel]=useState();
 
@@ -44,16 +42,14 @@ const AddPet =()=>{
         setTitle(petToEdit.title);
         setDescription(petToEdit.description);
         setPrice(petToEdit.price);
-        if(petToEdit.animaltag=="dog"){
+        if(petToEdit.animaltag==="dog"){
           setIsDogFocused(true);
-        }else if(petToEdit.animaltag=="cat"){
+        }else if(petToEdit.animaltag==="cat"){
           setIsCatFocused(true);
-        }else if(petToEdit.animaltag=="others"){
+        }else if(petToEdit.animaltag==="others"){
           setIsOthersFocused(true);
         }
-
         setImages(petToEdit.image);
-
         setHidden(petToEdit.hidden);
         setStockLevel(petToEdit.stockLevel);
         setBirthdate(petToEdit.birthdate);
@@ -73,34 +69,34 @@ const AddPet =()=>{
     }
   }, [dispatch, pets]);
 
-  const toggleSelectedAnimalTag= (button) => {
-    if (selectedAnimalTag.includes(button)) {
-      setSelectedAnimalTag(
-        selectedAnimalTag.filter((currentButton) => {
-          return currentButton !== button;
-        })
-      );
+  const toggleSelectedAnimalTag = (button) => {
+    if (selectedAnimalTag === button) {
+      setSelectedAnimalTag(null);
+      switch (button) {
+        case "dog":
+          setIsDogFocused(false); 
+          break;
+        case "cat":
+          setIsCatFocused(false);
+          break;
+        case "others":
+          setIsOthersFocused(false);
+          break;
+        default:
+          break;
+      }
     } else {
-      setSelectedAnimalTag([...selectedAnimalTag, button]);
-    }
-    switch (button) {
-      case "dog":
-        setIsDogFocused((prev) => !prev); // Toggle the focus state
-        break;
-      case "cat":
-        setIsCatFocused((prev) => !prev);
-        break;
-      case "others":
-        setIsOthersFocused((prev) => !prev);
-        break;
-      default:
-        break;
+      setSelectedAnimalTag(button);
+      setIsDogFocused(button === "dog");
+      setIsCatFocused(button === "cat");
+      setIsOthersFocused(button === "others");
     }
   };
+  
 
   const generatePetId = () => {
     if (pets.length === 0) {
-      return "A0001"; // If no products, start with P0001
+      return "A0001"; // If no pets, start with A0001
     }
 
     const lastPetId = pets[pets.length - 1].id;
@@ -139,9 +135,7 @@ const AddPet =()=>{
       animalTag = "others";
     }
 
-    return {
-      animalTag,
-    };
+    return animalTag;
   };
   
 
@@ -157,7 +151,7 @@ const AddPet =()=>{
       return;
     }
 
-    if (!priceString.trim()) {
+    if (!priceString.trim()|| isNaN(price)) {
       alert("Please provide the price for your pet.");
       return;
     }
@@ -172,7 +166,7 @@ const AddPet =()=>{
         return;
     }
 
-    const { animalTag } = getSelectedTags();
+    const animalTag = getSelectedTags();
 
     if (editMode) {
       const updatedPet = {
@@ -182,7 +176,7 @@ const AddPet =()=>{
         birthdate,
         image: images.filter((image) => image !== null),
         animaltag: animalTag,
-        price,
+        price:parseInt(price),
         stockLevel:stockLevel,
         hidden:hidden,
       };
@@ -197,8 +191,8 @@ const AddPet =()=>{
         id: newPetId,
         description:description,
         image:images.filter((image) => image !== null),
-        animaltag:[selectedAnimalTag],
-        price:price,
+        animaltag:selectedAnimalTag,
+        price:parseInt(price),
         birthdate:birthdate,
         stockLevel:1,
         hidden:false,
@@ -250,7 +244,7 @@ const AddPet =()=>{
         return (
           <img
             src={images[currentImageIndex]}
-            alt={`Image ${currentImageIndex + 1}`}
+            alt="Pet for sales"
             style={{ maxWidth: '100%', maxHeight: '100%' }}
           />
         );
@@ -261,7 +255,7 @@ const AddPet =()=>{
             return (
               <img
                 src={require(`../assets/images/${images[0]}`)}
-                alt={`Image 1`}
+                alt="Pet for sales"
                 style={{ maxWidth: "100%", maxHeight: "100%" }}
               />
             );
@@ -271,14 +265,14 @@ const AddPet =()=>{
                 {currentImageIndex === 0 && (
                   <img
                     src={require(`../assets/images/${images[0]}`)}
-                    alt={`Image 1`}
+                    alt="Pet for sales"
                     style={{ maxWidth: "100%", maxHeight: "100%" }}
                   />
                 )}
                 {currentImageIndex === 1 && (
                   <img
                     src={require(`../assets/images/${images[1]}`)}
-                    alt={`Image 2`}
+                    alt="Pet for sales"
                     style={{ maxWidth: "100%", maxHeight: "100%" }}
                   />
                 )}
@@ -288,7 +282,7 @@ const AddPet =()=>{
             return (
               <img
                 src={require(`../assets/images/${images[currentImageIndex]}`)}
-                alt={`Image ${currentImageIndex + 1}`}
+                alt="Pet for sales"
                 style={{ maxWidth: "100%", maxHeight: "100%" }}
               />
             );
@@ -435,9 +429,11 @@ const AddPet =()=>{
                 fill="white"
               />
             </svg>
-          <span id="Product-details-form-add-button-text">Add</span>
+            {editMode?
+              <span id="Product-details-form-add-button-text">Save</span>
+              :<span id="Product-details-form-add-button-text">Add</span>}
           </button>
-          <Link to={`/seller/petwarehouse`} id="Product-details-form-back-button">
+          <Link to={`/pet/sellerPet`} id="Product-details-form-back-button">
               Go Back
           </Link>
         </div>

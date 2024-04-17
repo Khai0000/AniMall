@@ -1,26 +1,17 @@
 import { useState, useEffect } from "react";
 import "../styles/ProductCard.css";
 import ProductCardSkeleton from "./ProductCardSkeleton";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-const ProductCard = ({product,index})=>{
+const ProductCard = ({product})=>{
     const [image,setImage]=useState(null);
     const [isLoading,setIsLoading]=useState(false);
 
-    const dispatch=useDispatch();
-    const navigate=useNavigate();
-
     const truncateText = (text, maxLength) => {
-        if(text.length==0){
+        if(text.length===0){
             return "";
         }
-        if (maxLength<=9) {
-            return text.slice(0, maxLength);
-        }else{
-            return text.slice(0,maxLength)+ "...";
-        }
+        return text.slice(0,maxLength);
     }
         
     useEffect(()=>{
@@ -55,17 +46,17 @@ const ProductCard = ({product,index})=>{
         <Link to={`/product/${product.title}`} style={{ textDecoration: 'none' }}>
         <div>
             <button className="product-button">
-                <img src={image} alt='' className="product-image" />
+                <div className="product-image">
+                    <img src={image} alt='' />
+                </div>
                 <div className="product-info">
-                    {product.title.length>7?
-                        <h3 className="product-name">{truncateText(product.title, 10)}</h3>
-                        :<h3 className="product-name">{truncateText(product.title, 9)}</h3>}
+                    <h3 className="product-name">{truncateText(product.title, 19)}</h3>
                     <p className="product-description">
                         <span>Description: </span>
                         <span id="product-description-content">
-                            {truncateText(product.description, 9)}
+                            {truncateText(product.description, 20)}
                             <br />
-                            {truncateText(product.description.slice(9),14)}
+                            {truncateText(product.description.slice(20),20)}
                         </span>
                         
                     </p>

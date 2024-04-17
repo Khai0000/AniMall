@@ -37,3 +37,32 @@
     fill: #F3B801;
 }
 
+.checkout-container{
+    margin-top: 1%;
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 3%;
+}
+
+.total-price{
+    color: #3C95A9;
+    margin-right: 3%;
+    font-weight:bold;
+}
+
+.checkout-button{
+    background-color: #F3B801;
+    border: none;
+    border-radius: 20px;
+    color: white;
+    padding-left: 4.5%;
+    padding-right: 4.5%;
+    padding-top: 0.3%;
+    padding-bottom: 0.3%;
+}
+
+.checkout-button:hover{
+    background-color: white;
+    color: #F3B801;
+    transition: ease 0.5s;
+}

@@ -20,8 +20,17 @@ const ForumHomeCard = ({ post,index }) => {
 
   useEffect(() => {
     setIsLoading(true);
-
-    if (post.image[0].includes("jpg")) {
+  
+    if (post.title === 'cat') {
+      console.log(post.image[0]);
+    }
+  
+    if (post.image[0].startsWith("data:image/")) {
+      // If the image URL starts with "data:image/", it indicates a base64 encoded image
+      setImage(post.image[0]);
+      setIsLoading(false);
+    } else {
+      // Handle other image types using existing logic
       let imageDir = post.image[0].substring(0, post.image[0].indexOf("."));
       import(`../assets/images/${imageDir}.jpg`)
         .then((image) => {
@@ -29,17 +38,14 @@ const ForumHomeCard = ({ post,index }) => {
         })
         .catch((error) => {
           console.error("Error loading image:", error);
-          setIsLoading(false);
         })
         .finally(() => {
           setIsLoading(false);
         });
-    } else {
-      console.log(post.image[0]);
-      setImage(post.image[0]);
-      setIsLoading(false);
     }
   }, [post]);
+  
+
 
   return isLoading ? (
     <ForumHomeCardSkeleton />
@@ -62,7 +68,7 @@ const ForumHomeCard = ({ post,index }) => {
         <p className="content">{post.content}</p>
       </div>
       {
-        <button
+        post.author==="Khai" && <button
         style={{zIndex:100}}
           className="deleteButton"
           onClick={(e) => {

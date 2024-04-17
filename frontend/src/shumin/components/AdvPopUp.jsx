@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import "../styles/AdvPopUp.css";
 import CloseIcon from "@mui/icons-material/Close";
 import adv1 from "../assets/images/adv1.jpg";

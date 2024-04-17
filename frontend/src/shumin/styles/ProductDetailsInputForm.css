@@ -144,7 +144,8 @@
 
 .Product-details-form-title-input,
 .Product-details-form-description-input,
-.Product-details-form-price-input{
+.Product-details-form-price-input,
+.Product-details-form-birthdate-input{
     padding: 1%;
     margin-bottom: 1%;
     border: 1px solid #3C95A9;
@@ -154,7 +155,8 @@
 
 .Product-details-form-title-input:hover,
 .Product-details-form-description-input:hover,
-.Product-details-form-price-input:hover{
+.Product-details-form-price-input:hover,
+.Product-details-form-birthdate-input:hover{
     border: 1px solid #F3B801;
 }
 

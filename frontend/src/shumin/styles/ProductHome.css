@@ -8,50 +8,52 @@
     align-items: center;
     justify-content: space-between;
 }
-  
-.Upper-section-search-container {
+ 
+.inputContainer {
     display: flex;
-    align-items: center; 
-    border-radius: 20px; 
-    overflow: hidden; 
-    background-color: #fff;
-    fill: #FFF;
-    filter: drop-shadow(0px 0px 2px #3C95A9);
-    margin-left: 2.2%;
-    margin-right:9.4%;
-    width: 36%;
-    height:30px;  /* cannot use percentage */
-  }
-
-.Upper-section-search-container.pet{
-    margin-right: 3.1%;
+    align-items: center;
+    flex: 1;
+    max-width: 34vw;
+    margin-left:2.5%;
+    position: relative;
+    margin-right: 6%;
 }
 
-.Upper-section-search-input {
-    flex: 1;  
-    border: none;
-    border-radius: 20px; 
+.searchBar {
+    border: 1px solid #3C95A9;
+    border-radius: 15px;
+    filter: drop-shadow(0 2px 4px rgba(60, 149, 169, 0.5));
+    font-size: 1.125rem;
+    padding: 3px 40px 3px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.10);
+    transition: border-color 0.3s ease, filter 0.3s ease;
+    width: 100%;
+    position: relative;
+    color: #666;
+}
+
+.searchBar:focus {
+    border-color: #f4b701;
+    --shadow-color: rgba(244, 183, 1, 0.5);
+    filter: drop-shadow(0 2px 4px rgba(244, 183, 1, 0.5));
     outline: none;
+    color: #666;
 }
-  
-.Upper-section-search-button {
-    background-color: transparent;
-    border: none;
-    padding: 2%;
+
+.searchIcon {
+    position: absolute;
+    right: 10px;
+    color: #3C95A9;
+    z-index: 1;
+}
+
+.inputContainer:focus-within .searchIcon {
+    color: #f4b701;
+    /* Change color to yellow when input container is focused */
+}
+
+.searchIcon:hover {
     cursor: pointer;
-}
-  
-.Upper-section-search-icon {
-    width: 10%; 
-    height: 10%; 
-    color: #555; 
-    display: flex;
-    align-items: end;
-}
-  
-.Upper-section-search-container.focused,
-.Upper-section-search-container:hover {
-    filter: drop-shadow(0px 0px 4px #F3B801);
 }
 
 .Upper-section-price-range-button {
@@ -90,7 +92,7 @@
     color: #3C95A9;
     border: transparent;
     height: 15%;
-    font-size: 130%;
+    font-size: 150%;
     margin-left: 8%;
 }
 
@@ -209,7 +211,7 @@
 
 .Product-category-row-content{
     display: flex;
-    justify-content:start;
+    justify-content:flex-start;
     overflow-x: auto;
     gap: 3%;
     padding-right: 3%;
@@ -273,6 +275,25 @@
     row-gap: 0;
     gap: 0;
 }
+
+.seller-link {
+    border-radius: 20px;
+    background-color: antiquewhite;
+    width: 8rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    text-decoration: none;
+    color: black; 
+    font-weight: bold;
+    margin-left: 50%;
+  }
+  
+.Seller-product{
+    margin-top:1rem ;
+    margin-bottom: 1rem;
+  }
 
 @media screen and (max-width: 1068px) {
     .Upper-section-search-container.product{

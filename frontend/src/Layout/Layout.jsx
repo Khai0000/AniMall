@@ -38,6 +38,9 @@ function Layout() {
         spacerHeight = totalHeight - outletHeight - headerHeight;
         setSpacing(spacerHeight);
       }
+      else{
+        setSpacing(0);
+      }
     };
 
     calculateSpacerHeight();

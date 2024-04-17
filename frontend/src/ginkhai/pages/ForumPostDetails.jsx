@@ -36,11 +36,15 @@ const ForumPostDetails = () => {
       const loadedImages = [];
       for (const image of post.image) {
         try {
-          if (image.includes("jpg")) {
+          if (image.startsWith("data:image/")) {
+            // If the image URL starts with "data:image/", it indicates a base64 encoded image
+            loadedImages.push(image);
+          } else if (image.includes(".jpg")) {
             let imageDir = image.substring(0, image.indexOf("."));
             const imageData = await import(`../assets/images/${imageDir}.jpg`);
             loadedImages.push(imageData.default);
           } else {
+            // Handle other image types here if needed
             loadedImages.push(image);
           }
         } catch (error) {
