@@ -158,7 +158,7 @@ const SellerServiceCard = ({service}) => {
         </button>
         <input
           type="number"
-          className="seller-service-card-quantity-input"
+          className="seller-service-card-quantity-input-zm"
           value={quantity}
           readOnly 
         />

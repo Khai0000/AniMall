@@ -8,15 +8,7 @@ import {
   updateChecked,
 } from "../slices/CartSlice";
 
-<<<<<<< HEAD
-const CartCard = ({product})=>{
-    const [image,setImage]=useState(null);
-    const [isLoading,setIsLoading]=useState(false);
-    const initialQuantity = product.quantity;
-    const [quantity,setQuantity]=useState(initialQuantity);
-    const initialChecked = product.checked;
-    const [isChecked,setIsChecked]=useState(initialChecked);
-=======
+
 const CartCard = ({ product }) => {
   const [image, setImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -24,7 +16,6 @@ const CartCard = ({ product }) => {
   const [quantity, setQuantity] = useState(initialQuantity);
   const initialChecked = product.checked;
   const [isChecked, setIsChecked] = useState(initialChecked);
->>>>>>> origin/ZM
 
   const dispatch = useDispatch();
 

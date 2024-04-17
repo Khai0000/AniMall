@@ -78,7 +78,7 @@
     background-color: #F3B801;
 }
 
-.seller-service-card-quantity-input {
+.seller-service-card-quantity-input-zm {
     margin-top: 4.2%;
     margin-bottom: 4.7%;
     margin-left: 0.7%;
@@ -91,7 +91,7 @@
     text-align: center;
 }
 
-.seller-service-card-quantity-input:hover {
+.seller-service-card-quantity-input-zm:hover {
     border-color: #F3B801;
     outline: none;
 }
@@ -141,7 +141,7 @@
         padding-left: 7%;
     }
 
-    .seller-service-card-quantity-input {
+    .seller-service-card-quantity-input-zm {
         margin-top: 1.5%;
         margin-bottom: 1.5%;
         margin-left: 0;
