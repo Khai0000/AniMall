@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import "../styles/SellerServiceCard.css";
-import SellerProductCardSkeleton from "./SellerServiceCardSkeleton";
+import SellerServiceCardSkeleton from "./SellerServiceCardSkeleton";
 import { useDispatch } from "react-redux";
 import {
   removeService,
@@ -8,18 +8,48 @@ import {
 } from "../slices/serviceSlice";
 import { Link } from "react-router-dom";
 
-const SellerServiceCard = ({ service, index }) => {
+const SellerServiceCard = ({service}) => {
   const [image, setImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isHidden, setIsHidden] = useState(service.hidden);
+  const [quantity] = useState(1);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (service.serviceImages && service.serviceImages.length > 0) {
-      const firstImage = service.serviceImages[0];
-      if (firstImage.includes("jpg")) {
-        let imageDir = firstImage.substring(0, firstImage.indexOf("."));
-        import(`../assets/image/${imageDir}.jpg`)
+    // if (service.serviceImages && service.serviceImages.length > 0) {
+    //   const firstImage = service.serviceImages[0];
+    //   if (firstImage.includes("jpg")) {
+    //     let imageDir = firstImage.substring(0, firstImage.indexOf("."));
+    //     import(`../assets/image/${imageDir}.jpg`)
+    //       .then((image) => {
+    //         setImage(image.default);
+    //       })
+    //       .catch((error) => {
+    //         console.error("Error loading image:", error);
+    //       })
+    //       .finally(() => {
+    //         setIsLoading(false);
+    //       });
+    //   } else {
+    //     // If the image URL does not contain "jpg", assume it's a direct URL
+    //     setImage(firstImage);
+    //     setIsLoading(false);
+    //   }
+    // } else {
+    //   // Handle the case where serviceImages is empty or undefined
+    //   console.error(
+    //     "Service image is not defined or not in the expected format:",
+    //     service
+    //   );
+    //   setIsLoading(false);
+    // }
+    if (service.serviceImages && service.serviceImages[0]) {
+      if (service.serviceImages[0].includes("jpg")) {
+        
+        let filename = service.serviceImages[0].split("/").pop();
+       
+        let imageName = filename.split(".")[0] + ".jpg";
+        import(`../assets/image/${imageName}`)
           .then((image) => {
             setImage(image.default);
           })
@@ -30,17 +60,13 @@ const SellerServiceCard = ({ service, index }) => {
             setIsLoading(false);
           });
       } else {
-        // If the image URL does not contain "jpg", assume it's a direct URL
-        setImage(firstImage);
+        
+        console.error(
+          "Service image is not in the expected format:",
+          service.serviceImages[0]
+        );
         setIsLoading(false);
       }
-    } else {
-      // Handle the case where serviceImages is empty or undefined
-      console.error(
-        "Service image is not defined or not in the expected format:",
-        service
-      );
-      setIsLoading(false);
     }
   }, [service]);
 
@@ -58,12 +84,12 @@ const SellerServiceCard = ({ service, index }) => {
   };
 
   return isLoading ? (
-    <SellerProductCardSkeleton />
+    <SellerServiceCardSkeleton />
   ) : (
     <div>
-      <div className="seller-product-card-container">
+      <div className="seller-service-card-container">
         <button
-          className={`seller-product-card-checkbox${
+          className={`seller-service-card-checkbox${
             !isHidden ? "-clicked" : "-unclicked"
           }`}
           onClick={handleCheckboxClick}
@@ -112,19 +138,41 @@ const SellerServiceCard = ({ service, index }) => {
             </svg>
           )}
         </button>
-        <img src={image} alt="" className="seller-product-card-image" />
+        <img src={image} alt="" className="seller-service-card-image" />
         <Link
           to={`add-service/${service.serviceTitle}`}
-          className="seller-product-card-product-name"
+          className="seller-service-card-product-name"
           style={{ textDecoration: "none" }}
         >
-          <h4 className="seller-product-card-product-name-content">
+          <h4 className="seller-service-card-product-name-content">
             {service.serviceTitle}
           </h4>
         </Link>
-        <h4 className="seller-product-card-price">{service.price}</h4>
+
+       
         <button
-          className="seller-product-card-remove-button"
+          className="seller-service-card-minus-button"
+          disabled
+        >
+          -
+        </button>
+        <input
+          type="number"
+          className="seller-service-card-quantity-input"
+          value={quantity}
+          readOnly 
+        />
+        <button
+          className="seller-service-card-plus-button"
+          disabled
+        >
+          +
+        </button>
+    
+
+        <h4 className="seller-service-card-price">{service.price}</h4>
+        <button
+          className="seller-service-card-remove-button"
           onClick={handleOnRemoveClicked}
         >
           <svg

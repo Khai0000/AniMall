@@ -4,10 +4,11 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Datepicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate } from "react-router-dom";
+import { addServiceToCart } from "../../shumin/slices/CartSlice";
+import { useSelector, useDispatch } from "react-redux";
 
-const ServicesAppointment = ({ title, description, price }) => {
+const ServicesAppointment = ({ serviceData }) => {
   const [selectedButtons, setSelectedButtons] = useState([]);
-
   const [selectedDate, setSelectedDate] = useState(() => {
     const currentDate = new Date();
     currentDate.setDate(currentDate.getDate() + 1);
@@ -15,7 +16,7 @@ const ServicesAppointment = ({ title, description, price }) => {
   });
 
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const [slotsAvailability, setSlotsAvailability] = useState({
     "8.00": 2,
     "9.00": 2,
@@ -30,7 +31,6 @@ const ServicesAppointment = ({ title, description, price }) => {
   const handleBack = () => {
     navigate(-1);
   };
-
 
   useEffect(() => {
     setSelectedButtons([]);
@@ -98,10 +98,26 @@ const ServicesAppointment = ({ title, description, price }) => {
       }
     }
 
-    const selectedDateTime = `${selectedDate.toLocaleDateString()} ${selectedButtons.join(
-      ", "
-    )}`;
-    alert(`Added to cart: ${selectedDateTime} Total price:RM ${totalPrice}`);
+    selectedButtons.forEach((slot) => {
+      const serviceDetails = {
+        title: serviceData.serviceTitle,
+        image: serviceData.serviceImages,
+        price: serviceData.price,
+        hidden: serviceData.hidden,
+        type: "service",
+        checked: true,
+        slot: slot,
+      };
+
+      dispatch(addServiceToCart(serviceDetails));
+
+      setSlotsAvailability((prevAvailability) => ({
+        ...prevAvailability,
+        [slot]: prevAvailability[slot] - 1,
+      }));
+    });
+
+    navigate(-1);
   };
 
   const CustomDatePickerInput = forwardRef(({ value, onClick }, ref) => (
@@ -110,22 +126,21 @@ const ServicesAppointment = ({ title, description, price }) => {
     </div>
   ));
 
-
-
+  const { serviceTitle, description, price } = serviceData;
   const totalPrice =
     selectedButtons.length === 0 ? 0 : selectedButtons.length * price;
-
 
   return (
     <div className="servicesAppointmentContainer">
       <div className="topContainer">
         <div className="appointmentTitle">
-          <h1>{title}</h1>
+          <h1>{serviceTitle}</h1>
         </div>
         <div className="appointmentDate">
           <button
-            className={`datePickerButton ${selectedDate ? "dateButtonSelected" : ""
-              }`}
+            className={`datePickerButton ${
+              selectedDate ? "dateButtonSelected" : ""
+            }`}
           >
             <Datepicker
               className="datePicker"
@@ -158,8 +173,9 @@ const ServicesAppointment = ({ title, description, price }) => {
             {Object.keys(slotsAvailability).map((slot) => (
               <button
                 key={slot}
-                className={`${selectedButtons.includes(slot) ? "selected" : ""
-                  } ${!isSlotAvailable(slot) ? "unavailable" : ""}`}
+                className={`${
+                  selectedButtons.includes(slot) ? "selected" : ""
+                } ${!isSlotAvailable(slot) ? "unavailable" : ""}`}
                 onClick={() => toggleButton(slot)}
               >
                 {slot}

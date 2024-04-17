@@ -11,18 +11,30 @@ function MyCart(){
 
     const [totalPrice,setTotalPrice]=useState(0);
 
-    useEffect(() => {
-        // Calculate total price when items change
-        let newTotalPrice = 0;
+   useEffect(() => {
+    // Calculate total price when items change
+    let newTotalPrice = 0;
 
-        item.forEach((item) => {
-            if (item.checked) {
+    item.forEach((item) => {
+        if (item.checked) {
+            if (item.type === "service") {
+                // Check if the price is a number
+                if (typeof item.price === "number") {
+                    newTotalPrice += item.price;
+                } else {
+                    console.error("Price for service item is not a number:", item);
+                }
+            } else {
+                // For other types of items, assume price is a number
                 newTotalPrice += item.price * item.quantity;
             }
-        });
-        setTotalPrice(newTotalPrice);
-    }, [item]);
+        }
+    });
 
+    setTotalPrice(Number(newTotalPrice)); // Ensure totalPrice is always a number
+}, [item]);
+
+    
     const handleOnCheckoutButtonClick=()=>{
         let numOfCheckedItem=0;
         if(item.length===0){

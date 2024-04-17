@@ -28,6 +28,7 @@
     flex: 1;
 }
 
+
 @media screen and (max-width: 768px) {
     .serviceDetailsContainer .topSideContainer .leftSide .imageSlider {
         width: 100%;
@@ -76,31 +77,26 @@
 .serviceDetailsContainer .ratingContainer .ratingTitle,
 .serviceDetailsContainer .commentContainer .commentTitle {
     color: #3C95A9;
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: 500;
     margin-bottom: 12px;
     margin-right: 2vw;
+    margin-top: 0.6vw;
 }
 
 .serviceDetailsContainer .commentContainer .commentHeader {
     margin-bottom: 12px;
+    display: flex;
 }
 
 .serviceDetailsContainer .addPostButton {
-    background-color: #3C95A9;
     border: none;
-    border-radius: 15px;
-    height: fit-content;
-    width: fit-content;
-    text-align: center;
-    color: #fff;
-    font-size: 2.5rem;
-    padding: 2px 14px;
+    background-color: transparent;
 }
 
-.serviceDetailsContainer .addPostButton:hover {
+.serviceDetailsContainer .addPostButton:hover svg path{
     cursor: pointer;
-    background-color: #F3B801;
+    fill: #F3B801;
 }
 
 .serviceDetailsContainer .commentContainer .commentBody {

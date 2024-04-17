@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+<<<<<<< HEAD
 // template for a cart
 //   {
 //     "items": [
@@ -71,13 +72,21 @@ import { createSlice } from "@reduxjs/toolkit";
 //   }
 
 
+=======
+>>>>>>> origin/ZM
 export const CartSlice = createSlice({
   name: "cart",
   initialState: [],
   reducers: {
     addItemToCart: (state, action) => {
       const newItem = action.payload;
+<<<<<<< HEAD
       const existingItemIndex = state.findIndex(item => item.title === newItem.title);
+=======
+      const existingItemIndex = state.findIndex(
+        (item) => item.title === newItem.title
+      );
+>>>>>>> origin/ZM
 
       if (existingItemIndex !== -1) {
         // Item already exists, update its quantity
@@ -87,17 +96,26 @@ export const CartSlice = createSlice({
         state.push(newItem);
       }
     },
+    addServiceToCart: (state, action) => {
+      const newService = action.payload;
+      state.push(newService);
+    },
     removeItemFromCart: (state, action) => {
       return state.filter((item) => item.title !== action.payload);
     },
     updateQuantity: (state, action) => {
       const { title, quantity } = action.payload;
+<<<<<<< HEAD
       const itemToUpdateIndex = state.findIndex(item => item.title === title);
+=======
+      const itemToUpdateIndex = state.findIndex((item) => item.title === title);
+>>>>>>> origin/ZM
 
       if (itemToUpdateIndex !== -1) {
         state[itemToUpdateIndex].quantity = quantity;
       }
     },
+
     updateChecked: (state, action) => {
       const { title, checked } = action.payload;
       const itemToUpdate = state.find(item => item.title === title);
@@ -107,13 +125,30 @@ export const CartSlice = createSlice({
       }
     },
     checkoutItems: (state, action) => {
+<<<<<<< HEAD
 
       return state.filter(item => !item.checked);
+=======
+      return state.filter((item) => !item.checked);
+>>>>>>> origin/ZM
     },
   },
 });
 
+<<<<<<< HEAD
 
 export const { addItemToCart, removeItemFromCart, updateQuantity, checkoutItems, updateChecked } = CartSlice.actions;
 
 export default CartSlice.reducer;
+=======
+export const {
+  addItemToCart,
+  addServiceToCart,
+  removeItemFromCart,
+  updateQuantity,
+  checkoutItems,
+  updateChecked,
+} = CartSlice.actions;
+
+export default CartSlice.reducer;
+>>>>>>> origin/ZM
