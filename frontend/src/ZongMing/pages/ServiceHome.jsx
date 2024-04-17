@@ -35,23 +35,19 @@ const ServiceHome = () => {
 
   }, [searchTerm, minPrice, maxPrice, allServices])
 
-  const handleBeforeUnload = () => {
-    localStorage.setItem("scrollPosition", window.pageYOffset);
-  };
-
-  // Event handler for handling search input changes
+  
   const handleSearch = (value) => {
     setSearchTerm(value);
   };
-
+  
   const handlePriceRangeChange = (min, max) => {
     setMinPrice(min);
     setMaxPrice(max);
   };
-
+  
   useEffect(() => {
     window.addEventListener("beforeunload", handleBeforeUnload);
-
+    
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
@@ -63,7 +59,11 @@ const ServiceHome = () => {
       []
     );
   }
-
+  
+  const handleBeforeUnload = () => {
+    localStorage.setItem("scrollPosition", window.pageYOffset);
+  };
+  
   return (
     <div className="service-home">
       <ServicesHeader

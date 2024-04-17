@@ -39,9 +39,9 @@ const ProductHome=()=>{
         setSearchTerm(value);
     };
 
-    //useEffect for filtering data
+    
     useEffect(()=>{
-        let filteredData = [...products];;
+        let filteredData = [...products];
         setIsLoading(true);
         
         filteredData = filteredData.filter((product) => !product.hidden);

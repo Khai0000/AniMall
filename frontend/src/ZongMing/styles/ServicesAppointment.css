@@ -43,7 +43,7 @@
 }
 
 .appointmentDescription {
-    margin-top: 1rem; /* Adjust spacing as needed */
+    margin-top: 1rem; 
 }
 
 .descriptionContainer .descriptionWord {
@@ -244,17 +244,17 @@
 
 .cartBtn,
 .backBtn {
-    padding: 10px 20px;
+    padding: 5px 10px;
     border: none;
-    border-radius: 15px;
+    border-radius: 10px;
     font-size: 1rem;
     cursor: pointer;
-    height: 7vh;
+    height: 5.5vh;
+    font-size: 0.85rem;
 }
 
 .cartIcon svg {
     font-size: 20px;
-    /* Adjust the size as needed */
 }
 
 .cartBtn {
@@ -278,29 +278,77 @@
     background-color: white;
     border: #1f7486 solid 0.5px;
     width: 10vw;
+    color: #3C95A9;
 }
 
 .bottomContainer .cartAndBackContainer .backBtn:hover {
     color: #f4b701;
     border: 1px solid #f4b701;
-    text-shadow: 0 0 0px #f4b701, 0 0 1px #f4b701, 0 0 30px #f4b701;
 }
 
 .bottomContainer .price {
     color: #3C95A9;
     display: flex;
-    font-size: 2vw;
-    font-weight: 550;
+    font-size: 1.2rem;
+    font-weight: bold;
 }
 
 @media (max-width: 768px) {
-    .cartBtn {
-        font-size: 0.9rem; 
+    .servicesAppointmentContainer {
+        margin: 0.5rem;
+        padding: 15px; 
+        margin-top: -1vh; 
     }
-}
+    
+    .topContainer {
+        flex-direction: column; 
+        align-items: flex-start; 
+    }
+    
+    .appointmentTitle,
+    .appointmentDate {
+        flex: 0 0 100%; 
+        margin: 0.5rem 0;
+        font-size: 80%;
+    }
+    .customDatePickerInput{
+        font-size: 90;
+    }
+    
+    .appointmentDate {
+        margin-left: 0; 
+    }
 
-@media (max-width: 576px) {
-    .cartBtn {
-        font-size: 0.8rem; 
+    .middleContainer .descriptionContainer {
+        margin-right: 0; 
+        margin-top: 0.5rem; 
+    }
+
+    .chooseDate {
+        max-width: 100%;
+        padding: 0.5rem; 
+    }
+
+    .chooseDate button {
+        padding: 3px 20px; 
+        font-size: 0.9rem; 
+        height: auto; 
+    }
+
+    .cartAndBackContainer {
+        flex-direction: column; 
+        column-gap: 0; 
+    }
+
+    .cartBtn,
+    .backBtn {
+        width: 50%;
+        margin-bottom: 0.5rem; 
+        height: auto;
+        font-size: 0.5rem;
+    }
+
+    .cartIcon svg {
+        font-size: 16px; 
     }
 }

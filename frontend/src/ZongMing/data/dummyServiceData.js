@@ -1,16 +1,22 @@
-import images from "./images";
+import dog1 from "../assets/image/dog7.jpg"
 import dog2 from "../assets/image/dog2.jpg";
-import dog3 from "../assets/image/dog3.jpeg";
-import dog4 from "../assets/image/dog4.jpeg";
-import dog5 from "../assets/image/dog5.jpeg";
-import dog6 from "../assets/image/dog6.jpeg";
+import dog3 from "../assets/image/dog3.jpg";
+import dog4 from "../assets/image/dog4.jpg";
+import dog5 from "../assets/image/dog5.jpg";
+import dog6 from "../assets/image/dog6.jpg";
+import dog7 from "../assets/image/dog8.jpg";
+import dog8 from "../assets/image/dog9.jpg";
+import dog9 from "../assets/image/dog10.jpg";
+import dog10 from "../assets/image/dog11.jpg";
+import dog11 from "../assets/image/dog12.jpg";
+import dog12 from "../assets/image/dog1.jpg";
 
 export const dummyServiceData = [
     {
       serviceTitle: "Haircut",
-      serviceImages: [ images[1].imgURL,dog6],
+      serviceImages: [ dog1,dog6],
       description: "Professional haircut service",
-      price: "30",
+      price: 30,
       ratings: {
         total: 61,
         1: 1,
@@ -34,9 +40,9 @@ export const dummyServiceData = [
     },
     {
       serviceTitle: "Manicure",
-      serviceImages: [images[2].imgURL, images[3].imgURL],
+      serviceImages: [dog6, dog7],
       description: "Pamper your nails with our manicure service",
-      price: "25",
+      price: 25,
       ratings: {
         total: 27,
         1: 1,
@@ -55,7 +61,7 @@ export const dummyServiceData = [
       serviceTitle: "Massage Therapy",
       serviceImages: [dog3,dog2],
       description: "Relax and unwind with our massage therapy service",
-      price: "50",
+      price: 50,
       ratings: {
         total: 51,
         1: 1,
@@ -72,9 +78,9 @@ export const dummyServiceData = [
     },
     {
       serviceTitle: "Facial Treatment",
-      serviceImages: [dog3, dog4],
+      serviceImages: [dog8, dog4],
       description: "Revitalize your skin with our facial treatment service",
-      price: "35",
+      price: 35,
       ratings: {
         total: 12,
         1: 0,
@@ -93,7 +99,7 @@ export const dummyServiceData = [
       serviceTitle: "Yoga Classes",
       serviceImages: [dog5, dog6],
       description: "Join our yoga classes for relaxation and flexibility",
-      price: "20",
+      price: 20,
       ratings: {
         total: 6,
         1: 0,
@@ -110,9 +116,9 @@ export const dummyServiceData = [
     },
     {
       serviceTitle: "Fitness Training",
-      serviceImages: [dog6,dog2],
+      serviceImages: [dog9,dog10],
       description: "Get fit with our personalized fitness training sessions",
-      price: "40",
+      price: 40,
       ratings: {
         total: 20,
         1: 2,
@@ -129,9 +135,9 @@ export const dummyServiceData = [
     },
     {
       serviceTitle: "Cooking Classes",
-      serviceImages: [images[0].imgURL, images[1].imgURL],
+      serviceImages: [dog11, dog12],
       description: "Learn to cook delicious dishes with our cooking classes",
-      price: "45",
+      price: 45,
       ratings: {
         total: 18,
         1: 1,
