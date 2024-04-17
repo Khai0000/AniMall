@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import {Outlet} from 'react-router-dom'
-import '../styles/Layout.css'
+import { Outlet } from "react-router-dom";
+import "../styles/Layout.css";
 
 function Layout() {
   const [isFooterIntersecting, setIsFooterIntersecting] = useState(false);
@@ -24,8 +24,8 @@ function Layout() {
   return (
     <div className="App">
       <Header />
-      <main >
-        <Outlet/>
+      <main>
+        <Outlet />
       </main>
       {/* <div className='spacer'></div> */}
       <div>
