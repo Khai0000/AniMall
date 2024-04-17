@@ -1,0 +1,83 @@
+.popupDialog{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 90vw;
+    transform: translate(-50%, -50%);
+}
+
+.popupContainer {
+    position: relative;
+    padding: 3vh 3vw;
+    border: 2px solid #3C95A9;
+    background: #FFF;
+}
+
+.popupContainer .closeButton {
+    position: absolute;
+    border: none;
+    background-color: #3C95A9;
+    color: white;
+    width: 35px;
+    height: 35px;
+    border-radius: 10px;
+    padding-top: 5px;
+    transform: rotate(45deg);
+    cursor: pointer;
+    right: 2vw;
+    top: 2vh;
+}
+
+.popupContainer .closeButton:hover {
+    background-color: #F3B801;
+}
+
+.popupContainer>p {
+    color: #3C95A9;
+    font-family: Overpass;
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-top: 4vh;
+}
+
+.popupContainer .closeIcon {
+    transform: rotate(45deg);
+}
+
+.popupCommentContainer {
+    width: 100%;
+    border: 2px solid #3C95A9;
+    border-radius: 15px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.popupCommentContainer>textarea {
+    width: 100%;
+    resize: none;
+    margin-bottom: 3vh;
+    color: #000;
+    font-family: Overpass;
+    font-size: 16px;
+    font-weight: 400;
+
+    outline: none;
+    border: none;
+}
+
+.popupCommentContainer>button{
+    background-color: #F3B801;
+    border: none;
+    color: #fff;
+    border-radius: 15px;
+    padding: 6px 64px;
+    cursor: pointer;
+    transition: background-color 0.5s ease; 
+}
+
+.popupCommentContainer>button:hover{
+    color: #F3B801;
+    background-color: #fff;
+}

@@ -1,0 +1,354 @@
+.servicesAppointmentContainer {
+    margin: 1rem;
+    
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #fff;
+    
+    margin-top: -2vh;
+}
+
+.topContainer {
+    display: flex;
+    align-items: center;
+}
+
+.appointmentTitle,
+.appointmentDate {
+    flex: 0 0 30%;
+    margin: 0; 
+}
+
+.appointmentTitle h2{
+    display: inline-flex;
+}
+
+.topContainer,
+.appointmentDescription,
+.price,
+.cartAndBackContainer {
+    margin-left: 2vw;
+}
+
+.appointmentDate {
+    margin-left: 9vw;
+}
+
+.middleContainer {
+    margin-top: -1vh;
+}
+
+.middleContainer .descriptionContainer {
+    margin-right: 1rem; 
+}
+
+.appointmentDescription {
+    margin-top: 1rem; 
+}
+
+.descriptionContainer .descriptionWord {
+    font-weight: bold;
+}
+
+.appointmentDescription .descriptionContent {
+    flex: 1; 
+    word-wrap: break-word;
+    max-width: 100%; 
+    color: #808080; 
+    font-size: 1rem;
+}
+
+.servicesAppointmentContainer .middleContainer .chooseDate {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(4, auto);
+    gap: 4vh;
+    column-gap: 7vw;
+    row-gap: 5vh;
+}
+
+.appointmentDate .datePickerButton{
+    border: none;
+    background-color: transparent;
+}
+
+.appointmentDate .datePickerButton .datePicker {
+    border: none;
+    color: #3C95A9;
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: 500;
+    border-radius: 15px;
+    width: 10vw;
+    min-width: 150px;
+    border: 3px solid #3C95A9;
+
+}
+
+.appointmentDate .datePickerButton .datePicker:hover {
+    border: 3px solid #f4b701;
+    color: #f4b701;
+}
+
+.appointmentDate .datePickerButton .datePicker:focus {
+    outline: none;
+}
+
+.appointmentDate .dateButtonSelected .datePicker {
+    color: white ;
+    background-color: #3C95A9;
+}
+
+.appointmentDate .dateButtonSelected .datePicker:hover {
+    color: white ;
+    background-color: #f4b701;
+    border: 3px solid #f4b701 ;
+}
+
+.servicesAppointmentContainer>.appointmentDate>.datePickerButton {
+    background-color: transparent;
+    border: none;
+    border-radius: 15px;
+    z-index: 101;
+}
+
+.react-datepicker__month-container {
+    border-radius: 0;
+    border: 1px solid #3C95A9;
+}
+
+.react-datepicker__header {
+    background-color: white !important;
+    color: #3C95A9 !important;
+    border-bottom: 1px solid #3C95A9 !important;
+}
+
+.react-datepicker__current-month,
+.react-datepicker__day-name,
+.react-datepicker__day {
+    color: #3C95A9 !important;
+}
+
+.react-datepicker__day--selected {
+    background-color: #3C95A9 !important;
+    color: white !important;
+}
+
+.react-datepicker__close-icon::after {
+    background-color: transparent !important;
+    font-size: 1.25rem !important;
+}
+
+.customDatePickerInput {
+    border: none;
+    background-color: transparent;
+    color: #3C95A9;
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: 500;
+    border-radius: 15px;
+    width: 10vw;
+    min-width: 150px;
+    border: 3px solid #3C95A9;
+  }
+  
+  .customDatePickerInput:hover {
+    border: 3px solid #f4b701;
+    color: #f4b701;
+  }
+
+  .react-datepicker__day--disabled {
+    color: #ccc !important;
+    cursor: not-allowed !important;
+}
+
+.react-datepicker__day--disabled:hover {
+    color: #ccc !important;
+}
+
+.react-datepicker__day:not(.react-datepicker__day--disabled):hover {
+    background-color: #3C95A9 !important;
+    color: white !important;
+    cursor: pointer !important;
+}
+
+  
+
+.dateContainer {
+    margin-top: 2vh;
+}
+
+.chooseDate {
+    padding: 1vw;
+    display: flex;
+    flex: 1;
+    max-width: 50vw;
+    align-items: center;
+}
+
+
+.chooseDate button {
+    position: relative;
+    padding: 3px 32px;
+    border-radius: 20px;
+    border: 3px solid #3C95A9;
+    color: #3C95A9;
+    background-color: transparent;
+    font-size: 1.125rem;
+    height: fit-content;
+    transition: padding 0.3s ease;
+}
+
+.chooseDate button:hover {
+    color: #f4b701;
+    border: 3px solid #f4b701;
+    cursor: pointer;
+}
+
+.chooseDate .selected::before {
+    content: "\2714";
+    position: absolute;
+    color: #fff;
+    font-size: 1.125rem;
+    font-weight: bold;
+    left: 8px;
+    bottom: 8%;
+}
+
+.chooseDate .selected {
+    background-color: #3C95A9;
+    border: 3px solid #3C95A9;
+    color: white;
+    padding: 3px 32px 3px 50px;
+}
+
+
+.chooseDate .selected:hover {
+    color: white;
+    background-color: #f4b701;
+}
+
+.chooseDate button.unavailable {
+    background-color: #ccc; 
+    color: #888; 
+    cursor: not-allowed; 
+  }
+  
+
+
+.cartAndBackContainer {
+    display: flex;
+    flex-direction: row;
+    column-gap: 3vw;
+}
+
+.cartBtn,
+.backBtn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    height: 5.5vh;
+    font-size: 0.85rem;
+}
+
+.cartIcon svg {
+    font-size: 20px;
+}
+
+.cartBtn {
+    background-color: #3c95a9;
+    color: white;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 13vw;
+}
+
+.cartBtn:hover {
+    background-color: #f4b701;
+    border: 3px solid #f4b701;
+    cursor: pointer;
+
+}
+
+.bottomContainer .cartAndBackContainer .backBtn {
+    background-color: white;
+    border: #1f7486 solid 0.5px;
+    width: 10vw;
+    color: #3C95A9;
+}
+
+.bottomContainer .cartAndBackContainer .backBtn:hover {
+    color: #f4b701;
+    border: 1px solid #f4b701;
+}
+
+.bottomContainer .price {
+    color: #3C95A9;
+    display: flex;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .servicesAppointmentContainer {
+        margin: 0.5rem;
+        padding: 15px; 
+        margin-top: -1vh; 
+    }
+    
+    .topContainer {
+        flex-direction: column; 
+        align-items: flex-start; 
+    }
+    
+    .appointmentTitle,
+    .appointmentDate {
+        flex: 0 0 100%; 
+        margin: 0.5rem 0;
+        font-size: 80%;
+    }
+    .customDatePickerInput{
+        font-size: 90;
+    }
+    
+    .appointmentDate {
+        margin-left: 0; 
+    }
+
+    .middleContainer .descriptionContainer {
+        margin-right: 0; 
+        margin-top: 0.5rem; 
+    }
+
+    .chooseDate {
+        max-width: 100%;
+        padding: 0.5rem; 
+    }
+
+    .chooseDate button {
+        padding: 3px 20px; 
+        font-size: 0.9rem; 
+        height: auto; 
+    }
+
+    .cartAndBackContainer {
+        flex-direction: column; 
+        column-gap: 0; 
+    }
+
+    .cartBtn,
+    .backBtn {
+        width: 50%;
+        margin-bottom: 0.5rem; 
+        height: auto;
+        font-size: 0.5rem;
+    }
+
+    .cartIcon svg {
+        font-size: 16px; 
+    }
+}

@@ -1,3 +1,9 @@
+.register-pages-container,.reset-pages-container{
+  background-color: #3c95a9;
+  padding-bottom: 0.001%;
+
+}
+
 .register-component {
   display: block;
   justify-content: center;
@@ -8,7 +14,7 @@
   width: 100%;
   height: auto;
   position: absolute;
-  z-index: -1;
+  z-index: 0;
   margin-top: -8%;
 }
 
@@ -42,6 +48,7 @@
   margin-left: 25%;
   color: #3c95a9;
   animation: fadeIn 1s;
+  z-index: 1;
 }
 
 .register-container input::placeholder {
@@ -69,8 +76,8 @@
   border-radius: 50px;
   width: 17%;
   margin-left: 41.5%;
-
   margin-bottom: 33%;
+  z-index: 1;
 }
 
 .register-button:hover {
@@ -87,7 +94,6 @@
   border-radius: 50px;
   width: 17%;
   margin-left: 41.5%;
-
   margin-bottom: 45%;
 }
 
@@ -103,10 +109,12 @@
   height: 90%;
   margin-left: 5%;
   margin-top: 5%;
+  margin-bottom: 9.5%;
   display: grid;
   justify-content: center;
-  margin-bottom: 9.5%;
   border: 2px solid #3c95a9;
+  z-index: 10;
+  position: relative;
 }
 
 .verify-icon {
@@ -121,6 +129,7 @@
   color: #3c95a9;
   font-size: 200%;
   margin-top: 5%;
+
 }
 
 .verification-code-container {
@@ -128,6 +137,7 @@
   justify-content: center;
   margin-left: 1.5%;
   margin-top: 3%;
+
 }
 
 .verification-code-container input {
@@ -140,6 +150,8 @@
   color: #3c95a9;
   padding: 1%;
   text-align: center;
+  z-index: 10;
+
 }
 
 .verification-code-container input:hover {
@@ -165,6 +177,8 @@ input[type="number"]::-webkit-outer-spin-button {
   color: #3c95a9;
   text-align: center;
   margin-top: 10%;
+  z-index: 10;
+
 }
 
 .resend-button {
@@ -176,6 +190,7 @@ input[type="number"]::-webkit-outer-spin-button {
   margin-left: 2%;
   padding: 1%;
   margin-bottom: 20%;
+
 }
 
 .resend-button:hover {

@@ -5,9 +5,11 @@ import PersonIcon from "@mui/icons-material/Person";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { NavLink } from "react-router-dom";
 import { useState, useEffect } from "react";
+import {useSelector} from 'react-redux';
 
 function Header() {
   const [isLogin, setIsLogin] = useState(false);
+  const user = useSelector((state)=>state.user.user);
 
   useEffect(() => {
     //set is login
@@ -29,7 +31,7 @@ function Header() {
       </div>
 
       <div className="actionContainer">
-        {isLogin ? (
+        {user ? (
           <>
             <div className="profile">
               <PersonIcon className="profileIcon" />
@@ -39,7 +41,7 @@ function Header() {
             <LogoutIcon className="actionIcon" />
           </>
         ) : (
-          <NavLink to={"/login"}>
+          <NavLink to={"/authentication/login"}>
             <AccountCircleIcon className="actionIcon" />
           </NavLink>
         )}

@@ -1,12 +1,12 @@
-body{
-    background-color: #3C95A9;
-}
+
 
 .login-pages{
     display: flex;
     height: fit-content;
-    margin-bottom: 1%;
+    margin-bottom: 0vh;
     height: 100vh;
+    background-color: #3C95A9;
+
 }
 
 .login-component{
@@ -118,16 +118,15 @@ body{
     height: 100%;
     width: 120%;
     margin-left: -20%;
-    z-index: -2;
+    z-index: 1;
 }
 .animal-pic{
     position: absolute;
-    margin-left: -54%;
+    right: 0;
     height: 100%;
     width: auto;
-    z-index: -1;
+    z-index: 2;
     margin-top: 1%;
-    
 }
 
 

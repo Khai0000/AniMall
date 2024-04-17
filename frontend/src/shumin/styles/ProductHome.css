@@ -1,0 +1,314 @@
+.Upper-section {
+    width: 100%; 
+    display: flex; 
+    height:6%;
+    padding: 2%;
+    margin-bottom: 1%;
+    background-color: white;
+    align-items: center;
+    justify-content: space-between;
+}
+ 
+.inputContainer {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    max-width: 34vw;
+    margin-left:2.5%;
+    position: relative;
+    margin-right: 6%;
+}
+
+.searchBar {
+    border: 1px solid #3C95A9;
+    border-radius: 15px;
+    filter: drop-shadow(0 2px 4px rgba(60, 149, 169, 0.5));
+    font-size: 1.125rem;
+    padding: 3px 40px 3px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.10);
+    transition: border-color 0.3s ease, filter 0.3s ease;
+    width: 100%;
+    position: relative;
+    color: #666;
+}
+
+.searchBar:focus {
+    border-color: #f4b701;
+    --shadow-color: rgba(244, 183, 1, 0.5);
+    filter: drop-shadow(0 2px 4px rgba(244, 183, 1, 0.5));
+    outline: none;
+    color: #666;
+}
+
+.searchIcon {
+    position: absolute;
+    right: 10px;
+    color: #3C95A9;
+    z-index: 1;
+}
+
+.inputContainer:focus-within .searchIcon {
+    color: #f4b701;
+    /* Change color to yellow when input container is focused */
+}
+
+.searchIcon:hover {
+    cursor: pointer;
+}
+
+.Upper-section-price-range-button {
+    width: 17%;
+    margin-right: 23%;
+    background-color: #3C95A9;
+    border: transparent;
+    color: #FFF;
+    border-radius: 10px;
+    font-size: 96%;
+    padding: 0.6%;
+}
+
+.Upper-section-price-range-button.pet{
+    margin-right: 3.5%;
+}
+  
+.Upper-section-price-range-button:hover,
+.Upper-section-price-range-button:active{
+    background-color: #F3B801;
+}
+
+.Upper-section-cart-button {
+    background-color: white;
+    color: #3C95A9;
+    border: none;
+    cursor: pointer;
+    height: 15%;
+    width: 10%;
+}
+
+
+#Upper-section-cart-button-text {
+    width: 10%;
+    background-color: #FFF;
+    color: #3C95A9;
+    border: transparent;
+    height: 15%;
+    font-size: 150%;
+    margin-left: 8%;
+}
+
+.Upper-section-cart-button:active svg path,
+.Upper-section-cart-button:hover svg path{
+  fill: #F3B801;
+}
+
+.Upper-section-cart-button:active #Upper-section-cart-button-text,
+.Upper-section-cart-button:hover #Upper-section-cart-button-text {
+  color:#F3B801;
+}
+
+.Upper-section-min-price,
+.Upper-section-max-price{
+    width: 19%;
+    background-color: white;
+    border: 1.35px solid #3C95A9;
+    border-radius: 10px;
+    font-size: 96%;
+    padding: 1.5%;
+    height: 15%;
+}
+
+.Upper-section-price-range-container.product{
+    margin-left:-5.8%;
+}
+
+.Upper-section-price-range-container.pet{
+    margin-left: 1%;
+    margin-right: -14.3%;
+}
+
+.Upper-section-to{
+    color: #3C95A9;
+}
+
+.Upper-section-min-price{
+    margin-right: 2%;
+}
+
+.Upper-section-max-price{
+    margin-left: 2%;
+}
+
+.Upper-section-search-container.show-price-range {
+    margin-right: 2.5%; 
+}
+
+.Upper-section-min-price:focus,
+.Upper-section-max-price:hover,
+.Upper-section-min-price:hover,
+.Upper-section-max-price:focus{    
+    border-color: #F3B801;
+    outline: none;
+}
+
+.Upper-section-adoption-button{
+    background-color: white;
+    border: 2px solid #3C95A9;
+    color: #3C95A9;
+    border-radius: 40px;
+    font-size: 96%;
+    padding-left: 1%;
+    padding-right: 1%;
+    padding-top: 0.5%;
+    padding-bottom: 0.5%;
+}
+
+.Upper-section-adoption-button:hover{
+    border: 2px solid #F3B801;
+    color: #F3B801;
+}
+
+.Upper-section-adoption-button.selected::before {
+    
+    position: absolute;
+    color: #fff;
+    font-size: 1.125rem;
+    font-weight: bold;
+    left: 8px;
+    bottom: 8%;
+}
+
+.Upper-section-adoption-button.selected{
+    content: "\2714";
+    background-color: #3C95A9;
+    color: white;
+    border-radius: 40px;
+    font-size: 96%;
+    padding-left: 1%;
+    padding-right: 1%;
+    padding-top: 0.5%;
+    padding-bottom: 0.5%;
+}
+
+.Upper-section-adoption-button.selected:hover{
+    content: "\2714";
+    background-color: #F3B801;
+    color: white;
+    border-radius: 40px;
+    font-size: 96%;
+    padding-left: 1%;
+    padding-right: 1%;
+    padding-top: 0.5%;
+    padding-bottom: 0.5%;
+}
+
+.Product-category-row.dog,
+.Product-category-row.others,
+.Product-category-row.cat{
+    padding-left: 1%;
+    padding-top: 2%;
+    padding-bottom:3%;
+}
+
+.Product-category-row-content{
+    display: flex;
+    justify-content:flex-start;
+    overflow-x: auto;
+    gap: 3%;
+    padding-right: 3%;
+}
+
+.Product-category-row-content::-webkit-scrollbar {
+    width: 0px; 
+}
+
+.Product-category-row.dog,
+.Product-category-row.others{
+    background-color: #DCEAEB;
+}
+
+.Product-category-row-caption-container{
+    padding-left: 2.5%;
+    margin-bottom: 2%;
+    font-weight: bold;
+    font-size: 1.25em;
+    align-items: center;
+    display: flex;
+}
+
+.Product-category-button{
+    background-color: transparent;
+    border: none;
+}
+
+.Product-category-button:hover svg path{
+    stroke: #F3B801; 
+    stroke-width: 2; 
+    stroke-linecap: round; 
+    filter: drop-shadow(0px 0px 4px #F3B801);
+}
+
+.Product-category-row-content-noproduct{
+    margin-left: 1%;
+    margin-top: 6%;
+    margin-bottom: 6%;
+    justify-content: center;
+    display: flex;
+}
+
+.NoProductContainer{
+    height: 66vh;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}
+
+.circularProgress {
+    color: #3C95A9 !important;
+}
+
+.loadingContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 66vh;
+    row-gap: 0;
+    gap: 0;
+}
+
+.seller-link {
+    border-radius: 20px;
+    background-color: antiquewhite;
+    width: 8rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    text-decoration: none;
+    color: black; 
+    font-weight: bold;
+    margin-left: 50%;
+  }
+  
+.Seller-product{
+    margin-top:1rem ;
+    margin-bottom: 1rem;
+  }
+
+@media screen and (max-width: 1068px) {
+    .Upper-section-search-container.product{
+        width: 83%;
+    }
+
+    .Upper-section-cart-button.product{
+        margin-left: -15%;
+    }
+
+    .Upper-section-search-container.pet{
+        width: 75%;
+    }
+
+    .Upper-section-price-range-container.pet{
+       margin-right: -22%;
+    }
+}

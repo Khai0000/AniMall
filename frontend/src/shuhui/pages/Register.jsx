@@ -7,11 +7,42 @@ import VerifyIcon from "../assets/images/verify_icon.png";
 function Register() {
   const [showVerify, setShowVerify] = useState(false);
   const [verificationCode, setVerificationCode] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmedPassword, setConfirmedPassword] = useState("");
   const inputRefs = useRef([]);
   const navigate = useNavigate();
 
-  const handleRegisterClick = () => {
+  const handleRegisterClick = (e) => {
+
+    e.preventDefault();
+
+    if (username.trim().length === 0) {
+      alert("Please enter a username");
+      return;
+    }
+    // can have blank space,
+
+    if (email.trim().length === 0) {
+      alert("Please enter an email");
+      return;
+    }
+    // check format 
+
+    if (password.trim().length === 0) {
+      alert("Please enter a password");
+      return;
+    }
+    if (confirmedPassword.trim().length === 0) {
+      alert("Please confirm your password");
+      return;
+    }
+    // is strong password or not.
+    // if password entered === confirmedPassword
+
     setShowVerify(true);
+    // send verification email to the input email
   };
 
   const handleInputChange = (index, value) => {
@@ -25,7 +56,7 @@ function Register() {
 
     if (newCode.length === 6) {
       if (newCode.join("") === "123456") {
-        navigate("/login"); // Redirect to product page if code is correct
+        navigate("/authentication/login"); // Redirect to product page if code is correct
       } else {
         // Clear all input fields if code is incorrect
         setVerificationCode("");
@@ -45,32 +76,40 @@ function Register() {
         <div className="register-pages">
           <div className="register-component">
             <h1 className="register-title">Create Account</h1>
-            <form className="register-container">
+            <form className="register-container" onSubmit={handleRegisterClick}>
               <input
+                required
                 className="register-username"
                 type="text"
                 placeholder="Username"
+                value={username}
+                onChange={(e)=>setUsername(e.target.value)}
               />
               <input
+                required
                 className="register-email"
                 type="email"
                 placeholder="Email"
+                value={email}
+                onChange={(e)=>setEmail(e.target.value)}
               />
               <input
+                required
                 className="register-password"
                 type="password"
                 placeholder="Password"
+                value={password}
+                onChange={(e)=>setPassword(e.target.value)}
               />
               <input
+                required
                 className="register-confirmpassword"
                 type="password"
                 placeholder="Confirmed Password"
+                value={confirmedPassword}
+                onChange={(e)=>setConfirmedPassword(e.target.value)}
               />
-              <button
-                className="register-button"
-                onClick={handleRegisterClick}
-                type="button"
-              >
+              <button className="register-button" type="submit">
                 REGISTER
               </button>
             </form>

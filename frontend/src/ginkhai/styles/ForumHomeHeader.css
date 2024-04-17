@@ -1,0 +1,189 @@
+.forumFilterContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.forumFilterContainer .inputContainer {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    max-width: 34vw;
+    position: relative;
+    margin-right: 6%;
+}
+
+#searchBar {
+    border: 1px solid #3C95A9;
+    border-radius: 15px;
+    filter: drop-shadow(0 2px 4px rgba(60, 149, 169, 0.5));
+    font-size: 1.125rem;
+    padding: 3px 40px 3px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.10);
+    transition: border-color 0.3s ease, filter 0.3s ease;
+    width: 100%;
+    position: relative;
+    color: #666;
+}
+
+#searchBar:focus {
+    border-color: #f4b701;
+    --shadow-color: rgba(244, 183, 1, 0.5);
+    filter: drop-shadow(0 2px 4px rgba(244, 183, 1, 0.5));
+    outline: none;
+    color: #666;
+}
+
+#searchBar:hover {
+    border-color: #f4b701;
+    --shadow-color: rgba(244, 183, 1, 0.5);
+    filter: drop-shadow(0 2px 4px rgba(244, 183, 1, 0.5));
+    outline: none;
+    color: #666;
+
+}
+
+
+.forumFilterContainer .searchIcon {
+    position: absolute;
+    right: 10px;
+    color: #3C95A9;
+    z-index: 1;
+    transition: color 0.3s ease, filter 0.3s ease;
+}
+
+.focusedIcon{
+    color: #f4b701 !important;
+}
+
+.inputContainer:focus-within .searchIcon {
+    color: #f4b701;
+    /* Change color to yellow when input container is focused */
+}
+
+.forumFilterContainer .searchIcon:hover {
+    cursor: pointer;
+}
+
+
+.forumButtonContainer {
+    display: flex;
+    flex: 1;
+    max-width: 50vw;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.forumButtonContainer .categoryButton {
+    position: relative;
+    padding: 3px 32px;
+    border-radius: 20px;
+    border: 3px solid #3C95A9;
+    color: #3C95A9;
+    background-color: transparent;
+    font-size: 1.125rem;
+    height: fit-content;
+    transition: padding 0.3s ease;
+}
+
+.forumButtonContainer .categoryButton:hover {
+    color: #f4b701;
+    border: 3px solid #f4b701;
+    cursor: pointer;
+}
+
+.forumButtonContainer .selected::before {
+    content: "\2714";
+    position: absolute;
+    color: #fff;
+    font-size: 1.125rem;
+    font-weight: bold;
+    left: 8px;
+    bottom: 8%;
+}
+
+.forumButtonContainer .selected {
+    background-color: #3C95A9;
+    border: 3px solid #3C95A9;
+    color: white;
+    padding: 3px 32px 3px 50px;
+}
+
+.forumButtonContainer .selected:hover {
+    color: white;
+    background-color: #f4b701;
+}
+
+.forumButtonContainer .buttonContainer {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.datePickerButton .datePicker {
+    border: none;
+    color: #3C95A9;
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: 500;
+    border-radius: 15px;
+    width: 10vw;
+    min-width: 150px;
+    border: 3px solid #3C95A9;
+
+}
+
+.datePickerButton .datePicker:hover {
+    border: 3px solid #f4b701;
+    color: #f4b701;
+}
+
+.datePickerButton .datePicker:focus {
+    outline: none;
+}
+
+.dateButtonSelected .datePicker {
+    color: white ;
+    background-color: #3C95A9;
+}
+
+.dateButtonSelected .datePicker:hover {
+    color: white ;
+    background-color: #f4b701;
+    border: 3px solid #f4b701 ;
+}
+
+.forumFilterContainer>.forumButtonContainer>.datePickerButton {
+    background-color: transparent;
+    border: none;
+    border-radius: 15px;
+    z-index: 101;
+}
+
+.react-datepicker__month-container {
+    border-radius: 0;
+    border: 1px solid #3C95A9;
+}
+
+.react-datepicker__header {
+    background-color: white !important;
+    color: #3C95A9 !important;
+    border-bottom: 1px solid #3C95A9 !important;
+}
+
+.react-datepicker__current-month,
+.react-datepicker__day-name,
+.react-datepicker__day {
+    color: #3C95A9 !important;
+}
+
+.react-datepicker__day--selected {
+    background-color: #3C95A9 !important;
+    color: white !important;
+}
+
+.react-datepicker__close-icon::after {
+    background-color: transparent !important;
+    font-size: 1.25rem !important;
+}
+

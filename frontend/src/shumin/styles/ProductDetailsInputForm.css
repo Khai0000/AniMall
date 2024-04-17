@@ -1,0 +1,304 @@
+.image-uploader-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2%;
+    margin-top: 1%;
+    float: left;
+    margin-left: 4%;
+    max-width: 100%; /* Limit the maximum width to the container's width */
+    box-sizing: border-box; /* Include padding in the width calculation */
+}
+
+
+.image-container {
+    width: 33em;
+    height: 28em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.1%;
+    border-radius: 41px;
+    border: 1px solid #EFEFEF;
+    box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.10);
+  }
+  
+  .placeholder {
+    background-image: url('../assets/images/imageplaceholder.png');
+    background-size:100%;
+    color: transparent;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    }
+  
+  .overlay-controls {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .nav-button {
+    font-size: 1.56em;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: #3C95A9;
+    margin-top: 2.35%;
+  }
+
+  .nav-button:hover{
+    color:#F3B801;
+  }
+  
+  .image-indicator {
+    font-size: 1em;
+    color: #333;
+  }
+  
+  .nav-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .pagination-dots {
+    display: flex;
+    margin-top: 2.35%;
+  }
+  
+  .pagination-indicator {
+    cursor: pointer;
+    font-size: 1.5em;
+    color: #ccc;
+    margin: 0 1.5%;
+  }
+  
+  .pagination-indicator.current {
+    color: #3C95A9;
+  }
+  
+  .delete-button {
+    position: absolute;
+    align-items: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color:#3C95A9; 
+    color: white; /* Button text color */
+    border:none;
+    padding: 2%;
+    border-radius: 5px;
+    cursor: pointer;
+    opacity: 0; /* Initially hidden */
+    transition: opacity 0.3s ease;
+  }
+  
+  .delete-button:hover{
+    background-color:#F3B801; 
+  }
+
+  .image-container:hover .delete-button {
+    opacity: 1; /* Show delete button on hover */
+  }
+
+  .image-overlay {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.5);/* Gray transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0; /* Initially hidden */
+    transition: opacity 0.3s ease;
+    width: 33em;
+    height: 28em;
+    padding: 0.1%;
+    border-radius: 41px;
+  }
+  
+  .image-container:hover .image-overlay {
+    opacity: 1; /* Show gray transparent background on hover */
+  }
+  .Product-details-form-container {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding-left: 4%;
+    padding-top: 6%;
+    padding-right: 4%;
+}
+
+.Product-details-form-title-input{
+    width: 50%;
+}
+
+.Product-details-form-description-input{
+    width: 70%;
+}
+
+.Product-details-form-price-input{
+    width: 30%;
+}
+
+.Product-details-form-title-input,
+.Product-details-form-description-input,
+.Product-details-form-price-input,
+.Product-details-form-birthdate-input{
+    padding: 1%;
+    margin-bottom: 1%;
+    border: 1px solid #3C95A9;
+    border-radius: 5px;
+    outline: none;
+}
+
+.Product-details-form-title-input:hover,
+.Product-details-form-description-input:hover,
+.Product-details-form-price-input:hover,
+.Product-details-form-birthdate-input:hover{
+    border: 1px solid #F3B801;
+}
+
+.Product-details-form-title{
+    font-size: 140%;
+    font-weight: bold;
+}
+
+.Product-details-form-description-content{
+    color: gray;
+    word-wrap: break-word;
+    padding-right: 5%;
+}
+
+.Product-details-form-product-categories-container {
+    margin-top: 5%;
+}
+
+.Product-details-form-product-categories-button.accessories {
+    margin-bottom: 5%;
+}
+
+.Product-details-form-product-categories-button {
+    border-radius: 113px;
+    border: 3px solid #3C95A9;
+    background-color: white;
+    padding-left: 4%;
+    padding-right: 4%;
+    margin-right: 2%;
+    color:#3C95A9;
+    padding-top: 0.6%;
+    padding-bottom: 0.6%;
+    transition: padding 0.3s ease;
+    margin-left: 2%;
+}
+
+.Product-details-form-product-categories-button:hover{
+    border: 3px solid #F3B801;
+    color:#F3B801;
+}
+
+.Product-details-form-product-categories-button.focused::before {
+    content: "\2714";
+    position: absolute;
+    color: white;
+    font-size: 1.125rem;
+    font-weight: bold;
+    margin-left: -2.5%;
+    margin-top: -0.41%;
+}
+
+
+.Product-details-form-product-categories-button.focused {
+    background-color: #3C95A9;
+    border: 3px solid #3C95A9;
+    color: white;
+    padding: 3px 32px 3px 50px;
+}
+
+.Product-details-form-product-categories-button.focused:hover{
+    color: white;
+    background-color: #f4b701;
+    border-color: #f4b701;
+}
+
+
+.Product-details-form-price,
+.Product-details-form-price-content  {
+    color: #3C95A9;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+#Product-details-form-add-button {
+    background-color: #3C95A9;
+    border: none;
+    border-radius: 10px;
+    padding: 2%;
+    width: 20%;
+}
+
+.Product-details-form-add-back-button{
+    margin-top: 10%;
+    display: inline-flex;
+    align-items: center;
+}
+
+#Product-details-form-add-button{
+    margin-right: 3%;
+    width: 26%;
+    display: inline-flex;
+    align-items: center; 
+}
+
+#Product-details-form-add-button:hover{
+    background-color: #f4b701;
+}
+
+#Product-details-form-add-button-text{
+    color: white;
+    margin-left: 20%;
+}
+
+#Product-details-form-add-button-icon{
+    margin-left: 10%;
+}
+
+#Product-details-form-back-button {
+    background-color:white;
+    color: #3C95A9;
+    border: 1.3px solid #3C95A9;
+    padding-left: 5%;
+    padding-right:5%;
+    padding-top: 2%;
+    border-radius: 10px;
+    font-size: smaller;
+    padding-bottom: 2%;
+    text-decoration: none;
+}
+
+#Product-details-form-back-button:hover {
+    border: 1.3px solid #f4b701;
+    color:#f4b701;
+}
+
+.Product-details-form-birthdate-content{
+  color: gray;
+}
+
+/* Media query for smaller screens */
+@media screen and (max-width: 768px){
+  .image-uploader-container {
+      margin-left: 0; /* Remove left margin on smaller screens */
+  }
+
+  .image-container {
+      max-width: 100%; /* Use full width on smaller screens */
+  }
+
+  #Product-details-form-add-button{
+    margin-right: 10%;
+    width: fit-content;
+  }
+}

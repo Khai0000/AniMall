@@ -1,0 +1,48 @@
+.advPopupContainer {
+  position: fixed;
+  padding: 10vh 10vw;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensures the ad is on top of other content */
+}
+
+.advPopupDialog {
+  position: relative;
+  background-color: transparent; /* Background color of the popup */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  
+}
+
+.advPopupDialog img {
+  max-width: 100%; /* Ensures the image is responsive */
+  border-radius: 10px; /* Optional: if you want rounded corners for the image */
+}
+
+.closeButton {
+  position: absolute;
+  top: 15px; /* Adjust as needed */
+  right: 10px; /* Adjust as needed */
+  border: none;
+  background-color: #3C95A9;
+  color: white;
+  width: 70px;
+  height:70px;
+  border-radius: 50%; /* Circle shape */
+  padding: 0;
+  font-size: 35px; /* Adjust as needed */
+  line-height: 35px; /* Center the 'X' vertically */
+  text-align: center; /* Center the 'X' horizontally */
+  cursor: pointer;
+}
+
+.closeButton:hover {
+  background-color: #F3B801;
+}
