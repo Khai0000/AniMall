@@ -19,8 +19,15 @@ const AddProduct =()=>{
   const [selectedProductTag,setSelectedProductTag]=useState();
   const [hidden,setHidden]=useState();
   const [stockLevel, setStockLevel]=useState();
-  const [rating,setRating]=useState();
-  const [comment,setComment]=useState();
+  const [rating, setRating] = useState({
+    total:0,
+    1:0,
+    2:0,
+    3:0,
+    4:0,
+    5:0,
+  });
+  const [comment, setComment] = useState([]);
 
   const [isDogFocused, setIsDogFocused] = useState(false);
   const [isCatFocused, setIsCatFocused] = useState(false);
@@ -228,8 +235,8 @@ const AddProduct =()=>{
         animaltag: selectedAnimalTag,
         producttag: selectedProductTag,
         price: parseInt(price),
-        ratings: [],
-        comments: [],
+        ratings: rating,
+        comments: comment,
         stockLevel: 1,
         hidden: false,
       };

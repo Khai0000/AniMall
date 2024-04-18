@@ -149,10 +149,12 @@ const ProductDetails = () => {
               </svg>
             </button>
           </div>
-          <div className="comment-body">
-            {product.comments.map((comment, index) => (
+          <div className="commentBody">
+            {product.comments.length === 0 ? (<div className="commentNotFound">
+              <p>No comments for this service yet.</p>
+            </div>) : product.comments.map((comment, index) => (
               <ProductPostComment
-                comments={comment}
+                comment={comment}
                 key={index}
                 title={title}
               />
