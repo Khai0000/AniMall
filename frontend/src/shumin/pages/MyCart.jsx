@@ -65,7 +65,7 @@ function MyCart(){
                     <div>
                         <Suspense fallback={<div>Loading...</div>}>
                         {item.map((item,index)=>(
-                            <CartCard key={item.title} product={item}/>
+                            <CartCard key={item.type==="service"?item.title:item.id} product={item}/>
                         ))}
                         </Suspense>
                     </div>
