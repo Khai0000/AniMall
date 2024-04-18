@@ -1,4 +1,4 @@
-.servicePopupDialog{
+.servicePopupDialog {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -23,7 +23,6 @@
     width: 35px;
     height: 35px;
     border-radius: 10px;
-    padding-top: 5px;
     transform: rotate(45deg);
     cursor: pointer;
     right: 4vw;
@@ -69,86 +68,83 @@
     border: none;
 }
 
-.servicePopupCommentContainer > .buttonContainer{
+.servicePopupCommentContainer>.buttonContainer {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
 }
 
-.servicePopupCommentContainer .ratingButtonContainer > button{
+.servicePopupCommentContainer .ratingButtonContainer>button {
     border-radius: 50%;
     font-weight: bold;
     color: #fff;
-    width: 4vw; 
-    height: 7.8vh; 
-    padding: 0;
+    width: fit-content;
+    height: fit-content;
+    padding: 1.8vh 1.2vw;
+
     border: none;
     margin-left: 0.67rem;
-    transition: font-size 0.3s ease;
-}
-
-.servicePopupCommentContainer .ratingButtonContainer button:hover {
-    border: 1.2px solid #3C95A9;
-    --shadow-color: rgb(242, 184, 10);
-    filter: drop-shadow(0 10px 7px rgba(244, 183, 1, 0.5));
+    transition:  color 0.3s ease;
 }
 
 
 /* Styling for button 1 */
 .servicePopupCommentContainer .ratingButtonContainer button:nth-child(1) {
-    background: linear-gradient(135deg, #ffff6a, #FFD700);
+    background-color: #252D37;
     color: white;
 }
 
 /* Styling for button 2 */
 .servicePopupCommentContainer .ratingButtonContainer button:nth-child(2) {
-    background: linear-gradient(135deg, #ffff64, #FFD700);
+    background-color: #252D37;
     color: white;
 }
 
 /* Styling for button 3 */
 .servicePopupCommentContainer .ratingButtonContainer button:nth-child(3) {
-    background: linear-gradient(135deg, #ffff4d, #FFD700);
+    background-color: #252D37;
     color: white;
 }
 
 /* Styling for button 4 */
 .servicePopupCommentContainer .ratingButtonContainer button:nth-child(4) {
-    background: linear-gradient(135deg, #D4AF37, #FFD700);
+    background-color: #6A6D71;
     color: white;
 }
 
 /* Styling for button 5 */
 .servicePopupCommentContainer .ratingButtonContainer button:nth-child(5) {
-    background: linear-gradient(135deg, #FFD700, #D4AF37);
+    background-color: #F3B801;
     color: white;
 }
 
 
 .servicePopupCommentContainer .ratingButtonContainer button.selected {
-    border: 3px solid #2F4F4F;
-    color: #8A572D;
-  }
-  
+    background-color: white ;
+    color: black ;
+    border: 1px solid #000;
+
+}
 
 
-.servicePopupCommentContainer>.buttonContainer>button{
+
+.servicePopupCommentContainer>.buttonContainer>button {
     background-color: #F3B801;
     border: none;
     color: #fff;
     border-radius: 15px;
     padding: 6px 64px;
     cursor: pointer;
-    transition: background-color 0.5s ease; 
+    transition: background-color 0.5s ease;
 }
 
-.servicePopupCommentContainer>.buttonContainer .submitBtn:hover{
+.servicePopupCommentContainer>.buttonContainer .submitBtn:hover {
     color: #F3B801;
     background-color: #fff;
 }
 
-.popupTitle .titlePopUp{
+.popupTitle .titlePopUp {
     color: #F3B801;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     font-weight: bold;

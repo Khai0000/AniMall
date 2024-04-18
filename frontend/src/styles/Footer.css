@@ -8,8 +8,7 @@ footer {
 }
 
 footer {
-    opacity: 0;
-    transition: opacity 0.8s;
+    opacity: 1;
 }
 
 footer.reveal {
