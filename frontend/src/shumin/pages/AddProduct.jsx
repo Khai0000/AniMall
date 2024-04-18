@@ -145,7 +145,8 @@ const AddProduct =()=>{
         setDescription(e.target.value);
         toggleDescription();
       } else if (fieldType === "price") {
-        setPrice(e.target.value);
+
+        setPrice(parseFloat(e.target.value));
         togglePrice();
       }
     }
@@ -447,7 +448,7 @@ const AddProduct =()=>{
               className="Product-details-form-price-input"
               onKeyPress={(e) => handleKeyPress(e, "price")}
               value={price}
-              onChange={(e) => setPrice(e.target.value)}
+              onChange={(e) => setPrice(parseFloat(e.target.value))}
             />
           ) : (
             <span className="Product-details-form-price-content">

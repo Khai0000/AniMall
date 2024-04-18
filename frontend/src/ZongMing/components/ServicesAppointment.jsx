@@ -109,6 +109,8 @@ const ServicesAppointment = ({ serviceData }) => {
         slot: slot,
       };
 
+      console.log("price",serviceData.price);
+
       dispatch(addServiceToCart(serviceDetails));
 
       setSlotsAvailability((prevAvailability) => ({

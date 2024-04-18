@@ -162,28 +162,26 @@ const SellerProductCard = ({ product }) => {
             {product.title}
           </h4>
         </Link>
-        <div className="seller-product-card-quantityControlContainer">
-          <button
-            className="seller-product-card-minus-button"
-            onClick={() => setNewQuantity("minus")}
-          >
-            -
-          </button>
+        <button
+          className="seller-product-card-minus-button"
+          onClick={() => setNewQuantity("minus")}
+        >
+          -
+        </button>
 
-          <input
-            type="number"
-            className="seller-product-card-quantity-input"
-            value={quantity}
-            onChange={handleQuantityChange}
-            onKeyPress={handleKeyPress}
-          ></input>
-          <button
-            className="seller-product-card-plus-button"
-            onClick={() => setNewQuantity("plus")}
-          >
-            +
-          </button>
-        </div>
+        <input
+          type="number"
+          className="seller-product-card-quantity-input"
+          value={quantity}
+          onChange={handleQuantityChange}
+          onKeyPress={handleKeyPress}
+        ></input>
+        <button
+          className="seller-product-card-plus-button"
+          onClick={() => setNewQuantity("plus")}
+        >
+          +
+        </button>
 
         <h4 className="seller-product-card-price">{product.price}</h4>
         <button

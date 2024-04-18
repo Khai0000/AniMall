@@ -60,11 +60,12 @@ const SellerServiceCard = ({service}) => {
             setIsLoading(false);
           });
       } else {
-        
-        console.error(
-          "Service image is not in the expected format:",
-          service.serviceImages[0]
-        );
+        setImage(service.serviceImages[0]);
+        // console.log(service.serviceImages[0]);
+        // console.error(
+        //   "Service image is not in the expected format:",
+        //   service.serviceImages[0]
+        // );
         setIsLoading(false);
       }
     }

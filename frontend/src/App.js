@@ -5,12 +5,11 @@ import {
   Navigate,
   RouterProvider,
 } from "react-router-dom";
-import * as CommonPages from './pages';
-import * as ZongMingPages from './ZongMing/pages';
-import * as ShuminPages from './shumin/pages';
-import * as GinkhaiPages from './ginkhai/pages';
-import * as ShuhuiPages from './shuhui/pages';
-
+import * as CommonPages from "./pages";
+import * as ZongMingPages from "./ZongMing/pages";
+import * as ShuminPages from "./shumin/pages";
+import * as GinkhaiPages from "./ginkhai/pages";
+import * as ShuhuiPages from "./shuhui/pages";
 
 function App() {
   const router = createBrowserRouter([
@@ -24,7 +23,10 @@ function App() {
           path: "/authentication",
           children: [
             { path: "/authentication/login", element: <ShuhuiPages.Login /> },
-            { path: "/authentication/register", element: <ShuhuiPages.Register /> },
+            {
+              path: "/authentication/register",
+              element: <ShuhuiPages.Register />,
+            },
             {
               path: "/authentication/reset-password",
               element: <ShuhuiPages.ResetPassword />,
@@ -43,7 +45,10 @@ function App() {
             },
             { path: "/pet/sellerPet/add-pet", element: <ShuminPages.AddPet /> },
             { path: "/pet/sellerPet", element: <ShuminPages.SellerPet /> },
-            { path: "/pet/sellerPet/add-pet/:id", element: <ShuminPages.AddPet /> },
+            {
+              path: "/pet/sellerPet/add-pet/:id",
+              element: <ShuminPages.AddPet />,
+            },
           ],
         },
         {
@@ -51,8 +56,14 @@ function App() {
           element: <CommonPages.Community />,
           children: [
             { path: "/community", element: <GinkhaiPages.ForumHome /> },
-            { path: "/community/post/:postId", element: <GinkhaiPages.ForumPostDetails /> },
-            { path: "/community/post/add", element: <GinkhaiPages.ForumAddPost /> },
+            {
+              path: "/community/post/:postId",
+              element: <GinkhaiPages.ForumPostDetails />,
+            },
+            {
+              path: "/community/post/add",
+              element: <GinkhaiPages.ForumAddPost />,
+            },
           ],
         },
         {
@@ -60,7 +71,10 @@ function App() {
           element: <CommonPages.Product />,
           children: [
             { path: "/product", element: <ShuminPages.ProductHome /> },
-            { path: "/product/:title", element: <ShuminPages.ProductDetails /> },
+            {
+              path: "/product/:title",
+              element: <ShuminPages.ProductDetails />,
+            },
             {
               path: "/product/ProductCategorized/:category",
               element: <ShuminPages.ProductCategorized />,
@@ -69,7 +83,10 @@ function App() {
               path: "/product/sellerProduct/add-product",
               element: <ShuminPages.AddProduct />,
             },
-            { path: "/product/sellerProduct", element: <ShuminPages.SellerProduct /> },
+            {
+              path: "/product/sellerProduct",
+              element: <ShuminPages.SellerProduct />,
+            },
             {
               path: "/product/sellerProduct/add-product/:id",
               element: <ShuminPages.AddProduct />,
@@ -82,7 +99,10 @@ function App() {
           element: <CommonPages.Services />,
           children: [
             { path: "/services", element: <ZongMingPages.ServiceHome /> },
-            { path: "/services/sellerService", element: <ZongMingPages.SellerService /> },
+            {
+              path: "/services/sellerService",
+              element: <ZongMingPages.SellerService />,
+            },
             {
               path: "/services/serviceDetails/:title",
               element: <ZongMingPages.ServiceDetail />,

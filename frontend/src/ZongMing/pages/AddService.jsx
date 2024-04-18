@@ -13,7 +13,7 @@ const AddService = () => {
   const [editMode, setEditMode] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
+  const [price, setPrice] = useState(0);
   const [hidden, setHidden] = useState();
   const [rating, setRating] = useState({
     total:0,
@@ -67,7 +67,7 @@ const AddService = () => {
         setDescription(e.target.value);
         toggleDescription();
       } else if (fieldType === "price") {
-        setPrice(e.target.value);
+        setPrice(parseFloat(e.target.value));
         togglePrice();
       }
     }
@@ -283,8 +283,8 @@ const AddService = () => {
               className="Product-details-form-price-input"
               onKeyPress={(e) => handleKeyPress(e, "price")}
               value={price}
-              onChange={(e) => setPrice(e.target.value)}
-            />
+              onChange={(e) => setPrice(parseFloat(e.target.value))}
+              />
           ) : (
             <span className="Product-details-form-price-content">
               {price || " XX"}
