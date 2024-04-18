@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-
 export const CartSlice = createSlice({
   name: "cart",
   initialState: [],
@@ -25,8 +24,10 @@ export const CartSlice = createSlice({
       state.push(newService);
     },
     removeItemFromCart: (state, action) => {
+
       return state.filter((item) => item.title !== action.payload);
     },
+
     updateQuantity: (state, action) => {
       const { title, quantity } = action.payload;
 
@@ -39,7 +40,7 @@ export const CartSlice = createSlice({
 
     updateChecked: (state, action) => {
       const { title, checked } = action.payload;
-      const itemToUpdate = state.find(item => item.title === title);
+      const itemToUpdate = state.find((item) => item.title === title);
 
       if (itemToUpdate) {
         itemToUpdate.checked = checked;
@@ -50,7 +51,6 @@ export const CartSlice = createSlice({
     },
   },
 });
-
 
 export const {
   addItemToCart,
