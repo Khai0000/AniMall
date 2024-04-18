@@ -81,7 +81,7 @@ function SellerProduct() {
             <div>
               <Suspense fallback={<div>Loading...</div>}>
                 {products.map((product, index) => (
-                  <SellerProductCard key={index} product={product} />
+                  <SellerProductCard key={product.id} product={product} />
                 ))}
               </Suspense>
             </div>
