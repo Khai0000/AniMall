@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState,useEffect } from "react";
 import "../styles/ProductDetailsInputForm.css";
 import useToggle from "../hooks/useToggle.js";
 import { useDispatch, useSelector } from "react-redux";
-import { addProduct, editProduct } from "../slices/ProductSlice.js";
+import { addProduct,editProduct} from "../slices/ProductSlice.js";
 import { ProductData } from "../data/DummyProductData.js";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link ,useParams,useNavigate} from "react-router-dom";
 
-const AddProduct = () => {
+const AddProduct =()=>{
   const [showTitleInput, toggleTitle] = useToggle();
   const [showDesciptionInput, toggleDescription] = useToggle();
   const [showPriceInput, togglePrice] = useToggle();
@@ -15,27 +15,27 @@ const AddProduct = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState();
-  const [selectedAnimalTag, setSelectedAnimalTag] = useState();
-  const [selectedProductTag, setSelectedProductTag] = useState();
-  const [hidden, setHidden] = useState();
-  const [stockLevel, setStockLevel] = useState();
+  const [selectedAnimalTag, setSelectedAnimalTag]=useState();
+  const [selectedProductTag,setSelectedProductTag]=useState();
+  const [hidden,setHidden]=useState();
+  const [stockLevel, setStockLevel]=useState();
   const [rating, setRating] = useState({
-    total: 0,
-    1: 0,
-    2: 0,
-    3: 0,
-    4: 0,
-    5: 0,
+    total:0,
+    1:0,
+    2:0,
+    3:0,
+    4:0,
+    5:0,
   });
-  const [comment, setComment] = useState();
+  const [comment, setComment] = useState([]);
 
   const [isDogFocused, setIsDogFocused] = useState(false);
   const [isCatFocused, setIsCatFocused] = useState(false);
   const [isFoodFocused, setIsFoodFocused] = useState(false);
   const [isAccessoriesFocused, setIsAccessoriesFocused] = useState(false);
   const [isOthersFocused, setIsOthersFocused] = useState(false);
-  const products = useSelector((state) => state.products);
-  const { id } = useParams();
+  const products = useSelector((state)=> state.products);
+  const { id } = useParams(); 
 
   //for image
   const [images, setImages] = useState([]);
@@ -52,17 +52,17 @@ const AddProduct = () => {
         setTitle(productToEdit.title);
         setDescription(productToEdit.description);
         setPrice(productToEdit.price);
-        if (productToEdit.animaltag === "dog") {
+        if(productToEdit.animaltag==="dog"){
           setIsDogFocused(true);
-        } else if (productToEdit.animaltag === "cat") {
+        }else if(productToEdit.animaltag==="cat"){
           setIsCatFocused(true);
-        } else if (productToEdit.animaltag === "others") {
+        }else if(productToEdit.animaltag==="others"){
           setIsOthersFocused(true);
         }
 
-        if (productToEdit.producttag === "food") {
+        if(productToEdit.producttag==="food"){
           setIsFoodFocused(true);
-        } else {
+        }else{
           setIsAccessoriesFocused(true);
         }
         setImages(productToEdit.image);
@@ -76,22 +76,23 @@ const AddProduct = () => {
   }, [id, products]);
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch=useDispatch();
 
   useEffect(() => {
-    if (products.length === 0) {
-      ProductData.forEach((product) => {
-        dispatch(addProduct(product));
-      });
+    if ( products.length === 0) {
+        ProductData.forEach((product) => {
+            dispatch(addProduct(product));
+        }
+    );
     }
   }, [dispatch, products]);
 
-  const toggleSelectedAnimalTag = (button) => {
+  const toggleSelectedAnimalTag= (button) => {
     if (selectedAnimalTag === button) {
       setSelectedAnimalTag(null);
       switch (button) {
         case "dog":
-          setIsDogFocused(false);
+          setIsDogFocused(false); 
           break;
         case "cat":
           setIsCatFocused(false);
@@ -110,12 +111,12 @@ const AddProduct = () => {
     }
   };
 
-  const toggleSelectedProductTag = (button) => {
+  const toggleSelectedProductTag= (button) => {
     if (selectedProductTag === button) {
       setSelectedProductTag(null);
       switch (button) {
         case "food":
-          setIsFoodFocused(false);
+          setIsFoodFocused(false); 
           break;
         case "accessories":
           setIsAccessoriesFocused(false);
@@ -151,7 +152,7 @@ const AddProduct = () => {
         setDescription(e.target.value);
         toggleDescription();
       } else if (fieldType === "price") {
-        setPrice(parseFloat(e.target.value));
+        setPrice(e.target.value);
         togglePrice();
       }
     }
@@ -160,7 +161,7 @@ const AddProduct = () => {
   const getSelectedTags = () => {
     let animalTag = "";
     let productTag = "";
-
+  
     if (isDogFocused) {
       animalTag = "dog";
     } else if (isCatFocused) {
@@ -168,18 +169,19 @@ const AddProduct = () => {
     } else if (isOthersFocused) {
       animalTag = "others";
     }
-
+  
     if (isFoodFocused) {
       productTag = "food";
     } else if (isAccessoriesFocused) {
       productTag = "accessories";
     }
-
+  
     return {
       animalTag,
       productTag,
     };
   };
+  
 
   const handleOnAddProductClick = () => {
     const priceString = String(price);
@@ -187,24 +189,24 @@ const AddProduct = () => {
       alert("Please provide a title for your product.");
       return;
     }
-
+  
     if (!description.trim()) {
       alert("Please provide the description for your product.");
       return;
     }
-
-    if (!priceString.trim() || isNaN(price)) {
+  
+    if (!priceString.trim() || isNaN(price)) { 
       alert("Please provide the price for your product.");
       return;
     }
-
+  
     if (images.every((image) => image === null)) {
       alert("Please upload at least one image for your product.");
       return;
     }
-
+  
     const { animalTag, productTag } = getSelectedTags();
-
+  
     if (editMode) {
       const updatedProduct = {
         id,
@@ -213,7 +215,7 @@ const AddProduct = () => {
         image: images.filter((image) => image !== null),
         animaltag: animalTag,
         producttag: productTag,
-        price: parseInt(price),
+        price:parseInt(price),
         ratings: rating,
         comments: comment,
         stockLevel: stockLevel,
@@ -224,7 +226,7 @@ const AddProduct = () => {
     } else {
       // Generate ID for the new product
       const newProductId = generateProductId();
-
+  
       const newProduct = {
         title: title,
         id: newProductId,
@@ -234,15 +236,16 @@ const AddProduct = () => {
         producttag: selectedProductTag,
         price: parseInt(price),
         ratings: rating,
-        comments: [],
+        comments: comment,
         stockLevel: 1,
         hidden: false,
       };
-
+  
       dispatch(addProduct(newProduct));
     }
     navigate(-1);
   };
+  
 
   const triggerFileInput = () => {
     if (currentImageIndex === -1 || images.length === 0) {
@@ -251,9 +254,7 @@ const AddProduct = () => {
   };
 
   const handleImageChange = (e) => {
-    const newImages = Array.from(e.target.files).map((file) =>
-      URL.createObjectURL(file)
-    );
+    const newImages = Array.from(e.target.files).map((file) => URL.createObjectURL(file));
     setImages([...images, ...newImages]);
     setCurrentImageIndex(images.length + newImages.length - 1);
   };
@@ -267,16 +268,10 @@ const AddProduct = () => {
     }
 
     let newIndex = currentImageIndex;
-    if (direction === "prev") {
-      newIndex =
-        currentImageIndex === -1
-          ? images.length - 1
-          : currentImageIndex > 0
-          ? currentImageIndex - 1
-          : images.length - 1;
-    } else if (direction === "next") {
-      newIndex =
-        currentImageIndex < images.length - 1 ? currentImageIndex + 1 : -1;
+    if (direction === 'prev') {
+      newIndex = currentImageIndex === -1 ? images.length - 1 : currentImageIndex > 0 ? currentImageIndex - 1 : images.length - 1;
+    } else if (direction === 'next') {
+      newIndex = currentImageIndex < images.length - 1 ? currentImageIndex + 1 : -1;
     }
     setCurrentImageIndex(newIndex);
   };
@@ -287,118 +282,90 @@ const AddProduct = () => {
     }
 
     // Check if the image source is from the file explorer or already a URL
-    const isImageFromFileExplorer =
-      images[currentImageIndex].startsWith("blob:"); // Assuming file explorer URLs start with 'blob:'
+    const isImageFromFileExplorer = images[currentImageIndex].startsWith('blob:'); // Assuming file explorer URLs start with 'blob:'
 
     if (isImageFromFileExplorer) {
-      return (
-        <img
-          src={images[currentImageIndex]}
-          alt="Product for sales"
-          style={{ maxWidth: "100%", maxHeight: "100%" }}
-        />
-      );
-    } else {
-      if (images.length === 0) {
-        return null;
-      } else if (images.length === 1) {
         return (
           <img
-            src={require(`../assets/images/${images[0]}`)}
+            src={images[currentImageIndex]}
             alt="Product for sales"
-            style={{ maxWidth: "100%", maxHeight: "100%" }}
+            style={{ maxWidth: '100%', maxHeight: '100%' }}
           />
         );
-      } else if (images.length === 2) {
-        return (
-          <>
-            {currentImageIndex === 0 && (
+        } else {
+          if (images.length === 0) {
+            return null;
+          } else if (images.length === 1) {
+            return (
               <img
                 src={require(`../assets/images/${images[0]}`)}
                 alt="Product for sales"
                 style={{ maxWidth: "100%", maxHeight: "100%" }}
               />
-            )}
-            {currentImageIndex === 1 && (
+            );
+          } else if (images.length === 2) {
+            return (
+              <>
+                {currentImageIndex === 0 && (
+                  <img
+                    src={require(`../assets/images/${images[0]}`)}
+                    alt="Product for sales"
+                    style={{ maxWidth: "100%", maxHeight: "100%" }}
+                  />
+                )}
+                {currentImageIndex === 1 && (
+                  <img
+                    src={require(`../assets/images/${images[1]}`)}
+                    alt="Product for sales"
+                    style={{ maxWidth: "100%", maxHeight: "100%" }}
+                  />
+                )}
+              </>
+            );
+          } else {
+            return (
               <img
-                src={require(`../assets/images/${images[1]}`)}
+                src={require(`../assets/images/${images[currentImageIndex]}`)}
                 alt="Product for sales"
                 style={{ maxWidth: "100%", maxHeight: "100%" }}
               />
-            )}
-          </>
-        );
-      } else {
-        return (
-          <img
-            src={require(`../assets/images/${images[currentImageIndex]}`)}
-            alt="Product for sales"
-            style={{ maxWidth: "100%", maxHeight: "100%" }}
-          />
-        );
-      }
-    }
+            );
+          }
+        }
   };
-
-  const handleDeleteImage = () => {
+  
+  
+  const handleDeleteImage=()=>{
     if (currentImageIndex !== -1) {
-      const updatedImages = images.filter(
-        (image, index) => index !== currentImageIndex
-      );
+      const updatedImages = images.filter((image, index) => index !== currentImageIndex);
       setImages(updatedImages);
       setCurrentImageIndex(updatedImages.length > 0 ? 0 : -1); // Set current index to the first image if there are remaining images, otherwise to -1
     }
-  };
+  }
+
 
   return (
     <div>
       <div className="image-uploader-container" onClick={triggerFileInput}>
         <div className="image-container">
           {displayContent()}
-          {currentImageIndex !== -1 && (
+          {currentImageIndex !==-1 && 
             <div className="image-overlay">
-              <button className="delete-button" onClick={handleDeleteImage}>
-                Delete Image
-              </button>
+              <button className="delete-button" onClick={handleDeleteImage}>Delete Image</button>
             </div>
-          )}
+          }
         </div>
         <div className="overlay-controls">
-          <button
-            className="nav-button prev-button"
-            onClick={(e) => navigateImage("prev", e)}
-            disabled={images.length === 0 && currentImageIndex === -1}
-          >
-            {"<"}
-          </button>
+          <button className="nav-button prev-button" onClick={(e) => navigateImage('prev', e)} disabled={images.length === 0 && currentImageIndex === -1}>{'<'}</button>
           <div className="pagination-dots">
             {images.map((_, index) => (
-              <span
-                key={index}
-                className={`pagination-indicator ${
-                  index === currentImageIndex ? "current" : ""
-                }`}
-                onClick={() => setCurrentImageIndex(index)}
-              >
-                •
-              </span>
+              <span key={index} className={`pagination-indicator ${index === currentImageIndex ? 'current' : ''}`} onClick={() => setCurrentImageIndex(index)}>•</span>
             ))}
           </div>
-          <button
-            className="nav-button next-button"
-            onClick={(e) => navigateImage("next", e)}
-            disabled={images.length === 0 && currentImageIndex === -1}
-          >
-            {">"}
-          </button>
+          <button className="nav-button next-button" onClick={(e) => navigateImage('next', e)} disabled={images.length === 0 && currentImageIndex === -1}>{'>'}</button>
+          
         </div>
-        <input
-          type="file"
-          accept="image/*"
-          multiple
-          onChange={handleImageChange}
-          style={{ display: "none" }}
-        />
+        <input type="file" accept="image/*" multiple onChange={handleImageChange} style={{ display: 'none' }} />
       </div>
       <div className="Product-details-form-container">
         <div onClick={toggleTitle}>
@@ -411,16 +378,12 @@ const AddProduct = () => {
               onChange={(e) => setTitle(e.target.value)}
             />
           ) : (
-            <span className="Product-details-form-title">
-              {title || "Title"}
-            </span>
+            <span className="Product-details-form-title">{title || "Title"}</span>
           )}
         </div>
         <div onClick={toggleDescription}>
           <br />
-          <span className="Product-details-form-description">
-            Description:{" "}
-          </span>
+          <span className="Product-details-form-description">Description: </span>
           {showDesciptionInput ? (
             <input
               onClick={(e) => e.stopPropagation()}
@@ -436,53 +399,49 @@ const AddProduct = () => {
           )}
         </div>
         <div className="Product-details-form-product-categories-container">
-          <span className="Product-details-form-product-categories-animal">
-            Animal type:{" "}
-          </span>
+          <span className="Product-details-form-product-categories-animal">Animal type: </span>
           <button
-            className={`Product-details-form-product-categories-button ${
-              isDogFocused ? "focused" : ""
-            }`}
-            onClick={() => toggleSelectedAnimalTag("dog")}
-          >
-            Dog
-          </button>
-          <button
-            className={`Product-details-form-product-categories-button ${
-              isCatFocused ? "focused" : ""
-            }`}
-            onClick={() => toggleSelectedAnimalTag("cat")}
-          >
-            Cat
-          </button>
-          <button
-            className={`Product-details-form-product-categories-button ${
-              isOthersFocused ? "focused" : ""
-            }`}
-            onClick={() => toggleSelectedAnimalTag("others")}
-          >
-            Others
+              className={`Product-details-form-product-categories-button ${
+                  isDogFocused ? "focused" : ""
+              }`}
+              onClick={() => toggleSelectedAnimalTag("dog")}
+              >
+              Dog
+              </button>
+              <button
+              className={`Product-details-form-product-categories-button ${
+                  isCatFocused ? "focused" : ""
+              }`}
+              onClick={() => toggleSelectedAnimalTag("cat")}
+              >
+              Cat
+              </button>
+              <button
+              className={`Product-details-form-product-categories-button ${
+                  isOthersFocused ? "focused" : ""
+              }`}
+              onClick={() => toggleSelectedAnimalTag("others")}
+              >
+              Others
           </button>
         </div>
         <div className="Product-details-form-product-categories-container">
-          <span className="Product-details-form-product-categories-producttype">
-            Product type:{" "}
-          </span>
+          <span className="Product-details-form-product-categories-producttype">Product type:  </span>
           <button
-            className={`Product-details-form-product-categories-button ${
-              isFoodFocused ? "focused" : ""
-            } accessories`}
-            onClick={() => toggleSelectedProductTag("food")}
-          >
-            Food
-          </button>
-          <button
-            className={`Product-details-form-product-categories-button ${
-              isAccessoriesFocused ? "focused" : ""
-            } accessories`}
-            onClick={() => toggleSelectedProductTag("accessories")}
-          >
-            Accessories
+              className={`Product-details-form-product-categories-button ${
+                  isFoodFocused ? "focused" : ""
+              } accessories`}
+              onClick={() => toggleSelectedProductTag("food")}
+              >
+              Food
+              </button>
+              <button
+              className={`Product-details-form-product-categories-button ${
+                  isAccessoriesFocused ? "focused" : ""
+              } accessories`}
+              onClick={() => toggleSelectedProductTag("accessories")}
+              >
+              Accessories
           </button>
         </div>
         <div onClick={togglePrice}>
@@ -495,7 +454,7 @@ const AddProduct = () => {
               className="Product-details-form-price-input"
               onKeyPress={(e) => handleKeyPress(e, "price")}
               value={price}
-              onChange={(e) => setPrice(parseFloat(e.target.value))}
+              onChange={(e) => setPrice(e.target.value)}
             />
           ) : (
             <span className="Product-details-form-price-content">
@@ -504,10 +463,7 @@ const AddProduct = () => {
           )}
         </div>
         <div className="Product-details-form-add-back-button">
-          <button
-            id="Product-details-form-add-button"
-            onClick={handleOnAddProductClick}
-          >
+          <button id="Product-details-form-add-button" onClick={handleOnAddProductClick}>
             <svg
               id="Product-details-form-add-button-icon"
               xmlns="http://www.w3.org/2000/svg"
@@ -521,17 +477,12 @@ const AddProduct = () => {
                 fill="white"
               />
             </svg>
-            {editMode ? (
+            {editMode?
               <span id="Product-details-form-add-button-text">Save</span>
-            ) : (
-              <span id="Product-details-form-add-button-text">Add</span>
-            )}
+              :<span id="Product-details-form-add-button-text">Add</span>}
           </button>
-          <Link
-            to={`/product/sellerProduct`}
-            id="Product-details-form-back-button"
-          >
-            Go Back
+          <Link to={`/product/sellerProduct`} id="Product-details-form-back-button">
+              Go Back
           </Link>
         </div>
       </div>
