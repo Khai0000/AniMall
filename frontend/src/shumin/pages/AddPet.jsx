@@ -97,7 +97,7 @@ const AddPet = () => {
       return "A0001"; // If no pets, start with A0001
     }
 
-    const lastPetId = pets[pets.length - 1].id;
+    const lastPetId = pets[0].id;
     const lastIdNumber = parseInt(lastPetId.slice(1), 10);
     const newIdNumber = lastIdNumber + 1;
     const paddedNewId = String(newIdNumber).padStart(4, "0");

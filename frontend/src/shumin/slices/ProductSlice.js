@@ -49,7 +49,8 @@ export const ProductSlice =createSlice({
             }
           }
           if (!isDuplicate) {
-            return [...state,newProduct];
+            console.log("Hi I'm here");
+            return [newProduct,...state];
           }
         }, 
         removeProduct(state,action){

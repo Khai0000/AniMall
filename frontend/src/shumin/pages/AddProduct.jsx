@@ -136,10 +136,11 @@ const AddProduct =()=>{
       return "P0001"; // If no products, start with P0001
     }
 
-    const lastProductId = products[products.length - 1].id;
+    const lastProductId = products[0].id;
     const lastIdNumber = parseInt(lastProductId.slice(1), 10);
     const newIdNumber = lastIdNumber + 1;
     const paddedNewId = String(newIdNumber).padStart(4, "0");
+
     return `P${paddedNewId}`;
   };
 
