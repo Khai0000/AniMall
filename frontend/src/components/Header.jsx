@@ -20,7 +20,7 @@ function Header() {
 
   const handleLogout = () => {
     setIsLogin(false);
-    navigate("/product");
+    navigate("/authentication/login", { replace: true });
     // Dispatch action to remove user from Redux store
     dispatch(removeUser());
   };
@@ -47,7 +47,7 @@ function Header() {
           <>
             <div className="profile" onClick={goToProfile}>
               <PersonIcon className="profileIcon" />
-              {user && <span>{user.username}</span>}
+              {user && <span>{user.username}...</span>}
             </div>
 
             <button className="logoutButton" onClick={handleLogout}>

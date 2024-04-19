@@ -2,15 +2,14 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { updateUser } from "../slices/userSlice";
 import "../styles/Profile.css";
-import PersonIcon from "@mui/icons-material/Person";
 import profileImage from "../assets/images/dog_profile.jpg";
 
 function Profile() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
   const [username, setUsername] = useState(user.username);
-  const [address, setAddress] = useState("Fill in your address here");
-  const [phone, setPhone] = useState("Write down your phone number");
+  const [address, setAddress] = useState("");
+  const [phone, setPhone] = useState("");
   const [usernameError, setUsernameError] = useState("");
   const [addressError, setAddressError] = useState("");
   const [phoneError, setPhoneError] = useState("");
@@ -102,6 +101,7 @@ function Profile() {
                     type="text"
                     name="username"
                     value={username}
+                    placeholder="Fill in your username"
                     onChange={(e) => setUsername(e.target.value)}
                   />
                   {usernameError && (
@@ -124,6 +124,7 @@ function Profile() {
                     className="fieldValue"
                     type="text"
                     name="address"
+                    placeholder="Fill in your address here"
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
                   />
@@ -141,6 +142,7 @@ function Profile() {
                     className="fieldValue"
                     type="text"
                     name="phone"
+                    placeholder="Write down your phone number"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                   />

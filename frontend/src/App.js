@@ -1,8 +1,8 @@
 import "./App.css";
 import Layout from "./Layout/Layout";
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { createBrowserRouter, RouterProvider, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
 import Pet from "./pages/Pet";
 import Community from "./pages/Community";
 import Product from "./pages/Product";
@@ -62,7 +62,7 @@ function App() {
           element: <Pet />,
           children: [
             { path: "/pet", element: <PetHome /> },
-            { path: "/pet/:title", element: isLoggedIn ? <PetDetails /> : <Login /> },
+            { path: "/pet/:title", element: isLoggedIn ? <PetDetails /> : <Navigate to="/authentication/login" replace={true} /> },
             { path: "/pet/PetCategorized/:category", element: <PetCategorized /> },
             { path: "/pet/sellerPet/add-pet", element: <AddPet /> },
             { path: "/pet/sellerPet", element: <SellerPet /> },
@@ -71,7 +71,7 @@ function App() {
         },
         {
           path: "/community",
-          element: isLoggedIn ? <Community /> : <Login />,
+          element: isLoggedIn ? <Community /> : <Navigate to="/authentication/login" replace={true} />,
           children: [
             { path: "/community", element: <ForumHome /> },
             { path: "/community/post/:postId", element: <ForumPostDetails /> },
@@ -83,7 +83,7 @@ function App() {
           element: <Product />,
           children: [
             { path: "/product", element: <ProductHome /> },
-            { path: "/product/:title", element: isLoggedIn ? <ProductDetails /> : <Login /> },
+            { path: "/product/:title", element: isLoggedIn ? <ProductDetails /> : <Navigate to="/authentication/login" replace={true} /> },
             { path: "/product/ProductCategorized/:category", element: <ProductCategorized /> },
             { path: "/product/sellerProduct/add-product", element: <AddProduct /> },
             { path: "/product/sellerProduct", element: <SellerProduct /> },
@@ -99,7 +99,7 @@ function App() {
             { path: "/services/sellerService", element: <SellerService /> },
             {
               path: "/services/serviceDetails/:title",
-              element: isLoggedIn ? <ServiceDetail /> : <Login />,
+              element: isLoggedIn ? <ServiceDetail /> : <Navigate to="/authentication/login" replace={true} />,
             },
             {
               path: "/services/sellerService/add-service",
@@ -111,7 +111,7 @@ function App() {
             },
           ],
         },
-        { path: "/mycart", element: isLoggedIn ? <MyCart /> : <Login /> },
+        { path: "/mycart", element: isLoggedIn ? <MyCart /> : <Navigate to="/authentication/login" replace={true} /> },
       ],
     },
   ]);
