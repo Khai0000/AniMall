@@ -54,10 +54,29 @@ header a.active {
   padding-right: 5px;
 }
 
+.profile:hover {
+  color: #f3b801;
+  cursor: pointer;
+  border: 3px solid #f3b801;
+  box-shadow: 0 0 1px #f3b801;
+}
+
 .actionContainer {
   display: flex;
 }
 
 .profileIcon {
   font-size: small;
+}
+
+.logoutButton {
+  background-color: transparent;
+  border: none;
+  color: #3c95a9;
+  cursor: pointer;
+}
+
+.logoutButton:hover {
+  color: #f3b801;
+  text-shadow: 0 0 1px #f3b801;
 }
