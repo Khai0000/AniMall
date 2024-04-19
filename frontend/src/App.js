@@ -1,4 +1,5 @@
 import "./App.css";
+import React, { useState, useEffect } from "react";
 import Layout from "./Layout/Layout";
 import {
   createBrowserRouter,
@@ -10,8 +11,17 @@ import * as ZongMingPages from "./ZongMing/pages";
 import * as ShuminPages from "./shumin/pages";
 import * as GinkhaiPages from "./ginkhai/pages";
 import * as ShuhuiPages from "./shuhui/pages";
+import { useSelector } from "react-redux";
+
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const user = useSelector((state) => state.user.user);
+
+  useEffect(() => {
+    setIsLoggedIn(user !== null);
+  }, [user]);
+
   const router = createBrowserRouter([
     {
       path: "/",
@@ -31,6 +41,10 @@ function App() {
               path: "/authentication/reset-password",
               element: <ShuhuiPages.ResetPassword />,
             },
+            {
+              path: "/authentication/profile",
+              element: <ShuhuiPages.Profile />,
+            },
           ],
         },
         {
@@ -38,7 +52,14 @@ function App() {
           element: <CommonPages.Pet />,
           children: [
             { path: "/pet", element: <ShuminPages.PetHome /> },
-            { path: "/pet/:title", element: <ShuminPages.PetDetails /> },
+            {
+              path: "/pet/:title",
+              element: isLoggedIn ? (
+                <ShuminPages.PetDetails />
+              ) : (
+                <Navigate to="/authentication/login" replace={true} />
+              ),
+            },
             {
               path: "/pet/PetCategorized/:category",
               element: <ShuminPages.PetCategorized />,
@@ -53,7 +74,11 @@ function App() {
         },
         {
           path: "/community",
-          element: <CommonPages.Community />,
+          element: isLoggedIn ? (
+            <CommonPages.Community />
+          ) : (
+            <Navigate to="/authentication/login" replace={true} />
+          ),
           children: [
             { path: "/community", element: <GinkhaiPages.ForumHome /> },
             {
@@ -73,7 +98,11 @@ function App() {
             { path: "/product", element: <ShuminPages.ProductHome /> },
             {
               path: "/product/:title",
-              element: <ShuminPages.ProductDetails />,
+              element: isLoggedIn ? (
+                <ShuminPages.ProductDetails />
+              ) : (
+                <Navigate to="/authentication/login" replace={true} />
+              ),
             },
             {
               path: "/product/ProductCategorized/:category",
@@ -105,7 +134,11 @@ function App() {
             },
             {
               path: "/services/serviceDetails/:title",
-              element: <ZongMingPages.ServiceDetail />,
+              element: isLoggedIn ? (
+                <ZongMingPages.ServiceDetail />
+              ) : (
+                <Navigate to="/authentication/login" replace={true} />
+              ),
             },
             {
               path: "/services/sellerService/add-service",
@@ -117,7 +150,14 @@ function App() {
             },
           ],
         },
-        { path: "/mycart", element: <ShuminPages.MyCart /> },
+        {
+          path: "/mycart",
+          element: isLoggedIn ? (
+            <ShuminPages.MyCart />
+          ) : (
+            <Navigate to="/authentication/login" replace={true} />
+          ),
+        },
       ],
     },
   ]);
