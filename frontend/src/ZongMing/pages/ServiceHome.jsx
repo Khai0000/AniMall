@@ -112,7 +112,7 @@ const ServiceHome = () => {
 
       <div className="sellerServiceBtn">
         <Link to="/services/sellerService" className="seller-service-page-link">
-          SellerService
+          Seller
         </Link>
       </div>
     </div>

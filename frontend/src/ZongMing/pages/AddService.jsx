@@ -309,7 +309,7 @@ const AddService = () => {
                 fill="white"
               />
             </svg>
-            <span id="Product-details-form-add-button-text">Add</span>
+            <span id="Product-details-form-add-button-text">Edit</span>
           </button>
           <Link
             to={`/services/sellerService`}

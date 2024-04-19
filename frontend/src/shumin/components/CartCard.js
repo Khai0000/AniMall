@@ -205,9 +205,13 @@ const CartCard = ({ product }) => {
 
         <div className="seller-product-card-middle-container">
           {product.type === "service" ? (
+            <>
             <div className="seller-product-card-slot-container">
-              <p className="seller-product-card-slot">{product.slot}</p>
+              <div>
+              <p className="seller-product-card-slot">{product.slot} {product.slot<12?"AM":"PM"}&nbsp;&nbsp;{product.date}</p>
+              </div>
             </div>
+            </>
           ) : (
             <div className="seller-product-card-quantityControlContainer">
               <button
@@ -234,7 +238,7 @@ const CartCard = ({ product }) => {
         </div>
 
         <div className="seller-product-card-price-container">
-          <h4 className="seller-product-card-price">{product.price}</h4>
+          <h4 className="seller-product-card-price">RM&nbsp;{product.price}</h4>
         </div>
 
         <div className="seller-product-card-remove-button-container">

@@ -55,6 +55,7 @@
     display: flex;
     width: 50rem;
     align-items: center;
+    justify-content: center;
 }
 
 .seller-product-card-product-name:hover {
@@ -111,11 +112,16 @@
 }
 
 .seller-product-card-slot-container {
-    width: 7rem;
+   width: 12rem;
+   
     display: flex;
     justify-content: center;
-    margin-left: 1rem;
+    border: #3C95A9 3px solid;
+    border-radius: 20px;
+    text-align: center;
+    font-family: 'Times New Roman', Times, serif;
 }
+
 
 .seller-product-card-quantity-input:hover {
     border-color: #F3B801;
@@ -129,9 +135,11 @@
 }
 
 
+
 .seller-product-card-quantityControlContainer {
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 
 .seller-product-card-price-container {
