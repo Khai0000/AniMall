@@ -112,14 +112,17 @@
 }
 
 .seller-product-card-slot-container {
-   width: 12rem;
-   
+    width: 12rem;
     display: flex;
     justify-content: center;
-    border: #3C95A9 3px solid;
-    border-radius: 20px;
+    /* border: #3C95A9 1.5px solid;
+    border-radius: 20px; */
     text-align: center;
-    font-family: 'Times New Roman', Times, serif;
+}
+
+.seller-product-card-slot{
+    font-size: 1rem;
+    font-weight: bolder;
 }
 
 
@@ -129,9 +132,10 @@
 }
 
 .seller-product-card-price {
-    margin-top: 4.5%;
     margin-left: 9.3%;
     width: 18%;
+    display: flex;
+    align-items: center;
 }
 
 
@@ -145,7 +149,6 @@
 .seller-product-card-price-container {
     display: flex;
     width: 40rem;
-    align-items: center;
 }
 
 .seller-product-card-remove-button {

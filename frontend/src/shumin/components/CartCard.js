@@ -208,7 +208,7 @@ const CartCard = ({ product }) => {
             <>
             <div className="seller-product-card-slot-container">
               <div>
-              <p className="seller-product-card-slot">{product.slot} {product.slot<12?"AM":"PM"}&nbsp;&nbsp;{product.date}</p>
+              <p className="seller-product-card-slot">{product.slot<12?product.slot:product.slot-12+".00"} {product.slot<12?"AM":"PM"}&nbsp;&nbsp;{product.date}</p>
               </div>
             </div>
             </>
