@@ -164,7 +164,7 @@ const ServicesAppointment = ({ serviceData }) => {
                 } ${!isSlotAvailable(slot) ? "unavailable" : ""}`}
                 onClick={() => toggleButton(slot)}
               >
-                {slot}{slot< 12 ?"AM":"PM"}
+                {slot<12?slot:slot-12+".00"}{slot< 12 ?"AM":"PM"}
               </button>
             ))}
           </div>
