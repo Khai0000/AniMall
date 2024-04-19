@@ -57,7 +57,7 @@ function App() {
               element: isLoggedIn ? (
                 <ShuminPages.PetDetails />
               ) : (
-                <Navigate to="/authentication/login" replace={true} />
+                <Navigate to="/authentication/login" replace={false} />
               ),
             },
             {
@@ -77,7 +77,7 @@ function App() {
           element: isLoggedIn ? (
             <CommonPages.Community />
           ) : (
-            <Navigate to="/authentication/login" replace={true} />
+            <Navigate to="/authentication/login" replace={false}  />
           ),
           children: [
             { path: "/community", element: <GinkhaiPages.ForumHome /> },
@@ -101,7 +101,7 @@ function App() {
               element: isLoggedIn ? (
                 <ShuminPages.ProductDetails />
               ) : (
-                <Navigate to="/authentication/login" replace={true} />
+                <Navigate to="/authentication/login" replace={false} />
               ),
             },
             {
@@ -137,7 +137,7 @@ function App() {
               element: isLoggedIn ? (
                 <ZongMingPages.ServiceDetail />
               ) : (
-                <Navigate to="/authentication/login" replace={true} />
+                <Navigate to="/authentication/login" replace={false} />
               ),
             },
             {
@@ -155,7 +155,7 @@ function App() {
           element: isLoggedIn ? (
             <ShuminPages.MyCart />
           ) : (
-            <Navigate to="/authentication/login" replace={true} />
+            <Navigate to="/authentication/login" replace={false} />
           ),
         },
       ],

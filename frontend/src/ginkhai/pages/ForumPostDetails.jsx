@@ -93,7 +93,7 @@ const ForumPostDetails = () => {
               By: <span className="authorName">{post.author}</span>
             </p>
           </div>
-          <button className="backButton" onClick={handleOnBackClick}>
+          <button className="weijiePostBackButton" onClick={handleOnBackClick}>
             Back
           </button>
         </div>
