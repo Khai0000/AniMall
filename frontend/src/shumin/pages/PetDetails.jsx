@@ -21,6 +21,7 @@ const PetDetails = () => {
   const pet = useSelector((state) =>
     state.pets.find((pet) => pet.title === title)
   );
+  const cartItem = useSelector((state) => state.cart);
 
   const [loadedImageUrls, setLoadedImageUrls] = useState([]);
 
@@ -60,37 +61,46 @@ const PetDetails = () => {
   // const adNumber = getRandomAdNumber();
 
   const handleOnAddToCartButtonClick = () => {
-    const petDetails = {
-      id: pet.id,
-      title: pet.title,
-      description: pet.description,
-      image: pet.image,
-      birthdate: pet.birthdate,
-      animaltag: pet.animaltag,
-      price: pet.price,
-      stockLevel: pet.stockLevel,
-      hidden: pet.hidden,
-      type: "pet",
-      quantity: 1,
-      checked: true,
-    };
-
-    dispatch(addItemToCart(petDetails));
-    const random = Math.floor(Math.random() * 3) + 1;
-    console.log(random);
-    if (random === 2) {
-      setShowAd(true);
-      console.log("Ad should show"); // Check if this code block is executed
+    const existingCartItem = cartItem.find((item) => item.id === pet.id);
+    if (existingCartItem) {
+      if (existingCartItem.stockLevel > existingCartItem.quantity) {
+        const petDetails = {
+          id: pet.id,
+          title: pet.title,
+          description: pet.description,
+          image: pet.image,
+          birthdate: pet.birthdate,
+          animaltag: pet.animaltag,
+          price: pet.price,
+          stockLevel: pet.stockLevel,
+          hidden: pet.hidden,
+          type: "pet",
+          quantity: existingCartItem.quantity + 1,
+          checked: true,
+        };
+        dispatch(addItemToCart(petDetails));
+        navigate(-1);
+      } else {
+        alert("Stock is not enough!");
+      }
     } else {
-      console.log("Ad will not show");
+      const petDetails = {
+        id: pet.id,
+        title: pet.title,
+        description: pet.description,
+        image: pet.image,
+        birthdate: pet.birthdate,
+        animaltag: pet.animaltag,
+        price: pet.price,
+        stockLevel: pet.stockLevel,
+        hidden: pet.hidden,
+        type: "pet",
+        quantity: 1,
+        checked: true,
+      };
+      dispatch(addItemToCart(petDetails));
+      navigate(-1);
     }
-
-    // navigate(-1);
-    // =======
-
-    //         dispatch(addItemToCart(petDetails));
-    //         navigate(-1);
-    // >>>>>>> origin/shumin
   };
 
   return (
@@ -118,7 +128,7 @@ const PetDetails = () => {
               onClick={handleOnAddToCartButtonClick}
             >
               <svg
-                style={{marginRight:"10%"}}
+                style={{ marginRight: "10%" }}
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
                 height="20"
