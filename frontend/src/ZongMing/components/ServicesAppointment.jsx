@@ -6,6 +6,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate } from "react-router-dom";
 import { addServiceToCart } from "../../shumin/slices/CartSlice";
 import { useDispatch } from "react-redux";
+import AdvPopUp from "../../shumin/components/AdvPopUp";
+
 
 const ServicesAppointment = ({ serviceData }) => {
   const [selectedButtons, setSelectedButtons] = useState([]);
@@ -14,7 +16,7 @@ const ServicesAppointment = ({ serviceData }) => {
     currentDate.setDate(currentDate.getDate() + 1);
     return currentDate;
   });
-
+  const [showAd, setShowAd] = useState(false); // State to control the advertisement popup
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [slotsAvailability, setSlotsAvailability] = useState({
@@ -117,7 +119,14 @@ const ServicesAppointment = ({ serviceData }) => {
       }));
     });
 
-    navigate(-1);
+    const random = Math.floor(Math.random() * 3) + 1;
+        console.log(random);
+        if(random===2){
+            setShowAd(true);
+            console.log("Ad should show"); // Check if this code block is executed
+    } else {
+        console.log("Ad will not show");
+    }
   };
 
   const CustomDatePickerInput = forwardRef(({ value, onClick }, ref) => (
@@ -203,6 +212,7 @@ const ServicesAppointment = ({ serviceData }) => {
           </button>
         </div>
       </div>
+      <AdvPopUp show={showAd} onClose={() => {setShowAd(false);navigate(-1);}} />{/* Passing props correctly */}
     </div>
   );
 };

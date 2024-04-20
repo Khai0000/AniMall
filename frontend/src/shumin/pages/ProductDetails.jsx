@@ -9,11 +9,12 @@ import CommentPopUp from "../components/CommentPopUp";
 import ProductPostComment from "../components/ProductPostComment";
 import "../styles/ProductDetails.css";
 import { addItemToCart } from "../slices/CartSlice"; 
+import AdvPopUp from "../components/AdvPopUp";
 
 const ProductDetails=()=>{
     const dispatch=useDispatch();
     const navigate=useNavigate();
-
+    const [showAd, setShowAd] = useState(false); // State to control the advertisement popup
     const { title } = useParams(); 
 
     const [imagesLoading, setImagesLoading] = useState(true);
@@ -75,7 +76,14 @@ const ProductDetails=()=>{
         };
         
         dispatch(addItemToCart(productDetails));
-        navigate(-1);
+        const random = Math.floor(Math.random() * 3) + 1;
+        console.log(random);
+        if(random===2){
+            setShowAd(true);
+            console.log("Ad should show"); // Check if this code block is executed
+    } else {
+        console.log("Ad will not show");
+    }
     }
 
     return(
@@ -134,6 +142,7 @@ const ProductDetails=()=>{
                         <CommentPopUp setShowPopup={setShowPopup} title={title} />
                     )}
             </div>
+            <AdvPopUp show={showAd} onClose={() => {setShowAd(false);navigate(-1);}} />{/* Passing props correctly */}
         </div>
     )
 }

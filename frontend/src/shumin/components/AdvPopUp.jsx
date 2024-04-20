@@ -6,8 +6,8 @@ import adv3 from "../assets/images/adv3.jpg";
 import adv4 from "../assets/images/adv4.jpg";
 
 function AdvPopUp({ show, onClose }) {  // Assuming show and onClose are passed as props
-//   const [adNumber, setAdNumber] = useState('');
-  const images = [adv1, adv2, adv3, adv4];
+
+  const images = [adv1, adv2, adv3,adv4];
   // Generate a random index based on the length of the images array
   const randomIndex = Math.floor(Math.random() * images.length);
 

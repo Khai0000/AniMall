@@ -1,0 +1,123 @@
+.adoption-form-container {
+  position: fixed;
+  top: 5%;
+  left: 5%;
+  right: 5%;
+  bottom: 5%;
+  background-color: rgba(255, 255, 255, 1);
+  border: 2px solid #3C95A9;
+  border-radius: 15px;
+  display: flex; /* Set the container to be a flex container */
+  flex-direction: row; /* Layout children in a row */
+  justify-content:space-between; /* Space between the two children */
+  align-items: flex-start; /* Align items to the start */
+  z-index: 1000; /* Ensure the container is above other content */
+  overflow-y: auto;
+}
+
+.adoption-form-dialog {
+  background-color: white;
+  color:  #3C95A9;
+  /* border: 2px solid #3C95A9;
+  border-radius: 15px; */
+  padding: 2%; 
+  display: flex; /* Set the container to be a flex container */
+  flex-direction: row; /* Layout children in a row */
+  justify-content:space-between; /* Space between the two children */
+  align-items: flex-start; /* Align items to the start */
+  /* height: auto; 
+  overflow-y: auto;  */ 
+}
+
+.terms-and-conditions {
+  width: 50%; /* Adjust width as necessary */
+  margin-right: 2%; /* Ensure some space between sections */
+  font-size: 1rem;
+  padding: 2%;
+  border: 2px solid #3C95A9;
+  border-radius: 15px;
+  text-align: justify;
+  height: auto; /* Let it grow as tall as content */
+  overflow-y: auto; /* Scrollbar if content overflows */
+}
+
+.adoption-form {
+  width: 45%; /* Adjust width as necessary */
+  padding: 2%;
+  font-size: 1rem;
+  border: 2px solid #3C95A9;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.adoption-form input{
+  border:2px solid #3C95A9;
+  border-radius: 20px;
+  padding: 4.5%;
+  min-width: 100%;
+  padding-left: 7%;
+  margin-top: 8%;
+  font-size: 90%;
+  color: #3C95A9;
+}
+
+.adoption-form input::placeholder{
+  color: #3C95A9;
+}
+
+
+.adoption-form input:focus{
+  outline: none;
+  border-color:  #F3B801;
+  color:  #F3B801;
+}
+
+.adoption-form input:hover{
+  background-image: url('../assets/images/input_paw.png');
+  background-color: transparent;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center right;
+}
+
+.closeButton {
+  position: absolute;
+  border: none;
+  background-color: #3C95A9;
+  color: white;
+  width: 35px;
+  height: 35px;
+  border-radius: 10px;
+  padding-top: 1px;
+  transform: rotate(45deg);
+  cursor: pointer;
+  right: 2vw;
+  top: 2vh;
+}
+
+.closeButton:hover {
+  background-color: #F3B801;
+}
+
+.submitButton{
+  margin-top: 35px;
+  background-color: #F3B801;
+  border: none;
+  color: #fff;
+  border-radius: 15px;
+  padding: 6px 64px;
+  cursor: pointer;
+  margin-left: auto;
+  margin-right: 0;
+  transition: background-color 0.5s ease; 
+}
+
+.submitButton:hover{
+  border:1px solid #F3B801;
+  border-radius: 15px;
+  color: #F3B801;
+  background-color: #fff;
+}
