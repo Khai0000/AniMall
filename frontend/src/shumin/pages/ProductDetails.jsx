@@ -21,6 +21,7 @@ const ProductDetails=()=>{
     const product=useSelector((state)=>
         state.products.find((product)=>product.title===title)
     );
+    const cartItem = useSelector((state) => state.cart);
 
     const [loadedImageUrls,setLoadedImageUrls]=useState([]);
 
@@ -57,25 +58,50 @@ const ProductDetails=()=>{
     };
 
     const handleOnAddToCartButtonClick=()=>{
-        const productDetails = {
-            id: product.id,
-            title: product.title,
-            description:product.description,
-            image:product.image,
-            animaltag: product.animaltag,
-            producttag:product.producttag,
-            price: product.price,
-            ratings:product.ratings,
-            comments:product.comments,
-            stockLevel:product.stockLevel,
-            hidden: product.hidden,
-            type:"product",
-            quantity:1,
-            checked:true,
-        };
-        
-        dispatch(addItemToCart(productDetails));
-        navigate(-1);
+        const existingCartItem = cartItem.find(item => item.id === product.id);
+        if(existingCartItem){
+            if(existingCartItem.stockLevel>existingCartItem.quantity){
+                    const productDetails = {
+                        id: product.id,
+                        title: product.title,
+                        description:product.description,
+                        image:product.image,
+                        animaltag: product.animaltag,
+                        producttag:product.producttag,
+                        price: product.price,
+                        ratings:product.ratings,
+                        comments:product.comments,
+                        stockLevel:product.stockLevel,
+                        hidden: product.hidden,
+                        type:"product",
+                        quantity:existingCartItem.quantity+1,
+                        checked:true,
+                    };
+                    dispatch(addItemToCart(productDetails));
+                    navigate(-1);
+            }else{
+                alert("Stock is not enough!");
+            }
+        }else{
+            const productDetails = {
+                id: product.id,
+                title: product.title,
+                description:product.description,
+                image:product.image,
+                animaltag: product.animaltag,
+                producttag:product.producttag,
+                price: product.price,
+                ratings:product.ratings,
+                comments:product.comments,
+                stockLevel:product.stockLevel,
+                hidden: product.hidden,
+                type:"product",
+                quantity:1,
+                checked:true,
+            };
+            dispatch(addItemToCart(productDetails));
+            navigate(-1);
+        }
     }
 
     return(
