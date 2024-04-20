@@ -22,6 +22,7 @@
     color: white;
     width: 35px;
     height: 35px;
+    padding-top: 5px;
     border-radius: 10px;
     transform: rotate(45deg);
     cursor: pointer;
@@ -141,6 +142,8 @@
 .servicePopupCommentContainer>.buttonContainer .submitBtn:hover {
     color: #F3B801;
     background-color: #fff;
+    border: 1px solid #F3B801;
+
 }
 
 .popupTitle .titlePopUp {

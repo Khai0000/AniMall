@@ -83,7 +83,7 @@
   background-position: center right;
 }
 
-.closeButton {
+.sx-closeButton {
   position: absolute;
   border: none;
   background-color: #3C95A9;
@@ -91,15 +91,19 @@
   width: 35px;
   height: 35px;
   border-radius: 10px;
-  padding-top: 1px;
+  padding-top: 5px;
   transform: rotate(45deg);
   cursor: pointer;
-  right: 2vw;
-  top: 2vh;
+  right: 4vw;
+  top: 5.5vh;
 }
 
-.closeButton:hover {
+.sx-closeButton:hover {
   background-color: #F3B801;
+}
+
+.sx-closeIcon{
+  transform: rotate(45deg);
 }
 
 .submitButton{

@@ -228,10 +228,10 @@ const ForumAddPost = () => {
             </button>
           </div>
           <div className="actionButtonContainer">
-            <button className="addButton" onClick={handleOnAddPostClick}>
+            <button className="wj-addButton" onClick={handleOnAddPostClick}>
               Add
             </button>
-            <button className="backButton" onClick={handleOnBackClick}>
+            <button className="wj-backButton" onClick={handleOnBackClick}>
               Back
             </button>
           </div>

@@ -309,13 +309,13 @@ const AddService = () => {
                 fill="white"
               />
             </svg>
-            <span id="Product-details-form-add-button-text">Edit</span>
+            <span id="Product-details-form-add-button-text">{editMode?"Edit":"Add"}</span>
           </button>
           <Link
             to={`/services/sellerService`}
             id="Product-details-form-back-button"
           >
-            Go Back
+            Back
           </Link>
         </div>
       </div>

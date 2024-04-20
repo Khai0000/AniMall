@@ -112,8 +112,8 @@ function AdoptFormPopUp({ show, onClose, whenSubmit }) {
           required
         />
         <button type="button" className="submitButton " onClick={whenSubmit}> Submit</button>
-        <button type="button" className="closeButton" onClick={onClose}>
-          <CloseIcon className="closeIcon" />
+        <button type="button" className="sx-closeButton" onClick={onClose}>
+          <CloseIcon className="sx-closeIcon" />
         </button>
       </form>
     </div>
