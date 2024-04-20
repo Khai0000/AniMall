@@ -1,10 +1,7 @@
 import "../styles/SellerService.css";
-
 import { useSelector } from "react-redux";
-
 import React, { useState, lazy, Suspense } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
-
 import { useNavigate } from "react-router-dom";
 
 const SellerServiceCard = lazy(() => import("../components/SellerServiceCard"));
@@ -12,7 +9,7 @@ const SellerServiceCard = lazy(() => import("../components/SellerServiceCard"));
 function SellerService() {
   const services = useSelector((state) => state.services);
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
 
   const navigate = useNavigate();
   const handleNavigateToAddProduct = () => {

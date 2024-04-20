@@ -33,8 +33,8 @@
 }
 
 .commentDetailsContainerSPC img {
-    width: 74px;
-    height: 74px;
+    width: 84px;
+    height: 84px;
     object-fit: cover;
     border-radius: 13px;
     border: 1px solid #EFEFEF;
@@ -48,7 +48,7 @@
 .commentDetailsContainerSPC>.authorContainerSPC>.authorSPC {
     color: #000;
     font-family: Inter;
-    font-size: 1.1rem;
+    font-size: 1.5rem;
     font-weight: 500;
     margin-bottom: 8px;
 }

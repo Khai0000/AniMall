@@ -49,7 +49,7 @@ export const ProductSlice =createSlice({
             }
           }
           if (!isDuplicate) {
-            return [...state,newProduct];
+            return [newProduct,...state];
           }
         }, 
         removeProduct(state,action){
@@ -84,14 +84,27 @@ export const ProductSlice =createSlice({
               existingProduct.quantityInCart += quantity;
             }
         },
-        addComment(state, action) {
-            const { title, comment } = action.payload;
-            const existingProduct = state.find(product => product.title === title);
-            if (existingProduct) {
-              existingProduct.comments.push(comment);
-            }
+        addComment: (state, action) => {
+          const { title, comment } = action.payload;
+          const product = state.find(
+            (product) => product.title === title
+          );
+          if (product) {
+            product.comments.unshift(comment);
+          }
         },
-        giveRating(state, action) {
+        removeComment: (state, action) => {
+          const { title, commentContent } = action.payload;
+          const product = state.find(
+            (product) => product.title === title
+          );
+          if (product) {
+            product.comments = product.comments.filter(
+              (comment) => comment.content !== commentContent
+            );
+          }
+        },
+        addRating(state, action) {
           const { title, rating } = action.payload;
           const product = state.find(
             (product) => product.title === title
@@ -101,13 +114,6 @@ export const ProductSlice =createSlice({
             product.ratings.total++;
             product.ratings[rating]++;
           }    
-        },
-        removeComment(state, action) {
-            const { id, commentId } = action.payload;
-            const existingProduct = state.find(product => product.id === id);
-            if (existingProduct) {
-              existingProduct.comments = existingProduct.comments.filter(comment => comment.id !== commentId);
-            }
         },
         checkOutProduct(state,action){
             const { id, quantity } = action.payload;
@@ -128,7 +134,7 @@ export const {
     hideProduct,
     addToCart,
     addComment,
-    giveRating,
+    addRating,
     removeComment,
     checkOutProduct,
   } = ProductSlice.actions;

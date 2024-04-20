@@ -1,10 +1,18 @@
 import React, { useState, useEffect } from "react";
 import "../styles/ProductPostComment.css";
 import ProductPostCommentSkeleton from "./ProductPostCommentSkeleton";
+import DeleteIcon from '@mui/icons-material/Delete';
+import { useDispatch } from 'react-redux';
+import { removeComment } from "../slices/ProductSlice";
 
-const ProductPostComment = ({ comment, title }) => { 
+const ProductPostComment = ({ comments, title }) => { 
   const [imageSource, setImageSource] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+
+  const handleOnDeleteClick = () => {
+    dispatch(removeComment({ title, commentContent: comments.content }));
+  }
 
   useEffect(() => {
     setIsLoading(true);
@@ -35,9 +43,15 @@ const ProductPostComment = ({ comment, title }) => {
       </div>
 
       <div className="authorContainerSPC">
-        <p className="authorSPC">{comment.name}</p>
-        <p className="contentSPC">{comment.comment}</p>
+        <p className="authorSPC">{comments.name}</p>
+        <p className="contentSPC">{comments.content}</p>
       </div>
+
+      {comments.name === "Khai" && (
+        <button className="deleteButtonSPC" onClick={handleOnDeleteClick}>
+          <DeleteIcon />
+        </button>
+      )}
     </div>
   );
 };

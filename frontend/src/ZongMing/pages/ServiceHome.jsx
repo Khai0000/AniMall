@@ -27,31 +27,42 @@ const ServiceHome = () => {
       .filter((service) =>
         service.serviceTitle.toLowerCase().includes(searchTerm.toLowerCase())
       )
-    filteredData = filteredData
-      .filter(
-        (service) => service.price >= minPrice && service.price <= maxPrice
+
+
+      if(minPrice.length!==0 && maxPrice.length===0){
+        filteredData=filteredData.filter(
+            (service)=>service.price> parseInt(minPrice)
+        );
+    }
+
+    if(minPrice.length ===0 && maxPrice.length!==0){
+        filteredData=filteredData.filter(
+            (service)=>service.price< parseInt(maxPrice)
+        );
+    }
+
+    if(minPrice.length !==0 && maxPrice.length!==0){
+      filteredData=filteredData.filter(
+          (service)=>service.price> parseInt(minPrice) && service.price< parseInt(maxPrice)
       );
+  }
     setFilteredServices(filteredData);
 
   }, [searchTerm, minPrice, maxPrice, allServices])
 
-  const handleBeforeUnload = () => {
-    localStorage.setItem("scrollPosition", window.pageYOffset);
-  };
-
-  // Event handler for handling search input changes
+  
   const handleSearch = (value) => {
     setSearchTerm(value);
   };
-
+  
   const handlePriceRangeChange = (min, max) => {
     setMinPrice(min);
     setMaxPrice(max);
   };
-
+  
   useEffect(() => {
     window.addEventListener("beforeunload", handleBeforeUnload);
-
+    
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
@@ -63,7 +74,11 @@ const ServiceHome = () => {
       []
     );
   }
-
+  
+  const handleBeforeUnload = () => {
+    localStorage.setItem("scrollPosition", window.pageYOffset);
+  };
+  
   return (
     <div className="service-home">
       <ServicesHeader
@@ -97,7 +112,7 @@ const ServiceHome = () => {
 
       <div className="sellerServiceBtn">
         <Link to="/services/sellerService" className="seller-service-page-link">
-          SellerService
+          Seller
         </Link>
       </div>
     </div>

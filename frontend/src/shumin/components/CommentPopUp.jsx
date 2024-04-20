@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import "../styles/CommentPopUp.css";
 import { useDispatch } from "react-redux";
-import { addComment ,giveRating} from "../slices/ProductSlice";
+import { addComment ,addRating} from "../slices/ProductSlice";
 
 const CommentPopUp = ({ setShowPopup, title }) => {
   const dispatch = useDispatch();
@@ -25,13 +25,15 @@ const CommentPopUp = ({ setShowPopup, title }) => {
     }
 
     const newComment = {
-      name: "Chua",
-      comment: bodyText,
+      image: null,
+      name: "Khai",
+      content: bodyText,
+      rating: selectedRating,
     };
 
    // Dispatch the addComment action
-    dispatch(addComment({ title, comment: newComment }));
-    dispatch(giveRating({ title, rating: selectedRating }));
+  dispatch(addComment({ title, comment: newComment }));
+  dispatch(addRating({ title, rating: selectedRating }));
 
   // Close the popup
   setShowPopup(false);
@@ -55,7 +57,7 @@ const CommentPopUp = ({ setShowPopup, title }) => {
 
         <div className="servicePopupCommentContainer">
           <textarea
-            rows={15}
+            rows={10}
             placeholder="Leave your comment here!"
             value={bodyText}
             onChange={handleOnBodyTextChange}

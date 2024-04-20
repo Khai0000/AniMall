@@ -103,9 +103,9 @@ const PetHome = () => {
     navigate("/mycart");
   };
 
-  const dog = filteredPets.filter((pet) => pet.animaltag.includes("dog"));
-  const cat = filteredPets.filter((pet) => pet.animaltag.includes("cat"));
-  const other = filteredPets.filter((pet) => pet.animaltag.includes("others"));
+  const dog = filteredPets.filter((pet) => pet.animaltag==="dog");
+  const cat = filteredPets.filter((pet) => pet.animaltag==="cat");
+  const other = filteredPets.filter((pet) => pet.animaltag==="others");
 
   const renderPetsForCategory = (pets, category) => (
     <div className={`Product-category-row ${category}`}>
@@ -126,7 +126,7 @@ const PetHome = () => {
         <div className="Product-category-row-content">
           <Suspense fallback={<div>Loading...</div>}>
             {pets.map((pet, index) => (
-              <PetCard key={index} pet={pet} />
+              <PetCard key={pet.id} pet={pet} />
             ))}
           </Suspense>
         </div>
@@ -141,6 +141,7 @@ const PetHome = () => {
           id="Upper-section-search-bar"
           onSearch={handleSearch}
           page="pet"
+          placeholder={"Search for a pet..."}
           showPriceRange={showPriceRange}
         />
         {showPriceRange ? (
@@ -187,7 +188,7 @@ const PetHome = () => {
           }`}
           onClick={toggleAdoptionFilter}
         >
-          {isAdoptionFilterActive ? "✓ Adoption" : "Adoption"}
+          {isAdoptionFilterActive ? "Adoption" : "Adoption"}
         </button>
         <MyCartButton page="pet" onClick={handleMyCartButtonClick} />
       </div>
@@ -208,9 +209,12 @@ const PetHome = () => {
           </div>
         )}
 
-        <Link to={`/pet/sellerPet`} className="seller-link">
-          <button id="Seller-product">Seller</button>
-        </Link>
+
+        <div className="Seller-product">
+            <Link to={`/pet/sellerPet`} className="seller-link">
+                Seller
+            </Link>
+        </div>
       </div>
     </div>
   );

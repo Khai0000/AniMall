@@ -120,6 +120,7 @@ const PetCategorized = () => {
         <SearchBar
           id="Upper-section-search-bar"
           onSearch={handleSearch}
+          placeholder={"Search for a pet..."}
           showPriceRange={showPriceRange}
           page="pet"
         />

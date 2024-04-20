@@ -1,25 +1,17 @@
 import { useState, useEffect } from "react";
 import "../styles/ProductCard.css";
 import ProductCardSkeleton from "./ProductCardSkeleton";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-const PetCard = ({pet,index})=>{
+const PetCard = ({pet})=>{
     const [image,setImage]=useState(null);
     const [isLoading,setIsLoading]=useState(false);
 
-    const dispatch=useDispatch();
-    const navigate=useNavigate();
-
     const truncateText = (text, maxLength) => {
-        if(text.length==0){
+        if(text.length===0){
             return "";
         }
-        if (maxLength<=9) {
-            return text.slice(0, maxLength);
-        }else{
-            return text.slice(0,maxLength)+ "...";
-        }
+        return text.slice(0,maxLength);
     }
         
     useEffect(()=>{
@@ -48,28 +40,26 @@ const PetCard = ({pet,index})=>{
     return isLoading?(
         <ProductCardSkeleton/>
     ):(
+        <Link to={`/pet/${pet.title}`} style={{ textDecoration: 'none' }}>
         <div>
-            <button className="product-button" 
-                onClick={()=>{
-                    navigate(`/pet/${pet.title}`,{state:pet});
-            }}>
-                
-                <img src={image} alt='' className="product-image" />
+            <button className="product-button" >
+                <div className="product-image">
+                    <img src={image} alt='' />
+                </div>
                 <div className="product-info">
-                    {pet.title.length>7?
-                        <h3 className="product-name">{truncateText(pet.title, 10)}</h3>
-                        :<h3 className="product-name">{truncateText(pet.title, 9)}</h3>}
+                    <h3 className="product-name">{truncateText(pet.title, 19)}</h3>
                     <p className="product-description">
                         <span>Description: </span>
                         <span id="product-description-content">
-                            {truncateText(pet.description, 9)}
+                            {truncateText(pet.description, 20)}
                             <br />
-                            {truncateText(pet.description.slice(9),14)}
+                            {truncateText(pet.description.slice(20),20)}
                         </span>
                     </p>
                 </div>
             </button>
         </div>
+        </Link>
     )
 }
 

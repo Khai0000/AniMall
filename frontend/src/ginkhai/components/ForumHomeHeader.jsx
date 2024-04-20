@@ -8,11 +8,13 @@ import {
   setSearchText,
   setSelectedDate,
 } from "../slices/forumHistorySlice";
+import { useState } from "react";
 
 const ForumHomeHeader = () => {
   const dispatch = useDispatch();
   const forumHistory = useSelector((state) => state.forumHistory);
   const { selectedCategory, searchText, selectedDate } = forumHistory;
+  const [isHovered, setIsHovered] = useState(false);
 
   const toggleButton = (button) => {
     const updatedCategories = selectedCategory.includes(button)
@@ -28,15 +30,19 @@ const ForumHomeHeader = () => {
 
   return (
     <div className="forumFilterContainer">
-      <div className="inputContainer">
+      <div
+        className="inputContainer"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
         <input
-          className="searchBar"
+          id="searchBar"
           type="text"
           placeholder="Search for a discussion..."
           onChange={handleOnTextChange}
           value={searchText}
         />
-        <SearchIcon className="searchIcon" />
+        <SearchIcon className={`searchIcon ${isHovered?"focusedIcon":""}`} />
       </div>
       <div className="forumButtonContainer">
         <button

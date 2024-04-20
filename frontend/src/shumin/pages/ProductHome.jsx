@@ -39,9 +39,9 @@ const ProductHome=()=>{
         setSearchTerm(value);
     };
 
-    //useEffect for filtering data
+    
     useEffect(()=>{
-        let filteredData = [...products];;
+        let filteredData = [...products];
         setIsLoading(true);
         
         filteredData = filteredData.filter((product) => !product.hidden);
@@ -93,9 +93,9 @@ const ProductHome=()=>{
         navigate("/mycart");
     };
 
-    const dogProducts=filteredProducts.filter(product=>product.animaltag=="dog");
-    const catProducts=filteredProducts.filter(product=>product.animaltag=="cat");
-    const otherProducts=filteredProducts.filter(product=>product.animaltag=="others");
+    const dogProducts=filteredProducts.filter(product=>product.animaltag==="dog");
+    const catProducts=filteredProducts.filter(product=>product.animaltag==="cat");
+    const otherProducts=filteredProducts.filter(product=>product.animaltag==="others");
     
     const renderProductsForCategory=(products,category)=>(
         <div className={`Product-category-row ${category}`}>
@@ -105,12 +105,12 @@ const ProductHome=()=>{
                     <EnterButtonIcon/>
                 </button>
             </div>
-            {products.length==0?
+            {products.length===0?
                 <p className="Product-category-row-content-noproduct">{`No ${category} product matched!`}</p>
                 :<div className="Product-category-row-content">
                     <Suspense fallback={<div>Loading...</div>}>
                         {products.map((product,index)=>(
-                            <ProductCard key={index} product={product}/>
+                            <ProductCard key={product.id} product={product}/>
                         ))}
                     </Suspense>
                 </div>}
@@ -120,7 +120,7 @@ const ProductHome=()=>{
     return (
         <div>
             <div className="Upper-section">
-                <SearchBar id="Upper-section-search-bar" onSearch={handleSearch} page="product"/>
+                <SearchBar id="Upper-section-search-bar" onSearch={handleSearch} page="product" placeholder={"Search for a product..."}/>
                 {showPriceRange?(
                     <div className="Upper-section-price-range-container product">
                         <form onSubmit={handlePriceRangeSubmit}>
@@ -169,9 +169,11 @@ const ProductHome=()=>{
                     <p>No product matched!</p>
                 </div>}
             
-                <Link to={`/product/sellerProduct`} className="seller-link">
-                    <button id="Seller-product">Seller</button>
-                </Link>
+                <div className="Seller-product">
+                    <Link to={`/product/sellerProduct`} className="seller-link">
+                        Seller
+                    </Link>
+                </div>
             </div>
         </div>
     )

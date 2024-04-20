@@ -5,8 +5,8 @@ export const ProductData=[
     title: "GUN PET Smart Heart Canned Food 170g Wet Food Makanan Kucing Basah Cat Food Pet 猫罐头湿粮",
     description:"Essential Benefits:\nProtein – To maintain good muscle mass\nFat – To maintain healthy skin and shiny coat\nMinerals – Strengthen bones and teeth\nTaurine Plus – Nourishing eye vision\nVitamins – Enhance body function and immune system",
     image:["catFood1.jpg"],
-    animaltag:["cat"],
-    producttag:["food"],
+    animaltag:"cat",
+    producttag:"food",
     price:25.00,
     ratings: {
         total: 61,
@@ -34,8 +34,8 @@ export const ProductData=[
         title: "WHISKAS Cat Pouch 80G",
         description:"WHISKAS cat food is complete and balanced, specially designed to fulfil your cat’s needs at every life stage.\nAt the age of 12 months, your kitten turns adult, and requires a different nutritional needs. This change in nutritional needs will change again when they turn 7.\nCats aged 1-6 need lots of playtime and a balanced diet to help them stay lean and healthy. Cats are carnivores while humans omnivores, so cats need two times more protein than us. They also need 41 essential nutrients for optimum health. WHISKAS understands the nutritional needs of cats, and every product is specially designed to be complete and balanced.",
         image:["catFood2.jpg","catFood3.jpg"],
-        animaltag:["cat"],
-        producttag:["food"],
+        animaltag:"cat",
+        producttag:"food",
         price:35.99,
         ratings: {
             total: 61,
@@ -54,8 +54,8 @@ export const ProductData=[
         title: "Royal Canin Kitten Dry Cat Food",
         description: "Tailored nutrition for kittens up to 12 months old. Supports healthy growth and development.",
         image: ["catFood6.jpg"], 
-        animaltag: ["cat"],
-        producttag: ["food"],
+        animaltag: "cat",
+        producttag: "food",
         price: 45.00,
         ratings: {
             total: 61,
@@ -66,8 +66,8 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "John Doe", comment: "My kittens absolutely love this food! It's great for their health and growth." },
-            { name: "Jane Smith", comment: "Highly recommended for anyone with kittens. It's nutritionally balanced and they enjoy eating it." }
+            { name: "John Doe", content: "My kittens absolutely love this food! It's great for their health and growth." },
+            { name: "Jane Smith", content: "Highly recommended for anyone with kittens. It's nutritionally balanced and they enjoy eating it." }
         ],
         stockLevel: 200,
         hidden: false,
@@ -77,8 +77,8 @@ export const ProductData=[
         title: "Purina Fancy Feast Gravy Lovers Poultry & Beef Feast Collection Wet Cat Food",
         description: "Delicious gourmet wet cat food with tender bites in gravy, featuring a variety of poultry and beef flavors.",
         image: ["catFood7.jpg","catFood8.jpg"],
-        animaltag: ["cat"],
-        producttag: ["food"],
+        animaltag: "cat",
+        producttag: "food",
         price: 20.99,
         ratings: {
             total: 61,
@@ -89,8 +89,8 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Lisa Johnson", comment: "My cats absolutely love these Fancy Feast flavors! It's their favorite mealtime treat." },
-            { name: "Michael Smith", comment: "Great variety pack. It keeps mealtime interesting for my picky eater." }
+            { name: "Lisa Johnson", content: "My cats absolutely love these Fancy Feast flavors! It's their favorite mealtime treat." },
+            { name: "Michael Smith", content: "Great variety pack. It keeps mealtime interesting for my picky eater." }
         ],
         stockLevel: 200,
         hidden: false,
@@ -100,8 +100,8 @@ export const ProductData=[
         title: "Hill's Science Diet Dry Cat Food, Adult, Chicken Recipe",
         description: "Clinically proven antioxidant benefits, no artificial colors, flavors, or preservatives. Formulated to support a healthy immune system and ideal body weight.",
         image: ["catFood9.jpg"],
-        animaltag: ["cat"],
-        producttag: ["food"],
+        animaltag: "cat",
+        producttag: "food",
         price: 40.00,
         ratings: {
             total: 61,
@@ -112,8 +112,8 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Jennifer Brown", comment: "My adult cats thrive on this food. Their coats are shiny and they are healthy." },
-            { name: "Daniel Wilson", comment: "High-quality ingredients. My cats love the taste and it's good for their overall health." }
+            { name: "Jennifer Brown", content: "My adult cats thrive on this food. Their coats are shiny and they are healthy." },
+            { name: "Daniel Wilson", content: "High-quality ingredients. My cats love the taste and it's good for their overall health." }
         ],
         stockLevel: 120,
         hidden: false,
@@ -123,8 +123,8 @@ export const ProductData=[
         title: "IAMS Proactive Health Adult Indoor Weight & Hairball Care Dry Cat Food",
         description: "Formulated to meet the unique needs of indoor cats, helps control hairballs and supports a healthy weight.",
         image: ["catFood10.jpg"],
-        animaltag: ["cat"],
-        producttag: ["food"],
+        animaltag: "cat",
+        producttag: "food",
         price: 35.50,
         ratings: {
             total: 61,
@@ -135,8 +135,8 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Emily Green", comment: "My indoor cats enjoy this food and it has reduced hairballs significantly." },
-            { name: "Christopher Martinez", comment: "Great for weight management. My cats are more active and healthy since switching to this food." }
+            { name: "Emily Green", content: "My indoor cats enjoy this food and it has reduced hairballs significantly." },
+            { name: "Christopher Martinez", content: "Great for weight management. My cats are more active and healthy since switching to this food." }
         ],
         stockLevel: 150,
         hidden: false,
@@ -146,8 +146,8 @@ export const ProductData=[
         title: "Blue Buffalo Wilderness High Protein Grain Free, Natural Adult Dry Cat Food",
         description: "Made with real chicken, packed with protein for healthy muscles and energy. Grain-free and free from artificial preservatives.",
         image: ["catFood11.jpg"],
-        animaltag: ["cat"],
-        producttag: ["food"],
+        animaltag: "cat",
+        producttag: "food",
         price: 55.00,
         ratings: {
             total: 61,
@@ -158,8 +158,8 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Jessica White", comment: "My cats go wild for this food! It's high in protein and keeps them satisfied." },
-            { name: "Andrew Taylor", comment: "Top-quality cat food. My cats have never looked better since switching to Blue Buffalo." }
+            { name: "Jessica White", content: "My cats go wild for this food! It's high in protein and keeps them satisfied." },
+            { name: "Andrew Taylor", content: "Top-quality cat food. My cats have never looked better since switching to Blue Buffalo." }
         ],
         stockLevel: 100,
         hidden: false,
@@ -169,8 +169,8 @@ export const ProductData=[
         title: "Purina ONE Urinary Tract Health Dry Cat Food, Chicken Recipe",
         description: "Specialized formula to support a healthy urinary tract system in cats. Made with real chicken and other high-quality ingredients.",
         image: ["catFood12.jpg","catFood13.jpg"],
-        animaltag: ["cat"],
-        producttag: ["food"],
+        animaltag: "cat",
+        producttag: "food",
         price: 30.99,
         ratings: {
             total: 61,
@@ -181,8 +181,8 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Olivia Anderson", comment: "My cat had urinary issues before, but this food has helped tremendously. Highly recommend." },
-            { name: "William Johnson", comment: "Great for urinary health. My cats love the taste, and it's effective in preventing issues." }
+            { name: "Olivia Anderson", content: "My cat had urinary issues before, but this food has helped tremendously. Highly recommend." },
+            { name: "William Johnson", content: "Great for urinary health. My cats love the taste, and it's effective in preventing issues." }
         ],
         stockLevel: 80,
         hidden: false,
@@ -192,8 +192,8 @@ export const ProductData=[
         title: "Wellness CORE Natural Grain Free Dry Cat Food, Indoor Chicken & Turkey Recipe",
         description: "Grain-free and protein-rich formula designed for indoor cats, promotes healthy digestion and ideal body weight.",
         image: ["catFood14.jpg","catFood15.jpg"],
-        animaltag: ["cat"],
-        producttag: ["food"],
+        animaltag: "cat",
+        producttag: "food",
         price: 42.50,
         ratings: {
             total: 61,
@@ -204,8 +204,8 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Sophia Brown", comment: "My indoor cats love this food. It's nutritious and keeps them active and healthy." },
-            { name: "James Wilson", comment: "Excellent choice for indoor cats. My cats have shiny coats and good energy levels." }
+            { name: "Sophia Brown", content: "My indoor cats love this food. It's nutritious and keeps them active and healthy." },
+            { name: "James Wilson", content: "Excellent choice for indoor cats. My cats have shiny coats and good energy levels." }
         ],
         stockLevel: 100,
         hidden: false,
@@ -215,8 +215,8 @@ export const ProductData=[
         title: "Merrick Purrfect Bistro Grain-Free Dry Cat Food, Salmon Recipe",
         description: "High-protein and grain-free recipe featuring real deboned salmon, supports overall health and vitality in cats.",
         image: ["catFood16.jpg"],
-        animaltag: ["cat"],
-        producttag: ["food"],
+        animaltag: "cat",
+        producttag: "food",
         price: 48.75,
         ratings: {
             total: 61,
@@ -227,8 +227,8 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Nathan Green", comment: "My cats love the taste of this salmon recipe. It's their favorite mealtime choice." },
-            { name: "Sophie Taylor", comment: "Highly recommend for cats who enjoy seafood flavors. My cats always finish their bowls." }
+            { name: "Nathan Green", content: "My cats love the taste of this salmon recipe. It's their favorite mealtime choice." },
+            { name: "Sophie Taylor", content: "Highly recommend for cats who enjoy seafood flavors. My cats always finish their bowls." }
         ],
         stockLevel: 90,
         hidden: false,
@@ -238,8 +238,8 @@ export const ProductData=[
         title: "Tiki Cat Luau Grain-Free, Low-Carbohydrate Wet Food",
         description: "Gourmet wet food with high protein and low carbs, featuring wild-caught, dolphin-safe fish and other natural ingredients.",
         image: ["catFood17.jpg","catFood18.jpg"],
-        animaltag: ["cat"],
-        producttag: ["food"],
+        animaltag: "cat",
+        producttag: "food",
         price: 22.99,
         ratings: {
             total: 61,
@@ -250,8 +250,8 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "David White", comment: "My cats go crazy for Tiki Cat Luau. It's a high-quality food with great ingredients." },
-            { name: "Ella Martinez", comment: "This wet food is perfect for cats who need low-carb options. My cats have better energy levels." }
+            { name: "David White", content: "My cats go crazy for Tiki Cat Luau. It's a high-quality food with great ingredients." },
+            { name: "Ella Martinez", content: "This wet food is perfect for cats who need low-carb options. My cats have better energy levels." }
         ],
         stockLevel: 120,
         hidden: false,
@@ -261,8 +261,8 @@ export const ProductData=[
         title: "Nature's Variety Instinct Raw Boost Grain-Free Dry Cat Food",
         description: "High-protein, grain-free kibble combined with freeze-dried raw pieces for a nutrient-rich diet.",
         image: ["catFood19.jpg"],
-        animaltag: ["cat"],
-        producttag: ["food"],
+        animaltag: "cat",
+        producttag: "food",
         price: 60.00,
         ratings: {
             total: 61,
@@ -273,8 +273,8 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Lucas Johnson", comment: "My cats love the raw pieces in this food. It adds a great texture and they enjoy every bite." },
-            { name: "Emma Smith", comment: "High-quality and balanced nutrition. My cats have glossy coats and are very active." }
+            { name: "Lucas Johnson", content: "My cats love the raw pieces in this food. It adds a great texture and they enjoy every bite." },
+            { name: "Emma Smith", content: "High-quality and balanced nutrition. My cats have glossy coats and are very active." }
         ],
         stockLevel: 80,
         hidden: false,
@@ -284,8 +284,8 @@ export const ProductData=[
         title: "Purina Pro Plan Focus Urinary Tract Health Adult Canned Wet Cat Food",
         description: "Specialized formula to support urinary tract health in cats, provides extra moisture and essential nutrients.",
         image: ["catFood20.jpg"],
-        animaltag: ["cat"],
-        producttag: ["food"],
+        animaltag: "cat",
+        producttag: "food",
         price: 18.50,
         ratings: {
             total: 61,
@@ -296,8 +296,8 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Ava Brown", comment: "My cat's urinary issues improved significantly after switching to this wet food. Great product." },
-            { name: "Ryan Wilson", comment: "Highly recommend for cats with urinary tract concerns. It's effective and my cat loves it." }
+            { name: "Ava Brown", content: "My cat's urinary issues improved significantly after switching to this wet food. Great product." },
+            { name: "Ryan Wilson", content: "Highly recommend for cats with urinary tract concerns. It's effective and my cat loves it." }
         ],
         stockLevel: 100,
         hidden: false,
@@ -308,8 +308,8 @@ export const ProductData=[
         title: "Cat Tree Tower with Scratching Posts",
         description: "Multi-level cat tree with scratching posts, cozy perches, and hanging toys for cats to play, scratch, and relax.",
         image: ["catAccessory1.jpg"],
-        animaltag: ["cat"],
-        producttag: ["accessories"],
+        animaltag: "cat",
+        producttag: "accessories",
         price: 65.99,
         ratings: {
             total: 61,
@@ -320,9 +320,9 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Sophia White", comment: "My cats love this cat tree! It's sturdy and provides hours of entertainment." },
-            { name: "James Taylor", comment: "Great investment for keeping cats active. Easy to assemble and well-made." },
-            { name: "Emma Martinez", comment: "My cats have claimed this tree as their own. It's their favorite spot to nap and play." }
+            { name: "Sophia White", content: "My cats love this cat tree! It's sturdy and provides hours of entertainment." },
+            { name: "James Taylor", content: "Great investment for keeping cats active. Easy to assemble and well-made." },
+            { name: "Emma Martinez", content: "My cats have claimed this tree as their own. It's their favorite spot to nap and play." }
         ],
         stockLevel: 90,
         hidden: false,
@@ -332,8 +332,8 @@ export const ProductData=[
         title: "Interactive Cat Toys Variety Pack",
         description: "Set of interactive toys including feather wands, balls, and tunnels to engage cats in play and exercise.",
         image: ["catAccessory2.jpg","catAccessory3.jpg"],
-        animaltag: ["cat"],
-        producttag: ["accessories"],
+        animaltag: "cat",
+        producttag: "accessories",
         price: 20.50,
         ratings: {
             total: 61,
@@ -344,8 +344,8 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Oliver Johnson", comment: "My cats go crazy for these toys! They're durable and keep my cats entertained." },
-            { name: "Emily Smith", comment: "Good variety of toys to keep cats active. My kittens especially love the feather wands." }
+            { name: "Oliver Johnson", content: "My cats go crazy for these toys! They're durable and keep my cats entertained." },
+            { name: "Emily Smith", content: "Good variety of toys to keep cats active. My kittens especially love the feather wands." }
         ],
         stockLevel: 120,
         hidden: false,
@@ -355,8 +355,8 @@ export const ProductData=[
         title: "Soft Cat Bed with Removable Cushion",
         description: "Cozy cat bed with a removable cushion, perfect for cats to curl up and sleep in comfort.",
         image: ["catAccessory4.jpg"],
-        animaltag: ["cat"],
-        producttag: ["accessories"],
+        animaltag: "cat",
+        producttag: "accessories",
         price: 30.00,
         ratings: {
             total: 61,
@@ -367,7 +367,7 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Liam Brown", comment: "My cat loves this bed! It's soft and the cushion is easy to clean." },
+            { name: "Liam Brown", content: "My cat loves this bed! It's soft and the cushion is easy to clean." },
         ],
         stockLevel: 80,
         hidden: false,
@@ -377,8 +377,8 @@ export const ProductData=[
         title: "Cat Litter Box with Lid and Scoop",
         description: "Spacious litter box with a lid for privacy and a scoop for easy cleaning, ideal for single or multiple cats.",
         image: ["catAccessory5.jpg"],
-        animaltag: ["cat"],
-        producttag: ["accessories"],
+        animaltag: "cat",
+        producttag: "accessories",
         price: 45.99,
         ratings: {
             total: 61,
@@ -389,9 +389,9 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Ava Taylor", comment: "This litter box is great for keeping odors contained. The lid helps with privacy too." },
-            { name: "Noah Martinez", comment: "Spacious and easy to clean. My cats adapted to it quickly." },
-            { name: "Isabella White", comment: "Good quality litter box. The scoop is a convenient addition." }
+            { name: "Ava Taylor", content: "This litter box is great for keeping odors contained. The lid helps with privacy too." },
+            { name: "Noah Martinez", content: "Spacious and easy to clean. My cats adapted to it quickly." },
+            { name: "Isabella White", content: "Good quality litter box. The scoop is a convenient addition." }
         ],
         stockLevel: 100,
         hidden: false,
@@ -401,8 +401,8 @@ export const ProductData=[
         title: "Cat Grooming Brush and Comb Set",
         description: "Set of grooming tools including a brush and comb to keep your cat's coat healthy and free of tangles.",
         image: ["catAccessory6.jpg"],
-        animaltag: ["cat"],
-        producttag: ["accessories"],
+        animaltag: "cat",
+        producttag: "accessories",
         price: 15.50,
         ratings: {
             total: 61,
@@ -413,8 +413,8 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Mia Johnson", comment: "Great brush set for keeping my long-haired cat's coat smooth and tangle-free." },
-            { name: "William Brown", comment: "The brush is gentle and effective. My cat enjoys the grooming sessions." }
+            { name: "Mia Johnson", content: "Great brush set for keeping my long-haired cat's coat smooth and tangle-free." },
+            { name: "William Brown", content: "The brush is gentle and effective. My cat enjoys the grooming sessions." }
         ],
         stockLevel: 60,
         hidden: false,
@@ -424,8 +424,8 @@ export const ProductData=[
         title: "Cat Collar with Bell and Safety Release",
         description: "Adjustable cat collar with a bell to alert birds and small animals, featuring a safety release buckle.",
         image: ["catAccessory7.jpg"],
-        animaltag: ["cat"],
-        producttag: ["accessories"],
+        animaltag: "cat",
+        producttag: "accessories",
         price: 10.99,
         ratings: {
             total: 61,
@@ -436,7 +436,7 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Olivia Taylor", comment: "The collar is lightweight and the safety release is reassuring. My cat doesn't mind wearing it." }
+            { name: "Olivia Taylor", content: "The collar is lightweight and the safety release is reassuring. My cat doesn't mind wearing it." }
         ],
         stockLevel: 70,
         hidden: false,
@@ -446,8 +446,8 @@ export const ProductData=[
         title: "Cat Scratching Post with Sisal Rope",
         description: "Durable scratching post with sisal rope, perfect for cats to satisfy their scratching instincts and protect furniture.",
         image: ["catAccessory8.jpg"],
-        animaltag: ["cat"],
-        producttag: ["accessories"],
+        animaltag: "cat",
+        producttag: "accessories",
         price: 25.00,
         ratings: {
             total: 61,
@@ -458,9 +458,9 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Ethan Martinez", comment: "Sturdy scratching post. My cat prefers it over my furniture now." },
-            { name: "Sophie Johnson", comment: "The sisal rope is durable. My cats love to scratch and play on this post." },
-            { name: "Lucas Wilson", comment: "Good quality and height. It's a must-have for any cat owner." }
+            { name: "Ethan Martinez", content: "Sturdy scratching post. My cat prefers it over my furniture now." },
+            { name: "Sophie Johnson", content: "The sisal rope is durable. My cats love to scratch and play on this post." },
+            { name: "Lucas Wilson", content: "Good quality and height. It's a must-have for any cat owner." }
         ],
         stockLevel: 50,
         hidden: false,
@@ -470,8 +470,8 @@ export const ProductData=[
         title: "Cat Tunnel Toy with Crinkle Sound",
         description: "Interactive cat tunnel toy with crinkle sound, provides entertainment and exercise for playful cats.",
         image: ["catAccessory9.jpg"],
-        animaltag: ["cat"],
-        producttag: ["accessories"],
+        animaltag: "cat",
+        producttag: "accessories",
         price: 18.99,
         ratings: {
             total: 61,
@@ -482,7 +482,7 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Chloe Brown", comment: "My cats love zooming through this tunnel. The crinkle sound adds to the fun." }
+            { name: "Chloe Brown", content: "My cats love zooming through this tunnel. The crinkle sound adds to the fun." }
         ],
         stockLevel: 40,
         hidden: false,
@@ -492,8 +492,8 @@ export const ProductData=[
         title: "Cat Window Perch Bed",
         description: "Cozy window perch bed for cats to sunbathe and enjoy the view, easily attaches to windows with suction cups.",
         image: ["catAccessory10.jpg"],
-        animaltag: ["cat"],
-        producttag: ["accessories"],
+        animaltag: "cat",
+        producttag: "accessories",
         price: 35.50,
         ratings: {
             total: 61,
@@ -504,7 +504,7 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Lily Taylor", comment: "My cat loves lounging on this perch. It's sturdy and gives her a great view." }
+            { name: "Lily Taylor", content: "My cat loves lounging on this perch. It's sturdy and gives her a great view." }
         ],
         stockLevel: 30,
         hidden: false,
@@ -514,8 +514,8 @@ export const ProductData=[
         title: "Automatic Cat Feeder",
         description: "Programmable automatic feeder for cats, dispenses meals at scheduled times, and helps with portion control.",
         image: ["catAccessory11.jpg"],
-        animaltag: ["cat"],
-        producttag: ["accessories"],
+        animaltag: "cat",
+        producttag: "accessories",
         price: 55.00,
         ratings: {
             total: 61,
@@ -535,8 +535,8 @@ export const ProductData=[
         title: "Pedigree Adult Dry Dog Food",
         description: "Complete and balanced nutrition for adult dogs, formulated with real meat, vegetables, and essential vitamins.",
         image: ["dogFood1.jpg"],
-        animaltag: ["dog"],
-        producttag: ["food"],
+        animaltag: "dog",
+        producttag: "food",
         price: 40.00,
         ratings: {
             total: 61,
@@ -547,9 +547,9 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "John Smith", comment: "My dog loves this food! His coat looks healthier and he has more energy." },
-            { name: "Sarah Johnson", comment: "Good quality dog food. It's helped with my dog's digestion." },
-            { name: "Michael Brown", comment: "Great value for the price. My dog enjoys mealtime now." }
+            { name: "John Smith", content: "My dog loves this food! His coat looks healthier and he has more energy." },
+            { name: "Sarah Johnson", content: "Good quality dog food. It's helped with my dog's digestion." },
+            { name: "Michael Brown", content: "Great value for the price. My dog enjoys mealtime now." }
         ],
         stockLevel: 100,
         hidden: false,
@@ -559,8 +559,8 @@ export const ProductData=[
         title: "Blue Buffalo Wilderness Grain-Free Dog Food",
         description: "High-protein grain-free dog food with real meat as the first ingredient, suitable for adult dogs.",
         image: ["dogFood2.jpg"],
-        animaltag: ["dog"],
-        producttag: ["food"],
+        animaltag:"dog",
+        producttag: "food",
         price: 55.99,
         ratings: {
             total: 61,
@@ -571,8 +571,8 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Jessica Taylor", comment: "My dog has a sensitive stomach and this food has been great for him." },
-            { name: "David White", comment: "High-quality ingredients. My dog's coat is shinier since switching to this food." }
+            { name: "Jessica Taylor", content: "My dog has a sensitive stomach and this food has been great for him." },
+            { name: "David White", content: "High-quality ingredients. My dog's coat is shinier since switching to this food." }
         ],
         stockLevel: 80,
         hidden: false,
@@ -582,8 +582,8 @@ export const ProductData=[
         title: "Royal Canin Small Breed Dry Dog Food",
         description: "Specialized dry dog food for small breed dogs, formulated with precise nutrients for their needs.",
         image: ["dogFood3.jpg"],
-        animaltag: ["dog"],
-        producttag: ["food"],
+        animaltag: "dog",
+        producttag: "food",
         price: 30.50,
         ratings: {
             total: 61,
@@ -594,8 +594,8 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Daniel Martinez", comment: "Perfect size kibble for my small dog. He loves the taste too." },
-            { name: "Emma Johnson", comment: "My dog's coat is softer and she has more energy since starting this food." }
+            { name: "Daniel Martinez", content: "Perfect size kibble for my small dog. He loves the taste too." },
+            { name: "Emma Johnson", content: "My dog's coat is softer and she has more energy since starting this food." }
         ],
         stockLevel: 120,
         hidden: false,
@@ -605,8 +605,8 @@ export const ProductData=[
         title: "Hill's Science Diet Adult Dog Food",
         description: "Balanced nutrition for adult dogs, made with high-quality ingredients and clinically proven antioxidants.",
         image: ["dogFood4.jpg"],
-        animaltag: ["dog"],
-        producttag: ["food"],
+        animaltag: "dog",
+        producttag: "food",
         price: 48.00,
         ratings: {
             total: 61,
@@ -617,8 +617,8 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Sophie Brown", comment: "My dog's coat looks healthier and he's more active since switching to this food." },
-            { name: "Jacob Taylor", comment: "Good for dogs with sensitive stomachs. My dog has had no issues with this food." }
+            { name: "Sophie Brown", content: "My dog's coat looks healthier and he's more active since switching to this food." },
+            { name: "Jacob Taylor", content: "Good for dogs with sensitive stomachs. My dog has had no issues with this food." }
         ],
         stockLevel: 90,
         hidden: false,
@@ -628,8 +628,8 @@ export const ProductData=[
         title: "Purina ONE SmartBlend Dog Food",
         description: "SmartBlend of nutrition for adult dogs, with real chicken as the first ingredient for a taste dogs love.",
         image: ["dogFood5.jpg"],
-        animaltag: ["dog"],
-        producttag: ["food"],
+        animaltag: "dog",
+        producttag: "food",
         price: 35.75,
         ratings: {
             total: 61,
@@ -640,8 +640,8 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Ethan Smith", comment: "My dog's coat is shinier and he's more energetic since starting this food." },
-            { name: "Ava Johnson", comment: "Great value for the quality. My dog enjoys mealtime with Purina ONE." }
+            { name: "Ethan Smith", content: "My dog's coat is shinier and he's more energetic since starting this food." },
+            { name: "Ava Johnson", content: "Great value for the quality. My dog enjoys mealtime with Purina ONE." }
         ],
         stockLevel: 110,
         hidden: false,
@@ -651,8 +651,8 @@ export const ProductData=[
         title: "Taste of the Wild High Prairie Grain-Free Dog Food",
         description: "Grain-free dog food with roasted bison and venison, suitable for all life stages of dogs.",
         image: ["dogFood6.jpg","dogFood7.jpg"],
-        animaltag: ["dog"],
-        producttag: ["food"],
+        animaltag: "dog",
+        producttag: "food",
         price: 60.00,
         ratings: {
             total: 61,
@@ -663,8 +663,8 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Noah Brown", comment: "My dog's digestion has improved and he loves the taste of this food." },
-            { name: "Mia Wilson", comment: "High-quality ingredients. My dog is thriving on Taste of the Wild." }
+            { name: "Noah Brown", content: "My dog's digestion has improved and he loves the taste of this food." },
+            { name: "Mia Wilson", content: "High-quality ingredients. My dog is thriving on Taste of the Wild." }
         ],
         stockLevel: 85,
         hidden: false,
@@ -674,8 +674,8 @@ export const ProductData=[
         title: "Wellness CORE Grain-Free Dog Food",
         description: "Grain-free, protein-rich dog food for adult dogs, with premium ingredients for optimal nutrition.",
         image: ["dogFood8.jpg"],
-        animaltag: ["dog"],
-        producttag: ["food"],
+        animaltag: "dog",
+        producttag: "food",
         price: 42.99,
         ratings: {
             total: 61,
@@ -686,8 +686,8 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Olivia Taylor", comment: "My dog's coat looks amazing and she has more energy with Wellness CORE." },
-            { name: "William Johnson", comment: "Great for dogs with food sensitivities. My dog loves the taste." }
+            { name: "Olivia Taylor", content: "My dog's coat looks amazing and she has more energy with Wellness CORE." },
+            { name: "William Johnson", content: "Great for dogs with food sensitivities. My dog loves the taste." }
         ],
         stockLevel: 95,
         hidden: false,
@@ -697,8 +697,8 @@ export const ProductData=[
         title: "CANIDAE All Life Stages Dog Food",
         description: "Nutritious dog food for all life stages, made with real meat and whole foods for optimal health.",
         image: ["dogFood9.jpg"],
-        animaltag: ["dog"],
-        producttag: ["food"],
+        animaltag: "dog",
+        producttag: "food",
         price: 38.50,
         ratings: {
             total: 61,
@@ -709,8 +709,8 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Sophia Brown", comment: "My dogs love this food. It's suitable for all their life stages." },
-            { name: "James Smith", comment: "Good value for money. My dogs are healthy and happy with CANIDAE." }
+            { name: "Sophia Brown", content: "My dogs love this food. It's suitable for all their life stages." },
+            { name: "James Smith", content: "Good value for money. My dogs are healthy and happy with CANIDAE." }
         ],
         stockLevel: 105,
         hidden: false,
@@ -720,8 +720,8 @@ export const ProductData=[
         title: "Merrick Grain-Free Dog Food",
         description: "Grain-free dog food with real meat, vegetables, and fruits for balanced nutrition.",
         image: ["dogFood10.jpg"],
-        animaltag: ["dog"],
-        producttag: ["food"],
+        animaltag: "dog",
+        producttag: "food",
         price: 45.25,
         ratings: {
             total: 61,
@@ -732,8 +732,8 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Isabella Johnson", comment: "My dog's coat is softer and she's more active since starting this food." },
-            { name: "Elijah Brown", comment: "Great for dogs with allergies. My dog's skin issues have improved." }
+            { name: "Isabella Johnson", content: "My dog's coat is softer and she's more active since starting this food." },
+            { name: "Elijah Brown", content: "Great for dogs with allergies. My dog's skin issues have improved." }
         ],
         stockLevel: 95,
         hidden: false,
@@ -743,8 +743,8 @@ export const ProductData=[
         title: "Iams ProActive Health Adult Dry Dog Food",
         description: "Nutritious dog food for adult dogs, with real chicken as the first ingredient and tailored fiber blend.",
         image: ["dogFood11.jpg"],
-        animaltag: ["dog"],
-        producttag: ["food"],
+        animaltag: "dog",
+        producttag: "food",
         price: 32.75,
         ratings: {
             total: 61,
@@ -755,8 +755,8 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Benjamin Taylor", comment: "My dog's digestion has improved and he loves the taste of Iams." },
-            { name: "Amelia Johnson", comment: "Good quality food. My dog is healthy and has a shiny coat." }
+            { name: "Benjamin Taylor", content: "My dog's digestion has improved and he loves the taste of Iams." },
+            { name: "Amelia Johnson", content: "Good quality food. My dog is healthy and has a shiny coat." }
         ],
         stockLevel: 115,
         hidden: false,
@@ -766,8 +766,8 @@ export const ProductData=[
         title: "Purina Pro Plan Sensitive Skin & Stomach Dog Food",
         description: "Specialized formula for dogs with sensitive skin and stomach, made with salmon as the primary ingredient.",
         image: ["dogFood12.jpg"],
-        animaltag: ["dog"],
-        producttag: ["food"],
+        animaltag: "dog",
+        producttag: "food",
         price: 48.99,
         ratings: {
             total: 61,
@@ -778,8 +778,8 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Lucas Brown", comment: "Great for dogs with skin allergies. My dog's itching has reduced significantly." },
-            { name: "Avery Smith", comment: "Highly recommended for sensitive dogs. My dog's digestion has improved." }
+            { name: "Lucas Brown", content: "Great for dogs with skin allergies. My dog's itching has reduced significantly." },
+            { name: "Avery Smith", content: "Highly recommended for sensitive dogs. My dog's digestion has improved." }
         ],
         stockLevel: 100,
         hidden: false,
@@ -789,8 +789,8 @@ export const ProductData=[
         title: "Nature's Recipe Grain-Free Dry Dog Food",
         description: "Grain-free dog food with real chicken, sweet potato, and pumpkin, suitable for dogs with food sensitivities.",
         image: ["dogFood13.jpg"],
-        animaltag: ["dog"],
-        producttag: ["food"],
+        animaltag: "dog",
+        producttag: "food",
         price: 36.50,
         ratings: {
             total: 61,
@@ -801,8 +801,8 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Evelyn Taylor", comment: "My dog loves this food. Her coat looks healthier and she's more energetic." },
-            { name: "Jackson Johnson", comment: "Good for dogs with allergies. My dog's stomach issues have improved." }
+            { name: "Evelyn Taylor", content: "My dog loves this food. Her coat looks healthier and she's more energetic." },
+            { name: "Jackson Johnson", content: "Good for dogs with allergies. My dog's stomach issues have improved." }
         ],
         stockLevel: 110,
         hidden: false,
@@ -813,8 +813,8 @@ export const ProductData=[
         title: "Adjustable Nylon Dog Collar",
         description: "Durable and adjustable nylon dog collar with a secure buckle for small to medium-sized dogs.",
         image: ["dogAccessory1.jpg"],
-        animaltag: ["dog"],
-        producttag: ["accessory"],
+        animaltag: "dog",
+        producttag: "accessory",
         price: 15.99,
         ratings: {
             total: 61,
@@ -825,8 +825,8 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Emily Wilson", comment: "Great collar for my dog. It's sturdy and easy to adjust." },
-            { name: "Liam Martinez", comment: "Good quality and comfortable for my dog to wear." }
+            { name: "Emily Wilson", content: "Great collar for my dog. It's sturdy and easy to adjust." },
+            { name: "Liam Martinez", content: "Good quality and comfortable for my dog to wear." }
         ],
         stockLevel: 150,
         hidden: false,
@@ -836,8 +836,8 @@ export const ProductData=[
         title: "Reflective Dog Leash",
         description: "Reflective dog leash for safe walks at night, made with durable materials and a comfortable handle.",
         image: ["dogAccessory2.jpg"],
-        animaltag: ["dog"],
-        producttag: ["accessory"],
+        animaltag: "dog",
+        producttag: "accessory",
         price: 20.50,
         ratings: {
             total: 61,
@@ -848,8 +848,8 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Oliver Brown", comment: "Love this leash! The reflective feature is great for night walks." },
-            { name: "Ella Johnson", comment: "Sturdy and comfortable to hold. Perfect for my dog." }
+            { name: "Oliver Brown", content: "Love this leash! The reflective feature is great for night walks." },
+            { name: "Ella Johnson", content: "Sturdy and comfortable to hold. Perfect for my dog." }
         ],
         stockLevel: 120,
         hidden: false,
@@ -859,8 +859,8 @@ export const ProductData=[
         title: "Dog Chew Toys Variety Pack",
         description: "Set of durable chew toys for dogs, including ropes, balls, and dental toys for dental health.",
         image: ["dogAccessory3.jpg"],
-        animaltag: ["dog"],
-        producttag: ["accessory"],
+        animaltag: "dog",
+        producttag: "accessory",
         price: 25.99,
         ratings: {
             total: 61,
@@ -871,8 +871,8 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Noah Wilson", comment: "My dog loves these toys! Keeps him entertained and helps with dental health." },
-            { name: "Mia Martinez", comment: "Durable toys that withstand my dog's chewing. Great variety in the pack." }
+            { name: "Noah Wilson", content: "My dog loves these toys! Keeps him entertained and helps with dental health." },
+            { name: "Mia Martinez", content: "Durable toys that withstand my dog's chewing. Great variety in the pack." }
         ],
         stockLevel: 100,
         hidden: false,
@@ -882,8 +882,8 @@ export const ProductData=[
         title: "Dog Grooming Brush",
         description: "Gentle and effective dog grooming brush for removing loose fur and keeping your dog's coat healthy.",
         image: ["dogAccessory4.jpg","dogAccessory5.jpg"],
-        animaltag: ["dog"],
-        producttag: ["accessory"],
+        animaltag: "dog",
+        producttag: "accessory",
         price: 18.75,
         ratings: {
             total: 61,
@@ -894,8 +894,8 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Ava Wilson", comment: "This brush works well on my dog's coat. Helps reduce shedding." },
-            { name: "Lucas Martinez", comment: "Comfortable to use and my dog enjoys being brushed with it." }
+            { name: "Ava Wilson", content: "This brush works well on my dog's coat. Helps reduce shedding." },
+            { name: "Lucas Martinez", content: "Comfortable to use and my dog enjoys being brushed with it." }
         ],
         stockLevel: 90,
         hidden: false,
@@ -905,8 +905,8 @@ export const ProductData=[
         title: "Dog Travel Water Bottle",
         description: "Portable water bottle with a built-in bowl for dogs, perfect for walks, hikes, and travel.",
         image: ["dogAccessory6.jpg"],
-        animaltag: ["dog"],
-        producttag: ["accessory"],
+        animaltag: "dog",
+        producttag: "accessory",
         price: 22.99,
         ratings: {
             total: 61,
@@ -917,8 +917,8 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Ethan Wilson", comment: "Very convenient for keeping my dog hydrated on walks." },
-            { name: "Avery Martinez", comment: "Sturdy and leak-proof. Great for outdoor adventures with my dog." }
+            { name: "Ethan Wilson", content: "Very convenient for keeping my dog hydrated on walks." },
+            { name: "Avery Martinez", content: "Sturdy and leak-proof. Great for outdoor adventures with my dog." }
         ],
         stockLevel: 80,
         hidden: false,
@@ -928,8 +928,8 @@ export const ProductData=[
         title: "Dog Seat Cover for Car",
         description: "Waterproof and durable seat cover for protecting your car seats from dog hair, dirt, and scratches.",
         image: ["dogAccessory7.jpg"],
-        animaltag: ["dog"],
-        producttag: ["accessory"],
+        animaltag: "dog",
+        producttag: "accessory",
         price: 35.50,
         ratings: {
             total: 61,
@@ -940,8 +940,8 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Sophia Wilson", comment: "Great quality seat cover. Easy to install and clean." },
-            { name: "Jackson Martinez", comment: "Fits my car perfectly and keeps it clean with my dog riding along." }
+            { name: "Sophia Wilson", content: "Great quality seat cover. Easy to install and clean." },
+            { name: "Jackson Martinez", content: "Fits my car perfectly and keeps it clean with my dog riding along." }
         ],
         stockLevel: 70,
         hidden: false,
@@ -951,8 +951,8 @@ export const ProductData=[
         title: "Dog Training Clicker",
         description: "Training clicker for dogs, used for positive reinforcement and teaching new commands.",
         image: ["dogAccessory8.jpg"],
-        animaltag: ["dog"],
-        producttag: ["accessory"],
+        animaltag: "dog",
+        producttag: "accessory",
         price: 10.99,
         ratings: {
             total: 61,
@@ -963,8 +963,8 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Isabella Wilson", comment: "Effective clicker for training. My dog responds well to it." },
-            { name: "Elijah Martinez", comment: "Simple and easy to use. Helps with training sessions." }
+            { name: "Isabella Wilson", content: "Effective clicker for training. My dog responds well to it." },
+            { name: "Elijah Martinez",content: "Simple and easy to use. Helps with training sessions." }
         ],
         stockLevel: 110,
         hidden: false,
@@ -975,8 +975,8 @@ export const ProductData=[
         title: "Rabbit Pellets",
         description: "Nutritious rabbit pellets made with natural ingredients to support rabbit health and digestion.",
         image: ["othersFood1.jpg"],
-        animaltag: ["others"],
-        producttag: ["food"],
+        animaltag: "others",
+        producttag: "food",
         price: 12.99,
         ratings: {
             total: 61,
@@ -987,8 +987,8 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Sophie Carter", comment: "My rabbits love these pellets. Keeps them healthy and active." },
-            { name: "Liam Parker", comment: "Good quality food for rabbits. Helps with their digestion." }
+            { name: "Sophie Carter", content: "My rabbits love these pellets. Keeps them healthy and active." },
+            { name: "Liam Parker", content: "Good quality food for rabbits. Helps with their digestion." }
         ],
         stockLevel: 50,
         hidden: false,
@@ -998,8 +998,8 @@ export const ProductData=[
         title: "Hamster Food Mix",
         description: "Nutritious food mix for hamsters, enriched with vitamins and minerals for their wellbeing.",
         image: ["othersFood3.jpg"],
-        animaltag: ["others"],
-        producttag: ["food"],
+        animaltag: "others",
+        producttag: "food",
         price: 6.99,
         ratings: {
             total: 61,
@@ -1010,8 +1010,8 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Olivia Davis", comment: "My hamster loves this food mix. Keeps him healthy and active." },
-            { name: "William White", comment: "Good variety in the mix. Provides all the nutrients my hamster needs." }
+            { name: "Olivia Davis", content: "My hamster loves this food mix. Keeps him healthy and active." },
+            { name: "William White", content: "Good variety in the mix. Provides all the nutrients my hamster needs." }
         ],
         stockLevel: 40,
         hidden: false,
@@ -1021,8 +1021,8 @@ export const ProductData=[
         title: "Bird Seed Mix",
         description: "High-quality seed mix for birds, suitable for a variety of bird species for optimal nutrition.",
         image: ["othersFood4.jpg"],
-        animaltag: ["others"],
-        producttag: ["food"],
+        animaltag: "others",
+        producttag: "food",
         price: 9.99,
         ratings: {
             total: 61,
@@ -1033,8 +1033,8 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Mia Garcia", comment: "My birds love this seed mix. Keeps them healthy and active." },
-            { name: "James Hernandez", comment: "Fresh seeds and a good variety. Perfect for my aviary birds." }
+            { name: "Mia Garcia", content: "My birds love this seed mix. Keeps them healthy and active." },
+            { name: "James Hernandez",content: "Fresh seeds and a good variety. Perfect for my aviary birds." }
         ],
         stockLevel: 80,
         hidden: false,
@@ -1044,8 +1044,8 @@ export const ProductData=[
         title: "Turtle Food Sticks",
         description: "Specially formulated food sticks for turtles, rich in essential nutrients for shell and overall health.",
         image: ["othersFood5.jpg"],
-        animaltag: ["others"],
-        producttag: ["food"],
+        animaltag: "others",
+        producttag: "food",
         price: 15.75,
         ratings: {
             total: 61,
@@ -1056,8 +1056,8 @@ export const ProductData=[
             5: 20,
         },
         comments: [
-            { name: "Ethan Lewis", comment: "My turtles love these food sticks. Keeps their shells healthy." },
-            { name: "Ava Martinez", comment: "Good quality food. My turtles are thriving on this diet." }
+            { name: "Ethan Lewis", content: "My turtles love these food sticks. Keeps their shells healthy." },
+            { name: "Ava Martinez", content: "Good quality food. My turtles are thriving on this diet." }
         ],
         stockLevel: 30,
         hidden: false,
@@ -1067,8 +1067,8 @@ export const ProductData=[
     title: "Rabbit Hutch",
     description: "Spacious and durable hutch for rabbits, suitable for outdoor use with weather-resistant materials.",
     image: ["othersAccessory1.jpg"],
-    animaltag: ["others"],
-    producttag: ["accessory"],
+    animaltag: "others",
+    producttag: "accessory",
     price: 85.99,
     ratings: {
         total: 61,
@@ -1079,8 +1079,8 @@ export const ProductData=[
         5: 20,
     },
     comments: [
-        { name: "Sophia Green", comment: "Great hutch for my rabbits. Provides ample space and protection." },
-        { name: "Jacob Clark", comment: "Sturdy and well-built hutch. Easy to clean and maintain." }
+        { name: "Sophia Green", content: "Great hutch for my rabbits. Provides ample space and protection." },
+        { name: "Jacob Clark", content: "Sturdy and well-built hutch. Easy to clean and maintain." }
     ],
     stockLevel: 20,
     hidden: false,
@@ -1090,8 +1090,8 @@ export const ProductData=[
     title: "Guinea Pig Cage",
     description: "Large and secure cage for guinea pigs, with multiple levels and accessories for enrichment.",
     image: ["othersAccessory2.jpg"],
-    animaltag: ["others"],
-    producttag: ["accessory"],
+    animaltag: "others",
+    producttag: "accessory",
     price: 120.50,
     ratings: {
         total: 61,
@@ -1102,8 +1102,8 @@ export const ProductData=[
         5: 20,
     },
     comments: [
-        { name: "Isabella Baker", comment: "Spacious cage for my guinea pigs. They love exploring the different levels." },
-        { name: "Michael Harris", comment: "Well-designed cage with plenty of room. Easy to assemble as well." }
+        { name: "Isabella Baker", content: "Spacious cage for my guinea pigs. They love exploring the different levels." },
+        { name: "Michael Harris", content: "Well-designed cage with plenty of room. Easy to assemble as well." }
     ],
     stockLevel: 15,
     hidden: false,
@@ -1113,8 +1113,8 @@ export const ProductData=[
     title: "Hamster Exercise Wheel 21cm",
     description: "Silent and durable exercise wheel for hamsters, providing them with essential exercise and entertainment.",
     image: ["othersAccessory3.jpg"],
-    animaltag: ["others"],
-    producttag: ["accessory"],
+    animaltag: "others",
+    producttag: "accessory",
     price: 14.99,
     ratings: {
         total: 61,
@@ -1125,8 +1125,8 @@ export const ProductData=[
         5: 20,
     },
     comments: [
-        { name: "Emma Hill", comment: "My hamster loves this wheel. It's quiet and doesn't disturb me at night." },
-        { name: "Daniel Carter", comment: "Sturdy wheel and easy to attach to the cage. Keeps my hamster active." }
+        { name: "Emma Hill", content: "My hamster loves this wheel. It's quiet and doesn't disturb me at night." },
+        { name: "Daniel Carter", content: "Sturdy wheel and easy to attach to the cage. Keeps my hamster active." }
     ],
     stockLevel: 25,
     hidden: false,
@@ -1136,8 +1136,8 @@ export const ProductData=[
     title: "Bird Cage Perches",
     description: "Set of natural wooden perches for birds, providing them with comfortable spots to rest and perch.",
     image: ["othersAccessory4.jpg"],
-    animaltag: ["others"],
-    producttag: ["accessory"],
+    animaltag: "others",
+    producttag: "accessory",
     price: 9.75,
     ratings: {
         total: 61,
@@ -1148,8 +1148,8 @@ export const ProductData=[
         5: 20,
     },
     comments: [
-        { name: "Mason Allen", comment: "Good quality perches for my birds. They love hopping between them." },
-        { name: "Sophie Turner", comment: "Natural and safe perches. Easy to clean and maintain." }
+        { name: "Mason Allen", content: "Good quality perches for my birds. They love hopping between them." },
+        { name: "Sophie Turner", content: "Natural and safe perches. Easy to clean and maintain." }
     ],
     stockLevel: 35,
     hidden: false,
@@ -1159,8 +1159,8 @@ export const ProductData=[
     title: "Turtle Basking Platform",
     description: "Floating basking platform for turtles, providing a dry area for basking under heat lamps.",
     image: ["othersAccessory5.jpg"],
-    animaltag: ["others"],
-    producttag: ["accessory"],
+    animaltag: "others",
+    producttag: "accessory",
     price: 29.50,
     ratings: {
         total: 61,
@@ -1171,8 +1171,8 @@ export const ProductData=[
         5: 20,
     },
     comments: [
-        { name: "Madison Young", comment: "Great platform for my turtles. They love basking under their heat lamp." },
-        { name: "Jack Turner", comment: "Sturdy and easy to clean. Provides a comfortable spot for my turtles." }
+        { name: "Madison Young", content: "Great platform for my turtles. They love basking under their heat lamp." },
+        { name: "Jack Turner", content: "Sturdy and easy to clean. Provides a comfortable spot for my turtles." }
     ],
     stockLevel: 18,
     hidden: false,
