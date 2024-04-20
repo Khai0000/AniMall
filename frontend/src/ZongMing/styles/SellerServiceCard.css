@@ -61,16 +61,9 @@
     color: white;
     font-size: 130%;
     border-radius: 8px;
-}
-
-.seller-service-card-minus-button {
-    padding-left: 1.15%;
-    padding-right: 1.15%;
-}
-
-.seller-service-card-plus-button {
-    padding-left: 1%;
-    padding-right: 1%;
+    width: 2rem;
+    height: 2rem;
+    text-align: center;
 }
 
 .seller-service-card-minus-button:hover,
@@ -87,7 +80,6 @@
     background-color: white;
     border: 1.1px solid #3C95A9;
     border-radius: 8px;
-    padding-left: 1.2%;
     text-align: center;
 }
 

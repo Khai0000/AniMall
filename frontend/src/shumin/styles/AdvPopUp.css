@@ -28,19 +28,17 @@
 
 .closeButton {
   position: absolute;
-  top: 15px; /* Adjust as needed */
-  right: 10px; /* Adjust as needed */
   border: none;
   background-color: #3C95A9;
   color: white;
-  width: 70px;
-  height:70px;
-  border-radius: 50%; /* Circle shape */
-  padding: 0;
-  font-size: 35px; /* Adjust as needed */
-  line-height: 35px; /* Center the 'X' vertically */
-  text-align: center; /* Center the 'X' horizontally */
+  width: 35px;
+  height: 35px;
+  border-radius: 10px;
+  padding-top: 5px;
+  transform: rotate(45deg);
   cursor: pointer;
+  right: 4vw;
+  top: 5.5vh;
 }
 
 .closeButton:hover {

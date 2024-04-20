@@ -133,6 +133,7 @@ const ForumAddPost = () => {
       comments: [],
       peopleWhoLikes: [],
       peopleWhoDislikes: [],
+      createdAt: new Date(),
     };
 
     dispatch(addPost(newPost));

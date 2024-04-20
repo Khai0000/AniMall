@@ -1,31 +1,31 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/ProductDetailsInputForm.css";
 import useToggle from "../hooks/useToggle.js";
 import { useDispatch, useSelector } from "react-redux";
-import { addPet,editPet } from "../slices/PetSlice.js";
+import { addPet, editPet } from "../slices/PetSlice.js";
 import { PetData } from "../data/DummyPetData.js";
-import { Link ,useParams,useNavigate} from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 
-const AddPet =()=>{
+const AddPet = () => {
   const [showTitleInput, toggleTitle] = useToggle();
   const [showDesciptionInput, toggleDescription] = useToggle();
   const [showPriceInput, togglePrice] = useToggle();
-  const [showBirthdateInput,toggleBirthdate]=useToggle();
+  const [showBirthdateInput, toggleBirthdate] = useToggle();
   const [editMode, setEditMode] = useState(false);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState();
-  const [birthdate,setBirthdate]=useState("");
-  const [selectedAnimalTag, setSelectedAnimalTag]=useState("");
-  const [hidden,setHidden]=useState();
-  const [stockLevel, setStockLevel]=useState();
+  const [birthdate, setBirthdate] = useState("");
+  const [selectedAnimalTag, setSelectedAnimalTag] = useState("");
+  const [hidden, setHidden] = useState();
+  const [stockLevel, setStockLevel] = useState();
 
   const [isDogFocused, setIsDogFocused] = useState(false);
   const [isCatFocused, setIsCatFocused] = useState(false);
   const [isOthersFocused, setIsOthersFocused] = useState(false);
-  const pets = useSelector((state)=> state.pets);
-  const { id } = useParams(); 
+  const pets = useSelector((state) => state.pets);
+  const { id } = useParams();
 
   //for image
   const [images, setImages] = useState([]);
@@ -42,11 +42,11 @@ const AddPet =()=>{
         setTitle(petToEdit.title);
         setDescription(petToEdit.description);
         setPrice(petToEdit.price);
-        if(petToEdit.animaltag==="dog"){
+        if (petToEdit.animaltag === "dog") {
           setIsDogFocused(true);
-        }else if(petToEdit.animaltag==="cat"){
+        } else if (petToEdit.animaltag === "cat") {
           setIsCatFocused(true);
-        }else if(petToEdit.animaltag==="others"){
+        } else if (petToEdit.animaltag === "others") {
           setIsOthersFocused(true);
         }
         setImages(petToEdit.image);
@@ -58,14 +58,13 @@ const AddPet =()=>{
   }, [id, pets]);
 
   const navigate = useNavigate();
-  const dispatch=useDispatch();
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if ( pets.length === 0) {
-        PetData.forEach((pet) => {
-            dispatch(addPet(pet));
-        }
-    );
+    if (pets.length === 0) {
+      PetData.forEach((pet) => {
+        dispatch(addPet(pet));
+      });
     }
   }, [dispatch, pets]);
 
@@ -74,7 +73,7 @@ const AddPet =()=>{
       setSelectedAnimalTag(null);
       switch (button) {
         case "dog":
-          setIsDogFocused(false); 
+          setIsDogFocused(false);
           break;
         case "cat":
           setIsCatFocused(false);
@@ -92,14 +91,13 @@ const AddPet =()=>{
       setIsOthersFocused(button === "others");
     }
   };
-  
 
   const generatePetId = () => {
     if (pets.length === 0) {
       return "A0001"; // If no pets, start with A0001
     }
 
-    const lastPetId = pets[pets.length - 1].id;
+    const lastPetId = pets[0].id;
     const lastIdNumber = parseInt(lastPetId.slice(1), 10);
     const newIdNumber = lastIdNumber + 1;
     const paddedNewId = String(newIdNumber).padStart(4, "0");
@@ -115,9 +113,9 @@ const AddPet =()=>{
         setDescription(e.target.value);
         toggleDescription();
       } else if (fieldType === "price") {
-        setPrice(e.target.value);
+        setPrice(parseFloat(e.target.value));
         togglePrice();
-      }else if (fieldType === "birthdate") {
+      } else if (fieldType === "birthdate") {
         setBirthdate(e.target.value);
         toggleBirthdate();
       }
@@ -126,7 +124,7 @@ const AddPet =()=>{
 
   const getSelectedTags = () => {
     let animalTag = "";
-  
+
     if (isDogFocused) {
       animalTag = "dog";
     } else if (isCatFocused) {
@@ -137,9 +135,8 @@ const AddPet =()=>{
 
     return animalTag;
   };
-  
 
-  const handleOnAddPetClick=()=>{
+  const handleOnAddPetClick = () => {
     const priceString = String(price);
     if (!title.trim()) {
       alert("Please provide a title for your pet.");
@@ -151,19 +148,19 @@ const AddPet =()=>{
       return;
     }
 
-    if (!priceString.trim()|| isNaN(price)) {
+    if (!priceString.trim() || isNaN(price)) {
       alert("Please provide the price for your pet.");
       return;
     }
 
     if (!birthdate.trim()) {
-        alert("Please provide the birthdate for your pet.");
-        return;
-      }
+      alert("Please provide the birthdate for your pet.");
+      return;
+    }
 
     if (images.every((image) => image === null)) {
-        alert("Please upload at least one image for your pet.");
-        return;
+      alert("Please upload at least one image for your pet.");
+      return;
     }
 
     const animalTag = getSelectedTags();
@@ -176,9 +173,9 @@ const AddPet =()=>{
         birthdate,
         image: images.filter((image) => image !== null),
         animaltag: animalTag,
-        price:parseInt(price),
-        stockLevel:stockLevel,
-        hidden:hidden,
+        price: parseInt(price),
+        stockLevel: stockLevel,
+        hidden: hidden,
       };
       // Dispatch editProduct action
       dispatch(editPet(updatedPet));
@@ -189,19 +186,19 @@ const AddPet =()=>{
       const newPet = {
         title: title,
         id: newPetId,
-        description:description,
-        image:images.filter((image) => image !== null),
-        animaltag:selectedAnimalTag,
-        price:parseInt(price),
-        birthdate:birthdate,
-        stockLevel:1,
-        hidden:false,
+        description: description,
+        image: images.filter((image) => image !== null),
+        animaltag: selectedAnimalTag,
+        price: parseInt(price),
+        birthdate: birthdate,
+        stockLevel: 1,
+        hidden: false,
       };
 
       dispatch(addPet(newPet));
     }
     navigate(-1);
-  }
+  };
 
   const triggerFileInput = () => {
     if (currentImageIndex === -1 || images.length === 0) {
@@ -210,7 +207,9 @@ const AddPet =()=>{
   };
 
   const handleImageChange = (e) => {
-    const newImages = Array.from(e.target.files).map((file) => URL.createObjectURL(file));
+    const newImages = Array.from(e.target.files).map((file) =>
+      URL.createObjectURL(file)
+    );
     setImages([...images, ...newImages]);
     setCurrentImageIndex(images.length + newImages.length - 1);
   };
@@ -224,10 +223,16 @@ const AddPet =()=>{
     }
 
     let newIndex = currentImageIndex;
-    if (direction === 'prev') {
-      newIndex = currentImageIndex === -1 ? images.length - 1 : currentImageIndex > 0 ? currentImageIndex - 1 : images.length - 1;
-    } else if (direction === 'next') {
-      newIndex = currentImageIndex < images.length - 1 ? currentImageIndex + 1 : -1;
+    if (direction === "prev") {
+      newIndex =
+        currentImageIndex === -1
+          ? images.length - 1
+          : currentImageIndex > 0
+          ? currentImageIndex - 1
+          : images.length - 1;
+    } else if (direction === "next") {
+      newIndex =
+        currentImageIndex < images.length - 1 ? currentImageIndex + 1 : -1;
     }
     setCurrentImageIndex(newIndex);
   };
@@ -238,90 +243,118 @@ const AddPet =()=>{
     }
 
     // Check if the image source is from the file explorer or already a URL
-    const isImageFromFileExplorer = images[currentImageIndex].startsWith('blob:'); // Assuming file explorer URLs start with 'blob:'
+    const isImageFromFileExplorer =
+      images[currentImageIndex].startsWith("blob:"); // Assuming file explorer URLs start with 'blob:'
 
     if (isImageFromFileExplorer) {
+      return (
+        <img
+          src={images[currentImageIndex]}
+          alt="Pet for sales"
+          style={{ maxWidth: "100%", maxHeight: "100%" }}
+        />
+      );
+    } else {
+      if (images.length === 0) {
+        return null;
+      } else if (images.length === 1) {
         return (
           <img
-            src={images[currentImageIndex]}
+            src={require(`../assets/images/${images[0]}`)}
             alt="Pet for sales"
-            style={{ maxWidth: '100%', maxHeight: '100%' }}
+            style={{ maxWidth: "100%", maxHeight: "100%" }}
           />
         );
-        } else {
-          if (images.length === 0) {
-            return null;
-          } else if (images.length === 1) {
-            return (
+      } else if (images.length === 2) {
+        return (
+          <>
+            {currentImageIndex === 0 && (
               <img
                 src={require(`../assets/images/${images[0]}`)}
                 alt="Pet for sales"
                 style={{ maxWidth: "100%", maxHeight: "100%" }}
               />
-            );
-          } else if (images.length === 2) {
-            return (
-              <>
-                {currentImageIndex === 0 && (
-                  <img
-                    src={require(`../assets/images/${images[0]}`)}
-                    alt="Pet for sales"
-                    style={{ maxWidth: "100%", maxHeight: "100%" }}
-                  />
-                )}
-                {currentImageIndex === 1 && (
-                  <img
-                    src={require(`../assets/images/${images[1]}`)}
-                    alt="Pet for sales"
-                    style={{ maxWidth: "100%", maxHeight: "100%" }}
-                  />
-                )}
-              </>
-            );
-          } else {
-            return (
+            )}
+            {currentImageIndex === 1 && (
               <img
-                src={require(`../assets/images/${images[currentImageIndex]}`)}
+                src={require(`../assets/images/${images[1]}`)}
                 alt="Pet for sales"
                 style={{ maxWidth: "100%", maxHeight: "100%" }}
               />
-            );
-          }
-        }
+            )}
+          </>
+        );
+      } else {
+        return (
+          <img
+            src={require(`../assets/images/${images[currentImageIndex]}`)}
+            alt="Pet for sales"
+            style={{ maxWidth: "100%", maxHeight: "100%" }}
+          />
+        );
+      }
+    }
   };
-  
-  
-  const handleDeleteImage=()=>{
+
+  const handleDeleteImage = () => {
     if (currentImageIndex !== -1) {
-      const updatedImages = images.filter((image, index) => index !== currentImageIndex);
+      const updatedImages = images.filter(
+        (image, index) => index !== currentImageIndex
+      );
       setImages(updatedImages);
       setCurrentImageIndex(updatedImages.length > 0 ? 0 : -1); // Set current index to the first image if there are remaining images, otherwise to -1
     }
-  }
-
+  };
 
   return (
     <div>
       <div className="image-uploader-container" onClick={triggerFileInput}>
         <div className="image-container">
           {displayContent()}
-          {currentImageIndex !==-1 && 
+          {currentImageIndex !== -1 && (
             <div className="image-overlay">
-              <button className="delete-button" onClick={handleDeleteImage}>Delete Image</button>
+              <button className="delete-button" onClick={handleDeleteImage}>
+                Delete Image
+              </button>
             </div>
-          }
+          )}
         </div>
         <div className="overlay-controls">
-          <button className="nav-button prev-button" onClick={(e) => navigateImage('prev', e)} disabled={images.length === 0 && currentImageIndex === -1}>{'<'}</button>
+          <button
+            className="nav-button prev-button"
+            onClick={(e) => navigateImage("prev", e)}
+            disabled={images.length === 0 && currentImageIndex === -1}
+          >
+            {"<"}
+          </button>
           <div className="pagination-dots">
             {images.map((_, index) => (
-              <span key={index} className={`pagination-indicator ${index === currentImageIndex ? 'current' : ''}`} onClick={() => setCurrentImageIndex(index)}>•</span>
+              <span
+                key={index}
+                className={`pagination-indicator ${
+                  index === currentImageIndex ? "current" : ""
+                }`}
+                onClick={() => setCurrentImageIndex(index)}
+              >
+                •
+              </span>
             ))}
           </div>
-          <button className="nav-button next-button" onClick={(e) => navigateImage('next', e)} disabled={images.length === 0 && currentImageIndex === -1}>{'>'}</button>
-          
+          <button
+            className="nav-button next-button"
+            onClick={(e) => navigateImage("next", e)}
+            disabled={images.length === 0 && currentImageIndex === -1}
+          >
+            {">"}
+          </button>
         </div>
-        <input type="file" accept="image/*" multiple onChange={handleImageChange} style={{ display: 'none' }} />
+        <input
+          type="file"
+          accept="image/*"
+          multiple
+          onChange={handleImageChange}
+          style={{ display: "none" }}
+        />
       </div>
       <div className="Product-details-form-container">
         <div onClick={toggleTitle}>
@@ -334,12 +367,16 @@ const AddPet =()=>{
               onChange={(e) => setTitle(e.target.value)}
             />
           ) : (
-            <span className="Product-details-form-title">{title || "Title"}</span>
+            <span className="Product-details-form-title">
+              {title || "Title"}
+            </span>
           )}
         </div>
         <div onClick={toggleDescription}>
           <br />
-          <span className="Product-details-form-description">Description: </span>
+          <span className="Product-details-form-description">
+            Description:{" "}
+          </span>
           {showDesciptionInput ? (
             <input
               onClick={(e) => e.stopPropagation()}
@@ -355,7 +392,7 @@ const AddPet =()=>{
           )}
         </div>
         <div onClick={toggleBirthdate}>
-            <br />
+          <br />
           <span className="Product-details-form-birthdate">Birth Date: </span>
           {showBirthdateInput ? (
             <input
@@ -366,34 +403,38 @@ const AddPet =()=>{
               onChange={(e) => setBirthdate(e.target.value)}
             />
           ) : (
-            <span className="Product-details-form-birthdate-content">{birthdate || "birthdate"}</span>
+            <span className="Product-details-form-birthdate-content">
+              {birthdate || "birthdate"}
+            </span>
           )}
         </div>
         <div className="Product-details-form-product-categories-container">
-          <span className="Product-details-form-product-categories-animal">Animal type: </span>
+          <span className="Product-details-form-product-categories-animal">
+            Animal type:{" "}
+          </span>
           <button
-              className={`Product-details-form-product-categories-button ${
-                  isDogFocused ? "focused" : ""
-              }`}
-              onClick={() => toggleSelectedAnimalTag("dog")}
-              >
-              Dog
-              </button>
-              <button
-              className={`Product-details-form-product-categories-button ${
-                  isCatFocused ? "focused" : ""
-              }`}
-              onClick={() => toggleSelectedAnimalTag("cat")}
-              >
-              Cat
-              </button>
-              <button
-              className={`Product-details-form-product-categories-button ${
-                  isOthersFocused ? "focused" : ""
-              }`}
-              onClick={() => toggleSelectedAnimalTag("others")}
-              >
-              Others
+            className={`Product-details-form-product-categories-button ${
+              isDogFocused ? "focused" : ""
+            }`}
+            onClick={() => toggleSelectedAnimalTag("dog")}
+          >
+            Dog
+          </button>
+          <button
+            className={`Product-details-form-product-categories-button ${
+              isCatFocused ? "focused" : ""
+            }`}
+            onClick={() => toggleSelectedAnimalTag("cat")}
+          >
+            Cat
+          </button>
+          <button
+            className={`Product-details-form-product-categories-button ${
+              isOthersFocused ? "focused" : ""
+            }`}
+            onClick={() => toggleSelectedAnimalTag("others")}
+          >
+            Others
           </button>
         </div>
         <div onClick={togglePrice}>
@@ -406,7 +447,7 @@ const AddPet =()=>{
               className="Product-details-form-price-input"
               onKeyPress={(e) => handleKeyPress(e, "price")}
               value={price}
-              onChange={(e) => setPrice(e.target.value)}
+              onChange={(e) => setPrice(parseFloat(e.target.value))}
             />
           ) : (
             <span className="Product-details-form-price-content">
@@ -415,7 +456,10 @@ const AddPet =()=>{
           )}
         </div>
         <div className="Product-details-form-add-back-button">
-          <button id="Product-details-form-add-button" onClick={handleOnAddPetClick}>
+          <button
+            id="Product-details-form-add-button"
+            onClick={handleOnAddPetClick}
+          >
             <svg
               id="Product-details-form-add-button-icon"
               xmlns="http://www.w3.org/2000/svg"
@@ -429,12 +473,14 @@ const AddPet =()=>{
                 fill="white"
               />
             </svg>
-            {editMode?
+            {editMode ? (
               <span id="Product-details-form-add-button-text">Save</span>
-              :<span id="Product-details-form-add-button-text">Add</span>}
+            ) : (
+              <span id="Product-details-form-add-button-text">Add</span>
+            )}
           </button>
           <Link to={`/pet/sellerPet`} id="Product-details-form-back-button">
-              Go Back
+            Go Back
           </Link>
         </div>
       </div>

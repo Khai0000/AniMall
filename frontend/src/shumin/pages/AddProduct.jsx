@@ -19,8 +19,15 @@ const AddProduct =()=>{
   const [selectedProductTag,setSelectedProductTag]=useState();
   const [hidden,setHidden]=useState();
   const [stockLevel, setStockLevel]=useState();
-  const [rating,setRating]=useState();
-  const [comment,setComment]=useState();
+  const [rating, setRating] = useState({
+    total:0,
+    1:0,
+    2:0,
+    3:0,
+    4:0,
+    5:0,
+  });
+  const [comment, setComment] = useState([]);
 
   const [isDogFocused, setIsDogFocused] = useState(false);
   const [isCatFocused, setIsCatFocused] = useState(false);
@@ -129,10 +136,11 @@ const AddProduct =()=>{
       return "P0001"; // If no products, start with P0001
     }
 
-    const lastProductId = products[products.length - 1].id;
+    const lastProductId = products[0].id;
     const lastIdNumber = parseInt(lastProductId.slice(1), 10);
     const newIdNumber = lastIdNumber + 1;
     const paddedNewId = String(newIdNumber).padStart(4, "0");
+
     return `P${paddedNewId}`;
   };
 
@@ -228,8 +236,8 @@ const AddProduct =()=>{
         animaltag: selectedAnimalTag,
         producttag: selectedProductTag,
         price: parseInt(price),
-        ratings: [],
-        comments: [],
+        ratings: rating,
+        comments: comment,
         stockLevel: 1,
         hidden: false,
       };

@@ -4,11 +4,11 @@ footer {
     margin: 0;
     width: 100%;
     padding: 4vh 2vw;
+    z-index: 5;
 }
 
 footer {
-    opacity: 0;
-    transition: opacity 0.8s;
+    opacity: 1;
 }
 
 footer.reveal {

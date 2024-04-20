@@ -126,7 +126,7 @@ const PetHome = () => {
         <div className="Product-category-row-content">
           <Suspense fallback={<div>Loading...</div>}>
             {pets.map((pet, index) => (
-              <PetCard key={index} pet={pet} />
+              <PetCard key={pet.id} pet={pet} />
             ))}
           </Suspense>
         </div>
