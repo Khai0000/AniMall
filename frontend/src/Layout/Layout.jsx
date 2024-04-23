@@ -45,7 +45,7 @@ function Layout() {
 
     calculateSpacerHeight();
 
-  },[location,bodyRef.current?.clientHeight]);
+  },[location,bodyRef,bodyRef.current?.clientHeight]);
 
   return (
     <div className="App">
@@ -58,7 +58,6 @@ function Layout() {
         footerRef={footerRef}
         className={isFooterIntersecting ? "reveal" : ""}
       />
-     {/* <AdvPopUp /> Include the AdvPopUp component */}
     </div>
   );
 }
