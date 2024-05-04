@@ -1,51 +1,54 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import "../styles/ForumHomeCard.css";
 import ForumHomeCardSkeleton from "./ForumHomeCardSkeleton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { removePost } from "../slices/postSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 
-const ForumHomeCard = ({ post,index }) => {
-  const [image, setImage] = useState(null);
+const ForumHomeCard = ({ post, index }) => {
+
   const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleOnDeleteClick = (e,title) => {
+  // useEffect(() => {
+  //   setIsLoading(true);
+  
+  //   const fetchImage = async () => {
+  //     try {
+  //       await axios.get(post.image[0]);
+  //       setIsLoading(false);
+  //     } catch (error) { 
+  //       console.error("Error loading image:", error);
+  //       setIsLoading(false); 
+  //     }
+  //   };
+  
+  //   fetchImage();
+  // }, []);
+  
+  const handleOnDeleteClick = async (e) => {
     e.stopPropagation();
-    dispatch(removePost(title));
+  
+    try {
+      const deletePostResponse = await axios.delete(`http://localhost:4000/api/community/post/${post._id}`);
+  
+      if (deletePostResponse.status === 200) {
+        dispatch(removePost(post._id));
+        alert('Post deleted successfully');
+      } else {
+        console.error('Unexpected response status:', deletePostResponse.status);
+        alert('An error occurred while deleting the post. Please try again later.');
+      }
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      alert('An error occurred while deleting the post. Please try again later.');
+    }
   };
-
-  useEffect(() => {
-    setIsLoading(true);
   
-    if (post.title === 'cat') {
-      console.log(post.image[0]);
-    }
-  
-    if (post.image[0].startsWith("data:image/")) {
-      // If the image URL starts with "data:image/", it indicates a base64 encoded image
-      setImage(post.image[0]);
-      setIsLoading(false);
-    } else {
-      // Handle other image types using existing logic
-      let imageDir = post.image[0].substring(0, post.image[0].indexOf("."));
-      import(`../assets/images/${imageDir}.jpg`)
-        .then((image) => {
-          setImage(image.default);
-        })
-        .catch((error) => {
-          console.error("Error loading image:", error);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    }
-  }, [post]);
-  
-
 
   return isLoading ? (
     <ForumHomeCardSkeleton />
@@ -53,11 +56,11 @@ const ForumHomeCard = ({ post,index }) => {
     <div
       className="cardContainer"
       onClick={() => {
-        navigate(`post/${index}`,{state:post});
+        navigate(`post/${index}`, { state: post });
       }}
     >
-      <div className="imageContainer ">
-        <img src={image} alt="" />
+      <div className="imageContainer">
+        <img src={post.image[0]} alt="" />
       </div>
 
       <div className="cardDetails">
@@ -67,17 +70,17 @@ const ForumHomeCard = ({ post,index }) => {
         </p>
         <p className="content">{post.content}</p>
       </div>
-      {
-        post.author==="Khai" && <button
-        style={{zIndex:100}}
+      {post.author === "Khai" && (
+        <button
+          style={{ zIndex: 100 }}
           className="deleteButton"
           onClick={(e) => {
-            handleOnDeleteClick(e,post.title);
+            handleOnDeleteClick(e, post.title);
           }}
         >
           <DeleteIcon />
         </button>
-      }
+      )}
     </div>
   );
 };

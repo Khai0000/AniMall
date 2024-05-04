@@ -3,8 +3,9 @@ import CloseIcon from "@mui/icons-material/Close";
 import "../styles/PopupDialog.css";
 import { useDispatch } from "react-redux";
 import { addComment } from "../slices/postSlice";
+import axios from 'axios';
 
-const PopupDialog = ({ setShowPopup, postTitle }) => {
+const PopupDialog = ({ setShowPopup, postId }) => {
   const dispatch = useDispatch();
 
   const [bodyText, setBodyText] = useState("");
@@ -13,7 +14,7 @@ const PopupDialog = ({ setShowPopup, postTitle }) => {
     setBodyText(e.target.value);
   };
 
-  const handleOnSubmitClick = () => {
+  const handleOnSubmitClick = async() => {
     if (bodyText.trim()==="") {
       alert("Body can't be empty");
       return;
@@ -24,8 +25,24 @@ const PopupDialog = ({ setShowPopup, postTitle }) => {
       content: bodyText,
     };
 
-    dispatch(addComment({ postTitle, comment: newComment }));
-    setShowPopup(false);
+    try{
+      console.log(postId);
+      const addCommentResponse = await axios.post(`http://localhost:4000/api/community/comment/post/${postId}`,{
+        name: "Khai",
+        content: bodyText,
+      });
+
+      if(addCommentResponse.status===201)
+      {
+        dispatch(addComment({ postId, comment: newComment }));
+        setShowPopup(false);
+      }
+    }catch(error){
+      console.log(error);
+    }
+
+
+
   };
 
   return (

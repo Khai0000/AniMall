@@ -25,36 +25,39 @@ const ForumPostDetails = () => {
 
   const postTitle = state.state.title;
 
+
   const post = useSelector((state) =>
     state.posts.find((post) => post.title === postTitle)
   );
 
+
   const [loadedImageUrls, setLoadedImageUrls] = useState([]);
 
   useEffect(() => {
-    const loadImageUrls = async () => {
-      const loadedImages = [];
-      for (const image of post.image) {
-        try {
-          if (image.startsWith("data:image/")) {
-            // If the image URL starts with "data:image/", it indicates a base64 encoded image
-            loadedImages.push(image);
-          } else if (image.includes(".jpg")) {
-            let imageDir = image.substring(0, image.indexOf("."));
-            const imageData = await import(`../assets/images/${imageDir}.jpg`);
-            loadedImages.push(imageData.default);
-          } else {
-            // Handle other image types here if needed
-            loadedImages.push(image);
-          }
-        } catch (error) {
-          console.error("Error loading image:", error);
-        }
-      }
-      setLoadedImageUrls(loadedImages);
-    };
+    // const loadImageUrls = async () => {
+    //   const loadedImages = [];
+    //   for (const image of post.image) {
+    //     try {
+    //       if (image.startsWith("data:image/")) {
+    //         // If the image URL starts with "data:image/", it indicates a base64 encoded image
+    //         loadedImages.push(image);
+    //       } else if (image.includes(".jpg")) {
+    //         let imageDir = image.substring(0, image.indexOf("."));
+    //         const imageData = await import(`../assets/images/${imageDir}.jpg`);
+    //         loadedImages.push(imageData.default);
+    //       } else {
+    //         // Handle other image types here if needed
+    //         loadedImages.push(image);
+    //       }
+    //     } catch (error) {
+    //       console.error("Error loading image:", error);
+    //     }
+    //   }
+    //   setLoadedImageUrls(loadedImages);
+    // };
 
-    loadImageUrls();
+    // loadImageUrls();
+    setLoadedImageUrls(post.image);
   }, [post.image]);
 
   const [showPopup, setShowPopup] = useState(false);
@@ -166,8 +169,8 @@ const ForumPostDetails = () => {
                 return (
                   <ForumPostComment
                     comment={comment}
-                    key={index}
-                    postTitle={postTitle}
+                    key={comment._id}
+                    postId={post._id}
                   />
                 );
               })
@@ -177,7 +180,7 @@ const ForumPostDetails = () => {
       </div>
 
       {showPopup && (
-        <PopupDialog setShowPopup={setShowPopup} postTitle={post.title} />
+        <PopupDialog setShowPopup={setShowPopup} postId={post._id} />
       )}
     </div>
   );
