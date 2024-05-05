@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setInitialPost } from "../ginkhai/slices/postSlice";
-import { combineData } from "../ginkhai/data/dummyData";
 import { Outlet } from "react-router-dom";
 import axios from "axios";
 
@@ -17,14 +16,12 @@ function Community() {
       if (forumPostsResponse.status === 200) {
         dispatch(setInitialPost(forumPostsResponse.data));
       } else {
-        console.log("gg");
         console.log(forumPostsResponse);
       }
     };
 
     !posts && getForumPosts();
 
-    // !posts && dispatch(setInitialPost(combineData));
   });
 
   return <Outlet />;

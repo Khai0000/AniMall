@@ -3,7 +3,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import "../styles/PopupDialog.css";
 import { useDispatch } from "react-redux";
 import { addComment } from "../slices/postSlice";
-import axios from 'axios';
+import axios from "axios";
 
 const PopupDialog = ({ setShowPopup, postId }) => {
   const dispatch = useDispatch();
@@ -14,35 +14,33 @@ const PopupDialog = ({ setShowPopup, postId }) => {
     setBodyText(e.target.value);
   };
 
-  const handleOnSubmitClick = async() => {
-    if (bodyText.trim()==="") {
+  const handleOnSubmitClick = async () => {
+    if (bodyText.trim() === "") {
       alert("Body can't be empty");
       return;
     }
-    const newComment = {
-      image: null,
-      name: "Khai",
-      content: bodyText,
-    };
+    // const newComment = {
+    //   image: null,
+    //   name: "Khai",
+    //   content: bodyText,
+    // };
 
-    try{
-      console.log(postId);
-      const addCommentResponse = await axios.post(`http://localhost:4000/api/community/comment/post/${postId}`,{
-        name: "Khai",
-        content: bodyText,
-      });
+    try {
+      const addCommentResponse = await axios.post(
+        `http://localhost:4000/api/community/comment/post/${postId}`,
+        {
+          name: "Khai",
+          content: bodyText,
+        }
+      );
 
-      if(addCommentResponse.status===201)
-      {
-        dispatch(addComment({ postId, comment: newComment }));
+      if (addCommentResponse.status === 201) {
+        dispatch(addComment({ postId, comment: addCommentResponse.data }));
         setShowPopup(false);
       }
-    }catch(error){
+    } catch (error) {
       console.log(error);
     }
-
-
-
   };
 
   return (

@@ -15,7 +15,6 @@ function ForumHome() {
   const dispatch = useDispatch();
   const posts = useSelector((state) => state.posts);
   const memoizedPosts = useMemo(() => posts || [], [posts]);
-  console.log(memoizedPosts);
   const forumHistory = useSelector((state) => state.forumHistory);
 
   const { selectedCategory, searchText, selectedDate, scrollPosition } =

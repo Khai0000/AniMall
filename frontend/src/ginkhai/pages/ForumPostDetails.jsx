@@ -4,8 +4,8 @@ import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbDownAltIcon from "@mui/icons-material/ThumbDownAlt";
 import IconButton from "@mui/material/IconButton";
-import { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import PopupDialog from "../components/PopupDialog";
 import ForumPostComment from "../components/ForumPostComment";
 import { useSelector, useDispatch } from "react-redux";
@@ -16,51 +16,62 @@ import {
   addLike,
 } from "../slices/postSlice";
 import ImageSlider from "../components/ImageSlider";
+import PulseLoader from "react-spinners/PulseLoader";
+import { NotFoundPages } from "../../pages";
+import axios from "axios";
 
 const ForumPostDetails = () => {
-  const state = useLocation();
-  const dispatch = useDispatch();
+  const { postId } = useParams();
+  const [isLoading, setIsLoading] = useState(true);
+  const [showErrorPage, setShowErrorPage] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [loadedImageUrls, setLoadedImageUrls] = useState([]);
+  const [disableButton, setDisableButton] = useState(false);
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const postTitle = state.state.title;
-
-
-  const post = useSelector((state) =>
-    state.posts.find((post) => post.title === postTitle)
+  const localPost = useSelector((state) =>
+    state.posts?.find((post) => {
+      return post._id === postId;
+    })
   );
 
-
-  const [loadedImageUrls, setLoadedImageUrls] = useState([]);
+  const postRef = useRef(localPost); 
+  postRef.current=localPost;
+  let post = postRef.current;
 
   useEffect(() => {
-    // const loadImageUrls = async () => {
-    //   const loadedImages = [];
-    //   for (const image of post.image) {
-    //     try {
-    //       if (image.startsWith("data:image/")) {
-    //         // If the image URL starts with "data:image/", it indicates a base64 encoded image
-    //         loadedImages.push(image);
-    //       } else if (image.includes(".jpg")) {
-    //         let imageDir = image.substring(0, image.indexOf("."));
-    //         const imageData = await import(`../assets/images/${imageDir}.jpg`);
-    //         loadedImages.push(imageData.default);
-    //       } else {
-    //         // Handle other image types here if needed
-    //         loadedImages.push(image);
-    //       }
-    //     } catch (error) {
-    //       console.error("Error loading image:", error);
-    //     }
-    //   }
-    //   setLoadedImageUrls(loadedImages);
-    // };
+    const fetchSpecificPost = async () => {
+      try {
+        if (!postRef.current) {
+          const specificPostResponse = await axios.get(
+            `http://localhost:4000/api/community/post/${postId}`
+          );
 
-    // loadImageUrls();
-    setLoadedImageUrls(post.image);
-  }, [post.image]);
+          if (specificPostResponse.status === 200) {
+            postRef.current = specificPostResponse.data;
+            setDisableButton(false);
+          } else {
+            throw new Error({ error: "Post not found" });
+          }
+        } else {
+          setIsLoading(false);
+        }
+      } catch (error) {
+        console.error("Error fetching post:", error);
+        setShowErrorPage(true);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  const [showPopup, setShowPopup] = useState(false);
+    fetchSpecificPost();
+  });
+
+  useEffect(() => {
+    post && setLoadedImageUrls(post.image);
+  }, [post]);
 
   const handleAddComment = () => {
     setShowPopup(true);
@@ -70,30 +81,58 @@ const ForumPostDetails = () => {
     navigate(-1);
   };
 
-  const handleOnLikeClick = () => {
+  const handleOnLikeClick = async () => {
     if (post.peopleWhoLikes.includes("Khai")) {
-      dispatch(removeLike({ postTitle, userUid: "Khai" }));
+      dispatch(removeLike({ postId, userUid: "Khai" }));
+      await axios.post(
+        `http://localhost:4000/api/community/post/${postId}/neutral`,
+        { userUid: "Khai" }
+      );
     } else {
-      dispatch(addLike({ postTitle, userUid: "Khai" }));
+      dispatch(addLike({ postId, userUid: "Khai" }));
+      await axios.post(
+        `http://localhost:4000/api/community/post/${postId}/like`,
+        { userUid: "Khai" }
+      );
+    }
+  };
+  const handleOnDislikeClick = async () => {
+    try {
+      if (post.peopleWhoDislikes.includes("Khai")) {
+        dispatch(removeDislike({ postId, userUid: "Khai" }));
+
+        await axios.post(
+          `http://localhost:4000/api/community/post/${postId}/neutral`,
+          { userUid: "Khai" }
+        );
+      } else {
+        dispatch(addDislike({ postId, userUid: "Khai" }));
+
+        await axios.post(
+          `http://localhost:4000/api/community/post/${postId}/dislike`,
+          { userUid: "Khai" }
+        );
+      }
+    } catch (error) {
+      console.error("Error handling dislike:", error);
     }
   };
 
-  const handleOnDislikeClick = () => {
-    if (post.peopleWhoDislikes.includes("Khai")) {
-      dispatch(removeDislike({ postTitle, userUid: "Khai" }));
-    } else {
-      dispatch(addDislike({ postTitle, userUid: "Khai" }));
-    }
-  };
-
-  return (
+  return isLoading ? (
+    <div className="wj-loadingContainer">
+      <PulseLoader size={"1.5rem"} color="#3C95A9" />
+      <p className="wj-loadingText">Loading...</p>
+    </div>
+  ) : showErrorPage ? (
+    <NotFoundPages />
+  ) : (
     <div className="postContainer">
       <div className="postDetailsContainer">
         <div className="headerContainer">
           <div>
-            <p className="title">{post.title}</p>
+            <p className="title">{post && post.title}</p>
             <p className="author">
-              By: <span className="authorName">{post.author}</span>
+              By: <span className="authorName">{ post && post.author}</span>
             </p>
           </div>
           <button className="weijiePostBackButton" onClick={handleOnBackClick}>
@@ -105,7 +144,7 @@ const ForumPostDetails = () => {
             <ImageSlider images={loadedImageUrls} />
           </div>
           <div className="contentContainer">
-            <span className="content">{post.content}</span>
+            <span className="content">{post && post.content}</span>
           </div>
         </div>
       </div>
@@ -114,34 +153,43 @@ const ForumPostDetails = () => {
         <div className="reactionContainer">
           <span className="reactionTitle">Reaction</span>
           <div className="goodReactionContainer">
-            <IconButton className="reactionButton" onClick={handleOnLikeClick}>
-              {post.peopleWhoLikes.includes("Khai") ? (
+            <IconButton
+              className="reactionButton"
+              onClick={handleOnLikeClick}
+              disabled={disableButton}
+            >
+              {post && post.peopleWhoLikes.includes("Khai") ? (
                 <ThumbUpIcon className="reactionIcon" color="success" />
               ) : (
                 <ThumbUpOffAltIcon className="reactionIcon" color="success" />
               )}
             </IconButton>
-            <span style={{ color: "#2e7d32" }}>{post.likes}</span>
+            <span style={{ color: "#2e7d32" }}>{post && post.likes}</span>
           </div>
           <div className="badReactionContainer">
             <IconButton
               className="reactionButton"
               onClick={handleOnDislikeClick}
+              disabled={disableButton}
             >
-              {post.peopleWhoDislikes.includes("Khai") ? (
+              {post && post.peopleWhoDislikes.includes("Khai") ? (
                 <ThumbDownAltIcon className="reactionIcon" color="error" />
               ) : (
                 <ThumbDownOffAltIcon className="reactionIcon" color="error" />
               )}
             </IconButton>
-            <span style={{ color: "#d32f2f" }}>{post.dislikes}</span>
+            <span style={{ color: "#d32f2f" }}>{post && post.dislikes}</span>
           </div>
         </div>
 
         <div className="commentContainer">
           <div className="comment-header">
             <span className="comment-title">Comment</span>
-            <button className="add-comment-button" onClick={handleAddComment}>
+            <button
+              className="add-comment-button"
+              onClick={handleAddComment}
+              disabled={disableButton}
+            >
               <svg
                 className="add-comment-button-icon"
                 xmlns="http://www.w3.org/2000/svg"
@@ -160,20 +208,24 @@ const ForumPostDetails = () => {
             </button>
           </div>
           <div className="commentBody">
-            {post.comments.length === 0 ? (
+            {post && post.comments.length === 0 ? (
               <div className="noCommentContainer">
                 <p>The topic have no comment yet! Add yours here!</p>
               </div>
             ) : (
-              post.comments.map((comment, index) => {
-                return (
-                  <ForumPostComment
-                    comment={comment}
-                    key={comment._id}
-                    postId={post._id}
-                  />
-                );
-              })
+              post && post.comments
+                .slice()
+                .reverse()
+                .map((comment) => {
+                  return (
+                    <ForumPostComment
+                      disable={disableButton}
+                      comment={comment}
+                      key={comment._id}
+                      postId={post._id}
+                    />
+                  );
+                })
             )}
           </div>
         </div>

@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { removeComment } from "../slices/postSlice";
 import axios from "axios";
 
-const ForumPostComment = ({ comment, postId }) => {
+const ForumPostComment = ({ disable,comment, postId }) => {
   const [imageSource, setImageSource] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -64,7 +64,7 @@ const ForumPostComment = ({ comment, postId }) => {
       </div>
 
       {comment.name === "Khai" && (
-        <button className="deleteButton" onClick={handleOnDeleteClick}>
+        <button className="deleteButton" onClick={handleOnDeleteClick} disabled={disable}>
           <DeleteIcon />
         </button>
       )}
