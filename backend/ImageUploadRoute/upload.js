@@ -52,7 +52,6 @@ router.delete("/:imageFileName", async (req, res) => {
       return res.status(404).json({ err: "Image not found" });
     }
 
-
     res.status(200).json({message:"Success"});
   } catch (error) {
     console.error("Error retrieving file:", error);
