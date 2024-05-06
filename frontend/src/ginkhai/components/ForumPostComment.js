@@ -1,20 +1,35 @@
 import React, { useState, useEffect } from "react";
 import "../styles/ForumPostComment.css";
 import ForumPostCommentSkeleton from "./ForumPostCommentSkeleton";
-import DeleteIcon from '@mui/icons-material/Delete';
-import {useDispatch} from 'react-redux';
+import DeleteIcon from "@mui/icons-material/Delete";
+import { useDispatch } from "react-redux";
 import { removeComment } from "../slices/postSlice";
+import axios from "axios";
 
-
-const ForumPostComment = ({ comment,postTitle }) => {
+const ForumPostComment = ({ disable,comment, postId }) => {
   const [imageSource, setImageSource] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch();
 
-  const handleOnDeleteClick = ()=>{
-    dispatch(removeComment({postTitle,commentBody:comment.content}));
-  }
+  const handleOnDeleteClick = async () => {
+    try {
+      const deleteCommentResponse = await axios.delete(
+        `http://localhost:4000/api/community/comment/post/${postId}/${comment._id}`
+      );
+
+      if (deleteCommentResponse.status === 200) {
+        dispatch(removeComment({ postId: postId, commentId: comment._id }));
+      } else {
+        console.error(
+          "Unexpected response status:",
+          deleteCommentResponse.status
+        );
+      }
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+    }
+  };
 
   useEffect(() => {
     setIsLoading(true);
@@ -48,9 +63,11 @@ const ForumPostComment = ({ comment,postTitle }) => {
         <p className="content">{comment.content}</p>
       </div>
 
-      {comment.name==="Khai" && <button className="deleteButton" onClick={handleOnDeleteClick}>
+      {comment.name === "Khai" && (
+        <button className="deleteButton" onClick={handleOnDeleteClick} disabled={disable}>
           <DeleteIcon />
-        </button>}
+        </button>
+      )}
     </div>
   );
 };

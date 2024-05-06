@@ -210,3 +210,16 @@
     text-align: center;
     color: #868686;
 }
+
+div.wj-loadingContainer{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+
+p.wj-loadingText{
+    color: #3C95A9;
+    font-size: 2rem;
+}

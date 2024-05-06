@@ -74,11 +74,12 @@ function App() {
         },
         {
           path: "/community",
-          element: isLoggedIn ? (
-            <CommonPages.Community />
-          ) : (
-            <Navigate to="/authentication/login" replace={false}  />
-          ),
+          // element: isLoggedIn ? (
+          //   <CommonPages.Community />
+          // ) : (
+          //   <Navigate to="/authentication/login" replace={false}  />
+          // ),
+          element:<CommonPages.Community/>,
           children: [
             { path: "/community", element: <GinkhaiPages.ForumHome /> },
             {

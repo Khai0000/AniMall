@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useMemo } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import ForumHomeHeader from "../components/ForumHomeHeader";
 import ForumHomeCardSkeleton from "../components/ForumHomeCardSkeleton";
 import "../styles/ForumHome.css";
-
 import { Link } from "react-router-dom";
 import { useEffect, useState, lazy, Suspense, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -13,8 +12,8 @@ const ForumHomeCard = lazy(() => import("../components/ForumHomeCard"));
 
 function ForumHome() {
   const dispatch = useDispatch();
-
   const posts = useSelector((state) => state.posts);
+  const memoizedPosts = useMemo(() => posts || [], [posts]);
   const forumHistory = useSelector((state) => state.forumHistory);
 
   const { selectedCategory, searchText, selectedDate, scrollPosition } =
@@ -33,7 +32,7 @@ function ForumHome() {
 
   // useEffect for filtering data
   useEffect(() => {
-    let filteredData = posts;
+    let filteredData = memoizedPosts;
     setIsLoading(true);
 
     if (searchText.length !== 0) {
@@ -72,7 +71,7 @@ function ForumHome() {
 
     setIsLoading(false);
     setFilteredPosts(filteredData);
-  }, [searchText, selectedCategory, posts, selectedDate, dispatch]);
+  }, [searchText, selectedCategory, memoizedPosts, selectedDate, dispatch]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -89,7 +88,6 @@ function ForumHome() {
     };
   }, [dispatch, containerRef]);
 
-
   return (
     <div className="forumContainer">
       <ForumHomeHeader />
@@ -101,7 +99,7 @@ function ForumHome() {
         ) : filteredPosts.length !== 0 ? (
           <Suspense fallback={<ForumHomeCardSkeleton />}>
             {filteredPosts.map((post, index) => (
-              <ForumHomeCard post={post} index={index} key={index} />
+              <ForumHomeCard post={post} index={index} key={post._id} />
             ))}
           </Suspense>
         ) : (

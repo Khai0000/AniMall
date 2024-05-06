@@ -5,6 +5,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addPost } from "../slices/postSlice";
+import axios from "axios";
 
 const ForumAddPost = () => {
   const [titleText, setTitleText] = useState("");
@@ -12,6 +13,7 @@ const ForumAddPost = () => {
   const [buttonCount, setButtonCount] = useState(3);
   const [selectedButtons, setSelectedButtons] = useState([]);
   const [uploadedImages, setUploadedImages] = useState([null, null, null]);
+  const [uploadedFiles, setUploadedFiles] = useState([null, null, null]);
   const inputRefs = useRef([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -37,23 +39,18 @@ const ForumAddPost = () => {
 
   const handleImageUpload = (index) => (event) => {
     const file = event.target.files[0];
-    const reader = new FileReader();
 
-    // reader.onload = (e) => {
-    //   const newImages = [...uploadedImages];
-    //   newImages[index] = e.target.result;
-    //   setUploadedImages(newImages);
-    // };
-
-    reader.onloadend = () => {
-      const newImages = [...uploadedImages];
-      newImages[index] = reader.result;
-      setUploadedImages(newImages);
-    };
-
-    if (file) {
-      reader.readAsDataURL(file);
+    if (!file) {
+      return;
     }
+
+    const newImages = [...uploadedImages];
+    newImages[index] = URL.createObjectURL(file);
+    setUploadedImages(newImages);
+
+    const newFiles = [...uploadedFiles];
+    newFiles[index] = file;
+    setUploadedFiles(newFiles);
   };
 
   const handleButtonClick = (index) => () => {
@@ -87,6 +84,10 @@ const ForumAddPost = () => {
       setUploadedImages(newImages);
       setButtonCount(buttonCount - 1);
     }
+
+    const newFiles = [...uploadedFiles];
+    newFiles[index] = null;
+    setUploadedFiles(newFiles);
   };
 
   const handleOnBackClick = () => {
@@ -101,7 +102,7 @@ const ForumAddPost = () => {
     setBodyText(e.target.value);
   };
 
-  const handleOnAddPostClick = () => {
+  const handleOnAddPostClick = async () => {
     if (!titleText.trim()) {
       alert("Please provide a title for your post.");
       return;
@@ -121,23 +122,54 @@ const ForumAddPost = () => {
       alert("Please select at least one tag for your post.");
       return;
     }
+    const formData = new FormData();
+    uploadedFiles.forEach((file) => {
+      if (file) formData.append("file", file);
+    });
 
-    const newPost = {
-      title: titleText,
-      author: "Khai",
-      content: bodyText,
-      tag: [...selectedButtons],
-      likes: 0,
-      dislikes: 0,
-      image: uploadedImages.filter((image) => image !== null),
-      comments: [],
-      peopleWhoLikes: [],
-      peopleWhoDislikes: [],
-      createdAt: new Date(),
-    };
+    try {
+      const imageResponse = await axios.post(
+        "http://localhost:4000/image/upload",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data", // Make sure to set proper content type
+          },
+        }
+      );
 
-    dispatch(addPost(newPost));
-    navigate(-1);
+      if (imageResponse.status === 200) {
+        console.log("Image uploaded successfully", imageResponse.data);
+
+        const newPostResponse = await axios.post(
+          "http://localhost:4000/api/community/post/add",
+          {
+            title: titleText,
+            image: imageResponse.data,
+            author: "Khai",
+            content: bodyText,
+            tag: [...selectedButtons],
+          }
+        );
+
+        if (newPostResponse.status === 200) {
+          const newPost = newPostResponse.data;
+          dispatch(addPost(newPost));
+          navigate(-1);
+        }
+        else{
+          console.error("Error uploading image:", newPostResponse.statusText);
+          alert("Error uploading post. Please try again later.");
+        }
+
+      } else {
+        console.error("Error uploading image:", imageResponse.statusText);
+        alert("Error uploading image. Please try again later.");
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      alert("Error uploading image. Please try again later.");
+    }
   };
 
   return (
