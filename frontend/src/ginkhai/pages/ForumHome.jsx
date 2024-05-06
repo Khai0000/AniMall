@@ -3,7 +3,6 @@ import CircularProgress from "@mui/material/CircularProgress";
 import ForumHomeHeader from "../components/ForumHomeHeader";
 import ForumHomeCardSkeleton from "../components/ForumHomeCardSkeleton";
 import "../styles/ForumHome.css";
-
 import { Link } from "react-router-dom";
 import { useEffect, useState, lazy, Suspense, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -100,7 +99,7 @@ function ForumHome() {
         ) : filteredPosts.length !== 0 ? (
           <Suspense fallback={<ForumHomeCardSkeleton />}>
             {filteredPosts.map((post, index) => (
-              <ForumHomeCard post={post} index={post._id} key={index} />
+              <ForumHomeCard post={post} index={index} key={post._id} />
             ))}
           </Suspense>
         ) : (

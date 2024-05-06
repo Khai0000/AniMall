@@ -10,18 +10,21 @@ function Community() {
 
   useEffect(() => {
     const getForumPosts = async () => {
-      const forumPostsResponse = await axios.get(
-        "http://localhost:4000/api/community"
-      );
-      if (forumPostsResponse.status === 200) {
-        dispatch(setInitialPost(forumPostsResponse.data));
-      } else {
-        console.log(forumPostsResponse);
+      try {
+        const forumPostsResponse = await axios.get(
+          "http://localhost:4000/api/community"
+        );
+        if (forumPostsResponse.status === 200) {
+          dispatch(setInitialPost(forumPostsResponse.data));
+        } else {
+          console.log(forumPostsResponse);
+        }
+      } catch (error) {
+        // Perform neccessary action;
       }
     };
 
     !posts && getForumPosts();
-
   });
 
   return <Outlet />;

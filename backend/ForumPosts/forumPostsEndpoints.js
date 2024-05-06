@@ -13,6 +13,7 @@ import {
 
 const router = express.Router();
 
+
 router.get("/", getAllForumPosts);
 
 router.post("/post/add", addOneForumPost);

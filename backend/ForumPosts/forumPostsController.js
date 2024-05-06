@@ -31,7 +31,7 @@ export const getOnePost = async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id))
-    return res.status(400).json({ error: "Invalid Workout id" });
+    return res.status(400).json({ error: "Invalid post id" });
 
   try {
     const response = await ForumPostModel.findById({ _id: id });
