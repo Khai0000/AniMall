@@ -470,7 +470,7 @@ const AddProduct =()=>{
               xmlns="http://www.w3.org/2000/svg"
               width="20"
               height="17"
-              viewBox="0 0 25 22"
+              viewBox="0 0 25 26"
               fill="none"
             >
               <path
