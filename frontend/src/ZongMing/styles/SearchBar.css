@@ -4,7 +4,7 @@
     justify-content: space-between;
     padding: 10px 20px;
     background-color: white;
-    margin: 1rem;
+    margin: 1.75rem;
 }
 
 .header-container .input-container {
@@ -12,32 +12,22 @@
     align-items: center;
     flex: 1;
     max-width: 34vw;
+    margin-left:2.5%;
     position: relative;
+    margin-right: 6%;
 }
 
 .header-container .search-bar {
     border: 1px solid #3C95A9;
     border-radius: 15px;
     filter: drop-shadow(0 2px 4px rgba(60, 149, 169, 0.5));
-    font-family: Inter;
-    font-size: 1rem;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
+    font-size: 1.125rem;
     padding: 3px 40px 3px 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.10);
     transition: border-color 0.3s ease, filter 0.3s ease;
     width: 100%;
     position: relative;
-    color: #3C95A9;
-}
-
-.search-bar:hover {
-    border-color: #f4b701;
-    --shadow-color: rgba(244, 183, 1, 0.5);
-    filter: drop-shadow(0 2px 4px rgba(244, 183, 1, 0.5));
-    outline: none;
-    color: #3C95A9;
+    color: #666;
 }
 
 .search-bar:focus {
@@ -45,8 +35,7 @@
     --shadow-color: rgba(244, 183, 1, 0.5);
     filter: drop-shadow(0 2px 4px rgba(244, 183, 1, 0.5));
     outline: none;
-    color: #3C95A9;
-    /* Adjusted text color */
+    color: #666;
 }
 
 .header-container .searchIcon {
@@ -61,6 +50,13 @@
 .header-container .searchIcon:hover {
     cursor: pointer;
 }
+
+.input-container:focus-within .searchIcon {
+    color: #f4b701;
+    /* Change color to yellow when input container is focused */
+}
+
+
 
 .price-range-btn {
     padding: 5px 40px;
@@ -85,17 +81,15 @@
     align-items: center;
     padding: 8px 15px;
     color: #3C95A9;
-    /* Adjusted text color */
+    font-size: 1.15rem;
     border: none;
     background: none;
-    /* Removed background color */
     cursor: pointer;
     transition: color 0.3s;
 }
 
 .cart-btn:hover {
     color: #F3B801;
-    /* Adjusted hover color */
 }
 
 .cart-icon {

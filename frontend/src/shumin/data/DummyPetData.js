@@ -152,7 +152,7 @@ export const PetData=[
         price: 0,
         stockLevel:1,
         hidden: false,
-    },
+    },   
     {
         id: "A0015",
         title: "Luna Labrador",

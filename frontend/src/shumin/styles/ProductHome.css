@@ -151,6 +151,7 @@
 }
 
 .Upper-section-adoption-button{
+    position: relative;
     background-color: white;
     border: 2px solid #3C95A9;
     color: #3C95A9;
@@ -160,6 +161,8 @@
     padding-right: 1%;
     padding-top: 0.5%;
     padding-bottom: 0.5%;
+    transition: padding 0.3s ease;
+    align-items: center;
 }
 
 .Upper-section-adoption-button:hover{
@@ -168,13 +171,13 @@
 }
 
 .Upper-section-adoption-button.selected::before {
-    
+    content: "\2714";
     position: absolute;
     color: #fff;
     font-size: 1.125rem;
     font-weight: bold;
     left: 8px;
-    bottom: 8%;
+    bottom: 17%;
 }
 
 .Upper-section-adoption-button.selected{
@@ -183,10 +186,7 @@
     color: white;
     border-radius: 40px;
     font-size: 96%;
-    padding-left: 1%;
-    padding-right: 1%;
-    padding-top: 0.5%;
-    padding-bottom: 0.5%;
+    padding-left: 2.5% ;
 }
 
 .Upper-section-adoption-button.selected:hover{
@@ -195,10 +195,6 @@
     color: white;
     border-radius: 40px;
     font-size: 96%;
-    padding-left: 1%;
-    padding-right: 1%;
-    padding-top: 0.5%;
-    padding-bottom: 0.5%;
 }
 
 .Product-category-row.dog,

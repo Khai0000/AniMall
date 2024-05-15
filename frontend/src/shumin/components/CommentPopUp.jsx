@@ -57,7 +57,7 @@ const CommentPopUp = ({ setShowPopup, title }) => {
 
         <div className="servicePopupCommentContainer">
           <textarea
-            rows={15}
+            rows={10}
             placeholder="Leave your comment here!"
             value={bodyText}
             onChange={handleOnBodyTextChange}

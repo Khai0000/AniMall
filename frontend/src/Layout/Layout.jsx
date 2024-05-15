@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+//import AdvPopUp from "../shumin/components/AdvPopUp"; // Import AdvPopUp
 import { Outlet } from 'react-router-dom'
 import {useLocation} from 'react-router-dom';
 
@@ -44,7 +45,7 @@ function Layout() {
 
     calculateSpacerHeight();
 
-  },[location,bodyRef.current?.clientHeight]);
+  },[location,bodyRef,bodyRef.current?.clientHeight]);
 
   return (
     <div className="App">

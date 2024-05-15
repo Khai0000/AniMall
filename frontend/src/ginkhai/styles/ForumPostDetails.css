@@ -11,7 +11,7 @@
 }
 
 .postContainer .postDetailsContainer .title {
-    font-size: 2.25rem;
+    font-size: 1.5rem;
     font-weight: 700;
     margin: 8px 0;
     max-width: 65vw;
@@ -20,42 +20,66 @@
 
 
 .postContainer .postDetailsContainer .author {
-    font-size: 2rem;
+    font-size: 1.3rem;
     font-weight: 500;
     margin: 8px 0;
 }
 
 .postContainer .postDetailsContainer .authorName {
     color: #7A7A7A;
-    font-size: 2rem;
+    font-size: 1.3rem;
     font-weight: 400;
 }
 
 .postContainer .postDetailsContainer img {
-    width: 40vw;
-    height: 60vh;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     border-radius: 40px;
-    border: 1px solid #EFEFEF;
-    box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.10);
-    margin: 16px 0;
     align-self: center;
 }
 
-.postContainer>.postDetailsContainer>.imageContainer{
-    width: 40vw;
-    height: 60vh;
-    margin-bottom: 7vh;
-    align-self: center;   
+#root > div > main > div > div.postDetailsContainer > div.floatContainer > div.imageContainer > div > div > .slider__item{
+    box-sizing: border-box;
+    min-width: 100%;
+    height: auto;
+    overflow: hidden;
+    height: 100%;
+    transition: transform 1s ease;
 }
+
+.postContainer>.postDetailsContainer>.floatContainer{
+    padding: 4vh 0;
+}
+
+
+.postContainer>.postDetailsContainer>.floatContainer>.imageContainer{
+    width: 30%;
+    height: 35vh;
+    float: left;
+    border-radius: 20px;
+    margin-right: 3vw;
+    margin-bottom: 5vh;
+}
+
+.postContainer>.postDetailsContainer>.floatContainer>.imageContainer .container__slider{
+    margin: 0;
+    margin-top: 1vh;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+}
+
+
 
 .postContainer .postDetailsContainer .content {
     color: #7B7979;
-    font-size: 2rem;
+    font-size: 1.2rem;
     font-weight: 500;
-    line-height: 4rem;
+    line-height: 2rem;
     word-wrap: break-word;
 }
+
 
 .postContainer .feedbackContainer {
     display: flex;
@@ -97,31 +121,25 @@
 .postContainer .reactionContainer .reactionTitle,
 .postContainer .commentContainer .commentTitle {
     color: #3C95A9;
-    font-size: 2.25rem;
+    font-size: 1.5rem;
     font-weight: 500;
-    margin-bottom: 12px;
-    margin-right: 2vw;
+    margin-top: 0.6vw;
 }
 
 .postContainer .commentContainer .commentHeader {
     margin-bottom: 12px;
 }
 
-.postContainer .addPostButton {
-    background-color: #3C95A9;
+.postContainer .addPostButton{
+    cursor: pointer;
+    background-color: transparent;
     border: none;
-    border-radius: 15px;
-    height: fit-content;
-    width: fit-content;
-    text-align: center;
-    color: #fff;
-    font-size: 2.5rem;
-    padding: 2px 14px;
 }
 
-.postContainer .addPostButton:hover {
+.postContainer .addPostButton:hover{
     cursor: pointer;
-    background-color: #F3B801;
+    background-color: transparent;
+    border: none;
 }
 
 .postContainer .commentContainer .commentBody {
@@ -157,7 +175,7 @@
     margin-left: auto;
 }
 
-.postContainer .backButton {
+.postContainer .weijiePostBackButton {
     background-color: transparent;
     border: 1px solid #3C95A9;
     color: #3C95A9;
@@ -165,12 +183,12 @@
     height: fit-content;
     width: fit-content;
     text-align: center;
-    font-size: 2rem;
+    font-size: 1.25rem;
     padding: 5px 64px;
     margin-left: auto;
 }
 
-.postContainer .backButton:hover {
+.postContainer .weijiePostBackButton:hover {
     color: #f4b701;
     border: 1px solid #f4b701;
     text-shadow: 0 0 0px #f4b701, 0 0 1px #f4b701, 0 0 30px #f4b701;
@@ -191,4 +209,17 @@
     font-size: 1.5rem;
     text-align: center;
     color: #868686;
+}
+
+div.wj-loadingContainer{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+
+p.wj-loadingText{
+    color: #3C95A9;
+    font-size: 2rem;
 }

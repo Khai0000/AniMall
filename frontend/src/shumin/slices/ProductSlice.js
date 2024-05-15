@@ -49,7 +49,7 @@ export const ProductSlice =createSlice({
             }
           }
           if (!isDuplicate) {
-            return [...state,newProduct];
+            return [newProduct,...state];
           }
         }, 
         removeProduct(state,action){

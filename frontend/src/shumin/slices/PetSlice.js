@@ -63,6 +63,13 @@ export const PetSlice =createSlice({
                 existingPet.hidden=true;
             }
         },
+        addToCart (state, action) {
+          const { id, quantity } = action.payload;
+          const existingPet = state.find(pet => pet.id === id);
+          if (existingPet) {
+            existingPet.quantityInCart += quantity;
+          }
+      },
         checkOutPet(state,action){
             const { id, quantity } = action.payload;
             const existingPet = state.find(pet => pet.id === id);
@@ -80,6 +87,7 @@ export const {
     editPet,
     setPetQuantity,
     hidePet,
+    addToCart,
     checkOutPet
   } = PetSlice.actions;
   export default PetSlice.reducer;

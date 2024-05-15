@@ -62,25 +62,36 @@ export const postSlice = createSlice({
       return [action.payload, ...state];
     },
     removePost: (state, action) => {
-      return state.filter((post) => post.title !== action.payload);
+      return state.filter((post) => post._id !== action.payload);
     },
     setInitialPost: (state, action) => {
       return [...action.payload];
     },
     addComment: (state, action) => {
-      const { postTitle, comment } = action.payload;
+      const { postId, comment } = action.payload;
       const postIndex = state.findIndex((post) => {
         return (
-          post.title.trim().toLowerCase() === postTitle.trim().toLowerCase()
+          post._id===postId
         );
       });
       if (postIndex !== -1) {
-        state[postIndex].comments.unshift(comment);
+        state[postIndex].comments.push(comment);
       }
     },
+    removeComment: (state, action) => {
+      const { postId, commentId } = action.payload;
+      const postIndex = state.findIndex((post) => post._id === postId);
+      if (postIndex !== -1) {
+        const post = state[postIndex];
+        post.comments = post.comments.filter((comment) => {
+          return comment._id !== commentId;
+        });
+      }
+
+    },
     addLike: (state, action) => {
-      const { postTitle, userUid } = action.payload;
-      const postIndex = state.findIndex((post) => post.title === postTitle);
+      const { postId, userUid } = action.payload;
+      const postIndex = state.findIndex((post) => post._id === postId);
       if (postIndex !== -1) {
         const post = state[postIndex];
 
@@ -96,12 +107,8 @@ export const postSlice = createSlice({
       }
     },
     addDislike: (state, action) => {
-      const { postTitle, userUid } = action.payload;
-      const postIndex = state.findIndex((post) => {
-        return (
-          post.title.trim().toLowerCase() === postTitle.trim().toLowerCase()
-        );
-      });
+      const { postId, userUid } = action.payload;
+      const postIndex = state.findIndex((post) => post._id === postId);
       if (postIndex !== -1) {
         const post = state[postIndex];
         post.peopleWhoDislikes.push(userUid);
@@ -116,12 +123,9 @@ export const postSlice = createSlice({
       }
     },
     removeLike: (state, action) => {
-      const { postTitle, userUid } = action.payload;
-      const postIndex = state.findIndex((post) => {
-        return (
-          post.title.trim().toLowerCase() === postTitle.trim().toLowerCase()
-        );
-      });
+      const { postId, userUid } = action.payload;
+      const postIndex = state.findIndex((post) => post._id === postId);
+
       if (postIndex !== -1) {
         const post = state[postIndex];
         post.peopleWhoLikes = post.peopleWhoLikes.filter(
@@ -131,12 +135,9 @@ export const postSlice = createSlice({
       }
     },
     removeDislike: (state, action) => {
-      const { postTitle, userUid } = action.payload;
-      const postIndex = state.findIndex((post) => {
-        return (
-          post.title.trim().toLowerCase() === postTitle.trim().toLowerCase()
-        );
-      });
+      const { postId, userUid } = action.payload;
+      const postIndex = state.findIndex((post) => post._id === postId);
+
       if (postIndex !== -1) {
         const post = state[postIndex];
         post.peopleWhoDislikes = post.peopleWhoDislikes.filter(
@@ -144,17 +145,6 @@ export const postSlice = createSlice({
         );
         post.dislikes -= 1;
       }
-    },
-    removeComment: (state, action) => {
-      const { postTitle, commentBody } = action.payload;
-      const postIndex = state.findIndex((post) => post.title === postTitle);
-      if (postIndex !== -1) {
-        const post = state[postIndex];
-        post.comments = post.comments.filter((comment) => {
-          return comment.content !== commentBody;
-        });
-      }
-
     },
   },
 });
