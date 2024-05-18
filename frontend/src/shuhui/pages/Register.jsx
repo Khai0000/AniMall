@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../styles/Register.css";
 import YellowTop from "../assets/images/yellow_top.png";
@@ -7,7 +8,9 @@ import VerifyIconError from "../assets/images/error_verify_icon.png";
 
 function Register() {
   const [showVerify, setShowVerify] = useState(false);
-  const [verificationCode, setVerificationCode] = useState("");
+  const [verificationCode, setVerificationCode] = useState(
+    Array.from({ length: 6 }).fill("")
+  );
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,9 +29,9 @@ function Register() {
         (inputRef) => inputRef === document.activeElement
       );
       if (event.key === "Backspace" && index > 0 && !event.target.value) {
-        event.preventDefault(); // Prevent default backspace behavior
-        inputRefs.current[index - 1].value = ""; // Clear the value of the previous input
-        inputRefs.current[index - 1].focus(); // Focus on the previous input field
+        event.preventDefault();
+        inputRefs.current[index - 1].value = "";
+        inputRefs.current[index - 1].focus();
       }
     };
 
@@ -39,7 +42,7 @@ function Register() {
     };
   }, []);
 
-  const handleRegisterClick = (e) => {
+  const handleRegisterClick = async (e) => {
     e.preventDefault();
 
     // Validate username
@@ -70,49 +73,96 @@ function Register() {
       return;
     }
 
-    setShowVerify(true);
-    // Logic to send verification email and proceed
+    try {
+      const newUserCreate = await axios.post(
+        "http://localhost:4000/api/auth/authentication/register",
+        {
+          username: username,
+          email: email,
+          password: password,
+        }
+      );
+
+      if (email === "animallpublic@gmail.com") {
+        // Navigate directly to login page if the email is for admin
+        navigate("/authentication/login");
+      } else {
+        setShowVerify(true);
+      }
+
+      // Handle successful registration here, such as displaying a success message or navigating to another page
+      console.log("User registered successfully:", newUserCreate.data);
+    } catch (error) {
+      console.error("Error creating user:", error);
+      alert("Error creating user. Please try again later.");
+    }
   };
 
-  const handleInputChange = (index, value, event) => {
+  const handleInputChange = async (index, value) => {
     const newCode = [...verificationCode];
     newCode[index] = value;
-    setVerificationCode(newCode.join(""));
+    setVerificationCode(newCode);
 
     if (value !== "" && index < inputRefs.current.length - 1) {
       inputRefs.current[index + 1].focus();
     }
 
-    if (newCode.length === 6) {
-      if (newCode.join("") === "123456") {
-        navigate("/authentication/login"); // Redirect to product page if code is correct
-      } else {
+    if (newCode.every((digit) => digit !== "")) {
+      const enteredCode = newCode.join("");
+
+      try {
+        const response = await axios.post(
+          "http://localhost:4000/api/auth/authentication/verify",
+          {
+            email: email, // Send the email as well
+            verificationCode: enteredCode, // Send the verification code
+          }
+        );
+
+        if (response.data.success) {
+          navigate("/authentication/login");
+        } else {
+          console.log(response.data);
+          setCodeError(true);
+          setVerificationCode(Array.from({ length: 6 }).fill(""));
+          inputRefs.current[0].focus();
+          inputRefs.current.forEach((inputRef) => {
+            inputRef.classList.add("invalid");
+          });
+        }
+      } catch (error) {
+        console.error("Error:", error);
         setCodeError(true);
-        // Clear all input fields if code is incorrect
-        setVerificationCode("");
-        inputRefs.current[0].focus(); // Focus on the first input field
+        setVerificationCode(Array.from({ length: 6 }).fill(""));
+        inputRefs.current[0].focus();
         inputRefs.current.forEach((inputRef) => {
-          inputRef.classList.add("invalid"); // Add "invalid" class to all input fields
+          inputRef.classList.add("invalid");
         });
       }
     } else {
       inputRefs.current.forEach((inputRef) => {
-        inputRef.classList.remove("invalid"); // Remove "invalid" class
-      }); // Reset codeError when code is being retyped
+        inputRef.classList.remove("invalid");
+      });
+      setCodeError(false);
     }
   };
 
-  const handleResendClick = () => {
-    // Add logic to resend verification code
-    setCodeError(false);
-    setTimeout(() => {
-      // Reset the input fields to original color after 1 second
-      inputRefs.current.forEach((inputRef) => {
-        inputRef.classList.remove("invalid"); // Remove "invalid" class
-      });
-    }, 100);
+  const handleResendClick = async () => {
+    try {
+      await axios.post(
+        "http://localhost:4000/api/auth/authentication/send-reset-email",
+        { email }
+      );
+      setCodeError(false);
+      setTimeout(() => {
+        inputRefs.current.forEach((inputRef) => {
+          inputRef.classList.remove("invalid");
+        });
+      }, 100);
+    } catch (error) {
+      console.error("Error resending verification code", error);
+    }
   };
-
   return (
     <div className="register-pages-container">
       <img className="yellow-top" src={YellowTop} alt="yellowtop" />

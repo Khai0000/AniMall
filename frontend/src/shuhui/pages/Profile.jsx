@@ -1,26 +1,48 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { updateUser } from "../slices/userSlice";
 import "../styles/Profile.css";
 import profileImage from "../assets/images/dog_profile.jpg";
+import axios from "axios";
 
 function Profile() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
-  const [username, setUsername] = useState(user.username);
+  const [username, setUsername] = useState("");
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const [usernameError, setUsernameError] = useState("");
   const [addressError, setAddressError] = useState("");
   const [phoneError, setPhoneError] = useState("");
-
   const [isEditMode, setIsEditMode] = useState(false);
-  // const [editedUser, setEditedUser] = useState({
-  //   username: user.username,
-  //   email: user.email,
-  //   address: "Fill in your address here",
-  //   phone: "Write down your phone number",
-  // });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem("token"); // Ensure your token is stored in localStorage
+        const response = await axios.get(
+          "http://localhost:4000/api/auth/authentication/profile",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const userData = response.data;
+
+        setUsername(userData.username);
+        setAddress(userData.address);
+        setPhone(userData.phone);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const validateUsername = (username) => {
     const isValidUsername = /^[a-z]+$/.test(username);
@@ -43,7 +65,6 @@ function Profile() {
   };
 
   const validatePhone = (phone) => {
-    // Assuming phone number should be a string with only digits and length between 8 to 15 characters
     const isValidPhone = /^\d{8,15}$/.test(phone);
     if (!isValidPhone) {
       setPhoneError("Please enter a valid phone number");
@@ -53,15 +74,7 @@ function Profile() {
     return isValidPhone;
   };
 
-  // const handleInputChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setEditedUser((prevState) => ({
-  //     ...prevState,
-  //     [name]: value,
-  //   }));
-  // };
-
-  const handleSaveChanges = (e) => {
+  const handleSaveChanges = async (e) => {
     e.preventDefault();
 
     const isUsernameValid = validateUsername(username);
@@ -69,21 +82,39 @@ function Profile() {
     const isPhoneValid = validatePhone(phone);
 
     if (isUsernameValid && isAddressValid && isPhoneValid) {
-      dispatch(
-        updateUser({
-          username: username,
-          email: user.email,
-          address: address,
-          phone: phone,
-        })
-      );
-      setIsEditMode(false);
-    } // Exit edit mode after saving changes
+      try {
+        const token = localStorage.getItem("token"); // Ensure your token is stored in localStorage
+        const response = await axios.put(
+          "http://localhost:4000/api/auth/authentication/profile",
+          {
+            username: username,
+            email: user.email,
+            address: address,
+            phone: phone,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        console.log(response.data);
+        setIsEditMode(false);
+        dispatch(updateUser({ username, address, phone }));
+      } catch (error) {
+        console.error("Error updating profile:", error);
+      }
+    }
   };
 
   const handleBackButton = () => {
     setIsEditMode(false);
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="profileContainer">
@@ -106,7 +137,7 @@ function Profile() {
                   />
                   {usernameError && (
                     <div className="error">{usernameError}</div>
-                  )}{" "}
+                  )}
                 </div>
               ) : (
                 <span className="fieldValue">{username}</span>
@@ -128,7 +159,7 @@ function Profile() {
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
                   />
-                  {addressError && <div className="error">{addressError}</div>}{" "}
+                  {addressError && <div className="error">{addressError}</div>}
                 </div>
               ) : (
                 <span className="fieldValue">{address}</span>
@@ -146,7 +177,7 @@ function Profile() {
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                   />
-                  {phoneError && <div className="error">{phoneError}</div>}{" "}
+                  {phoneError && <div className="error">{phoneError}</div>}
                 </div>
               ) : (
                 <span className="fieldValue">{phone}</span>

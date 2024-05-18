@@ -47,7 +47,7 @@ function Header() {
           <>
             <div className="profile" onClick={goToProfile}>
               <PersonIcon className="profileIcon" />
-              {user && <span>{user.username}...</span>}
+              {user && <span>{user.username}</span>}
             </div>
 
             <button className="logoutButton" onClick={handleLogout}>
