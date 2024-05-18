@@ -9,49 +9,63 @@ import OAuth2Client from 'google-auth-library';
 import axios, { isCancel, AxiosError } from 'axios';
 import { generateVerificationCode, sendVerificationEmail } from "./emailUtils.js";
 
+const temporaryAccounts = {}
+
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' });
 };
 
+export const oauthcallback = async (req, res) => {
+    console.log(req)
+};
+
 export const registerUser = async (req, res) => {
     const { username, email, password } = req.body;
-
     try {
         const userExists = await AuthModel.findOne({ email });
         if (userExists) {
-            if (!userExists.verifyStatus) {
-                // Resend verification code if the user exists but is not verified
-                const verificationCode = generateVerificationCode();
-                userExists.verificationCode = verificationCode;
-                await userExists.save();
-                await sendVerificationEmail(email, verificationCode);
-                return res.status(200).json({ message: 'Verification code resent to your email' });
-            } else {
-                return res.status(400).json({ message: 'User already exists and is verified' });
-            }
+            // if (!userExists.verifyStatus) {
+            //     // Resend verification code if the user exists but is not verified
+            //     const verificationCode = generateVerificationCode();
+            //     userExists.verificationCode = verificationCode;
+            //     await userExists.save();
+            //     await sendVerificationEmail(email, verificationCode);
+            //     return res.status(200).json({ message: 'Verification code resent to your email' });
+            // } else {
+            return res.status(400).json({ message: 'User already exists and is verified' });
+            //}
         }
 
         let newUser;
-        if (email === 'animallpublic@gmail.com') {
-            newUser = await AuthModel.create({
-                username,
-                email,
-                password,
-                role: 'admin',
-                verifyStatus: true,
-                verificationCode: undefined
-            });
-        } else {
-            const verificationCode = generateVerificationCode();
-            newUser = await AuthModel.create({
-                username,
-                email,
-                password,
-                role: 'user',
-                verificationCode,
-                verifyStatus: false
-            });
-            await sendVerificationEmail(email, verificationCode);
+        // if (email === 'animallpublic@gmail.com') {
+        //     newUser = await AuthModel.create({
+        //         username,
+        //         email,
+        //         password,
+        //         role: 'admin',
+        //         verifyStatus: true,
+        //         verificationCode: undefined
+        //     });
+        // } else {
+        const verificationCode = generateVerificationCode();
+
+        temporaryAccounts[email] = {
+            username,
+            email,
+            password,
+            role: 'user',
+            verificationCode,
+            verifyStatus: false,
+            creationDate: new Date()
+        };
+
+        await sendVerificationEmail(email, verificationCode);
+
+        //make verification code expire in 10 minute
+        for (const [key, value] of Object.entries(temporaryAccounts)) {
+            if (isVerificationCodeExpired(key)) {
+                delete temporaryAccounts[key];
+            }
         }
 
         res.status(201).json({ message: 'User registered successfully.', admin: email === 'animallpublic@gmail.com' });
@@ -60,27 +74,36 @@ export const registerUser = async (req, res) => {
     }
 };
 
-
+const isVerificationCodeExpired = (email) => {
+    return temporaryAccounts[email].creationDate < new Date(new Date().getTime() - process.env.VERIFY_CODE_EXPIRY_MIN * 60000)
+}
 
 export const verifyUser = async (req, res) => {
     const { email, verificationCode } = req.body;
 
-
     try {
-        const user = await AuthModel.findOne({ email });
+        const user = temporaryAccounts[email];
+        // const user = await AuthModel.findOne({ email });
 
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+        if (!user || isVerificationCodeExpired(email)) {
+            return res.status(404).json({ message: 'Verification code expired' });
         }
 
         if (user.verificationCode !== verificationCode) {
             return res.status(400).json({ message: 'Invalid verification code' });
         }
 
-        // Activate the user by setting verifyStatus to true
         user.verifyStatus = true;
         user.verificationCode = undefined; // Optionally, remove the verification code
-        await user.save();
+        delete user["creationDate"];
+
+        let newUser = await AuthModel.create(user);
+        delete temporaryAccounts[email];
+
+        // Activate the user by setting verifyStatus to true
+        // user.verifyStatus = true;
+        // user.verificationCode = undefined; // Optionally, remove the verification code
+        //await user.save();
 
         res.status(200).json({ success: true, message: 'User verified and activated successfully' });
     } catch (error) {
@@ -127,7 +150,7 @@ export const loginUser = async (req, res) => {
         }
 
         if (!user.verifyStatus) {
-            return res.status(403).json({ message: 'Please verify your email before logging in' });
+            return res.status(403).json({ message: 'Your account has been blocked. Please contact administrator.' });
         }
 
         res.json({
