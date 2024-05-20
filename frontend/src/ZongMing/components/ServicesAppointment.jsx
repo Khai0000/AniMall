@@ -6,13 +6,10 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate } from "react-router-dom";
 import { addServiceToCart } from "../../shumin/slices/CartSlice";
 import { useDispatch } from "react-redux";
-<<<<<<< Updated upstream
-=======
 import AdvPopUp from "../../shumin/components/AdvPopUp";
 import axios from 'axios';
 import SuccessModal from "./SuccessfulModal.jsx";
 
->>>>>>> Stashed changes
 
 const ServicesAppointment = ({ serviceData }) => {
   const [selectedButtons, setSelectedButtons] = useState([]);
@@ -26,9 +23,6 @@ const ServicesAppointment = ({ serviceData }) => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-<<<<<<< Updated upstream
-  const [slotsAvailability, setSlotsAvailability] = useState("");
-=======
 
   const formattedDateForDB = `${selectedDate.getFullYear()}-${(selectedDate.getMonth() + 1).toString().padStart(2, "0")}-${selectedDate.getDate().toString().padStart(2, "0")}`;
 
@@ -59,58 +53,11 @@ const ServicesAppointment = ({ serviceData }) => {
   const isSlotAvailable = (slot) => {
     return slotsAvailability[slot] !== 2;
   };
->>>>>>> Stashed changes
 
   const handleBack = () => {
     navigate(-1);
   };
 
-<<<<<<< Updated upstream
-  useEffect(() => {
-    setSelectedButtons([]);
-    setSlotsAvailability({
-      "8.00": 0,
-      "9.00": 2,
-      "10.00": 2,
-      "11.00": 2,
-      "13.00": 2,
-      "14.00": 2,
-      "15.00": 2,
-      "16.00": 2,
-    });
-  }, [selectedDate]);
-
-  const isSlotAvailable = (slot) => {
-    return slotsAvailability[slot] > 0;
-  };
-
-  const toggleButton = (button) => {
-    if (!isSlotAvailable(button)) {
-      return;
-    }
-  
-    const updatedButtons = [...selectedButtons];
-  
-    const index = updatedButtons.indexOf(button);
-    if (index !== -1) {
-      updatedButtons.splice(index, 1);
-      setSlotsAvailability({
-        ...slotsAvailability,
-        [button]: slotsAvailability[button] + 1,
-      });
-    } else {
-      updatedButtons.push(button);
-      setSlotsAvailability({
-        ...slotsAvailability,
-        [button]: slotsAvailability[button] - 1,
-      });
-    }
-  
-    setSelectedButtons(updatedButtons);
-  };
-  
-  const handleAddToCart = () => {
-=======
   const randomAdPopup = () => {
     const random = Math.floor(Math.random() * 3) + 1;
     if (random === 2) {
@@ -122,25 +69,10 @@ const ServicesAppointment = ({ serviceData }) => {
   
 
   const handleAddToCart = async () => {
->>>>>>> Stashed changes
     if (!selectedDate) {
       alert("Please select a date before adding to cart.");
       return;
     }
-<<<<<<< Updated upstream
-  
-   
-      if (selectedButtons.length === 0) {
-        alert("Please select a time slot before adding to cart.");
-        return;
-      }
-    
-      const formattedDate =
-    selectedDate.getDate().toString().padStart(2, "0") + "/" +
-    (selectedDate.getMonth() + 1).toString().padStart(2, "0") + "/" +
-    selectedDate.getFullYear();
-  
-=======
     if (selectedButtons.length === 0) {
       alert("Please select a time slot before adding to cart.");
       return;
@@ -173,7 +105,6 @@ const ServicesAppointment = ({ serviceData }) => {
       console.error("Error updating slot availability:", error);
       return;
     }
->>>>>>> Stashed changes
   
     selectedButtons.forEach((slot) => {
       const serviceDetails = {
@@ -188,21 +119,11 @@ const ServicesAppointment = ({ serviceData }) => {
         uniqueId: generateUniqueId(),
         userId:temporaryUserId,
       };
-<<<<<<< Updated upstream
-  
-=======
->>>>>>> Stashed changes
       dispatch(addServiceToCart(serviceDetails));
   
     });
-<<<<<<< Updated upstream
-  
-    setSelectedButtons([]);
-    navigate(-1);
-=======
     setSelectedButtons([]);
     setShowSuccessModal(true);
->>>>>>> Stashed changes
   };
   
 
@@ -228,14 +149,7 @@ const ServicesAppointment = ({ serviceData }) => {
         </div>
         <div className="appointmentDate">
           <button
-<<<<<<< Updated upstream
-            className={`datePickerButtonZM ${
-              selectedDate ? "dateButtonSelectedZM" : ""
-            }`}
-          >
-=======
             className={`datePickerButtonZM ${selectedDate ? "dateButtonSelectedZM" : ""}`}>
->>>>>>> Stashed changes
             <Datepicker
               className="datePickerZM"
               selected={selectedDate}
@@ -268,20 +182,11 @@ const ServicesAppointment = ({ serviceData }) => {
             {timeSlots.map((slot) => (
               <button
                 key={slot}
-<<<<<<< Updated upstream
-                className={`${
-                  selectedButtons.includes(slot) ? "selected" : ""
-                } ${!isSlotAvailable(slot) ? "unavailable" : ""}`}
-                onClick={() => toggleButton(slot)}
-              >
-                {slot<12?slot:slot-12+".00"}{slot< 12 ?"AM":"PM"}
-=======
                 className={`${selectedButtons.includes(slot) ? "selected" : ""} ${!isSlotAvailable(slot) ? "unavailable" : ""}`}
                 onClick={() => toggleButton(slot)}
               >
                 {parseInt(slot) < 12 ? `${slot} AM` : `${parseInt(slot) - 12}.00 PM`}
 
->>>>>>> Stashed changes
               </button>
             ))}
           </div>
@@ -306,18 +211,12 @@ const ServicesAppointment = ({ serviceData }) => {
           </button>
         </div>
       </div>
-<<<<<<< Updated upstream
-=======
       <AdvPopUp show={showAd} onClose={() => { setShowAd(false);  }} />
       <SuccessModal show={showSuccessModal} onClose={() => setShowSuccessModal(false)} />
->>>>>>> Stashed changes
     </div>
   );
 };
 
 export default ServicesAppointment;
-<<<<<<< Updated upstream
-=======
 
 
->>>>>>> Stashed changes

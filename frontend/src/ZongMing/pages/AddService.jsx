@@ -349,11 +349,7 @@ const AddService = () => {
                 fill="white"
               />
             </svg>
-<<<<<<< Updated upstream
-            <span id="Product-details-form-add-button-text">Edit</span>
-=======
             <span id="Product-details-form-add-button-text">{editMode ? "Edit" : "Add"}</span>
->>>>>>> Stashed changes
           </button>
           <Link
             to={`/services/sellerService`}

@@ -24,13 +24,8 @@ export const CartSlice = createSlice({
       state.push(newService);
     },
     removeItemFromCart: (state, action) => {
-<<<<<<< Updated upstream
-
-      return state.filter((item) => item.title !== action.payload);
-=======
       const uniqueIdToRemove = action.payload;
       return state.filter((item) => item.uniqueId !== uniqueIdToRemove);
->>>>>>> Stashed changes
     },
 
     updateQuantity: (state, action) => {
