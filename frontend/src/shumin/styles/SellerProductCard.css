@@ -55,6 +55,7 @@
     display: flex;
     width: 50rem;
     align-items: center;
+    justify-content: center;
 }
 
 .seller-product-card-product-name:hover {
@@ -77,16 +78,7 @@
     border-radius: 8px;
     width: 2rem;
     height: 2rem;
-}
-
-.seller-product-card-minus-button {
-    padding-left: 1.15%;
-    padding-right: 1.15%;
-}
-
-.seller-product-card-plus-button {
-    padding-left: 1%;
-    padding-right: 1%;
+    text-align: center;
 }
 
 .seller-product-card-minus-button:hover,
@@ -95,21 +87,44 @@
 }
 
 .seller-product-card-quantity-input {
+
+    margin-top: 4.2%;
+    margin-bottom: 4.7%;
+    margin-left: 0.7%;
+    margin-right: 0.7%;
+    width: 7%;
+    background-color: white;
+    border: 1.1px solid #3C95A9;
+    border-radius: 8px;
+    text-align: center;
+
+}
+
+.seller-product-card-quantity-cart-input {
     margin-left: 0.5rem;
     margin-right: 0.5rem;
     background-color: white;
     border: 1.1px solid #3C95A9;
     border-radius: 8px;
     text-align: center;
-    
+    height: 2rem;
+    max-width: 50%;
 }
 
-.seller-product-card-slot-container{
-    width: 7rem;
+.seller-product-card-slot-container {
+    width: 12rem;
     display: flex;
     justify-content: center;
-    margin-left: 1rem;
+    /* border: #3C95A9 1.5px solid;
+    border-radius: 20px; */
+    text-align: center;
 }
+
+.seller-product-card-slot{
+    font-size: 1rem;
+    font-weight: bolder;
+}
+
 
 .seller-product-card-quantity-input:hover {
     border-color: #F3B801;
@@ -117,18 +132,23 @@
 }
 
 .seller-product-card-price {
-    
+    margin-left: 9.3%;
+    width: 18%;
+    display: flex;
+    align-items: center;
 }
+
+
 
 .seller-product-card-quantityControlContainer {
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 
 .seller-product-card-price-container {
     display: flex;
     width: 40rem;
-    align-items: center;
 }
 
 .seller-product-card-remove-button {
@@ -151,7 +171,7 @@
     .seller-product-card-container {
         flex-direction: column;
         align-items: center;
-        
+
     }
 
     .seller-product-card-image {
@@ -193,13 +213,8 @@
         padding-right: 0;
     }
 
-
     .seller-product-card-remove-button-container {
         display: flex;
         justify-content: center
     }
-    
-
-
-
 }

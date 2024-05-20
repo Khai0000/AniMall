@@ -6,8 +6,8 @@ import adv3 from "../assets/images/adv3.jpg";
 import adv4 from "../assets/images/adv4.jpg";
 
 function AdvPopUp({ show, onClose }) {  // Assuming show and onClose are passed as props
-//   const [adNumber, setAdNumber] = useState('');
-  const images = [adv1, adv2, adv3, adv4];
+
+  const images = [adv1, adv2, adv3,adv4];
   // Generate a random index based on the length of the images array
   const randomIndex = Math.floor(Math.random() * images.length);
 
@@ -21,7 +21,7 @@ function AdvPopUp({ show, onClose }) {  // Assuming show and onClose are passed 
       <div className="advPopupContainer">
         <div className="advPopupDialog">
           <img src={selectedImage} alt="Advertisement"/>
-          <button className="closeButton" onClick={onClose}><CloseIcon className="closeIcon" /></button>
+          <button className="sx-closeButton" onClick={onClose}><CloseIcon className="sx-closeIcon" /></button>
         </div>
       </div>
     </div>

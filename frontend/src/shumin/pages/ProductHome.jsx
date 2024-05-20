@@ -110,7 +110,7 @@ const ProductHome=()=>{
                 :<div className="Product-category-row-content">
                     <Suspense fallback={<div>Loading...</div>}>
                         {products.map((product,index)=>(
-                            <ProductCard key={index} product={product}/>
+                            <ProductCard key={product.id} product={product}/>
                         ))}
                     </Suspense>
                 </div>}

@@ -6,6 +6,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate } from "react-router-dom";
 import { addServiceToCart } from "../../shumin/slices/CartSlice";
 import { useDispatch } from "react-redux";
+import AdvPopUp from "../../shumin/components/AdvPopUp";
 
 const ServicesAppointment = ({ serviceData }) => {
   const [selectedButtons, setSelectedButtons] = useState([]);
@@ -17,25 +18,27 @@ const ServicesAppointment = ({ serviceData }) => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [slotsAvailability, setSlotsAvailability] = useState({
-    "8.00": 2,
-    "9.00": 2,
-    "10.00": 2,
-    "11.00": 2,
-    "13.00": 2,
-    "14.00": 2,
-    "15.00": 2,
-    "16.00": 2,
-  });
+  const [slotsAvailability, setSlotsAvailability] = useState("");
+  const [showAd, setShowAd] = useState(false);
+
 
   const handleBack = () => {
     navigate(-1);
   };
 
+  const randomAdPopup = () => {
+    const random = Math.floor(Math.random() * 3) + 1;
+    if (random === 2) {
+      setShowAd(true);
+    } else {
+      navigate(-1);
+    }
+  }
+
   useEffect(() => {
     setSelectedButtons([]);
     setSlotsAvailability({
-      "8.00": 2,
+      "8.00": 0,
       "9.00": 2,
       "10.00": 2,
       "11.00": 2,
@@ -81,22 +84,17 @@ const ServicesAppointment = ({ serviceData }) => {
       return;
     }
 
-    // Check if the selected date is today
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    if (selectedDate.getTime() === today.getTime()) {
-      // If today, check if any time slots are selected
-      if (selectedButtons.length === 0) {
-        alert("Please select a time slot before adding to cart.");
-        return;
-      }
-    } else {
-      // If not today, ensure both date and time slots are selected
-      if (selectedButtons.length === 0) {
-        alert("Please select a time slot before adding to cart.");
-        return;
-      }
+
+    if (selectedButtons.length === 0) {
+      alert("Please select a time slot before adding to cart.");
+      return;
     }
+
+    const formattedDate =
+      selectedDate.getDate().toString().padStart(2, "0") + "/" +
+      (selectedDate.getMonth() + 1).toString().padStart(2, "0") + "/" +
+      selectedDate.getFullYear();
+
 
     selectedButtons.forEach((slot) => {
       const serviceDetails = {
@@ -107,17 +105,15 @@ const ServicesAppointment = ({ serviceData }) => {
         type: "service",
         checked: true,
         slot: slot,
+        date: formattedDate,
       };
 
       dispatch(addServiceToCart(serviceDetails));
-
-      setSlotsAvailability((prevAvailability) => ({
-        ...prevAvailability,
-        [slot]: prevAvailability[slot] - 1,
-      }));
+      randomAdPopup();
     });
 
-    navigate(-1);
+    setSelectedButtons([]);
+    // navigate(-1);
   };
 
   const CustomDatePickerInput = forwardRef(({ value, onClick }, ref) => (
@@ -132,18 +128,17 @@ const ServicesAppointment = ({ serviceData }) => {
 
   return (
     <div className="servicesAppointmentContainer">
-      <div className="topContainer">
+      <div className="topContainerZM">
         <div className="appointmentTitle">
           <h1>{serviceTitle}</h1>
         </div>
         <div className="appointmentDate">
           <button
-            className={`datePickerButton ${
-              selectedDate ? "dateButtonSelected" : ""
-            }`}
+            className={`datePickerButtonZM ${selectedDate ? "dateButtonSelectedZM" : ""
+              }`}
           >
             <Datepicker
-              className="datePicker"
+              className="datePickerZM"
               selected={selectedDate}
               onChange={(date) => {
                 setSelectedDate(date);
@@ -155,54 +150,56 @@ const ServicesAppointment = ({ serviceData }) => {
                 return date.getTime() > today.getTime();
               }}
               customInput={<CustomDatePickerInput />}
+              // Set minDate to disable dates earlier than today
+              minDate={new Date()}
             />
           </button>
         </div>
       </div>
 
-      <div className="middleContainer">
-        <div className="appointmentDescription">
-          <div className="descriptionContainer">
-            <p className="descriptionWord">Description:</p>
-            <p className="descriptionContent">{description}</p>
+      <div className="middleContainerSA">
+        <div className="appointmentDescriptionSA">
+          <div className="descriptionContainerSA">
+            <p className="descriptionWordSA">Description:</p>
+            <p className="descriptionContentSA">{description}</p>
           </div>
         </div>
 
-        <div className="dateContainer">
-          <div className="chooseDate">
+        <div className="dateContainerZM">
+          <div className="chooseDateZM">
             {Object.keys(slotsAvailability).map((slot) => (
               <button
                 key={slot}
-                className={`${
-                  selectedButtons.includes(slot) ? "selected" : ""
-                } ${!isSlotAvailable(slot) ? "unavailable" : ""}`}
+                className={`${selectedButtons.includes(slot) ? "selected" : ""
+                  } ${!isSlotAvailable(slot) ? "unavailable" : ""}`}
                 onClick={() => toggleButton(slot)}
               >
-                {slot}
+                {slot < 12 ? slot : slot - 12 + ".00"}{slot < 12 ? "AM" : "PM"}
               </button>
             ))}
           </div>
         </div>
       </div>
 
-      <div className="bottomContainer">
-        <div className="price">
-          <p className="priceWord">Price : </p>
-          <p className="priceTotal"> RM {totalPrice}</p>
+      <div className="bottomContainerSA">
+        <div className="priceSA">
+          <p className="priceWordSA">Price : </p>
+          <p className="priceTotalSA"> RM {totalPrice}</p>
         </div>
 
-        <div className="cartAndBackContainer">
-          <button className="cartBtn" onClick={handleAddToCart}>
-            <i className="cartIcon">
+        <div className="cartAndBackContainerSA">
+          <button className="cartBtnSA" onClick={handleAddToCart}>
+            <i className="cartIconSA">
               <ShoppingCartIcon />
             </i>
             Add to Cart
           </button>
-          <button className="backBtn" onClick={handleBack}>
+          <button className="backBtnSA" onClick={handleBack}>
             Back
           </button>
         </div>
       </div>
+      <AdvPopUp show={showAd} onClose={() => { setShowAd(false); navigate(-1); }} />
     </div>
   );
 };

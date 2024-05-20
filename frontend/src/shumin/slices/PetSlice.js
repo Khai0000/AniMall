@@ -28,7 +28,7 @@ export const PetSlice =createSlice({
             }
           }
           if (!isDuplicate) {
-            return [...state,newPet];
+            return [newPet,...state];
           }
         }, 
         removePet(state,action){

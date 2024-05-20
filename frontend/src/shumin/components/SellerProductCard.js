@@ -168,6 +168,7 @@ const SellerProductCard = ({ product }) => {
         >
           -
         </button>
+
         <input
           type="number"
           className="seller-product-card-quantity-input"
@@ -181,6 +182,7 @@ const SellerProductCard = ({ product }) => {
         >
           +
         </button>
+
         <h4 className="seller-product-card-price">{product.price}</h4>
         <button
           className="seller-product-card-remove-button"

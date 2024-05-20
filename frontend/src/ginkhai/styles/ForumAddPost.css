@@ -162,26 +162,26 @@
     border: 1px solid #3c95A9;
 }
 
-.addPostDetailsContainer .addButton {
+.addPostDetailsContainer .wj-addButton {
     padding: 5px 64px;
     color: white;
     background-color: #3C95A9;
     border: none;
 }
 
-.addPostDetailsContainer .addButton:hover {
+.addPostDetailsContainer .wj-addButton:hover {
     border: none;
     color: white;
     background-color: #f4b701;
 }
 
-.addPostDetailsContainer .backButton {
+.addPostDetailsContainer .wj-backButton {
     padding: 5px 32px;
     border: 1px solid #3C95A9;
     color: #3C95A9
 }
 
-.addPostDetailsContainer .backButton:hover {
+.addPostDetailsContainer .wj-backButton:hover {
     color: #f4b701;
     border: 1px solid #f4b701;
     text-shadow: 0 0 0px #f4b701, 0 0 1px #f4b701, 0 0 30px #f4b701;

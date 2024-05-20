@@ -56,7 +56,7 @@ function SellerPet(){
                     <div>
                         <Suspense fallback={<div>Loading...</div>}>
                         {pets.map((pet,index)=>(
-                            <SellerPetCard key={index} pet={pet}/>
+                            <SellerPetCard key={pet.id} pet={pet}/>
                         ))}
                         </Suspense>
                     </div>
