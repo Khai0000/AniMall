@@ -84,12 +84,7 @@ function Register() {
         }
       );
 
-      if (email === "animallpublic@gmail.com") {
-        // Navigate directly to login page if the email is for admin
-        navigate("/authentication/login");
-      } else {
-        setShowVerify(true);
-      }
+      setShowVerify(true);
 
       // Handle successful registration here, such as displaying a success message or navigating to another page
       console.log("User registered successfully:", newUserCreate.data);
