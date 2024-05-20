@@ -1,12 +1,10 @@
 import SearchBar from "../components/SearchBar";
 import "../styles/ProductHome.css";
-import React, { useState, useEffect, lazy, Suspense } from "react";
+import React, { useState, useEffect, lazy, Suspense ,useMemo} from "react";
 import MyCartButton from "../components/MyCartButton";
 import CircularProgress from "@mui/material/CircularProgress";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector} from "react-redux";
 import EnterButtonIcon from "../components/EnterButtonIcon";
-import { addPet } from "../slices/PetSlice";
-import { PetData } from "../data/DummyPetData";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
@@ -19,22 +17,14 @@ const PetHome = () => {
   const [maxPrice, setMaxPrice] = useState("");
   const [isAdoptionFilterActive, setIsAdoptionFilterActive] = useState(false);
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const pets = useSelector((state) => state.pets);
+  const memoizedPets=useMemo(()=>pets||[],[pets]);
 
   const [filteredPets, setFilteredPets] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-
-  useEffect(() => {
-    if (pets.length === 0) {
-      PetData.forEach((pet) => {
-        dispatch(addPet(pet));
-      });
-    }
-  }, [dispatch, pets]);
 
   const handleSearch = (value) => {
     setSearchTerm(value);
@@ -42,7 +32,7 @@ const PetHome = () => {
 
   // useEffect for filtering data
   useEffect(() => {
-    let filteredData = [...pets];
+    let filteredData = [...memoizedPets];
     setIsLoading(true);
     if (isAdoptionFilterActive) {
       filteredData = filteredData.filter((pet) => !pet.hidden && pet.price === 0);
@@ -80,7 +70,7 @@ const PetHome = () => {
 
     setIsLoading(false);
     setFilteredPets(filteredData);
-  }, [searchTerm, pets, minPrice, maxPrice, isAdoptionFilterActive]);
+  }, [searchTerm, memoizedPets, minPrice, maxPrice, isAdoptionFilterActive]);
 
   const toggleAdoptionFilter = () => {
     setIsAdoptionFilterActive(!isAdoptionFilterActive);
@@ -125,8 +115,8 @@ const PetHome = () => {
       ) : (
         <div className="Product-category-row-content">
           <Suspense fallback={<div>Loading...</div>}>
-            {pets.map((pet, index) => (
-              <PetCard key={pet.id} pet={pet} />
+            {pets.map((pet) => (
+              <PetCard pet={pet} />
             ))}
           </Suspense>
         </div>

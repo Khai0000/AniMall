@@ -4,15 +4,31 @@ import ProductPostCommentSkeleton from "./ProductPostCommentSkeleton";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useDispatch } from 'react-redux';
 import { removeComment } from "../slices/ProductSlice";
+import axios from "axios";
 
-const ProductPostComment = ({ comments, title }) => { 
+const ProductPostComment = ({comments, id}) => { 
   const [imageSource, setImageSource] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
 
-  const handleOnDeleteClick = () => {
-    dispatch(removeComment({ title, commentContent: comments.content }));
-  }
+  const handleOnDeleteClick = async () => {
+    try {
+      const deleteCommentResponse = await axios.delete(
+        `http://localhost:4000/api/product/comment/product/${id}/${comments._id}`
+      );
+
+      if (deleteCommentResponse.status === 200) {
+        dispatch(removeComment({ id, commentId: comments._id }));
+      } else {
+        console.error(
+          "Unexpected response status:",
+          deleteCommentResponse.status
+        );
+      }
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+    }
+  };
 
   useEffect(() => {
     setIsLoading(true);

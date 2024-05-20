@@ -1,37 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-// template for a product{
-//     id: 100033,
-//     title: "Friskies cat food"
-//     description:"Friskies is known for its variety of flavors and textures designed to appeal to cats' preferences. The brand focuses on providing nutritionally balanced meals for cats of all ages, from kittens to adult cats. Friskies products often include proteins, vitamins, and minerals essential for a cat's health and well-being.",
-//     image:["catFood1"],
-//     animaltag:["dog","cat","others"],
-//     producttag:["food","accessories"],
-//     price:25.00,
-//     ratings: {
-//        total: 61,
-//        1: 0,
-//        2: 1,
-//        3: 5,
-//        4: 50,
-//        5: 5,
-//     },
-//     comments:[
-//         {    
-//             name:"Ali",
-//             content:"good product!"
-//         },
-//         {
-//             name:"Ahmad",
-//             content:"Nicelah!"
-//         },
-//     ],
-//     stockLevel:500,
-//     hidden:false,
-//
-// }
-
-
 export const ProductSlice =createSlice({
     name: "product",
     initialState:[],
@@ -43,7 +11,7 @@ export const ProductSlice =createSlice({
           const newProduct = action.payload;
           let isDuplicate = false;
           for (const product of state) {
-            if (product.id === newProduct.id) {
+            if (product._id === newProduct._id) {
               isDuplicate = true;
               break;
             }
@@ -53,11 +21,11 @@ export const ProductSlice =createSlice({
           }
         }, 
         removeProduct(state,action){
-            return state.filter((product)=>product.id!==action.payload);
+            return state.filter((product)=>product._id!==action.payload);
         },
         editProduct(state, action) {
           const { id, ...updates } = action.payload; 
-          const existingProductIndex = state.findIndex(product => product.id === id);
+          const existingProductIndex = state.findIndex(product => product._id === id);
       
           if (existingProductIndex !== -1) {
               const updatedState = [...state];
@@ -72,42 +40,43 @@ export const ProductSlice =createSlice({
         },
         hideProduct(state,action){
             const {id}=action.payload;
-            const existingProduct= state.find(product=>product.id===id);
+            const existingProduct= state.find(product=>product._id===id);
             if(existingProduct){
                 existingProduct.hidden=true;
             }
         },
         addToCart (state, action) {
             const { id, quantity } = action.payload;
-            const existingProduct = state.find(product => product.id === id);
+            const existingProduct = state.find(product => product._id === id);
             if (existingProduct) {
               existingProduct.quantityInCart += quantity;
             }
         },
         addComment: (state, action) => {
-          const { title, comment } = action.payload;
+          const { id, comment } = action.payload;
           const product = state.find(
-            (product) => product.title === title
+            (product) => product._id === id
           );
           if (product) {
             product.comments.unshift(comment);
           }
         },
         removeComment: (state, action) => {
-          const { title, commentContent } = action.payload;
-          const product = state.find(
-            (product) => product.title === title
-          );
-          if (product) {
-            product.comments = product.comments.filter(
-              (comment) => comment.content !== commentContent
-            );
+          const { id, commentId } = action.payload;
+          const productIndex = state.findIndex(product => product._id === id);
+        
+          if (productIndex !== -1) {
+            // Using map to create a new array for immutability
+            state[productIndex] = {
+              ...state[productIndex],
+              comments: state[productIndex].comments.filter(comment => comment._id !== commentId),
+            };
           }
-        },
+        },        
         addRating(state, action) {
-          const { title, rating } = action.payload;
+          const { id, rating } = action.payload;
           const product = state.find(
-            (product) => product.title === title
+            (product) => product._id === id
           );
           if (product) {
             // Update the total ratings count and specific rating count
@@ -117,7 +86,7 @@ export const ProductSlice =createSlice({
         },
         checkOutProduct(state,action){
             const { id, quantity } = action.payload;
-            const existingProduct = state.find(product => product.id === id);
+            const existingProduct = state.find(product => product._id === id);
             if (existingProduct) {
               existingProduct.stockLevel -= quantity;
             }

@@ -6,6 +6,8 @@ import dotenv from "dotenv";
 import forumPostRouter from "./ForumPosts/forumPostsEndpoints.js";
 import upload from "./ImageUploadRoute/upload.js";
 import Grid from "gridfs-stream";
+import productRouter from "./Products/productsEndpoint.js";
+import petRouter from "./Pets/petsEndpoint.js";
 
 let gfs;
 
@@ -26,6 +28,8 @@ app.get("/", (req, res) => {
 
 app.use("/api/community", forumPostRouter);
 app.use("/image", upload);
+app.use("/api/product", productRouter);
+app.use("/api/pet", petRouter);
 
 mongoose
   .connect(process.env.MONGODB_URL)

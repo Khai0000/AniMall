@@ -15,14 +15,15 @@ const ProductDetails = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { title } = useParams();
+  const { productId } = useParams();
   const [showAd, setShowAd] = useState(false);
 
   const [imagesLoading, setImagesLoading] = useState(true);
 
   const product = useSelector((state) =>
-    state.products.find((product) => product.title === title)
+    state.products.find((product) => product._id === productId)
   );
+
   const cartItem = useSelector((state) => state.cart);
 
   const [loadedImageUrls, setLoadedImageUrls] = useState([]);
@@ -32,7 +33,9 @@ const ProductDetails = () => {
       const loadedImages = [];
       for (const image of product.image) {
         try {
-          if (image.includes("jpg")) {
+          if (image.startsWith("http://") || image.startsWith("https://")) {
+            loadedImages.push(image);
+          } else if (image.includes("jpg")) {
             let imageDir = image.substring(0, image.indexOf("."));
             const imageData = await import(`../assets/images/${imageDir}.jpg`);
             loadedImages.push(imageData.default);
@@ -46,6 +49,7 @@ const ProductDetails = () => {
       setLoadedImageUrls(loadedImages);
       setImagesLoading(false);
     };
+
     loadImageUrls();
   }, [product.image]);
 
@@ -192,18 +196,17 @@ const ProductDetails = () => {
                 <p>No comments for this service yet.</p>
               </div>
             ) : (
-              product.comments.map((comment, index) => (
+              product.comments.map((comment) => (
                 <ProductPostComment
                   comments={comment}
-                  key={index}
-                  title={title}
+                  id={productId}
                 />
               ))
             )}
           </div>
         </div>
         {showPopup && (
-          <CommentPopUp setShowPopup={setShowPopup} title={title} />
+          <CommentPopUp setShowPopup={setShowPopup} id={productId} />
         )}
       </div>
       <AdvPopUp show={showAd} onClose={() => { setShowAd(false); navigate(-1); }} />

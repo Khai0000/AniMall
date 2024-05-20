@@ -4,6 +4,7 @@ import SellerProductCardSkeleton from "./SellerProductCardSkeleton";
 import { useDispatch } from "react-redux";
 import { editPet, removePet } from "../slices/PetSlice";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const SellerPetCard = ({pet})=>{
     const [image,setImage]=useState(null);
@@ -14,60 +15,106 @@ const SellerPetCard = ({pet})=>{
 
     const dispatch=useDispatch();
 
-    useEffect(()=>{
-        if(pet.image &&pet.image[0].includes("jpg")){
-            let imageDir=pet.image[0].substring(0,pet.image[0].indexOf("."));
-            import(`../assets/images/${imageDir}.jpg`)
-                .then((image)=>{
-                    setImage(image.default);
-                })
-                .catch((error)=>{
-                    console.error("Error loading image:", error);
-                })
-                .finally(()=>{
-                    setIsLoading(false);
-                })
-        } else if (pet.image && pet.image[0]) {
-            setImage(pet.image[0]);
-            setIsLoading(false);
+    console.log(pet.image);
+    useEffect(() => {
+      if (pet.image && pet.image[0]) {
+        const imageUrl = pet.image[0];
+        console.log(imageUrl);
+        if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://") || imageUrl.startsWith("blob:")) {
+          // For remote images and blob images
+          setImage(imageUrl);
+          setIsLoading(false);
         } else {
-            // Handle the case where product.image is not as expected
-            console.error("Pet image is not defined or not in the expected format:", pet);
-            setIsLoading(false);
+          // For local images
+          const imageId = pet.image[0].substring(0, pet.image[0].indexOf("."));
+          setImage(`http://localhost:4000/image/${imageId}.jpg`);
+          setIsLoading(false);
         }
-    },[pet]);
+      } else {
+        // Handle the case where pet.image is not defined or not in the expected format
+        console.error("Pet image is not defined or not in the expected format:", pet);
+        setIsLoading(false);
+      }
+    }, [pet]);
 
-    const handleOnRemoveClicked=()=>{
-        dispatch(removePet(pet.id));
-    }
+    const handleOnRemoveClicked = async () => {
+        try {
+          const response = await axios.delete(`http://localhost:4000/api/pet/pet/${pet._id}`);
+          if (response.status === 200) {
+            dispatch(removePet(pet._id));
+            console.log("Pet deleted successfully!");
+          } else {
+            console.error("Failed to delete pet:", response.data);
+          }
+        } catch (error) {
+          console.error("Error deleting pet:", error);
+        }
+      };
 
-    const handleCheckboxClick = () => {
-        if (!isHidden || quantity >= 1) {
+      const handleCheckboxClick = async () => {
+        try{
+          if (!isHidden || quantity >= 1) {
             const newHiddenValue = !isHidden;
             setIsHidden(newHiddenValue);
-            dispatch(editPet({ id: pet.id, hidden: newHiddenValue }));
-        } else {
-            alert("Cannot make the pet visible as the stock level is insufficient.");
+            const response = await axios.put(`http://localhost:4000/api/pet/pet/${pet._id}`,
+              {hidden:newHiddenValue}
+            )
+            if(response.status===200){
+              dispatch(editPet({ id: pet._id, hidden: newHiddenValue }));
+            } else {
+              console.error('Failed to update pet hidden status:', response);
+            }
+          }else{
+            alert(
+              "Cannot make the pet visible as the stock level is insufficient."
+            );
+          }
+        }catch(error){
+          console.error("Error updating pet:", error);
         }
-    };
+      };
 
-    useEffect(() => {
-        // Automatically set isHidden to true if quantity is 0 or less
-        if (quantity <= 0 && !isHidden) {
-            console.log("Hi(from seller pet card");
-            setIsHidden(true);
-            dispatch(editPet({ id: pet.id, hidden: true }));
+      useEffect( () => {
+        async function hidePet(){
+          try{
+            if (quantity <= 0 && !isHidden) {
+              setIsHidden(true);
+      
+              const response = await axios.put(`http://localhost:4000/api/pet/pet/${pet._id}`,{
+                hidden: true
+              })
+              if(response.status===200){
+                dispatch(editPet({ id: pet._id, hidden: true }));
+              }else {
+                console.error('Failed to hide pet:', response);
+              }
+            }
+          }catch(error){
+            console.error("Error updating pet:", error);
+          }
         }
-    }, [quantity,isHidden,pet.id,dispatch]);
+        hidePet()
+      }, [quantity, dispatch, isHidden, pet._id]);
 
-    const handleQuantityChange = (event) => {
-        if (!isNaN(event.target.value)) {
+      const handleQuantityChange = async (event) => {
+        try{
+          if (!isNaN(event.target.value)) {
             const newQuantity = parseInt(event.target.value, 10);
             setQuantity(newQuantity);
-            dispatch(editPet({ id: pet.id, stockLevel: newQuantity }));
-        }
-    }
     
+            const response = await axios.put(`http://localhost:4000/api/pet/pet/${pet._id}`,{
+              stockLevel: newQuantity
+            })
+            if(response.status===200){
+              dispatch(editPet({ id: pet._id, stockLevel: newQuantity }));
+            }else {
+              console.error('Failed to update pet quantity:', response);
+            }
+          }
+        }catch(error){
+          console.error("Error updating pet:", error);
+        }
+      };
 
     const handleKeyPress = (event) => {
         if (event.key === "Enter") {
@@ -76,19 +123,28 @@ const SellerPetCard = ({pet})=>{
         }
       };
 
-    const setNewQuantity = (operation) => {
+      const setNewQuantity = async (operation) => {
         let newQuantity = quantity;
         if (operation === "minus") {
-            newQuantity -= 1;
+          newQuantity -= 1;
         } else if (operation === "plus") {
-            newQuantity += 1;
+          newQuantity += 1;
         }
-
         setQuantity(newQuantity);
-
-        // Dispatch editProduct action with updated quantity
-        dispatch(editPet({ id: pet.id, stockLevel: newQuantity }));
-    };
+    
+        try{
+          const response= await axios.put(`http://localhost:4000/api/pet/pet/${pet._id}`,
+            {stockLevel: newQuantity}
+          )
+          if(response.status===200){
+            dispatch(editPet({ id: pet.id, stockLevel: newQuantity }));
+          }else {
+            console.error('Failed to update pet quantity:', response);
+          }
+        }catch(error){
+          console.error("Error updating pet:", error);
+        }
+      };
 
     return(
         isLoading?(
@@ -108,7 +164,7 @@ const SellerPetCard = ({pet})=>{
                     }    
                 </button>
                 <img src={image} alt='' className="seller-product-card-image" />
-                <Link to={`/pet/sellerPet/add-pet/${pet.id}`} className="seller-product-card-product-name" style={{ textDecoration: 'none' }}>
+                <Link to={`/pet/sellerPet/add-pet/${pet._id}`} className="seller-product-card-product-name" style={{ textDecoration: 'none' }}>
                     <h4 className="seller-product-card-product-name-content">{pet.title}</h4>
                 </Link>
                 <button className="seller-product-card-minus-button" onClick={()=>setNewQuantity("minus")}>-</button>

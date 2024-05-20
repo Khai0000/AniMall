@@ -13,7 +13,7 @@ const PetDetails = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { title } = useParams(); // Retrieve the service title from URL parameter
+  const { petId } = useParams(); // Retrieve the service title from URL parameter
 
   const [imagesLoading, setImagesLoading] = useState(true);
 
@@ -21,8 +21,9 @@ const PetDetails = () => {
   const [showForm, setShowForm] = useState(false); // State to control the advertisement popup
 
   const pet = useSelector((state) =>
-    state.pets.find((pet) => pet.title === title)
+    state.pets.find((pet) => pet._id === petId)
   );
+
   const cartItem = useSelector((state) => state.cart);
 
   const [loadedImageUrls, setLoadedImageUrls] = useState([]);
@@ -32,7 +33,9 @@ const PetDetails = () => {
       const loadedImages = [];
       for (const image of pet.image) {
         try {
-          if (image.includes("jpg")) {
+          if (image.startsWith("http://") || image.startsWith("https://")) {
+            loadedImages.push(image);
+          } else if (image.includes("jpg")) {
             let imageDir = image.substring(0, image.indexOf("."));
             const imageData = await import(`../assets/images/${imageDir}.jpg`);
             loadedImages.push(imageData.default);
@@ -46,50 +49,10 @@ const PetDetails = () => {
       setLoadedImageUrls(loadedImages);
       setImagesLoading(false);
     };
+
     loadImageUrls();
   }, [pet.image]);
 
-    const handleOnAddToCartButtonClick=()=>{
-        const existingCartItem = cartItem.find(item => item.id === pet.id);
-        if(existingCartItem){
-            if(existingCartItem.stockLevel>existingCartItem.quantity){
-                    const petDetails = {
-                        id: pet.id,
-                        title: pet.title,
-                        description:pet.description,
-                        image:pet.image,
-                        birthdate: pet.birthdate,
-                        animaltag: pet.animaltag,
-                        price: pet.price,
-                        stockLevel:pet.stockLevel,
-                        hidden: pet.hidden,
-                        type:"pet",
-                        quantity:existingCartItem.quantity+1,
-                        checked:true,
-                    };
-                    dispatch(addItemToCart(petDetails));
-                    navigate(-1);
-            }else{
-                alert("Stock is not enough!");
-            }
-        }else{
-            const petDetails = {
-                id: pet.id,
-                title: pet.title,
-                description:pet.description,
-                image:pet.image,
-                birthdate: pet.birthdate,
-                animaltag: pet.animaltag,
-                price: pet.price,
-                stockLevel:pet.stockLevel,
-                hidden: pet.hidden,
-                type:"pet",
-                quantity:1,
-                checked:true,
-            };
-            dispatch(addItemToCart(petDetails));
-            navigate(-1);
-        }
   const handleNavigateBack = () => {
     navigate(-1); // Navigate back one step in history
   };
@@ -209,6 +172,6 @@ const PetDetails = () => {
       <AdvPopUp show={showAd} onClose={() => { setShowAd(false); navigate(-1); }} />
     </div >
   );
-};}
+};
 
 export default PetDetails;

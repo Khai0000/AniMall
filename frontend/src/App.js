@@ -53,7 +53,7 @@ function App() {
           children: [
             { path: "/pet", element: <ShuminPages.PetHome /> },
             {
-              path: "/pet/:title",
+              path: "/pet/:petId",
               element: isLoggedIn ? (
                 <ShuminPages.PetDetails />
               ) : (
@@ -98,7 +98,7 @@ function App() {
           children: [
             { path: "/product", element: <ShuminPages.ProductHome /> },
             {
-              path: "/product/:title",
+              path: "/product/:productId",
               element: isLoggedIn ? (
                 <ShuminPages.ProductDetails />
               ) : (

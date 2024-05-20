@@ -12,12 +12,9 @@ export const CartSlice = createSlice({
         // Item already exists, update its quantity
         existingItem.quantity += 1;
       } else {
-          // Item is new, add it to the cart
-          state.push(newItem);
+        // Item is new, add it to the cart
+        state.push(newItem);
       }
-  },
-    removeItemFromCart: (state, action) => {
-      return state.filter((item)=>item.title!==action.payload);
     },
     addServiceToCart: (state, action) => {
       const newService = action.payload;

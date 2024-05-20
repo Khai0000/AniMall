@@ -1,12 +1,10 @@
 import SearchBar from "../components/SearchBar";
 import "../styles/ProductHome.css";
-import React, { useState,useEffect,lazy,Suspense} from "react";
+import React, { useState,useEffect,lazy,Suspense, useMemo} from "react";
 import MyCartButton from "../components/MyCartButton";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useSelector, useDispatch } from "react-redux";
 import EnterButtonIcon from "../components/EnterButtonIcon";
-import { addProduct } from "../slices/ProductSlice";
-import { ProductData } from "../data/DummyProductData";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
@@ -21,28 +19,20 @@ const ProductHome=()=>{
     const navigate = useNavigate();
 
     const products = useSelector((state)=> state.products);
+    const memoizedProducts=useMemo(()=>products||[],[products]);
 
     const [filteredProducts,setFilteredProducts]=useState([]);
     const [isLoading,setIsLoading]=useState(true);
     const [searchTerm,setSearchTerm]=useState("");
-
-    useEffect(() => {
-        if ( products.length === 0) {
-            ProductData.forEach((product) => {
-                dispatch(addProduct(product));
-            }
-        );
-        }
-    }, [dispatch, products]);
     
     const handleSearch = (value) => {
         setSearchTerm(value);
     };
-
     
     useEffect(()=>{
-        let filteredData = [...products];
+        let filteredData = [...memoizedProducts];
         setIsLoading(true);
+        console.log(filteredData);
         
         filteredData = filteredData.filter((product) => !product.hidden);
 
@@ -74,7 +64,7 @@ const ProductHome=()=>{
 
         setIsLoading(false);
         setFilteredProducts(filteredData);
-    }, [searchTerm, products,minPrice,maxPrice, dispatch]);
+    }, [searchTerm, memoizedProducts,minPrice,maxPrice, dispatch]);
 
     const handlePriceRangeSubmit = (event) => {
         event.preventDefault(); // Prevent form submission
@@ -109,8 +99,8 @@ const ProductHome=()=>{
                 <p className="Product-category-row-content-noproduct">{`No ${category} product matched!`}</p>
                 :<div className="Product-category-row-content">
                     <Suspense fallback={<div>Loading...</div>}>
-                        {products.map((product,index)=>(
-                            <ProductCard key={product.id} product={product}/>
+                        {products.map((product)=>(
+                            <ProductCard key={product._id} product={product}/>
                         ))}
                     </Suspense>
                 </div>}
