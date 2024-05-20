@@ -6,6 +6,13 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate } from "react-router-dom";
 import { addServiceToCart } from "../../shumin/slices/CartSlice";
 import { useDispatch } from "react-redux";
+<<<<<<< Updated upstream
+=======
+import AdvPopUp from "../../shumin/components/AdvPopUp";
+import axios from 'axios';
+import SuccessModal from "./SuccessfulModal.jsx";
+
+>>>>>>> Stashed changes
 
 const ServicesAppointment = ({ serviceData }) => {
   const [selectedButtons, setSelectedButtons] = useState([]);
@@ -14,15 +21,51 @@ const ServicesAppointment = ({ serviceData }) => {
     currentDate.setDate(currentDate.getDate() + 1);
     return currentDate;
   });
-
+  const [slotsAvailability, setSlotsAvailability] = useState({});
+  const [showAd, setShowAd] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+<<<<<<< Updated upstream
   const [slotsAvailability, setSlotsAvailability] = useState("");
+=======
+
+  const formattedDateForDB = `${selectedDate.getFullYear()}-${(selectedDate.getMonth() + 1).toString().padStart(2, "0")}-${selectedDate.getDate().toString().padStart(2, "0")}`;
+
+  useEffect(() => {
+    const fetchSlotAvailability = async () => {
+      try {
+        const response = await axios.get(`http://localhost:4000/api/services/${serviceData._id}/update-availability/${formattedDateForDB}`);
+        console.log("Slot availability response:", response.data.availability);
+        setSlotsAvailability(response.data.availability);
+      } catch (error) {
+        console.error("Error fetching slot availability:", error);
+      }
+    };
+    fetchSlotAvailability();
+  }, [selectedDate, serviceData._id]);
+
+
+  const toggleButton = (button) => {
+    if (!isSlotAvailable(button)) {
+      return;
+    }
+    const updatedButtons = selectedButtons.includes(button)
+      ? selectedButtons.filter((selected) => selected !== button)
+      : [...selectedButtons, button];
+    setSelectedButtons(updatedButtons);
+  };
+
+  const isSlotAvailable = (slot) => {
+    return slotsAvailability[slot] !== 2;
+  };
+>>>>>>> Stashed changes
 
   const handleBack = () => {
     navigate(-1);
   };
 
+<<<<<<< Updated upstream
   useEffect(() => {
     setSelectedButtons([]);
     setSlotsAvailability({
@@ -67,10 +110,24 @@ const ServicesAppointment = ({ serviceData }) => {
   };
   
   const handleAddToCart = () => {
+=======
+  const randomAdPopup = () => {
+    const random = Math.floor(Math.random() * 3) + 1;
+    if (random === 2) {
+      setShowAd(true);
+    } else {
+      setShowSuccessModal(true);
+    }
+  }
+  
+
+  const handleAddToCart = async () => {
+>>>>>>> Stashed changes
     if (!selectedDate) {
       alert("Please select a date before adding to cart.");
       return;
     }
+<<<<<<< Updated upstream
   
    
       if (selectedButtons.length === 0) {
@@ -83,26 +140,73 @@ const ServicesAppointment = ({ serviceData }) => {
     (selectedDate.getMonth() + 1).toString().padStart(2, "0") + "/" +
     selectedDate.getFullYear();
   
+=======
+    if (selectedButtons.length === 0) {
+      alert("Please select a time slot before adding to cart.");
+      return;
+    }
+    const formattedDate =
+      selectedDate.getDate().toString().padStart(2, "0") + "/" +
+      (selectedDate.getMonth() + 1).toString().padStart(2, "0") + "/" +
+      selectedDate.getFullYear();
+
+      const generateUniqueId = () => {
+        return '_' + Math.random().toString(36).substr(2, 9); // Generate a random string
+      };
+
+      const temporaryUserId = "20240519"
+  
+    try {
+      // Update slot availability after adding to cart
+      const updateResponse = await axios.post(`http://localhost:4000/api/services/${serviceData._id}/update-availability`, {
+        date: formattedDateForDB,
+        selectedSlots: selectedButtons,
+        action: "add"
+      });
+      console.log("Slot availability update response:", updateResponse.data);
+  
+      // Fetch updated slot availability
+      const fetchResponse = await axios.get(`http://localhost:4000/api/services/${serviceData._id}/update-availability/${formattedDateForDB}`);
+      console.log("Updated Slot availability response:", fetchResponse.data.availability);
+      setSlotsAvailability(fetchResponse.data.availability);
+    } catch (error) {
+      console.error("Error updating slot availability:", error);
+      return;
+    }
+>>>>>>> Stashed changes
   
     selectedButtons.forEach((slot) => {
       const serviceDetails = {
         title: serviceData.serviceTitle,
         image: serviceData.serviceImages,
-        price: serviceData.price,
-        hidden: serviceData.hidden,
+        price: serviceData.servicePrice,
         type: "service",
-        checked: true,
         slot: slot,
         date: formattedDate,
+        id: serviceData._id,
+        checked:true,
+        uniqueId: generateUniqueId(),
+        userId:temporaryUserId,
       };
+<<<<<<< Updated upstream
   
+=======
+>>>>>>> Stashed changes
       dispatch(addServiceToCart(serviceDetails));
   
     });
+<<<<<<< Updated upstream
   
     setSelectedButtons([]);
     navigate(-1);
+=======
+    setSelectedButtons([]);
+    setShowSuccessModal(true);
+>>>>>>> Stashed changes
   };
+  
+
+
 
   const CustomDatePickerInput = forwardRef(({ value, onClick }, ref) => (
     <div ref={ref} className="customDatePickerInput" onClick={onClick}>
@@ -110,9 +214,11 @@ const ServicesAppointment = ({ serviceData }) => {
     </div>
   ));
 
-  const { serviceTitle, description, price } = serviceData;
+  const { serviceTitle, serviceDescription, servicePrice } = serviceData;
   const totalPrice =
-    selectedButtons.length === 0 ? 0 : selectedButtons.length * price;
+    selectedButtons.length === 0 ? 0 : selectedButtons.length * servicePrice;
+
+  const timeSlots = ["08:00", "09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00"];
 
   return (
     <div className="servicesAppointmentContainer">
@@ -122,10 +228,14 @@ const ServicesAppointment = ({ serviceData }) => {
         </div>
         <div className="appointmentDate">
           <button
+<<<<<<< Updated upstream
             className={`datePickerButtonZM ${
               selectedDate ? "dateButtonSelectedZM" : ""
             }`}
           >
+=======
+            className={`datePickerButtonZM ${selectedDate ? "dateButtonSelectedZM" : ""}`}>
+>>>>>>> Stashed changes
             <Datepicker
               className="datePickerZM"
               selected={selectedDate}
@@ -139,7 +249,6 @@ const ServicesAppointment = ({ serviceData }) => {
                 return date.getTime() > today.getTime();
               }}
               customInput={<CustomDatePickerInput />}
-              // Set minDate to disable dates earlier than today
               minDate={new Date()}
             />
           </button>
@@ -150,21 +259,29 @@ const ServicesAppointment = ({ serviceData }) => {
         <div className="appointmentDescriptionSA">
           <div className="descriptionContainerSA">
             <p className="descriptionWordSA">Description:</p>
-            <p className="descriptionContentSA">{description}</p>
+            <p className="descriptionContentSA">{serviceDescription}</p>
           </div>
         </div>
 
         <div className="dateContainerZM">
           <div className="chooseDateZM">
-            {Object.keys(slotsAvailability).map((slot) => (
+            {timeSlots.map((slot) => (
               <button
                 key={slot}
+<<<<<<< Updated upstream
                 className={`${
                   selectedButtons.includes(slot) ? "selected" : ""
                 } ${!isSlotAvailable(slot) ? "unavailable" : ""}`}
                 onClick={() => toggleButton(slot)}
               >
                 {slot<12?slot:slot-12+".00"}{slot< 12 ?"AM":"PM"}
+=======
+                className={`${selectedButtons.includes(slot) ? "selected" : ""} ${!isSlotAvailable(slot) ? "unavailable" : ""}`}
+                onClick={() => toggleButton(slot)}
+              >
+                {parseInt(slot) < 12 ? `${slot} AM` : `${parseInt(slot) - 12}.00 PM`}
+
+>>>>>>> Stashed changes
               </button>
             ))}
           </div>
@@ -189,8 +306,18 @@ const ServicesAppointment = ({ serviceData }) => {
           </button>
         </div>
       </div>
+<<<<<<< Updated upstream
+=======
+      <AdvPopUp show={showAd} onClose={() => { setShowAd(false);  }} />
+      <SuccessModal show={showSuccessModal} onClose={() => setShowSuccessModal(false)} />
+>>>>>>> Stashed changes
     </div>
   );
 };
 
 export default ServicesAppointment;
+<<<<<<< Updated upstream
+=======
+
+
+>>>>>>> Stashed changes

@@ -28,6 +28,8 @@ function Header() {
         <NavLink to={"/community"}>Community</NavLink>
         <span className="separator">|</span>
         <NavLink to={"/services"}>Services</NavLink>
+        <span className="separator">|</span>
+        <NavLink to={"/order"}>Order</NavLink>
       </div>
 
       <div className="actionContainer">

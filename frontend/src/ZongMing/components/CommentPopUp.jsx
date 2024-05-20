@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import "../styles/CommentPopUp.css";
 import { useDispatch } from "react-redux";
-import { addComment ,addRating} from "../slices/serviceSlice";
+import { addComment, addRating } from "../slices/serviceSlice";
+import axios from "axios";
 
-const CommentPopUp = ({ setShowPopup, serviceTitle }) => {
+const CommentPopUp = ({ setShowPopup, serviceId, serviceTitle,updateServiceCommentsAndRating}) => {
   const dispatch = useDispatch();
 
   const [bodyText, setBodyText] = useState("");
@@ -18,39 +19,33 @@ const CommentPopUp = ({ setShowPopup, serviceTitle }) => {
     setSelectedRating(rating === selectedRating ? null : rating);
   };
 
-  const handleOnSubmitClick = () => {
+  const handleOnSubmitClick = async () => {
     if (bodyText.trim() === "" || !selectedRating) {
       alert("Body can't be empty OR Please select a rating");
       return;
     }
 
     const newComment = {
-      image: null,
-      name: "Khai",
+      username: "ZM",
       content: bodyText,
       rating: selectedRating,
     };
 
-  //  // Find the service in the dummy data array
-  //  const serviceIndex = dummyServiceData.findIndex(
-  //   (service) => service.serviceTitle === serviceTitle
-  // );
+    try {
+      const addCommentResponse = await axios.post(
+        `http://localhost:4000/api/services/${serviceId}/comments`, newComment);
 
-  // if (serviceIndex !== -1) {
-  //   // Add the new comment to the comments array of the service
-  //   dummyServiceData[serviceIndex].comments.push(newComment);
-
-  //   // Update the total ratings count and specific rating count
-  //   dummyServiceData[serviceIndex].ratings.total++;
-  //   dummyServiceData[serviceIndex].ratings[selectedRating]++;
-
-   // Dispatch the addComment action
-  dispatch(addComment({ serviceTitle, comment: newComment }));
-  dispatch(addRating({ serviceTitle, rating: selectedRating }));
-
-  // Close the popup
-  setShowPopup(false);
-};
+      if (addCommentResponse.status === 201) {
+        dispatch(addComment({ serviceId, serviceComments: addCommentResponse.data }));
+        dispatch(addRating({ serviceId, serviceRating: selectedRating }));
+        updateServiceCommentsAndRating(addCommentResponse.data, selectedRating);
+        setShowPopup(false);
+      }
+    } catch (error) {
+      console.error("Error adding comment:", error);
+      alert("Failed to submit comment. Please try again later.");
+    }
+  };
 
   return (
     <div className="servicePopupDialog">

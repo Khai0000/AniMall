@@ -4,15 +4,33 @@ import ServicePostCommentSkeleton from "./ServicePostCommentSkeleton";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useDispatch } from 'react-redux';
 import { removeComment } from "../slices/serviceSlice";
+import axios from "axios";
 
-const ServicePostComment = ({ comment, serviceTitle }) => { 
+const ServicePostComment = ({ comment, serviceId,onDelete  }) => {
   const [imageSource, setImageSource] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
 
-  const handleOnDeleteClick = () => {
-    dispatch(removeComment({ serviceTitle, commentContent: comment.content }));
-  }
+  const handleOnDeleteClick = async (commentId) => {
+    try {
+      console.log("Deleting comment with ID:", commentId); // Log comment ID
+      const deleteCommentResponse = await axios.delete(
+        `http://localhost:4000/api/services/${serviceId}/comments/${commentId}`
+      );
+
+      if (deleteCommentResponse.status === 200) {
+        onDelete(commentId);
+        dispatch(removeComment({ serviceId: serviceId, commentId: commentId }));
+      } else {
+        console.error(
+          "Unexpected response status:",
+          deleteCommentResponse.status
+        );
+      }
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+    }
+  };
 
   useEffect(() => {
     setIsLoading(true);
@@ -43,17 +61,19 @@ const ServicePostComment = ({ comment, serviceTitle }) => {
       </div>
 
       <div className="authorContainerSPC">
-        <p className="authorSPC">{comment.name}</p>
+        <p className="authorSPC">{comment.username}</p>
         <p className="contentSPC">{comment.content}</p>
       </div>
 
-      {comment.name === "Khai" && (
-        <button className="deleteButtonSPC" onClick={handleOnDeleteClick}>
+      {comment.username === "ZM" && (
+        <button className="deleteButtonSPC" onClick={() => handleOnDeleteClick(comment._id)} >
           <DeleteIcon />
         </button>
       )}
     </div>
   );
 };
+
+
 
 export default ServicePostComment;

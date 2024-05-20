@@ -10,6 +10,10 @@ import * as ZongMingPages from "./ZongMing/pages";
 import * as ShuminPages from "./shumin/pages";
 import * as GinkhaiPages from "./ginkhai/pages";
 import * as ShuhuiPages from "./shuhui/pages";
+<<<<<<< Updated upstream
+=======
+import { useSelector } from "react-redux";
+>>>>>>> Stashed changes
 
 function App() {
   const router = createBrowserRouter([
@@ -53,6 +57,14 @@ function App() {
         },
         {
           path: "/community",
+<<<<<<< Updated upstream
+=======
+          // element: isLoggedIn ? (
+          //   <CommonPages.Community />
+          // ) : (
+          //   <Navigate to="/authentication/login" replace={false}  />
+          // ),
+>>>>>>> Stashed changes
           element: <CommonPages.Community />,
           children: [
             { path: "/community", element: <GinkhaiPages.ForumHome /> },
@@ -104,8 +116,17 @@ function App() {
               element: <ZongMingPages.SellerService />,
             },
             {
+<<<<<<< Updated upstream
               path: "/services/serviceDetails/:title",
               element: <ZongMingPages.ServiceDetail />,
+=======
+              path: "/services/:serviceId",
+              element: isLoggedIn ? (
+                <ZongMingPages.ServiceDetail />
+              ) : (
+                <Navigate to="/authentication/login" replace={false} />
+              ),
+>>>>>>> Stashed changes
             },
             {
               path: "/services/sellerService/add-service",
@@ -117,7 +138,36 @@ function App() {
             },
           ],
         },
+<<<<<<< Updated upstream
         { path: "/mycart", element: <ShuminPages.MyCart /> },
+=======
+        {
+          path: "/mycart",
+          element: isLoggedIn ? (
+            <ShuminPages.MyCart />
+          ) : (
+            <Navigate to="/authentication/login" replace={false} />
+          ),
+        },
+        {
+          path: "/order",
+          element: <CommonPages.Order/>,
+          children: [
+            {
+              path: "/order",
+              element: isLoggedIn ? (
+                user.role === "admin" ? (
+                  <ZongMingPages.SellerOrder/>
+                ) : (
+                  <ZongMingPages.SellerOrder />
+                )
+              ) : (
+                <Navigate to="/authentication/login" replace={false} />
+              ),
+            },
+          ],
+        },
+>>>>>>> Stashed changes
       ],
     },
   ]);

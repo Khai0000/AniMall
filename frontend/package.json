@@ -11,6 +11,11 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+<<<<<<< Updated upstream
+=======
+    "axios": "^1.6.8",
+    "bootstrap-icons": "^1.11.3",
+>>>>>>> Stashed changes
     "chart.js": "^4.4.2",
     "lucide-react": "^0.363.0",
     "react": "^18.2.0",

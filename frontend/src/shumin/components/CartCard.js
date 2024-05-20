@@ -7,84 +7,63 @@ import {
   updateQuantity,
   updateChecked,
 } from "../slices/CartSlice";
+import axios from "axios";
 
-const CartCard = ({ product }) => {
+const CartCard = ({ product}) => {
   const [image, setImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const initialQuantity = product.quantity;
   const [quantity, setQuantity] = useState(initialQuantity);
   const initialChecked = product.checked;
   const [isChecked, setIsChecked] = useState(initialChecked);
-
+  const[serviceId,setServiceId]=useState(null);
   const dispatch = useDispatch();
 
-  console.log("Product:", product);
 
   useEffect(() => {
-    if (product.type === "service") {
-      if (product.image && product.image[0]) {
-        if (product.image[0].includes("jpg")) {
-          // Extract the filename from the image path
-          let filename = product.image[0].split("/").pop();
-          // Remove the hash part from the filename
-          let imageName = filename.split(".")[0] + ".jpg";
-          import(`../../ZongMing/assets/image/${imageName}`)
-            .then((image) => {
-              setImage(image.default);
-            })
-            .catch((error) => {
-              console.error("Error loading image:", error);
-            })
-            .finally(() => {
-              setIsLoading(false);
-            });
-        } else {
-          setImage(product.image[0]);
-          // Handle the case where the image format is not as expected
-          // console.error(
-          //   "Service image is not in the expected format:",
-          //   product.image[0]
-          // );
-          // setIsLoading(false);
-        }
-      }
-    } else {
-      if (product.image && product.image[0].includes("jpg")) {
-        let imageDir = product.image[0].substring(
-          0,
-          product.image[0].indexOf(".")
-        );
-        import(`../assets/images/${imageDir}.jpg`)
-          .then((image) => {
-            setImage(image.default);
-          })
-          .catch((error) => {
-            console.error("Error loading image:", error);
-          })
-          .finally(() => {
-            setIsLoading(false);
-          });
-      } else if (product.image && product.image[0]) {
-        setImage(product.image[0]);
-        setIsLoading(false);
-      } else {
-        console.error(
-          "Product image is not defined or not in the expected format:",
-          product
-        );
-        setIsLoading(false);
-      }
+    if (product.id) {
+      setServiceId(product.id);
     }
   }, [product]);
 
-  const handleOnRemoveClicked = () => {
-    dispatch(removeItemFromCart(product.title));
+  useEffect(() => {
+    const loadImage = () => {
+      if (product.image && product.image[0]) {
+        setImage(product.image[0]);
+      } else {
+        console.error("Product image is not defined or not in the expected format:", product);
+      }
+      setIsLoading(false);
+    };
+
+    loadImage();
+  }, [product]);
+
+
+  const formatDate = (dateString) => {
+    const [day, month, year] = dateString.split('/');
+    return `${year}-${month}-${day}`;
+  };
+
+  
+  const handleOnRemoveClicked = async () => {
+    try {
+      await axios.post(`http://localhost:4000/api/services/${serviceId}/update-availability`, {
+        date: formatDate(product.date),
+        selectedSlots: [product.slot],
+        action: "remove"
+      });
+
+      dispatch(removeItemFromCart(product.uniqueId));
+    } catch (error) {
+      console.error("Error reducing slot availability:", error);
+    }
   };
 
   const handleCheckboxClick = () => {
     const newCheckedValue = !isChecked;
     setIsChecked(newCheckedValue);
-    dispatch(updateChecked({ title: product.title, checked: newCheckedValue }));
+    dispatch(updateChecked({ uniqueId: product.uniqueId, checked: newCheckedValue }));
   };
 
   const handleQuantityChange = (event) => {
@@ -139,6 +118,13 @@ const CartCard = ({ product }) => {
 
     // Dispatch editProduct action with updated quantity
     dispatch(updateQuantity({ title: product.title, quantity: newQuantity }));
+  };
+
+  const formatSlot = (slot) => {
+    const [hour] = slot.split(":").map(Number);
+    const period = hour < 12 ? "AM" : "PM";
+    const formattedHour = hour % 12 || 12; // Convert 24-hour to 12-hour format
+    return `${formattedHour} ${period}`;
   };
 
   return isLoading ? (
@@ -208,7 +194,7 @@ const CartCard = ({ product }) => {
             <>
             <div className="seller-product-card-slot-container">
               <div>
-              <p className="seller-product-card-slot">{product.slot<12?product.slot:product.slot-12+".00"} {product.slot<12?"AM":"PM"}&nbsp;&nbsp;{product.date}</p>
+              <p className="seller-product-card-slot">{formatSlot(product.slot)} &nbsp;&nbsp;{product.date}</p>
               </div>
             </div>
             </>

@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Link, useParams } from "react-router-dom";
 import { addService, editService } from "../slices/serviceSlice.js";
+import axios from "axios";
 
 const AddService = () => {
   const [showTitleInput, toggleTitle] = useToggle();
@@ -16,45 +17,55 @@ const AddService = () => {
   const [price, setPrice] = useState(0);
   const [hidden, setHidden] = useState();
   const [rating, setRating] = useState({
-    total:0,
-    1:0,
-    2:0,
-    3:0,
-    4:0,
-    5:0,
+    total: 0,
+    1: 0,
+    2: 0,
+    3: 0,
+    4: 0,
+    5: 0,
   });
   const [comment, setComment] = useState([]);
-  const [createdAt, setCreatedAt] = useState();
-  const service = useSelector((state) => state.services);
+  const [serviceId, setServiceId] = useState([]);
+
+
+  const [allServices, setAllServices] = useState([]);
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const response = await axios.get("http://localhost:4000/api/services");
+        setAllServices(response.data);
+      } catch (error) {
+        console.error("Error fetching services:", error);
+      }
+    };
+    fetchServices();
+  }, []);
+
   const { serviceTitle } = useParams();
-  //for image
+
   const [images, setImages] = useState([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(-1);
+
   useEffect(() => {
-    // Check if an title is provided, indicating an edit mode
     if (serviceTitle) {
       setEditMode(true);
-      // Find the service with the provided title
-      const serviceToEdit = service.find(
+      const serviceToEdit = allServices.find(
         (service) => service.serviceTitle === serviceTitle
       );
       if (serviceToEdit) {
-        // Populate the state with existing product details for editing
+        const serviceId = serviceToEdit._id;
+        setServiceId(serviceId);
         setTitle(serviceToEdit.serviceTitle);
-        setDescription(serviceToEdit.description);
-        setPrice(serviceToEdit.price);
+        setDescription(serviceToEdit.serviceDescription);
+        setPrice(serviceToEdit.servicePrice);
         setImages(serviceToEdit.serviceImages);
-        setHidden(serviceToEdit.hidden);
-        setRating(serviceToEdit.ratings);
-        setComment(serviceToEdit.comments);
-        setCreatedAt(generateTimestamp);
+        setHidden(serviceToEdit.serviceHide);
+        setRating(serviceToEdit.serviceRating);
+        setComment(serviceToEdit.serviceComments);
       }
     }
-  }, [serviceTitle, service]);
+  }, [serviceTitle, allServices]);
 
-  function generateTimestamp() {
-    return new Date().toISOString();
-  }
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -72,64 +83,101 @@ const AddService = () => {
       }
     }
   };
-  const handleOnAddProductClick = () => {
+
+
+  const handleOnAddProductClick = async () => {
     const priceString = String(price);
     if (!title.trim()) {
-      alert("Please provide a title for your product.");
+      alert("Please provide a title for your service.");
       return;
     }
     if (!description.trim()) {
-      alert("Please provide the description for your product.");
+      alert("Please provide a description for your service.");
       return;
     }
     if (!priceString.trim()) {
-      alert("Please provide the price for your product.");
+      alert("Please provide the price for your service.");
       return;
     }
     if (images.every((image) => image === null)) {
-      alert("Please upload at least one image for your product.");
+      alert("Please upload at least one image for your service.");
       return;
     }
-    if (editMode) {
-      const updatedService = {
-        serviceTitle: title,
-        description,
-        serviceImages: images.filter((image) => image !== null),
-        price,
-        ratings: rating,
-        comments: comment,
-        hidden: hidden,
-        createdAt,
-      };
 
-      dispatch(editService({ serviceTitle, updatedService }));
-    } else {
-      const newService = {
-        serviceTitle: title,
-        description: description,
-        serviceImages: images.filter((image) => image !== null),
-        price: price,
-        ratings: rating,
-        comments: comment,
-        hidden: false,
-        createdAt: generateTimestamp(),
-      };
-      dispatch(addService(newService));
+    try {
+      if (editMode) {
+        const updatedService = {
+          serviceTitle: title,
+          description,
+          serviceImages: images.filter((image) => image !== null),
+          price,
+          ratings: rating,
+          comments: comment,
+          hidden: hidden,
+        };
+        // Here you should call the API endpoint to update the service
+        const response = await axios.put(`http://localhost:4000/api/services/${serviceId}`, updatedService);
+
+        if (response.status === 200) {
+          dispatch(editService({ serviceId, updatedService }));
+        } else {
+          alert("Failed to update the service. Please try again.");
+        }
+      } else {
+        const newService = {
+          serviceTitle: title,
+          serviceDescription: description,
+          serviceImages: images.filter((image) => image !== null),
+          servicePrice: price,
+          serviceRating: rating,
+          serviceComments: comment,
+          serviceHide: false,
+        };
+        const response = await axios.post("http://localhost:4000/api/services/add", newService);
+        if (response.status === 200) {
+          dispatch(addService(newService));
+        } else {
+          alert("Failed to add the service. Please try again.");
+        }
+      }
+      navigate(-1);
+    } catch (error) {
+      console.error("Error adding service:", error);
+      alert("An error occurred while adding the service. Please try again.");
     }
-    navigate(-1);
   };
+
+
+
+
   const triggerFileInput = () => {
     if (currentImageIndex === -1 || images.length === 0) {
       document.querySelector('input[type="file"]').click();
     }
   };
-  const handleImageChange = (e) => {
-    const newImages = Array.from(e.target.files).map((file) =>
-      URL.createObjectURL(file)
-    );
-    setImages([...images, ...newImages]);
-    setCurrentImageIndex(images.length + newImages.length - 1);
+  const handleImageChange = async (e) => {
+    const formData = new FormData();
+    Array.from(e.target.files).forEach((file) => {
+      formData.append("file", file);
+    });
+
+    try {
+      const response = await axios.post("http://localhost:4000/image/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      const uploadedImageUrls = response.data;
+
+      setImages([...images, ...uploadedImageUrls]);
+      setCurrentImageIndex(images.length + uploadedImageUrls.length - 1);
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
   };
+
+
   const navigateImage = (direction, e) => {
     e.stopPropagation();
     if (images.length === 0) {
@@ -142,8 +190,8 @@ const AddService = () => {
         currentImageIndex === -1
           ? images.length - 1
           : currentImageIndex > 0
-          ? currentImageIndex - 1
-          : images.length - 1;
+            ? currentImageIndex - 1
+            : images.length - 1;
     } else if (direction === "next") {
       newIndex =
         currentImageIndex < images.length - 1 ? currentImageIndex + 1 : -1;
@@ -155,28 +203,21 @@ const AddService = () => {
       return <div className="placeholder">Click to add image</div>;
     }
 
-    // Check if the image source is from the file explorer or already a URL
-    const isImageFromFileExplorer =
-      images[currentImageIndex].startsWith("blob:"); // Assuming file explorer URLs start with 'blob:'
+    // Check if the image source is from the database or already a URL
+    const isImageFromDatabase = images[currentImageIndex].startsWith("http://localhost:4000"); // Change the URL as per your backend setup
 
-    // If the image is from a URL
-    if (!isImageFromFileExplorer) {
+    // If the image is from the database
+    if (isImageFromDatabase) {
       return (
         <img
-          src={images[currentImageIndex]}
+          src={images[currentImageIndex]} // Assuming the image URL is stored in the images array
           alt="imgA"
           style={{ maxWidth: "100%", maxHeight: "100%" }}
         />
       );
     } else {
-      // If the image is from file explorer, you can use the URL directly
-      return (
-        <img
-          src={images[currentImageIndex]}
-          alt="imgA"
-          style={{ maxWidth: "100%", maxHeight: "100%" }}
-        />
-      );
+      // Handle other cases if needed
+      return <div>Image source not recognized</div>;
     }
   };
 
@@ -215,9 +256,8 @@ const AddService = () => {
             {images.map((_, index) => (
               <span
                 key={index}
-                className={`pagination-indicator ${
-                  index === currentImageIndex ? "current" : ""
-                }`}
+                className={`pagination-indicator ${index === currentImageIndex ? "current" : ""
+                  }`}
                 onClick={() => setCurrentImageIndex(index)}
               >
                 •
@@ -284,7 +324,7 @@ const AddService = () => {
               onKeyPress={(e) => handleKeyPress(e, "price")}
               value={price}
               onChange={(e) => setPrice(parseFloat(e.target.value))}
-              />
+            />
           ) : (
             <span className="Product-details-form-price-content">
               {price || " XX"}
@@ -309,7 +349,11 @@ const AddService = () => {
                 fill="white"
               />
             </svg>
+<<<<<<< Updated upstream
             <span id="Product-details-form-add-button-text">Edit</span>
+=======
+            <span id="Product-details-form-add-button-text">{editMode ? "Edit" : "Add"}</span>
+>>>>>>> Stashed changes
           </button>
           <Link
             to={`/services/sellerService`}

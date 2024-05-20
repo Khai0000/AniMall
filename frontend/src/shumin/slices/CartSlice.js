@@ -24,8 +24,13 @@ export const CartSlice = createSlice({
       state.push(newService);
     },
     removeItemFromCart: (state, action) => {
+<<<<<<< Updated upstream
 
       return state.filter((item) => item.title !== action.payload);
+=======
+      const uniqueIdToRemove = action.payload;
+      return state.filter((item) => item.uniqueId !== uniqueIdToRemove);
+>>>>>>> Stashed changes
     },
 
     updateQuantity: (state, action) => {
@@ -39,8 +44,8 @@ export const CartSlice = createSlice({
     },
 
     updateChecked: (state, action) => {
-      const { title, checked } = action.payload;
-      const itemToUpdate = state.find((item) => item.title === title);
+      const { uniqueId, checked } = action.payload;
+      const itemToUpdate = state.find((item) => item.uniqueId === uniqueId);
 
       if (itemToUpdate) {
         itemToUpdate.checked = checked;

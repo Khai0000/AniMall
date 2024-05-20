@@ -8,30 +8,24 @@ const CartCard=lazy(()=>import("../components/CartCard"));
 function MyCart(){
     const item = useSelector((state)=> state.cart);
     const dispatch=useDispatch();
+    console.log("item:",item);
 
     const [totalPrice,setTotalPrice]=useState(0);
 
    useEffect(() => {
-    // Calculate total price when items change
     let newTotalPrice = 0;
 
     item.forEach((item) => {
         if (item.checked) {
             if (item.type === "service") {
-                // Check if the price is a number
-                if (typeof item.price === "number") {
                     newTotalPrice += item.price;
-                } else {
-                    console.error("Price for service item is not a number:", item);
-                }
             } else {
-                // For other types of items, assume price is a number
                 newTotalPrice += item.price * item.quantity;
             }
         }
     });
 
-    setTotalPrice(Number(newTotalPrice)); // Ensure totalPrice is always a number
+    setTotalPrice(Number(newTotalPrice)); 
 }, [item]);
 
     
@@ -51,6 +45,7 @@ function MyCart(){
         
     }
 
+
     return(
         <div>
             <div id='Upper-section'>
@@ -65,7 +60,7 @@ function MyCart(){
                     <div>
                         <Suspense fallback={<div>Loading...</div>}>
                         {item.map((item,index)=>(
-                            <CartCard key={item.type==="service"?item.title:item.id} product={item}/>
+                            <CartCard key={item.uniqueId} product={item} />
                         ))}
                         </Suspense>
                     </div>

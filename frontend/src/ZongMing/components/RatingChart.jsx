@@ -6,40 +6,44 @@ const Tooltip = ({ count, position }) => {
   const style = {
     position: "fixed",
     top: `${position.y}px`,
-    left: `${position.x + 20}px`, // Adjust the offset from the cursor
+    left: `${position.x + 20}px`,
     background: "white",
     border: "1px solid black",
     padding: "5px",
   };
 
-  return <div style={style}>{count} people rated</div>;
+  const text = count === 0 ? "No ratings" : `${count} people rated.`;
+
+  return <div style={style}>{text}</div>;
 };
 
+
 const RatingChart = ({ ratings }) => {
+
   const transformRatingsData = (ratings) => {
     const ratingsData = [];
-    if (ratings.total === 0) {
-      for (let i = 5; i >= 1; i--) {
-        ratingsData.push({ stars: 5, percentage: 0 })
-      }
-    } else {
-      for (let i = 5; i >= 1; i--) {
-        const percentage = (ratings[i] / ratings.total) * 100;
-        ratingsData.push({ stars: i, percentage });
-      }
+    const total = ratings.total;
 
+    for (let i = 5; i >= 1; i--) {
+      const key = `${i}_stars`;
+      const count = ratings[key] || 0;
+      const percentage = total === 0 ? 0 : (count / total) * 100;
+      ratingsData.push({ stars: i, percentage });
     }
+
+    
+
     return ratingsData;
   };
 
+
   const [hoveredStarCount, setHoveredStarCount] = useState(null);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
-
   const ratingsData = transformRatingsData(ratings);
-
   const handleMouseMove = (e) => {
     setTooltipPosition({ x: e.clientX, y: e.clientY });
   };
+
 
   return (
     <div
@@ -77,7 +81,7 @@ const RatingChart = ({ ratings }) => {
       ))}
       {hoveredStarCount !== null && (
         <Tooltip
-          count={ratings[hoveredStarCount]}
+          count={ratings[`${hoveredStarCount}_stars`]}
           position={tooltipPosition}
         />
       )}
