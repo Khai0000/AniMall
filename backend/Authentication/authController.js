@@ -154,10 +154,15 @@ export const loginUser = async (req, res) => {
         }
 
         res.json({
-            _id: user._id,
+
+            userUid: user._id,
             username: user.username,
             email: user.email,
             token: generateToken(user._id),
+            role: user.role,
+            verifyStatus: user.verifyStatus,
+            address: user.address,
+            phone: user.phone,
         });
     } catch (error) {
         console.error("Login Error:", error); // Log the error for debugging

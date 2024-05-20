@@ -13,6 +13,7 @@ function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [loginError, setLoginError] = useState("");
@@ -48,8 +49,26 @@ function Login() {
           // Save the token in local storage or Redux store
           localStorage.setItem("token", response.data.token);
           // Retrieve username from the response and set it in the Redux store
-          const username = response.data.username;
-          dispatch(setUser({ username, email }));
+          const {
+            username,
+            email,
+            userUid,
+            role,
+            verifyStatus,
+            address,
+            phone,
+          } = response.data;
+          dispatch(
+            setUser({
+              username,
+              email,
+              userUid,
+              role,
+              verifyStatus,
+              address,
+              phone,
+            })
+          );
           navigate("/product");
         } else {
           setLoginError("Login failed. Please check your credentials.");

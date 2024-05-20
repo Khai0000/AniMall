@@ -12,10 +12,9 @@ import { useNavigate } from "react-router-dom";
 
 const PetCard = lazy(() => import("../components/PetCard"));
 
-
 const PetHome = () => {
   const [showPriceRange, setShowPriceRange] = useState(false);
-  const [minPrice, setMinPrice] = useState(""); 
+  const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [isAdoptionFilterActive, setIsAdoptionFilterActive] = useState(false);
 
@@ -23,6 +22,8 @@ const PetHome = () => {
   const navigate = useNavigate();
 
   const pets = useSelector((state) => state.pets);
+  const user = useSelector((state) => state.user.user);
+  console.log(user);
 
   const [filteredPets, setFilteredPets] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -45,7 +46,9 @@ const PetHome = () => {
     let filteredData = [...pets];
     setIsLoading(true);
     if (isAdoptionFilterActive) {
-      filteredData = filteredData.filter((pet) => !pet.hidden && pet.price === 0);
+      filteredData = filteredData.filter(
+        (pet) => !pet.hidden && pet.price === 0
+      );
     } else {
       filteredData = filteredData.filter((pet) => !pet.hidden);
       filteredData = filteredData.filter((pet) => pet.price > 0);
@@ -103,9 +106,9 @@ const PetHome = () => {
     navigate("/mycart");
   };
 
-  const dog = filteredPets.filter((pet) => pet.animaltag==="dog");
-  const cat = filteredPets.filter((pet) => pet.animaltag==="cat");
-  const other = filteredPets.filter((pet) => pet.animaltag==="others");
+  const dog = filteredPets.filter((pet) => pet.animaltag === "dog");
+  const cat = filteredPets.filter((pet) => pet.animaltag === "cat");
+  const other = filteredPets.filter((pet) => pet.animaltag === "others");
 
   const renderPetsForCategory = (pets, category) => (
     <div className={`Product-category-row ${category}`}>
@@ -209,11 +212,10 @@ const PetHome = () => {
           </div>
         )}
 
-
         <div className="Seller-product">
-            <Link to={`/pet/sellerPet`} className="seller-link">
-                Seller
-            </Link>
+          <Link to={`/pet/sellerPet`} className="seller-link">
+            Seller
+          </Link>
         </div>
       </div>
     </div>
