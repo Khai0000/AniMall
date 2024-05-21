@@ -53,7 +53,8 @@ function MyCart() {
                     productId: item.id,
                     price: item.price,
                     type: item.type,
-                    quantity: item.quantity
+                    quantity: item.quantity,
+                    image: item.image,
                 })),
                 totalPrice: totalPrice
             });
@@ -67,7 +68,8 @@ function MyCart() {
                     productId: item.id,
                     price: item.price,
                     type: item.type,
-                    quantity: item.quantity
+                    quantity: item.quantity,
+                    image: item.image[0],
                 })),
                 totalPrice: totalPrice
             });

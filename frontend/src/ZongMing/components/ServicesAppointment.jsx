@@ -121,7 +121,7 @@ const ServicesAppointment = ({ serviceData }) => {
         quantity:1,
       };
       dispatch(addServiceToCart(serviceDetails));
-      randomAdPopup();
+      
     });
     setSelectedButtons([]);
     setShowSuccessModal(true);

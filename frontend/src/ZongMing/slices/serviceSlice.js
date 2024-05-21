@@ -14,23 +14,23 @@ export const serviceSlice = createSlice({
       return [action.payload, ...state];
     },
     addComment: (state, action) => {
-      const { serviceTitle, comment } = action.payload;
+      const { serviceTitle, serviceComments } = action.payload;
       const service = state.find(
         (service) => service.serviceTitle === serviceTitle
       );
       if (service) {
-        service.serviceComments.unshift(comment);
+        service.serviceComments.unshift(serviceComments);
       }
     },
     addRating: (state, action) => {
-      const { serviceTitle, rating } = action.payload;
+      const { serviceTitle, serviceRating } = action.payload;
       const service = state.find(
         (service) => service.serviceTitle === serviceTitle
       );
       if (service) {
         // Update the total ratings count and specific rating count
         service.serviceRating.total++;
-        service.serviceRating[rating]++;
+        service.serviceRating[serviceRating]++;
       }
     },
     removeComment: (state, action) => {

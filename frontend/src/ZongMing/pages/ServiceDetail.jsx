@@ -38,7 +38,7 @@ const ServiceDetail = () => {
       }
     };
     getOneService();
-  }, [serviceId]);
+  }, [serviceId,comments]);
 
   const updateServiceCommentsAndRating = (newComment, newRating) => {
     setComments((prevComments) => [...prevComments, newComment]);
@@ -65,6 +65,7 @@ const ServiceDetail = () => {
       return updatedService;
     });
   };
+
 
   const handleAddComment = () => {
     setShowPopup(true);

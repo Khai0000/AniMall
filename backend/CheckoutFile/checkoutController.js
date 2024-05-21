@@ -1,5 +1,4 @@
   import {CheckoutModel} from "./checkoutModel.js";
-  import { v4 as uuidv4 } from 'uuid';
   import mongoose from "mongoose";
 
 
@@ -30,8 +29,6 @@
   export const createReceipt = async (req, res) => {
     try {
       const { userId, username, email, address, products, totalPrice } = req.body;
-
-      const receiptId = uuidv4();
       const userObjectId = new mongoose.Types.ObjectId(userId);
 
       const newReceipt = {
