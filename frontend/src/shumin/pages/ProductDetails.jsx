@@ -9,18 +9,21 @@ import CommentPopUp from "../components/CommentPopUp";
 import ProductPostComment from "../components/ProductPostComment";
 import "../styles/ProductDetails.css";
 import { addItemToCart } from "../slices/CartSlice";
+import AdvPopUp from "../components/AdvPopUp";
 
 const ProductDetails = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { title } = useParams();
+  const [showAd, setShowAd] = useState(false);
 
   const [imagesLoading, setImagesLoading] = useState(true);
 
   const product = useSelector((state) =>
     state.products.find((product) => product.title === title)
   );
+  const cartItem = useSelector((state) => state.cart);
 
   const [loadedImageUrls, setLoadedImageUrls] = useState([]);
 
@@ -56,27 +59,61 @@ const ProductDetails = () => {
     navigate(-1);
   };
 
-  const handleOnAddToCartButtonClick = () => {
-    const productDetails = {
-      id: product.id,
-      title: product.title,
-      description: product.description,
-      image: product.image,
-      animaltag: product.animaltag,
-      producttag: product.producttag,
-      price: product.price,
-      ratings: product.ratings,
-      comments: product.comments,
-      stockLevel: product.stockLevel,
-      hidden: product.hidden,
-      type: "product",
-      quantity: 1,
-      checked: true,
-    };
+  const randomAdPopup = () => {
+    const random = Math.floor(Math.random() * 3) + 1;
+    if (random === 2) {
+      setShowAd(true);
+    } else {
+      navigate(-1);
+    }
+  }
 
-    dispatch(addItemToCart(productDetails));
-    navigate(-1);
-  };
+  const handleOnAddToCartButtonClick = () => {
+    const existingCartItem = cartItem.find(item => item.id === product.id);
+    if (existingCartItem) {
+      if (existingCartItem.stockLevel > existingCartItem.quantity) {
+        const productDetails = {
+          id: product.id,
+          title: product.title,
+          description: product.description,
+          image: product.image,
+          animaltag: product.animaltag,
+          producttag: product.producttag,
+          price: product.price,
+          ratings: product.ratings,
+          comments: product.comments,
+          stockLevel: product.stockLevel,
+          hidden: product.hidden,
+          type: "product",
+          quantity: existingCartItem.quantity + 1,
+          checked: true,
+        };
+        dispatch(addItemToCart(productDetails));
+        randomAdPopup();
+      } else {
+        alert("Stock is not enough!");
+      }
+    } else {
+      const productDetails = {
+        id: product.id,
+        title: product.title,
+        description: product.description,
+        image: product.image,
+        animaltag: product.animaltag,
+        producttag: product.producttag,
+        price: product.price,
+        ratings: product.ratings,
+        comments: product.comments,
+        stockLevel: product.stockLevel,
+        hidden: product.hidden,
+        type: "product",
+        quantity: 1,
+        checked: true,
+      };
+      dispatch(addItemToCart(productDetails));
+      randomAdPopup();
+    }
+  }
 
   return (
     <div className="product-details-container">
@@ -169,6 +206,7 @@ const ProductDetails = () => {
           <CommentPopUp setShowPopup={setShowPopup} title={title} />
         )}
       </div>
+      <AdvPopUp show={showAd} onClose={() => { setShowAd(false); navigate(-1); }} />
     </div>
   );
 };

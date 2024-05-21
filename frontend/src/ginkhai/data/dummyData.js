@@ -197,6 +197,8 @@ export const catData = [
       "Siamese cats are known for their striking appearance and social nature. When I first brought home my Siamese cat, Luna, I was immediately captivated by her bright blue eyes and sleek coat. From the beginning, Luna proved to be a vocal and affectionate companion, always eager to be near me. Despite her independent streak, she had a playful side and enjoyed chasing toys around the house. As she settled into her new home, Luna quickly established herself as the queen of the household, ruling over her domain with grace and charm. Our bond only grew stronger with time, and I consider myself lucky to have such a wonderful feline friend.",
     image: ["cat1.jpg"],
     tag: ["cat"],
+    likes: 69,
+    dislikes: 69,
     comments: [
       {
         name: "Ava",

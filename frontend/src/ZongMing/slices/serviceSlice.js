@@ -19,7 +19,7 @@ export const serviceSlice = createSlice({
         (service) => service.serviceTitle === serviceTitle
       );
       if (service) {
-        service.comments.unshift(comment);
+        service.serviceComments.unshift(comment);
       }
     },
     addRating: (state, action) => {
@@ -29,8 +29,8 @@ export const serviceSlice = createSlice({
       );
       if (service) {
         // Update the total ratings count and specific rating count
-        service.ratings.total++;
-        service.ratings[rating]++;
+        service.serviceRating.total++;
+        service.serviceRating[rating]++;
       }
     },
     removeComment: (state, action) => {
@@ -39,7 +39,7 @@ export const serviceSlice = createSlice({
         (service) => service.serviceTitle === serviceTitle
       );
       if (service) {
-        service.comments = service.comments.filter(
+        service.serviceComments = service.serviceComments.filter(
           (comment) => comment.content !== commentContent
         );
       }

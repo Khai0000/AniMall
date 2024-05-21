@@ -51,6 +51,10 @@ const serviceItemSchema = mongoose.Schema(
             type: String,
             required: true,
           },
+          userUid:{
+            type:String,
+            required:true,
+          },
           content: {
             type: String,
             required: true,

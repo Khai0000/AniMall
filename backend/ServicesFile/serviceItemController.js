@@ -119,31 +119,32 @@ export const deleteOneService = async (req, res) => {
 
 export const addServiceComment = async (req, res) => {
   const serviceId = req.params.serviceId;
-  const { username, content, rating } = req.body;
- 
+  const { username, userUid, content, rating } = req.body;
+
+  if (!username || !userUid || !content) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
+
   try {
     const serviceToUpdate = await ServiceItemsModel.findById(serviceId);
     if (!serviceToUpdate) {
       return res.status(404).json({ error: "Service not found" });
     }
 
-    const newComment = { username, content };
+    const newComment = { username, userUid, content };
     serviceToUpdate.serviceComments.push(newComment);
 
     if (rating) {
       serviceToUpdate.serviceRating.total++;
       serviceToUpdate.serviceRating[`${rating}_stars`]++;
     }
+
     await serviceToUpdate.save();
 
-    const addedComment = serviceToUpdate.serviceComments.find(
-      (comment) => comment.username === username && comment.content === content
-    );
-
-    return res.status(201).json(addedComment);
+    return res.status(201).json(serviceToUpdate);
   } catch (error) {
     console.error("Error adding comment:", error);
-    res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
 
@@ -164,15 +165,6 @@ export const deleteComment = async (req, res) => {
     if (commentIndex === -1) {
       return res.status(404).json({ error: "Comment not found" });
     }
-
-    // if (
-    //   serviceItem.serviceComments[commentIndex].userId.toString() !== req.user.id &&
-    //   req.user.role !== "admin"
-    // ) {
-    //   return res
-    //     .status(403)
-    //     .json({ error: "You are not authorized to delete this comment" });
-    // }
 
     serviceItem.serviceComments.splice(commentIndex, 1);
 

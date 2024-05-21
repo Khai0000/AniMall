@@ -13,6 +13,7 @@ import * as GinkhaiPages from "./ginkhai/pages";
 import * as ShuhuiPages from "./shuhui/pages";
 import { useSelector } from "react-redux";
 
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const user = useSelector((state) => state.user.user);
@@ -40,6 +41,10 @@ function App() {
               path: "/authentication/reset-password",
               element: <ShuhuiPages.ResetPassword />,
             },
+            {
+              path: "/authentication/profile",
+              element: <ShuhuiPages.Profile />,
+            },
           ],
         },
         {
@@ -47,7 +52,14 @@ function App() {
           element: <CommonPages.Pet />,
           children: [
             { path: "/pet", element: <ShuminPages.PetHome /> },
-            { path: "/pet/:title", element: <ShuminPages.PetDetails /> },
+            {
+              path: "/pet/:title",
+              element: isLoggedIn ? (
+                <ShuminPages.PetDetails />
+              ) : (
+                <Navigate to="/authentication/login" replace={false} />
+              ),
+            },
             {
               path: "/pet/PetCategorized/:category",
               element: <ShuminPages.PetCategorized />,
@@ -62,7 +74,12 @@ function App() {
         },
         {
           path: "/community",
-          element: <CommonPages.Community />,
+          // element: isLoggedIn ? (
+          //   <CommonPages.Community />
+          // ) : (
+          //   <Navigate to="/authentication/login" replace={false}  />
+          // ),
+          element:<CommonPages.Community/>,
           children: [
             { path: "/community", element: <GinkhaiPages.ForumHome /> },
             {
@@ -82,7 +99,11 @@ function App() {
             { path: "/product", element: <ShuminPages.ProductHome /> },
             {
               path: "/product/:title",
-              element: <ShuminPages.ProductDetails />,
+              element: isLoggedIn ? (
+                <ShuminPages.ProductDetails />
+              ) : (
+                <Navigate to="/authentication/login" replace={false} />
+              ),
             },
             {
               path: "/product/ProductCategorized/:category",
@@ -129,7 +150,7 @@ function App() {
               element: <ZongMingPages.AddServiceComponent />,
             },
           ],
-        },
+        },,
         {
           path: "/mycart",
           element: isLoggedIn ? (
@@ -148,7 +169,7 @@ function App() {
                 user.role === "admin" ? (
                   <ZongMingPages.SellerOrder/>
                 ) : (
-                  <ZongMingPages.SellerOrder />
+                  <ZongMingPages.UserOrder />
                 )
               ) : (
                 <Navigate to="/authentication/login" replace={false} />

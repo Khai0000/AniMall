@@ -1,23 +1,83 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUser } from "../slices/userSlice";
 import "../styles/Login.css";
 import DogPaw from "../assets/images/dog_paw.png";
 import YellowCircle from "../assets/images/yellow_circle.png";
 import AnimalPic from "../assets/images/animal_pic.png";
-import { useDispatch} from "react-redux";
-import { setUser } from "../slices/userSlice";
+import axios from "axios"; // Import axios for making HTTP requests
 
 function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [isLogin, setIsLogin] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleLoginClick = (e) => {
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [loginError, setLoginError] = useState("");
+
+  const validateEmail = (email) => {
+    const isValidEmail = /\S+@\S+\.\S+/.test(email);
+    setEmailError(isValidEmail ? "" : "Please enter a valid email address");
+    return isValidEmail;
+  };
+
+  const validatePassword = (password) => {
+    const isValidPassword = password.length >= 6;
+    setPasswordError(isValidPassword ? "" : "Incorrect password. Try again.");
+    return isValidPassword;
+  };
+
+  const handleLoginClick = async (e) => {
     e.preventDefault();
-    setIsLogin(true);
-    dispatch(setUser({ username: "Khai", email: "ginkhai232@bweodiq.com" }));
-    navigate("/product");
+    const isEmailValid = validateEmail(email);
+    const isPasswordValid = validatePassword(password);
+
+    if (isEmailValid && isPasswordValid) {
+      try {
+        const response = await axios.post(
+          "http://localhost:4000/api/auth/authentication/login",
+          {
+            email: email,
+            password: password,
+          }
+        );
+
+        if (response.data.token) {
+          // Save the token in local storage or Redux store
+          localStorage.setItem("token", response.data.token);
+          // Retrieve username from the response and set it in the Redux store
+          const {
+            username,
+            email,
+            userUid,
+            role,
+            verifyStatus,
+            address,
+            phone,
+          } = response.data;
+          dispatch(
+            setUser({
+              username,
+              email,
+              userUid,
+              role,
+              verifyStatus,
+              address,
+              phone,
+            })
+          );
+          navigate("/product");
+        } else {
+          setLoginError("Login failed. Please check your credentials.");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        setLoginError("An error occurred. Please try again later.");
+      }
+    }
   };
 
   return (
@@ -25,6 +85,7 @@ function Login() {
       <div className="login-component">
         <div className="login-column">
           <h1 className="login-title">Login To Your Account</h1>
+          {loginError && <div className="error">{loginError}</div>}
           <p className="login-register">
             New Customer?{" "}
             <Link className="login-register-link" to="/authentication/register">
@@ -32,12 +93,22 @@ function Login() {
             </Link>
           </p>
           <form className="login-container" onSubmit={handleLoginClick}>
-            <input className="login-email" type="email" placeholder="Email" />
+            <input
+              className="login-email"
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            {emailError && <div className="error">{emailError}</div>}
             <input
               className="login-password"
               type="password"
               placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
+            {passwordError && <div className="error">{passwordError}</div>}
             <p className="login-reset">
               <Link
                 className="login-reset-link"
@@ -50,8 +121,7 @@ function Login() {
               LOGIN
             </button>
           </form>
-
-          <img className="dog-paw" src={DogPaw} alt="dogpaw" />
+          <img className="dog-paw" src={DogPaw} alt="dog paw" />
         </div>
       </div>
       <div className="login-deco">
@@ -59,9 +129,9 @@ function Login() {
           <img
             className="yellow-circle"
             src={YellowCircle}
-            alt="yellowcircle"
+            alt="yellow circle"
           />
-          <img className="animal-pic" src={AnimalPic} alt="animalpic" />
+          <img className="animal-pic" src={AnimalPic} alt="animal pic" />
         </div>
       </div>
     </div>

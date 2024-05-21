@@ -8,7 +8,6 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
-
 function Header() {
   const [isLogin, setIsLogin] = useState(false);
   const user = useSelector((state) => state.user.user);
@@ -22,12 +21,11 @@ function Header() {
   const handleLogout = () => {
     setIsLogin(false);
     navigate("/authentication/login", { replace: true });
-    // Dispatch action to remove user from Redux store
     dispatch(removeUser());
   };
 
   const goToProfile = () => {
-    navigate("/authentication/profile"); // Navigate to the profile page
+    navigate("/authentication/profile"); 
   };
 
 

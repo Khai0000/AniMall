@@ -1,11 +1,9 @@
 import express from "express";
-import {
+import{
   getUserReceipts,
   getAllReceipts,
-  getReceiptById,
   createReceipt,
-  deleteReceiptById
-} from "./checkoutController";
+}from "./checkoutController.js";
 
 const router = express.Router();
 
@@ -13,10 +11,6 @@ router.get("/user/receipts", getUserReceipts);
 
 router.get("/admin/receipts", getAllReceipts);
 
-router.get("/receipts/:receiptId", getReceiptById);
-
 router.post("/receipts", createReceipt);
-
-router.delete("/receipts/:receiptId", deleteReceiptById);
 
 export default router;

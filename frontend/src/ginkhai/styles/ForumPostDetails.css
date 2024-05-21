@@ -175,7 +175,7 @@
     margin-left: auto;
 }
 
-.postContainer .backButton {
+.postContainer .weijiePostBackButton {
     background-color: transparent;
     border: 1px solid #3C95A9;
     color: #3C95A9;
@@ -188,7 +188,7 @@
     margin-left: auto;
 }
 
-.postContainer .backButton:hover {
+.postContainer .weijiePostBackButton:hover {
     color: #f4b701;
     border: 1px solid #f4b701;
     text-shadow: 0 0 0px #f4b701, 0 0 1px #f4b701, 0 0 30px #f4b701;
@@ -209,4 +209,17 @@
     font-size: 1.5rem;
     text-align: center;
     color: #868686;
+}
+
+div.wj-loadingContainer{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+
+p.wj-loadingText{
+    color: #3C95A9;
+    font-size: 2rem;
 }

@@ -480,7 +480,7 @@ const AddPet = () => {
             )}
           </button>
           <Link to={`/pet/sellerPet`} id="Product-details-form-back-button">
-            Go Back
+            Back
           </Link>
         </div>
       </div>

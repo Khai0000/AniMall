@@ -25,24 +25,3 @@
   max-width: 100%; /* Ensures the image is responsive */
   border-radius: 10px; /* Optional: if you want rounded corners for the image */
 }
-
-.closeButton {
-  position: absolute;
-  top: 15px; /* Adjust as needed */
-  right: 10px; /* Adjust as needed */
-  border: none;
-  background-color: #3C95A9;
-  color: white;
-  width: 70px;
-  height:70px;
-  border-radius: 50%; /* Circle shape */
-  padding: 0;
-  font-size: 35px; /* Adjust as needed */
-  line-height: 35px; /* Center the 'X' vertically */
-  text-align: center; /* Center the 'X' horizontally */
-  cursor: pointer;
-}
-
-.closeButton:hover {
-  background-color: #F3B801;
-}

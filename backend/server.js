@@ -6,8 +6,10 @@ import dotenv from "dotenv";
 import forumPostRouter from "./ForumPosts/forumPostsEndpoints.js";
 import servicesRouter from "./ServicesFile/serviceItemEndpoints.js";
 import cartRouter from "./Cart/cartEndpoints.js";
+import orderRouter from "./CheckoutFile/checkoutEndpoints.js";
 import upload from "./ImageUploadRoute/upload.js";
 import Grid from "gridfs-stream";
+import authRouter from "./Authentication/authEndpoints.js";
 
 let gfs;
 
@@ -30,6 +32,8 @@ app.use("/api/community", forumPostRouter);
 app.use("/api/services", servicesRouter);
 app.use("/api/cart",cartRouter);
 app.use("/image", upload);
+app.use("/api/auth", authRouter);
+app.use("/api/orders",orderRouter);
 
 mongoose
   .connect(process.env.MONGODB_URL)

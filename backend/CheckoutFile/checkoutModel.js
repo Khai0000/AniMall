@@ -1,10 +1,38 @@
 import mongoose from "mongoose";
 
-const checkoutSchema = mongoose.Schema(
+const receiptSchema = new mongoose.Schema({
+  products: [
+    {
+      productId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+        required: true
+      },
+      price: {
+        type: Number,
+        required: true
+      },
+      type: {
+        type: String,
+        required: true
+      },
+      quantity: {
+        type: Number,
+        required: true
+      },
+    }
+  ],
+  totalPrice: {
+    type: Number,
+    required: true
+  }
+});
+
+const checkoutSchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User", 
+      ref: "User",
       required: true
     },
     username: {
@@ -19,37 +47,9 @@ const checkoutSchema = mongoose.Schema(
       type: String,
       required: true
     },
-    products: [
-      {
-        productId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Product", 
-          required: true
-        },
-        price: {
-          type: Number,
-          required: true
-        },
-        type: {
-          type: String,
-          required: true
-        }
-      }
-    ],
-    totalPrice: {
-      type: Number,
-      required: true
-    },
-    receiptId: {
-      type: String,
-      required: true,
-      unique: true
-    }
+    receipts: [receiptSchema]
   },
   { timestamps: true }
 );
 
-export const CheckoutModel = mongoose.model(
-  "Checkout",
-  checkoutSchema
-);
+export const CheckoutModel = mongoose.model("Checkout", checkoutSchema);

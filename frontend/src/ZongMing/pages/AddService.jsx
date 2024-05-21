@@ -355,7 +355,7 @@ const AddService = () => {
             to={`/services/sellerService`}
             id="Product-details-form-back-button"
           >
-            Go Back
+            Back
           </Link>
         </div>
       </div>

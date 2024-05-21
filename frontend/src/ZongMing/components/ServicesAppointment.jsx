@@ -5,7 +5,7 @@ import Datepicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate } from "react-router-dom";
 import { addServiceToCart } from "../../shumin/slices/CartSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import AdvPopUp from "../../shumin/components/AdvPopUp";
 import axios from 'axios';
 import SuccessModal from "./SuccessfulModal.jsx";
@@ -23,6 +23,7 @@ const ServicesAppointment = ({ serviceData }) => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.user);
 
   const formattedDateForDB = `${selectedDate.getFullYear()}-${(selectedDate.getMonth() + 1).toString().padStart(2, "0")}-${selectedDate.getDate().toString().padStart(2, "0")}`;
 
@@ -86,7 +87,6 @@ const ServicesAppointment = ({ serviceData }) => {
         return '_' + Math.random().toString(36).substr(2, 9); // Generate a random string
       };
 
-      const temporaryUserId = "20240519"
   
     try {
       // Update slot availability after adding to cart
@@ -117,10 +117,11 @@ const ServicesAppointment = ({ serviceData }) => {
         id: serviceData._id,
         checked:true,
         uniqueId: generateUniqueId(),
-        userId:temporaryUserId,
+        userId: user.id,
+        quantity:1,
       };
       dispatch(addServiceToCart(serviceDetails));
-  
+      randomAdPopup();
     });
     setSelectedButtons([]);
     setShowSuccessModal(true);
