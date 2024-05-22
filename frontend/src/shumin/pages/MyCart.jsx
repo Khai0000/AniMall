@@ -1,21 +1,41 @@
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import React, { useEffect, useState, lazy, Suspense } from 'react';
-import { checkoutItems } from '../slices/CartSlice';
+import { checkoutItems,setCartItems,updateChecked } from '../slices/CartSlice';
 
 const CartCard = lazy(() => import("../components/CartCard"));
 
 function MyCart() {
-    const item = useSelector((state) => state.cart);
+
     const dispatch = useDispatch();
     const user = useSelector((state) => state.user.user);
-
+    const cartItems = useSelector((state) => state.cart);
     const [totalPrice, setTotalPrice] = useState(0);
+    const userUid = user.userUid;
+
+    useEffect(() => {
+        const fetchCartItems = async () => {
+            try {
+                const response = await axios.get(`http://localhost:4000/api/cart/${userUid}`);
+                if (response.status === 200) {
+                    dispatch(setCartItems(response.data.items));
+                }
+            } catch (error) {
+                console.error('Error fetching cart items:', error);
+            }
+        };
+
+        if (user.userUid) {
+            fetchCartItems();
+        }
+    }, [user.userUid,dispatch]);
+
+    
 
     useEffect(() => {
         let newTotalPrice = 0;
 
-        item.forEach((item) => {
+        cartItems.forEach((item) => {
             if (item.checked) {
                 if (item.type === "service") {
                     newTotalPrice += item.price;
@@ -26,11 +46,11 @@ function MyCart() {
         });
 
         setTotalPrice(Number(newTotalPrice));
-    }, [item]);
+    }, [cartItems]);
 
     const handleOnCheckoutButtonClick = async () => {
         let numOfCheckedItem = 0;
-        const checkedItems = item.filter((item) => item.checked);
+        const checkedItems = cartItems.filter((item) => item.checked);
 
         if (checkedItems.length === 0) {
             alert("No item to checkout!");
@@ -49,27 +69,32 @@ function MyCart() {
                 username: user.username,
                 email: user.email,
                 address: user.address,
+                phone:user.phone,
                 products: checkedItems.map(item => ({
                     productId: item.id,
                     price: item.price,
                     type: item.type,
                     quantity: item.quantity,
                     image: item.image,
+                    productTitle: item.title,
                 })),
                 totalPrice: totalPrice
             });
 
             const response = await axios.post('http://localhost:4000/api/orders/receipts', {
-                userId: user.id,
+                userId: user.userUid,
                 username: user.username,
                 email: user.email,
                 address: user.address,
+                phone:user.phone,
                 products: checkedItems.map(item => ({
                     productId: item.id,
                     price: item.price,
                     type: item.type,
-                    quantity: item.quantity,
+                    quantity: item.type === "service" ? item.slot : item.quantity,
                     image: item.image[0],
+                    title: item.title,
+                    date: item.type === "service" ? item.date : "",
                 })),
                 totalPrice: totalPrice
             });
@@ -96,11 +121,11 @@ function MyCart() {
                 <span id='Upper-section-warehouse'>My Cart</span>
             </div>
             <div>
-                {item.length !== 0 ? (
+                {cartItems.length !== 0 ? (
                     <>
                         <div>
                             <Suspense fallback={<div>Loading...</div>}>
-                                {item.map((item) => (
+                                {cartItems.map((item) => (
                                     <CartCard key={item.uniqueId} product={item} />
                                 ))}
                             </Suspense>

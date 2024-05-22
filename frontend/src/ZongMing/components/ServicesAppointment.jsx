@@ -5,7 +5,7 @@ import Datepicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate } from "react-router-dom";
 import { addServiceToCart } from "../../shumin/slices/CartSlice";
-import { useDispatch,useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import AdvPopUp from "../../shumin/components/AdvPopUp";
 import axios from 'axios';
 import SuccessModal from "./SuccessfulModal.jsx";
@@ -67,7 +67,7 @@ const ServicesAppointment = ({ serviceData }) => {
       setShowSuccessModal(true);
     }
   }
-  
+
 
   const handleAddToCart = async () => {
     if (!selectedDate) {
@@ -78,63 +78,63 @@ const ServicesAppointment = ({ serviceData }) => {
       alert("Please select a time slot before adding to cart.");
       return;
     }
-    const formattedDate =
-      selectedDate.getDate().toString().padStart(2, "0") + "/" +
-      (selectedDate.getMonth() + 1).toString().padStart(2, "0") + "/" +
-      selectedDate.getFullYear();
 
-      const generateUniqueId = () => {
-        return '_' + Math.random().toString(36).substr(2, 9); // Generate a random string
-      };
 
-  
+    const generateUniqueId = () => {
+      return '_' + Math.random().toString(36).substr(2, 9);
+    };
+
+
     try {
-      // Update slot availability after adding to cart
       const updateResponse = await axios.post(`http://localhost:4000/api/services/${serviceData._id}/update-availability`, {
         date: formattedDateForDB,
         selectedSlots: selectedButtons,
         action: "add"
       });
       console.log("Slot availability update response:", updateResponse.data);
-  
-      // Fetch updated slot availability
+
       const fetchResponse = await axios.get(`http://localhost:4000/api/services/${serviceData._id}/update-availability/${formattedDateForDB}`);
       console.log("Updated Slot availability response:", fetchResponse.data.availability);
       setSlotsAvailability(fetchResponse.data.availability);
+
     } catch (error) {
       console.error("Error updating slot availability:", error);
       return;
     }
-  
-    selectedButtons.forEach((slot) => {
-      const serviceDetails = {
-        title: serviceData.serviceTitle,
-        image: serviceData.serviceImages,
-        price: serviceData.servicePrice,
-        type: "service",
-        slot: slot,
-        date: formattedDate,
-        id: serviceData._id,
-        checked:true,
-        uniqueId: generateUniqueId(),
-        userId: user.id,
-        quantity:1,
-      };
-      dispatch(addServiceToCart(serviceDetails));
-      
-    });
-    setSelectedButtons([]);
-    setShowSuccessModal(true);
+
+    const itemsToAdd = selectedButtons.map((slot) => ({
+      productId: serviceData._id,
+      title: serviceData.serviceTitle,
+      image: serviceData.serviceImages,
+      price: serviceData.servicePrice,
+      type: "service",
+      slot: slot,
+      date: formattedDateForDB,
+      quantity: 1,
+      checked: true,
+      uniqueId: generateUniqueId(),
+    }));
+
+    try {
+      const addItemsResponse = await axios.post('http://localhost:4000/api/cart/add', {
+        username: user.username,
+        userId: user.userUid,
+        items: itemsToAdd,
+      });
+      console.log("Add items response:", addItemsResponse.data);
+
+      if (addItemsResponse.status === 201) {
+        dispatch(addServiceToCart(itemsToAdd));
+        setShowSuccessModal(true);
+        setSelectedButtons([]);
+      } else {
+        alert("Add to Cart Failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error adding items to database:", error);
+      alert("Checkout failed. Please try again.");
+    }
   };
-  
-
-
-
-  const CustomDatePickerInput = forwardRef(({ value, onClick }, ref) => (
-    <div ref={ref} className="customDatePickerInput" onClick={onClick}>
-      {value ? value : "Select Date"}
-    </div>
-  ));
 
   const { serviceTitle, serviceDescription, servicePrice } = serviceData;
   const totalPrice =
@@ -148,9 +148,10 @@ const ServicesAppointment = ({ serviceData }) => {
         <div className="appointmentTitle">
           <h1>{serviceTitle}</h1>
         </div>
+        
         <div className="appointmentDate">
           <button
-            className={`datePickerButtonZM ${selectedDate ? "dateButtonSelectedZM" : ""}`}>
+            className={`datePickerButtonZM `}>
             <Datepicker
               className="datePickerZM"
               selected={selectedDate}
@@ -163,10 +164,11 @@ const ServicesAppointment = ({ serviceData }) => {
                 today.setHours(0, 0, 0, 0);
                 return date.getTime() > today.getTime();
               }}
-              customInput={<CustomDatePickerInput />}
+              
               minDate={new Date()}
             />
           </button>
+
         </div>
       </div>
 
@@ -212,7 +214,7 @@ const ServicesAppointment = ({ serviceData }) => {
           </button>
         </div>
       </div>
-      <AdvPopUp show={showAd} onClose={() => { setShowAd(false);  }} />
+      <AdvPopUp show={showAd} onClose={() => { setShowAd(false); }} />
       <SuccessModal show={showSuccessModal} onClose={() => setShowSuccessModal(false)} />
     </div>
   );

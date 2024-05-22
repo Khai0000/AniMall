@@ -4,6 +4,9 @@ export const CartSlice = createSlice({
   name: "cart",
   initialState: [],
   reducers: {
+    setCartItems: (state, action) => {
+      return action.payload;
+    },
     addItemToCart: (state, action) => {
       const newItem = action.payload;
 
@@ -53,6 +56,7 @@ export const CartSlice = createSlice({
 });
 
 export const {
+  setCartItems,
   addItemToCart,
   addServiceToCart,
   removeItemFromCart,

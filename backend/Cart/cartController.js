@@ -1,64 +1,56 @@
 import { Cart } from "./cartModel.js";
-import { Product } from "../Product/productModel.js"; 
-import { ServiceItemsModel } from "../ServicesFile/serviceItemModel.js";
+
 
 export const addToCart = async (req, res) => {
-  const { userId } = req.user; 
-  const { productId, quantity, type } = req.body;
-
   try {
-    let item;
-    if (type === 'product') {
-      item = await Product.findById(productId);
-    } else if (type === 'service') {
-      item = await ServiceItemsModel.findById(productId);
-    }
+    const { userId, username, items } = req.body;
+    
+    let cartDocument = await Cart.findOne({ userId });
 
-    if (!item) {
-      return res.status(404).json({ message: `${type.charAt(0).toUpperCase() + type.slice(1)} not found` });
-    }
+    if (cartDocument) {
+      items.forEach(newItem => {
+        const existingItemIndex = cartDocument.items.findIndex(item => item.productId === newItem.productId && item.type === newItem.type);
 
-    const price = item.price;
-    const totalPrice = price * quantity;
-
-    let cart = await Cart.findOne({ userId });
-
-    if (!cart) {
-      cart = new Cart({ userId, items: [{ productId, quantity, price, totalPrice, type }] });
+        if (existingItemIndex !== -1 && newItem.type !== "service") {
+          cartDocument.items[existingItemIndex].quantity += newItem.quantity;
+        } else {
+          cartDocument.items.push(newItem);
+        }
+      });
     } else {
-      const existingItemIndex = cart.items.findIndex(item => item.productId.toString() === productId && item.type === type);
-      if (existingItemIndex !== -1) {
-        cart.items[existingItemIndex].quantity += quantity;
-        cart.items[existingItemIndex].totalPrice += totalPrice;
-      } else {
-        cart.items.push({ productId, quantity, price, totalPrice, type });
-      }
+      cartDocument = new Cart({
+        userId,
+        username,
+        items,
+      });
     }
 
-    await cart.save();
+    await cartDocument.save();
 
-    res.status(201).json(cart);
+    res.status(201).json(cartDocument);
   } catch (error) {
-    console.error(error);
+    console.error('Error adding item to cart:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
 };
 
-export const removeFromCart = async (req, res) => {
-  const { userId } = req.user; 
-  const { itemId } = req.params;
 
+export const removeFromCart = async (req, res) => {
+  const { userId, itemIdDeId } = req.params;
+  console.log("abc:",userId);
+  console.log("cart:",itemIdDeId);
   try {
     let cart = await Cart.findOne({ userId });
 
     if (!cart) {
       return res.status(404).json({ message: 'Cart not found' });
     }
-
-    cart.items = cart.items.filter(item => item._id.toString() !== itemId);
+    
+    cart.items = cart.items.filter(item => !item._id.equals(itemIdDeId));
+    
     await cart.save();
 
-    res.status(200).json(cart);
+    res.status(200).json(cart.items);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal server error' });
@@ -66,21 +58,50 @@ export const removeFromCart = async (req, res) => {
 };
 
 export const getCart = async (req, res) => {
-  const { userId } = req.user; 
+  const { userId } = req.params;
 
   try {
-    const cart = await Cart.findOne({ userId }).populate({
-      path: 'items.productId',
-      select: 'name price',
-      populate: { path: 'productId', select: 'name price' } // Dynamic population
-    });
+    const cart = await Cart.findOne({ userId });
 
     if (!cart) {
       return res.status(404).json({ message: 'Cart not found' });
     }
+
     res.status(200).json(cart);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+
+export const updateCart = async (req,res) => {
+  const { userId } = req.body;
+  const { itemId, quantity } = req.body;
+
+  try {
+    let cart = await Cart.findOne({ userId });
+
+    if (!cart) {
+      return res.status(404).json({ message: 'Cart not found' });
+    }
+
+    const itemIndex = cart.items.findIndex(item => item._id.toString() === itemId);
+
+    if (itemIndex === -1) {
+      return res.status(404).json({ message: 'Item not found in the cart' });
+    }
+
+     if (quantity === 0) {
+      cart.items.splice(itemIndex, 1);
+    } else {
+      cart.items[itemIndex].quantity = quantity;
+    }
+    await cart.save();
+
+    res.status(200).json(cart);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+

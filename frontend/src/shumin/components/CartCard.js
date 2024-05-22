@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "../styles/SellerProductCard.css";
 import SellerProductCardSkeleton from "./SellerProductCardSkeleton";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   removeItemFromCart,
   updateQuantity,
@@ -9,20 +9,21 @@ import {
 } from "../slices/CartSlice";
 import axios from "axios";
 
-const CartCard = ({ product}) => {
+const CartCard = ({ product }) => {
   const [image, setImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const initialQuantity = product.quantity;
   const [quantity, setQuantity] = useState(initialQuantity);
   const initialChecked = product.checked;
   const [isChecked, setIsChecked] = useState(initialChecked);
-  const[serviceId,setServiceId]=useState(null);
+  const [serviceId, setServiceId] = useState(null);
   const dispatch = useDispatch();
 
+  const user = useSelector((state) => state.user.user);
 
   useEffect(() => {
-    if (product.id) {
-      setServiceId(product.id);
+    if (product.productId) {
+      setServiceId(product.productId);
     }
   }, [product]);
 
@@ -31,7 +32,10 @@ const CartCard = ({ product}) => {
       if (product.image && product.image[0]) {
         setImage(product.image[0]);
       } else {
-        console.error("Product image is not defined or not in the expected format:", product);
+        console.error(
+          "Product image is not defined or not in the expected format:",
+          product
+        );
       }
       setIsLoading(false);
     };
@@ -39,20 +43,27 @@ const CartCard = ({ product}) => {
     loadImage();
   }, [product]);
 
-
   const formatDate = (dateString) => {
-    const [day, month, year] = dateString.split('/');
+    const [day, month, year] = dateString.split("/");
     return `${year}-${month}-${day}`;
   };
 
-  
   const handleOnRemoveClicked = async () => {
     try {
-      await axios.post(`http://localhost:4000/api/services/${serviceId}/update-availability`, {
-        date: formatDate(product.date),
-        selectedSlots: [product.slot],
-        action: "remove"
-      });
+      const userId = user.userUid;
+      const itemIdDeId = product._id;
+      await axios.delete(
+        `http://localhost:4000/api/cart/remove/${userId}/${itemIdDeId}`
+      );
+
+      await axios.post(
+        `http://localhost:4000/api/services/${serviceId}/update-availability`,
+        {
+          date: formatISODateToYMD(product.date),
+          selectedSlots: [product.slot],
+          action: "remove",
+        }
+      );
 
       dispatch(removeItemFromCart(product.uniqueId));
     } catch (error) {
@@ -63,7 +74,9 @@ const CartCard = ({ product}) => {
   const handleCheckboxClick = () => {
     const newCheckedValue = !isChecked;
     setIsChecked(newCheckedValue);
-    dispatch(updateChecked({ uniqueId: product.uniqueId, checked: newCheckedValue }));
+    dispatch(
+      updateChecked({ uniqueId: product.uniqueId, checked: newCheckedValue })
+    );
   };
 
   const handleQuantityChange = (event) => {
@@ -126,6 +139,14 @@ const CartCard = ({ product}) => {
     const formattedHour = hour % 12 || 12; // Convert 24-hour to 12-hour format
     return `${formattedHour} ${period}`;
   };
+
+  function formatISODateToYMD(isoDateString) {
+    const date = new Date(isoDateString);
+    const formattedDate = `${date.getUTCFullYear()}-${(date.getUTCMonth() + 1)
+      .toString()
+      .padStart(2, "0")}-${date.getUTCDate().toString().padStart(2, "0")}`;
+    return formattedDate;
+  }
 
   return isLoading ? (
     <SellerProductCardSkeleton />
@@ -192,11 +213,14 @@ const CartCard = ({ product}) => {
         <div className="seller-product-card-middle-container">
           {product.type === "service" ? (
             <>
-            <div className="seller-product-card-slot-container">
-              <div>
-              <p className="seller-product-card-slot">{formatSlot(product.slot)} &nbsp;&nbsp;{product.date}</p>
+              <div className="seller-product-card-slot-container">
+                <div>
+                  <p className="seller-product-card-slot">
+                    {formatSlot(product.slot)} &nbsp;&nbsp;
+                    {formatISODateToYMD(product.date)}
+                  </p>
+                </div>
               </div>
-            </div>
             </>
           ) : (
             <div className="seller-product-card-quantityControlContainer">

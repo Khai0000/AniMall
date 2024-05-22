@@ -29,8 +29,7 @@
   export const createReceipt = async (req, res) => {
     try {
       const { userId, username, email, address, products, totalPrice } = req.body;
-      const userObjectId = new mongoose.Types.ObjectId(userId);
-
+      
       const newReceipt = {
         products,
         totalPrice
@@ -42,7 +41,7 @@
         checkoutDocument.receipts.push(newReceipt);
       } else {
         checkoutDocument = new CheckoutModel({
-          userId: userObjectId,
+          userId,
           username,
           email,
           address,

@@ -186,15 +186,32 @@ export const updateSlotAvailability = async (req, res) => {
       return res.status(400).json({ error: "Missing required parameters" });
     }
 
+    
+    if (!Array.isArray(selectedSlots)) {
+      return res.status(400).json({ error: "selectedSlots must be an array" });
+    }
+
+    // Convert date string to Date object
+    const dateObj = new Date(date);
+
+    console.log("serviceId type:", typeof serviceId);
+    console.log("date type:", typeof date);
+    console.log("action type:", typeof action);
+    console.log("selectedSlots type:", typeof selectedSlots);
+    console.log("selectedSlots:", selectedSlots);
+
     let availability = await ServiceAvailabilityModel.findOne({
       serviceId,
-      date,
+      date: dateObj,
     });
+
+    console.log("selectedSlotsssssss:", availability);
+
 
     if (!availability) {
       availability = new ServiceAvailabilityModel({
         serviceId,
-        date,
+        date: dateObj,
         slots: getDefaultSlotsAvailability(),
       });
     }
@@ -248,6 +265,7 @@ export const updateSlotAvailability = async (req, res) => {
 };
 
 
+
 export const getSlotAvailability = async (req, res) => {
   const { serviceId, date } = req.params;
 
@@ -280,7 +298,7 @@ export const getSlotAvailability = async (req, res) => {
 
 const getDefaultSlotsAvailability = () => {
   const defaultSlots = new Map();
-  const timeSlots = ["08:00", "09:00", "10:00", "11:00", "12:00", "14:00", "15:00", "16:00"];
+  const timeSlots = ["08:00", "09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00"];
   timeSlots.forEach(slot => {
     defaultSlots.set(slot, 0);
   });
