@@ -1,0 +1,169 @@
+.seller-service-card-container {
+    display: flex;
+    justify-content: flex-start;
+    padding-top: 1.5%;
+    padding-left: 3.2%;
+    padding-right: 3.2%;
+}
+
+.seller-service-card-checkbox-clicked,
+.seller-service-card-checkbox-unclicked {
+    background-color: transparent;
+    border: none;
+}
+
+.seller-service-card-checkbox-clicked:hover svg rect {
+    fill: #3C95A9;
+    stroke: #3C95A9;
+}
+
+.seller-service-card-checkbox-unclicked:hover svg rect {
+    fill: white;
+    stroke: #F3B801;
+}
+
+.seller-service-card-image {
+    width: 140px;
+    height: 140px;
+    border-radius: 13px;
+    margin-left: 1.5%;
+    object-fit: cover;
+}
+
+.seller-service-card-product-name {
+    margin-left: 5%;
+    width: 34%;
+    background-color: transparent;
+    border: none;
+    font-size: 1em;
+    text-align: start;
+    overflow: hidden;
+    /* Hide any overflowing content */
+    /* white-space: nowrap; Prevent text from wrapping */
+    text-overflow: ellipsis;
+    /* Show ellipsis (...) for overflowed text */
+    padding-right: 5.8%;
+    color: black;
+    display: flex;
+    align-items: center;
+}
+
+.seller-service-card-product-name:hover {
+    color: #F3B801;
+}
+
+.seller-service-card-minus-button,
+.seller-service-card-plus-button {
+    margin-top: 4.2%;
+    margin-bottom: 4.7%;
+    background-color: #3C95A9;
+    border: none;
+    color: white;
+    font-size: 130%;
+    border-radius: 8px;
+    width: 2rem;
+    height: 2rem;
+    text-align: center;
+}
+
+.seller-service-card-minus-button:hover,
+.seller-service-card-plus-button:hover {
+    background-color: #F3B801;
+}
+
+.seller-service-card-quantity-input-zm {
+    margin-top: 4.2%;
+    margin-bottom: 4.7%;
+    margin-left: 0.7%;
+    margin-right: 0.7%;
+    width: 7%;
+    background-color: white;
+    border: 1.1px solid #3C95A9;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.seller-service-card-quantity-input-zm:hover {
+    border-color: #F3B801;
+    outline: none;
+}
+
+.seller-service-card-price {
+    margin-top: 4.5%;
+    margin-left: 9.3%;
+    width: 18%;
+}
+
+.seller-service-card-remove-button {
+    background-color: transparent;
+    border: none;
+}
+
+.seller-service-card-remove-button:hover svg path {
+    fill: #F3B801;
+}
+
+#horizontal-line {
+    width: 97%;
+    margin-left: 3%;
+    padding-right: 3%;
+}
+
+@media screen and (max-width: 768px) {
+    .seller-service-card-container {
+        flex-direction: column;
+        align-items: center;
+        padding: 1.5% 0;
+    }
+
+    .seller-service-card-image {
+        width: 30%;
+        height: auto;
+        margin-left: 0;
+        margin-bottom: 1.5%;
+    }
+
+    .seller-service-card-product-name {
+        width: 100%;
+        margin-left: 0;
+        padding-right: 7%;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        padding-left: 7%;
+    }
+
+    .seller-service-card-quantity-input-zm {
+        margin-top: 1.5%;
+        margin-bottom: 1.5%;
+        margin-left: 0;
+        margin-right: 0;
+        width: 10%;
+        padding-top: 1%;
+        padding-bottom: 1%;
+    }
+
+    .seller-service-card-price {
+        margin-top: 1.5%;
+        margin-left: 0;
+        width: 100%;
+        text-align: center;
+    }
+
+    #horizontal-line {
+        margin-left: 0;
+        padding-right: 0;
+    }
+
+    .seller-service-card-minus-button,
+    .seller-service-card-plus-button,
+    .seller-service-card-remove-button {
+        margin-top: 1.5%;
+        margin-bottom: 1.5%;
+    }
+
+    .seller-service-card-checkbox-clicked,
+    .seller-service-card-checkbox-unclicked {
+        margin-bottom: 3%;
+    }
+}

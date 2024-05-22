@@ -1,0 +1,129 @@
+/* .profileContainer {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  color: #3c95a9;
+} */
+
+.profileInfo {
+  display: flex;
+  justify-content: left;
+  margin-left: 10%;
+  margin-top: 3%;
+}
+
+.profileInfo img {
+  height: 35%;
+  width: 35%;
+  border-radius: 50px;
+  margin-right: 10%;
+  margin-bottom: 5%;
+}
+
+.profileName {
+  color: #3c95a9;
+  font-size: 300%;
+  text-align: center;
+}
+
+/* .profileImage {
+  height: 10%;
+  width: auto;
+  border-radius: 50px;
+  margin-bottom: 10%;
+} */
+
+.profileDetails {
+  margin-top: 1%;
+}
+
+.profileField {
+  display: grid;
+  text-align: left;
+  margin-top: 5%;
+}
+
+.profileField input {
+  border: 1px solid rgb(179, 177, 177);
+  color: rgb(179, 177, 177);
+  border-radius: 9px;
+  padding: 2%;
+  padding-left: 5%;
+}
+
+.profileField input:hover {
+  color: #f3b801;
+  border: 1px solid #f3b801;
+}
+
+.profileField input:focus {
+  color: #f3b801;
+  border: 1px solid #f3b801;
+  outline: none;
+  box-shadow: 0 0 3px #f3b801;
+}
+
+.fieldName {
+  color: black;
+  font-weight: bold;
+  margin-bottom: 3%;
+}
+
+.fieldValue {
+  color: gray;
+  margin-bottom: 1%;
+  width: 500px;
+  word-wrap: break-word;
+}
+
+.profileButton {
+  background-color: #3c95a9;
+  color: white;
+  font-size: large;
+  border: none;
+  width: 180px;
+  height: 6%;
+  padding: 2%;
+  border-radius: 9px;
+  margin-top: 15%;
+  margin-bottom: 15%;
+}
+
+.profileButton:hover {
+  background-color: #f3b801;
+  cursor: pointer;
+  box-shadow: 0 0 3px #f3b801;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: left;
+}
+
+.editmodeButton {
+  display: flex;
+  height: fit-content;
+  width: 300%;
+}
+
+.backButton {
+  background-color: white;
+  color: #3c95a9;
+  font-size: large;
+  border: none;
+  width: 100px;
+  height: 6%;
+  padding: 2%;
+  border-radius: 9px;
+  margin-top: 15%;
+  margin-bottom: 15%;
+  border: 1px solid #3c95a9;
+  margin-left: 5%;
+}
+
+.backButton:hover {
+  color: #f3b801;
+  border: 1px solid #f3b801;
+  box-shadow: 0 0 3px #f3b801;
+  cursor: pointer;
+}

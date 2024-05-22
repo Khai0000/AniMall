@@ -1,0 +1,214 @@
+.register-pages-container,
+.reset-pages-container {
+  background-color: #3c95a9;
+  padding-bottom: 0.001%;
+  min-height: 111vh;
+}
+
+.register-component {
+  display: block;
+  justify-content: center;
+  position: relative;
+}
+
+.yellow-top {
+  width: 100%;
+  height: auto;
+  position: absolute;
+  z-index: 0;
+  margin-top: -8%;
+}
+
+.register-title {
+  position: relative;
+  color: white;
+  font-size: 300%;
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  height: fit-content;
+  z-index: 2;
+  margin-top: 5%;
+}
+
+.register-container {
+  display: grid;
+  width: 50%;
+  margin-left: 25%;
+  text-align: center;
+  margin-top: 6%;
+}
+
+.register-container input {
+  border: none;
+  border-radius: 20px;
+  padding: 2.5%;
+  width: 50%;
+  padding-left: 3%;
+  margin-top: 5%;
+  font-size: 90%;
+  margin-left: 25%;
+  color: #3c95a9;
+  animation: fadeIn 1s;
+  z-index: 1;
+}
+
+.register-container input::placeholder {
+  color: #3c95a9;
+}
+
+.register-container input:focus {
+  outline: none;
+  border-color: transparent;
+}
+
+.register-container input:hover {
+  background-image: url("../assets/images/input_paw.png");
+  background-color: transparent;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center right;
+}
+
+.register-button {
+  background-color: white;
+  color: #3c95a9;
+  border: none;
+  padding: 1.5%;
+  border-radius: 50px;
+  width: 17%;
+  margin-left: 41.5%;
+  margin-top: 5%;
+  z-index: 1;
+}
+
+.register-button:hover {
+  background-color: #f3b801;
+  color: white;
+  cursor: pointer;
+}
+
+.reset-button {
+  background-color: white;
+  color: #3c95a9;
+  border: none;
+  padding: 1.5%;
+  border-radius: 50px;
+  width: 17%;
+  margin-left: 41.5%;
+  margin-bottom: 45%;
+  margin-top: 5%;
+}
+
+.reset-button:hover {
+  background-color: #f3b801;
+  color: white;
+  cursor: pointer;
+}
+
+.register-verify {
+  background-color: white;
+  width: 90%;
+  height: 90%;
+  margin-left: 5%;
+  margin-top: 5%;
+  margin-bottom: 9.5%;
+  display: grid;
+  justify-content: center;
+  border: 2px solid #3c95a9;
+  z-index: 10;
+  position: relative;
+}
+
+.verify-icon {
+  width: 30%;
+  height: auto;
+  margin-left: 35%;
+  margin-top: 20%;
+}
+
+.verify-text {
+  text-align: center;
+  color: #3c95a9;
+  font-size: 200%;
+  margin-top: 5%;
+  width: 611px;
+}
+.verify-text-error {
+  text-align: center;
+  color: #e47a7a;
+  font-size: 200%;
+  margin-top: 5%;
+  width: 611px;
+}
+
+.verification-code-container {
+  display: flex;
+  justify-content: center;
+  margin-left: 1.5%;
+  margin-top: 3%;
+}
+
+.verification-code-container input {
+  border-radius: 10px;
+  height: 100%;
+  font-size: 200%;
+  width: 8%;
+  margin-right: 3%;
+  border: 1px solid #3c95a9;
+  color: #3c95a9;
+  padding: 1%;
+  text-align: center;
+  z-index: 10;
+}
+
+.verification-code-container input:hover {
+  border: 1px solid#F3B801;
+  color: #f3b801;
+  box-shadow: 0 0 3px #f3b801;
+}
+
+.verification-code-container input::placeholder {
+  color: #3c95a9;
+}
+
+.verification-code-container input:focus {
+  outline: none;
+  border: 1px solid#F3B801;
+  color: #f3b801;
+  box-shadow: 0 0 2px #f3b801;
+  caret-color: transparent;
+}
+
+.verification-code-input.invalid {
+  border: 1px solid #e47a7a; /* Red border for incorrect input */
+  outline-color: #e47a7a; /* Red outline color for incorrect input */
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.re-send {
+  color: #3c95a9;
+  text-align: center;
+  margin-top: 10%;
+  z-index: 10;
+}
+
+.resend-button {
+  background-color: #3c95a9;
+  color: white;
+  width: 25%;
+  border-radius: 7px;
+  border: none;
+  margin-left: 2%;
+  padding: 1%;
+  margin-bottom: 20%;
+}
+
+.resend-button:hover {
+  background-color: #f3b801;
+  cursor: pointer;
+}

@@ -1,0 +1,153 @@
+.servicePopupDialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 90vw;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+}
+
+.servicePopupContainer {
+    position: relative;
+    padding: 3vh 3vw;
+    border: 2px solid #3C95A9;
+    background: #FFF;
+    border-radius: 20px;
+}
+
+.servicePopupContainer .closeButton {
+    position: absolute;
+    border: none;
+    background-color: #3C95A9;
+    color: white;
+    width: 35px;
+    height: 35px;
+    border-radius: 10px;
+    transform: rotate(45deg);
+    cursor: pointer;
+    right: 4vw;
+    top: 5.5vh;
+    padding-top: 5px;
+}
+
+.servicePopupContainer .closeButton:hover {
+    background-color: #F3B801;
+}
+
+.servicePopupContainer>p {
+    color: #3C95A9;
+    font-family: Overpass;
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-top: 4vh;
+}
+
+.servicePopupContainer .closeIcon {
+    transform: rotate(45deg);
+}
+
+.servicePopupCommentContainer {
+    width: 100%;
+    border: 2px solid #3C95A9;
+    border-radius: 15px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2vw;
+}
+
+
+.servicePopupCommentContainer>textarea {
+    width: 100%;
+    resize: none;
+    margin-bottom: 3vh;
+    color: #000;
+    font-family: Overpass;
+    font-size: 16px;
+    font-weight: 400;
+    outline: none;
+    border: none;
+}
+
+.servicePopupCommentContainer>.buttonContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.servicePopupCommentContainer .ratingButtonContainer>button {
+    border-radius: 50%;
+    font-weight: bold;
+    color: #fff;
+    width: fit-content;
+    height: fit-content;
+    padding: 1.8vh 1.2vw;
+
+    border: none;
+    margin-left: 0.67rem;
+    transition:  color 0.3s ease;
+}
+
+
+/* Styling for button 1 */
+.servicePopupCommentContainer .ratingButtonContainer button:nth-child(1) {
+    background-color: #252D37;
+    color: white;
+}
+
+/* Styling for button 2 */
+.servicePopupCommentContainer .ratingButtonContainer button:nth-child(2) {
+    background-color: #252D37;
+    color: white;
+}
+
+/* Styling for button 3 */
+.servicePopupCommentContainer .ratingButtonContainer button:nth-child(3) {
+    background-color: #252D37;
+    color: white;
+}
+
+/* Styling for button 4 */
+.servicePopupCommentContainer .ratingButtonContainer button:nth-child(4) {
+    background-color: #6A6D71;
+    color: white;
+}
+
+/* Styling for button 5 */
+.servicePopupCommentContainer .ratingButtonContainer button:nth-child(5) {
+    background-color: #F3B801;
+    color: white;
+}
+
+
+.servicePopupCommentContainer .ratingButtonContainer button.selected {
+    background-color: white ;
+    color: black ;
+    border: 1px solid #000;
+
+}
+
+
+
+.servicePopupCommentContainer>.buttonContainer>button {
+    background-color: #F3B801;
+    border: none;
+    color: #fff;
+    border-radius: 15px;
+    padding: 6px 64px;
+    cursor: pointer;
+    transition: background-color 0.5s ease;
+}
+
+.servicePopupCommentContainer>.buttonContainer .submitBtn:hover {
+    color: #F3B801;
+    background-color: #fff;
+    border: 1px solid #F3B801;
+}
+
+.popupTitle .titlePopUp {
+    color: #F3B801;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: bold;
+}

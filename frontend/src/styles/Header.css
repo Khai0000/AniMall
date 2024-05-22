@@ -1,0 +1,82 @@
+header {
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5vh 2vw;
+  color: #3c95a9;
+  font-size: 1.2rem;
+  z-index: 5;
+}
+
+header > img {
+  width: 90px;
+  height: 30px;
+}
+
+header .linkContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  flex: 1;
+  max-width: 70vw;
+}
+
+header .actionContainer .actionIcon {
+  width: 2.4rem;
+  height: 2.4rem;
+}
+
+header .actionContainer .actionIcon:last-child {
+  margin-left: 1.5vw;
+}
+
+header a {
+  text-decoration: none;
+  color: #3c95a9;
+}
+
+header a:hover {
+  color: #f3b801;
+}
+
+header a.active {
+  color: #f3b801;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  border: 3px solid #3c95a9;
+  border-radius: 50px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.profile:hover {
+  color: #f3b801;
+  cursor: pointer;
+  border: 3px solid #f3b801;
+  box-shadow: 0 0 1px #f3b801;
+}
+
+.actionContainer {
+  display: flex;
+}
+
+.profileIcon {
+  font-size: small;
+}
+
+.logoutButton {
+  background-color: transparent;
+  border: none;
+  color: #3c95a9;
+  cursor: pointer;
+}
+
+.logoutButton:hover {
+  color: #f3b801;
+  text-shadow: 0 0 1px #f3b801;
+}
