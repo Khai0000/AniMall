@@ -28,7 +28,7 @@ export const getAllReceipts = async (req, res) => {
 
 export const createReceipt = async (req, res) => {
   try {
-    const { userId, username, email, address, products, totalPrice } = req.body;
+    const { userId, username, email, address, phone, products, totalPrice } = req.body;
     const userObjectId = new mongoose.Types.ObjectId(userId);
 
     const newReceipt = {
@@ -39,12 +39,13 @@ export const createReceipt = async (req, res) => {
     let checkoutDocument = await CheckoutModel.findOne({ userId });
 
     if (checkoutDocument) {
-      checkoutDocument.receipts.push(newReceipt);
+      checkoutDocument.receipts.unshift(newReceipt);
     } else {
       checkoutDocument = new CheckoutModel({
         userId: userObjectId,
         username,
         email,
+        phone,
         address,
         receipts: [newReceipt]
       });

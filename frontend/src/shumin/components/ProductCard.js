@@ -7,12 +7,9 @@ const ProductCard = ({product})=>{
     const [image,setImage]=useState(null);
     const [isLoading,setIsLoading]=useState(false);
 
-    const truncateText = (text, maxLength) => {
-        if(text.length===0){
-            return "";
-        }
-        return text.slice(0,maxLength);
-    }
+    const truncateText = (text = "", maxLength) => {
+      return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+    };
         
     useEffect(() => {
         setIsLoading(true);

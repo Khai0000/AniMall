@@ -15,7 +15,11 @@ function Pet(){
                     "http://localhost:4000/api/pet"
                 );
                 if(petsResponse.status === 200){
-                    dispatch(setInitialPet(petsResponse.data));
+                    const updatedPets = petsResponse.data.map(pet => ({
+                        ...pet,
+                        hidden: pet.stockLevel === 0 ? true : false
+                    }));
+                    dispatch(setInitialPet(updatedPets));
                 }else{
                     console.log(petsResponse);
                 }
@@ -23,8 +27,8 @@ function Pet(){
                 // Perform neccessary action;
             }
         };
-        pets.length===0&&getPets();
-    });
+        getPets();
+    },[pets.length,JSON.stringify(pets.map(item => item.stockLevel))]);
 
     return <Outlet/>
 }

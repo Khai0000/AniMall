@@ -69,7 +69,7 @@ const SellerOrderCard=({ receipt , selectedCategory, sortedServiceReceipt})=>{
                         <div className="user-popup-content">
                             <p>Name: {receipt.user.username}</p>
                             <p>Email: {receipt.user.email}</p>
-                            <p>Phone: xxxxxxxx</p>  
+                            <p>Phone: {receipt.user.phone}</p>  
                             <p>Address: {receipt.user.address}</p>
                             <button className="close-popup" onClick={togglePopup}>
                                 Close
@@ -78,7 +78,7 @@ const SellerOrderCard=({ receipt , selectedCategory, sortedServiceReceipt})=>{
                     </div>
                 )}
             </div>
-            <div className="order-items-container">
+            <div className="order-items-container">            
                 {receipt.products.map((item, index) => {
                     const dateStatus = selectedCategory.length === 1 && selectedCategory[0] === 'service' && item.type === 'service'
                     ? checkDateStatus(item.date, item.quantity)
@@ -89,7 +89,7 @@ const SellerOrderCard=({ receipt , selectedCategory, sortedServiceReceipt})=>{
                         <div className={itemClassName} key={index}>
                             <img src={item.image} alt={item.title} className="item-image" />
                             <span className="item-name">{item.title}</span>
-                            {item.type === "service" ? <span className="item-quantity-or-slot">{item.date}</span> : ""}
+                            {item.type === "service" ? <span className="item-quantity-or-slot">{formatDate(item.date)}</span> : ""}
                             {item.type === "service" ? <span className="item-quantity-or-slot">{item.quantity}</span> : <span className="item-quantity-or-slot">x{item.quantity}</span>}
                             <span className="item-price">RM {item.price}</span>
                         </div>

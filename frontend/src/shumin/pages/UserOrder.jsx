@@ -1,6 +1,6 @@
 import '../styles/UserOrder.css';
 import { useSelector, useDispatch } from 'react-redux';
-import React, { useEffect, Suspense, useState, useRef } from 'react';
+import React, { useEffect, Suspense, useState } from 'react';
 import { setInitialOrders } from '../../ZongMing/slices/orderSlice';
 import { lazy } from 'react';
 import axios from 'axios';
@@ -27,7 +27,7 @@ const UserOrder = () => {
             }
         };
         fetchReceipts();
-    },[dispatch]);
+    },[dispatch,user.user.userUid]);
 
     console.log(receipt);
 

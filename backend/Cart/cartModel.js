@@ -6,52 +6,48 @@ const cartSchema = new mongoose.Schema(
       type: String,
       required:true,
     },
-    email:{
+    userId: {
       type: String,
-      required:true,
-    },
-    address:{
-      type: String,
-    },
-    phone:{
-      type: String,
-    },
-    userUid: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
       required: true,
     },
     items: [
       {
         productId: {
-          type: mongoose.Schema.Types.ObjectId,
-          refPath: "items.type", 
-          required: true,
-        },
-        title:{
           type: String,
           required: true,
         },
-        slot:{
+        title: {
           type: String,
-          default:"",
+          required: true,
         },
-        image:{
+        slot: {
+          type: String,
+          required: false,
+        },
+        image: {
           type: [String],
           required: true,
-        },
-        quantity: {
-          type: Number,
-          default:0,
         },
         price: {
           type: Number,
           required: true,
         },
+        quantity: {
+          type: Number,
+          default: 1, 
+          required:true,
+        },
         type: {
           type: String,
           required: true,
-          enum: ['Product', 'ServiceItem'], 
+        },
+        date: {
+          type: Date, 
+          required: false,
+        },
+        checked: {
+          type: Boolean,
+          default: true,
         },
       },
     ],

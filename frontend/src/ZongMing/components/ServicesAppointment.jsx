@@ -5,8 +5,11 @@ import Datepicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate } from "react-router-dom";
 import { addServiceToCart } from "../../shumin/slices/CartSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import AdvPopUp from "../../shumin/components/AdvPopUp";
+import axios from 'axios';
+import SuccessModal from "./SuccessfulModal.jsx";
+
 
 const ServicesAppointment = ({ serviceData }) => {
   const [selectedButtons, setSelectedButtons] = useState([]);
@@ -15,12 +18,42 @@ const ServicesAppointment = ({ serviceData }) => {
     currentDate.setDate(currentDate.getDate() + 1);
     return currentDate;
   });
-
+  const [slotsAvailability, setSlotsAvailability] = useState({});
+  const [showAd, setShowAd] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [slotsAvailability, setSlotsAvailability] = useState("");
-  const [showAd, setShowAd] = useState(false);
+  const user = useSelector((state) => state.user.user);
 
+  const formattedDateForDB = `${selectedDate.getFullYear()}-${(selectedDate.getMonth() + 1).toString().padStart(2, "0")}-${selectedDate.getDate().toString().padStart(2, "0")}`;
+
+  useEffect(() => {
+    const fetchSlotAvailability = async () => {
+      try {
+        const response = await axios.get(`http://localhost:4000/api/services/${serviceData._id}/update-availability/${formattedDateForDB}`);
+        console.log("Slot availability response:", response.data.availability);
+        setSlotsAvailability(response.data.availability);
+      } catch (error) {
+        console.error("Error fetching slot availability:", error);
+      }
+    };
+    fetchSlotAvailability();
+  }, [selectedDate, serviceData._id]);
+
+
+  const toggleButton = (button) => {
+    if (!isSlotAvailable(button)) {
+      return;
+    }
+    const updatedButtons = selectedButtons.includes(button)
+      ? selectedButtons.filter((selected) => selected !== button)
+      : [...selectedButtons, button];
+    setSelectedButtons(updatedButtons);
+  };
+
+  const isSlotAvailable = (slot) => {
+    return slotsAvailability[slot] !== 2;
+  };
 
   const handleBack = () => {
     navigate(-1);
@@ -31,100 +64,76 @@ const ServicesAppointment = ({ serviceData }) => {
     if (random === 2) {
       setShowAd(true);
     } else {
-      navigate(-1);
+      setShowSuccessModal(true);
     }
   }
 
-  useEffect(() => {
-    setSelectedButtons([]);
-    setSlotsAvailability({
-      "8.00": 0,
-      "9.00": 2,
-      "10.00": 2,
-      "11.00": 2,
-      "13.00": 2,
-      "14.00": 2,
-      "15.00": 2,
-      "16.00": 2,
-    });
-  }, [selectedDate]);
 
-  const isSlotAvailable = (slot) => {
-    return slotsAvailability[slot] > 0;
-  };
-
-  const toggleButton = (button) => {
-    if (!isSlotAvailable(button)) {
-      return;
-    }
-
-    const updatedButtons = [...selectedButtons];
-
-    const index = updatedButtons.indexOf(button);
-    if (index !== -1) {
-      updatedButtons.splice(index, 1);
-      setSlotsAvailability({
-        ...slotsAvailability,
-        [button]: slotsAvailability[button] + 1,
-      });
-    } else {
-      updatedButtons.push(button);
-      setSlotsAvailability({
-        ...slotsAvailability,
-        [button]: slotsAvailability[button] - 1,
-      });
-    }
-
-    setSelectedButtons(updatedButtons);
-  };
-
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (!selectedDate) {
       alert("Please select a date before adding to cart.");
       return;
     }
-
-
     if (selectedButtons.length === 0) {
       alert("Please select a time slot before adding to cart.");
       return;
     }
+    
+    try {
+      const updateResponse = await axios.post(`http://localhost:4000/api/services/${serviceData._id}/update-availability`, {
+        date: formattedDateForDB,
+        selectedSlots: selectedButtons,
+        action: "add"
+      });
+      console.log("Slot availability update response:", updateResponse.data);
 
-    const formattedDate =
-      selectedDate.getDate().toString().padStart(2, "0") + "/" +
-      (selectedDate.getMonth() + 1).toString().padStart(2, "0") + "/" +
-      selectedDate.getFullYear();
+      const fetchResponse = await axios.get(`http://localhost:4000/api/services/${serviceData._id}/update-availability/${formattedDateForDB}`);
+      console.log("Updated Slot availability response:", fetchResponse.data.availability);
+      setSlotsAvailability(fetchResponse.data.availability);
 
+    } catch (error) {
+      console.error("Error updating slot availability:", error);
+      return;
+    }
 
-    selectedButtons.forEach((slot) => {
-      const serviceDetails = {
-        title: serviceData.serviceTitle,
-        image: serviceData.serviceImages,
-        price: serviceData.price,
-        hidden: serviceData.hidden,
-        type: "service",
-        checked: true,
-        slot: slot,
-        date: formattedDate,
-      };
+    const itemsToAdd = selectedButtons.map((slot) => ({
+      productId: serviceData._id,
+      title: serviceData.serviceTitle,
+      image: serviceData.serviceImages,
+      price: serviceData.servicePrice,
+      type: "service",
+      slot: slot,
+      date: formattedDateForDB,
+      quantity: 1,
+      checked: true,
+    }));
 
-      dispatch(addServiceToCart(serviceDetails));
-      randomAdPopup();
-    });
+    try {
+      const addItemsResponse = await axios.post('http://localhost:4000/api/cart/add', {
+        username: user.username,
+        userId: user.userUid,
+        items: itemsToAdd,
+      });
+      console.log("Add items response:", addItemsResponse.data);
 
-    setSelectedButtons([]);
-    // navigate(-1);
+      if (addItemsResponse.status === 201) {
+        dispatch(addServiceToCart(itemsToAdd));
+        setShowSuccessModal(true);
+        setSelectedButtons([]);
+      } else {
+        alert("Add to Cart Failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error adding items to database:", error);
+      alert("Checkout failed. Please try again.");
+    }
   };
 
-  const CustomDatePickerInput = forwardRef(({ value, onClick }, ref) => (
-    <div ref={ref} className="customDatePickerInput" onClick={onClick}>
-      {value ? value : "Select Date"}
-    </div>
-  ));
-
-  const { serviceTitle, description, price } = serviceData;
+  const { serviceTitle, serviceDescription, servicePrice } = serviceData;
   const totalPrice =
-    selectedButtons.length === 0 ? 0 : selectedButtons.length * price;
+    selectedButtons.length === 0 ? 0 : selectedButtons.length * servicePrice;
+
+  const timeSlots = ["08:00", "09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00"];
 
   return (
     <div className="servicesAppointmentContainer">
@@ -132,11 +141,10 @@ const ServicesAppointment = ({ serviceData }) => {
         <div className="appointmentTitle">
           <h1>{serviceTitle}</h1>
         </div>
+        
         <div className="appointmentDate">
           <button
-            className={`datePickerButtonZM ${selectedDate ? "dateButtonSelectedZM" : ""
-              }`}
-          >
+            className={`datePickerButtonZM `}>
             <Datepicker
               className="datePickerZM"
               selected={selectedDate}
@@ -149,11 +157,11 @@ const ServicesAppointment = ({ serviceData }) => {
                 today.setHours(0, 0, 0, 0);
                 return date.getTime() > today.getTime();
               }}
-              customInput={<CustomDatePickerInput />}
-              // Set minDate to disable dates earlier than today
+              
               minDate={new Date()}
             />
           </button>
+
         </div>
       </div>
 
@@ -161,20 +169,20 @@ const ServicesAppointment = ({ serviceData }) => {
         <div className="appointmentDescriptionSA">
           <div className="descriptionContainerSA">
             <p className="descriptionWordSA">Description:</p>
-            <p className="descriptionContentSA">{description}</p>
+            <p className="descriptionContentSA">{serviceDescription}</p>
           </div>
         </div>
 
         <div className="dateContainerZM">
           <div className="chooseDateZM">
-            {Object.keys(slotsAvailability).map((slot) => (
+            {timeSlots.map((slot) => (
               <button
                 key={slot}
-                className={`${selectedButtons.includes(slot) ? "selected" : ""
-                  } ${!isSlotAvailable(slot) ? "unavailable" : ""}`}
+                className={`${selectedButtons.includes(slot) ? "selected" : ""} ${!isSlotAvailable(slot) ? "unavailable" : ""}`}
                 onClick={() => toggleButton(slot)}
               >
-                {slot < 12 ? slot : slot - 12 + ".00"}{slot < 12 ? "AM" : "PM"}
+                {parseInt(slot) < 12 ? `${slot} AM` : `${parseInt(slot) - 12}.00 PM`}
+
               </button>
             ))}
           </div>
@@ -199,9 +207,12 @@ const ServicesAppointment = ({ serviceData }) => {
           </button>
         </div>
       </div>
-      <AdvPopUp show={showAd} onClose={() => { setShowAd(false); navigate(-1); }} />
+      <AdvPopUp show={showAd} onClose={() => { setShowAd(false); }} />
+      <SuccessModal show={showSuccessModal} onClose={() => setShowSuccessModal(false)} />
     </div>
   );
 };
 
 export default ServicesAppointment;
+
+

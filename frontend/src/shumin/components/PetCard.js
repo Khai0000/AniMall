@@ -13,10 +13,6 @@ const PetCard = ({pet})=>{
         }
         return text.slice(0,maxLength);
     }
-
-    console.log(pet.image);
-    console.log(pet.title);
-    console.log(pet.description);
         
     useEffect(() => {
         setIsLoading(true);

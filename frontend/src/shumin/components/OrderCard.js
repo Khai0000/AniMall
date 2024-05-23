@@ -8,8 +8,6 @@ const OrderCard = ({ receipt }) => {
     return date.toLocaleDateString(undefined, options);
   };
 
-  console.log(receipt);
-
   const formatTime = (timestamp) => {
     const date = new Date(timestamp);
     const options = { hour: '2-digit', minute: '2-digit' };
@@ -27,7 +25,7 @@ const OrderCard = ({ receipt }) => {
           <div className="order-item" key={index}>
             <img src={item.image} alt={item.title} className="item-image" />
             <span className="item-name">{item.title}</span>
-            {/* {item.type===service?<span className="item-quantity-or-slot">{item.slot}</span>:<span className="item-quantity-or-slot">{item.quantity}</span>} */}
+            {item.type==="service"?<span className="item-quantity-or-slot">{formatDate(item.date)}</span>:""}
             <span className="item-quantity-or-slot">{item.quantity}</span>
             <span className="item-price">RM {item.price}</span>
           </div>

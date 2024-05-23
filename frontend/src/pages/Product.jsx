@@ -15,7 +15,11 @@ function Product(){
                     "http://localhost:4000/api/product"
                 );
                 if(productsResponse.status === 200){
-                    dispatch(setInitialProduct(productsResponse.data));
+                    const updatedProducts = productsResponse.data.map(product => ({
+                        ...product,
+                        hidden: product.stockLevel === 0 ? true : false
+                    }));
+                    dispatch(setInitialProduct(updatedProducts));
                 }else{
                     console.log(productsResponse);
                 }
@@ -23,8 +27,8 @@ function Product(){
                 // Perform neccessary action;
             }
         };
-        products.length===0&&getProducts();
-    });
+        getProducts();
+    },[products.length,JSON.stringify(products.map(item => item.stockLevel))]);
 
     return <Outlet/>
 }

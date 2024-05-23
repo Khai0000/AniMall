@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 import SearchBar from "../components/SearchBar";
 import { useState, useEffect } from "react";
 import MyCartButton from "../components/MyCartButton";

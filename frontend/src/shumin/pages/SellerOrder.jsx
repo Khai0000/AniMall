@@ -8,7 +8,7 @@ import { lazy } from 'react';
 const SellerOrderCard=lazy(()=>import("../components/SellerOrderCard"));
 
 const SellerOrder =()=>{
-    // const order = useSelector((state) => state.orders.order);
+    const order = useSelector((state) => state.orders.order);
     const selectedCategory = useSelector((state) => state.orders.selectedCategory);
     const dispatch = useDispatch();
     const [receipt,setReceipts]=useState([]);
@@ -54,6 +54,7 @@ const SellerOrder =()=>{
                         username: order.username,
                         email: order.email,
                         address: order.address,
+                        phone:order.phone,
                         userId:order.userId
                     }));
                     const receiptsWithUsers = response.data.flatMap(order =>
@@ -70,7 +71,7 @@ const SellerOrder =()=>{
             }
         };
         fetchReceipts();
-    },[dispatch]);
+    },[dispatch,order]);
 
     useEffect(() => {
         let filteredReceipts = [];
@@ -86,10 +87,16 @@ const SellerOrder =()=>{
                 return { ...receiptItem, products: filteredProducts };
             }).filter(receiptItem => receiptItem.products.length > 0); // Filter out receipts with no products
         }
+
+        const serviceReceipts = filteredReceipts.map(receiptItem => ({
+            ...receiptItem,
+            products: receiptItem.products.filter(product => product.type === "service")
+        })).filter(receiptItem => receiptItem.products.length > 0); // Filter out receipts with no service products
     
-        const sortedReceipts = sortReceiptsByClosestService(receipt);
+        const sortedReceipts = sortReceiptsByClosestService(serviceReceipts);
         setSortedServiceReceipt(sortedReceipts);
         setFilteredReceipts(filteredReceipts);
+        
     }, [selectedCategory, receipt]);
 
     console.log(sortedServiceReceipt);

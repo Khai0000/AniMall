@@ -10,6 +10,9 @@ import ProductPostComment from "../components/ProductPostComment";
 import "../styles/ProductDetails.css";
 import { addItemToCart } from "../slices/CartSlice";
 import AdvPopUp from "../components/AdvPopUp";
+import { setInitialProduct } from "../slices/ProductSlice";
+import axios from "axios";
+import SuccessfulModal from "../../ZongMing/components/SuccessfulModal";
 
 const ProductDetails = () => {
   const dispatch = useDispatch();
@@ -17,12 +20,32 @@ const ProductDetails = () => {
 
   const { productId } = useParams();
   const [showAd, setShowAd] = useState(false);
-
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [imagesLoading, setImagesLoading] = useState(true);
 
   const product = useSelector((state) =>
     state.products.find((product) => product._id === productId)
   );
+
+  const user = useSelector((state)=>state.user.user);
+
+  useEffect(()=>{
+    const getProducts = async () =>{
+        try{
+            const productsResponse = await axios.get(
+                "http://localhost:4000/api/product"
+            );
+            if(productsResponse.status === 200){
+                dispatch(setInitialProduct(productsResponse.data));
+            }else{
+                console.log(productsResponse);
+            }
+        }catch(error){
+            // Perform neccessary action;
+        }
+    };
+    getProducts();
+  },[]);
 
   const cartItem = useSelector((state) => state.cart);
 
@@ -49,7 +72,6 @@ const ProductDetails = () => {
       setLoadedImageUrls(loadedImages);
       setImagesLoading(false);
     };
-
     loadImageUrls();
   }, [product.image]);
 
@@ -72,52 +94,43 @@ const ProductDetails = () => {
     }
   }
 
-  const handleOnAddToCartButtonClick = () => {
-    const existingCartItem = cartItem.find(item => item.id === product.id);
-    if (existingCartItem) {
-      if (existingCartItem.stockLevel > existingCartItem.quantity) {
-        const productDetails = {
-          id: product.id,
+  const handleOnAddToCartButtonClick = async () => {
+    const existingCartItem = cartItem.find(item => item.productId === product._id);
+    if (existingCartItem && existingCartItem.quantity >= product.stockLevel) {
+        alert('Cannot add more of this item. Stock level reached.');
+        return;
+    }else if((existingCartItem && existingCartItem.quantity < product.stockLevel)||(!existingCartItem)){
+        const productDetails = [{
+          productId: product._id,
           title: product.title,
-          description: product.description,
           image: product.image,
-          animaltag: product.animaltag,
-          producttag: product.producttag,
           price: product.price,
-          ratings: product.ratings,
-          comments: product.comments,
-          stockLevel: product.stockLevel,
-          hidden: product.hidden,
           type: "product",
-          quantity: existingCartItem.quantity + 1,
+          quantity: 1,
           checked: true,
-        };
-        dispatch(addItemToCart(productDetails));
-        randomAdPopup();
-      } else {
-        alert("Stock is not enough!");
+        }];
+        try {
+          const addItemsResponse = await axios.post('http://localhost:4000/api/cart/add', {
+              username: user.username,
+              userId: user.userUid,
+              items: productDetails,
+          });
+          console.log("Add items response:", addItemsResponse.data);
+
+          if (addItemsResponse.status === 201) {
+              dispatch(addItemToCart(productDetails));
+              randomAdPopup();
+              setShowSuccessModal(true);
+          } else {
+              console.error("Error: Unable to add items to cart. Server responded with status:", addItemsResponse.status);
+              alert("Add to Cart Failed. Please try again.");
+          }
+      } catch (error) {
+          console.error("Error adding items to database:", error.response.data);
+          alert("Checkout failed. Please try again.");
       }
-    } else {
-      const productDetails = {
-        id: product.id,
-        title: product.title,
-        description: product.description,
-        image: product.image,
-        animaltag: product.animaltag,
-        producttag: product.producttag,
-        price: product.price,
-        ratings: product.ratings,
-        comments: product.comments,
-        stockLevel: product.stockLevel,
-        hidden: product.hidden,
-        type: "product",
-        quantity: 1,
-        checked: true,
-      };
-      dispatch(addItemToCart(productDetails));
-      randomAdPopup();
     }
-  }
+  };
 
   return (
     <div className="product-details-container">
@@ -210,6 +223,7 @@ const ProductDetails = () => {
         )}
       </div>
       <AdvPopUp show={showAd} onClose={() => { setShowAd(false); navigate(-1); }} />
+      <SuccessfulModal show={showSuccessModal} onClose={() => setShowSuccessModal(false)} />
     </div>
   );
 };

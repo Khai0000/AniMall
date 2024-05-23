@@ -7,7 +7,6 @@ import { useSelector, useDispatch } from "react-redux";
 import EnterButtonIcon from "../components/EnterButtonIcon";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import SellerOrderCardSkeleton from "../components/SellerOrderCardSkeleton";
 
 const ProductCard=lazy(()=>import("../components/ProductCard"));
 
@@ -15,7 +14,7 @@ const ProductHome=()=>{
     const [showPriceRange,setShowPriceRange]=useState(false);
     const [minPrice, setMinPrice] = useState('');
     const [maxPrice, setMaxPrice] = useState(''); 
-    
+
     const dispatch=useDispatch();
     const navigate = useNavigate();
 
@@ -29,11 +28,10 @@ const ProductHome=()=>{
     const handleSearch = (value) => {
         setSearchTerm(value);
     };
-
+    
     useEffect(()=>{
         let filteredData = [...memoizedProducts];
         setIsLoading(true);
-        console.log(filteredData);
         
         filteredData = filteredData.filter((product) => !product.hidden);
 
@@ -162,12 +160,7 @@ const ProductHome=()=>{
             
                 <div className="Seller-product">
                     <Link to={`/product/sellerProduct`} className="seller-link">
-                        Seller 
-                    </Link>
-                </div>
-                <div>
-                    <Link to={`/product/order`} className="seller-link">
-                        User Order
+                        Seller
                     </Link>
                 </div>
                 <div>
@@ -181,4 +174,3 @@ const ProductHome=()=>{
 }
 
 export default ProductHome;
-

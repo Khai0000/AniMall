@@ -14,23 +14,23 @@ export const serviceSlice = createSlice({
       return [action.payload, ...state];
     },
     addComment: (state, action) => {
-      const { serviceTitle, comment } = action.payload;
+      const { serviceTitle, serviceComments } = action.payload;
       const service = state.find(
         (service) => service.serviceTitle === serviceTitle
       );
       if (service) {
-        service.comments.unshift(comment);
+        service.serviceComments.unshift(serviceComments);
       }
     },
     addRating: (state, action) => {
-      const { serviceTitle, rating } = action.payload;
+      const { serviceTitle, serviceRating } = action.payload;
       const service = state.find(
         (service) => service.serviceTitle === serviceTitle
       );
       if (service) {
         // Update the total ratings count and specific rating count
-        service.ratings.total++;
-        service.ratings[rating]++;
+        service.serviceRating.total++;
+        service.serviceRating[serviceRating]++;
       }
     },
     removeComment: (state, action) => {
@@ -39,16 +39,16 @@ export const serviceSlice = createSlice({
         (service) => service.serviceTitle === serviceTitle
       );
       if (service) {
-        service.comments = service.comments.filter(
+        service.serviceComments = service.serviceComments.filter(
           (comment) => comment.content !== commentContent
         );
       }
     },
 
     editService: (state, action) => {
-      const { serviceTitle, updatedService } = action.payload;
+      const { serviceId, updatedService } = action.payload;
       const index = state.findIndex(
-        (service) => service.serviceTitle === serviceTitle
+        (service) => service.serviceId === serviceId
       );
       if (index !== -1) {
         state[index] = { ...state[index], ...updatedService };
@@ -58,8 +58,10 @@ export const serviceSlice = createSlice({
       return state.filter((service) => service.serviceTitle !== action.payload);
     },
     hideService(state, action) {
-      const {serviceTitle} = action.payload;
-      const existingService = state.find((service) => service.serviceTitle === serviceTitle);
+      const { serviceTitle } = action.payload;
+      const existingService = state.find(
+        (service) => service.serviceTitle === serviceTitle
+      );
       if (existingService) {
         existingService.hidden = !existingService.hidden;
       }
