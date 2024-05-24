@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import React, { useEffect, useState, lazy, Suspense } from 'react';
-import { checkoutItems,setCartItems } from '../slices/CartSlice';
+import { checkoutItems,setCartItems ,removeItemFromCart} from '../slices/CartSlice';
 import { editPet } from '../slices/PetSlice';
 import { editProduct } from '../slices/ProductSlice';
 
@@ -17,6 +17,7 @@ function MyCart() {
     const products = useSelector((state) => state.products);
     const pets = useSelector((state) => state.pets);
 
+
     useEffect(() => {
         const fetchCartItems = async () => {
             try {
@@ -30,30 +31,24 @@ function MyCart() {
         };
 
         fetchCartItems();
-    }, []);
+    }, [dispatch,userUid]);
 
-    console.log(products);
+
 
     useEffect(() => {
         let newTotalPrice = 0;
-
         cartItems.forEach((item) => {
             if (item.checked) {
-                if (item.type === "service") {
-                    newTotalPrice += item.price;
-                } else {
-                    newTotalPrice += item.price * item.quantity;
-                }
+                newTotalPrice += item.type === 'service' ? item.price : item.price * item.quantity;
             }
         });
-
-        setTotalPrice(Number(newTotalPrice));
+        setTotalPrice(newTotalPrice);
     }, [cartItems]);
+    
 
     const handleOnCheckoutButtonClick = async () => {
         let numOfCheckedItem = 0;
         const checkedItems = cartItems.filter((item) => item.checked);
-        console.log("check",checkedItems)
 
         if (checkedItems.length === 0) {
             alert("No item to checkout!");
@@ -88,20 +83,21 @@ function MyCart() {
                 numOfCheckedItem = checkedItems.length;
                 alert(`${numOfCheckedItem} item(s) checked out successfully!`);
 
-                await Promise.all(
-                    checkedItems.map(async (item) => {
-                        try {
-                            const response = await axios.delete(`http://localhost:4000/api/cart/remove/${user.userUid}/${item._id}`);
-                            if (response.status === 200) {
-                                dispatch(checkoutItems({ itemId: item.productId }));
-                                return response.data;
-                            }
-                        } catch (error) {
-                            console.error(`Error removing item ${item._id} from cart:`, error);
-                            throw error;
+
+                for (const item of checkedItems) {
+                    try {
+                        const response = await axios.delete(`http://localhost:4000/api/cart/remove/${user.userUid}/${item._id}`);
+                        if (response.status === 200) {
+                            dispatch(removeItemFromCart(item._id));
+                            dispatch(checkoutItems({ itemId: item._id }));
+                            console.log('Item removed successfully:', response);
                         }
-                    })
-                );
+                    } catch (error) {
+                        console.error(`Error removing item ${item._id} from cart:`, error);
+                        console.log('Error:', error);
+                        throw error;
+                    }
+                }
 
                 await Promise.all(
                     checkedItems.map(async (item) => {
@@ -116,17 +112,18 @@ function MyCart() {
                             if (product) {
                                 newStockLevel = product.stockLevel - item.quantity;
                                 updateEndpoint = `http://localhost:4000/api/product/product/${item.productId}`;
-                                dispatchAction = editProduct({ id: item.productId, stockLevel: newStockLevel });
+                                dispatchAction = editProduct({ id: item.productId, stockLevel: newStockLevel,hidden:newStockLevel===0?true:false});
                             } else if (pet) {
                                 newStockLevel = pet.stockLevel - item.quantity;
                                 updateEndpoint = `http://localhost:4000/api/pet/pet/${item.productId}`;
-                                dispatchAction = editPet({ _id: item.productId, stockLevel: newStockLevel });
+                                dispatchAction = editPet({ _id: item.productId, stockLevel: newStockLevel,hidden:newStockLevel===0?true:false});
                             }
                 
                             if (newStockLevel !== undefined && updateEndpoint && dispatchAction) {
                                 try {
                                     const stockUpdateResponse = await axios.put(updateEndpoint, {
                                         stockLevel: newStockLevel
+                                        ,hidden:newStockLevel===0?true:false
                                     });
                 
                                     if (stockUpdateResponse.status === 200) {

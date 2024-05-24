@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import "../styles/SellerProductCard.css";
 import SellerProductCardSkeleton from "./SellerProductCardSkeleton";
 import { useDispatch } from "react-redux";
-import { editPet, removePet } from "../slices/PetSlice";
+import { editPet, removePet,updateQuantity } from "../slices/PetSlice";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
@@ -106,7 +106,7 @@ const SellerPetCard = ({pet})=>{
               stockLevel: newQuantity
             })
             if(response.status===200){
-              dispatch(editPet({ id: pet._id, stockLevel: newQuantity }));
+              dispatch(updateQuantity({ id: pet._id, quantity: newQuantity }));
             }else {
               console.error('Failed to update pet quantity:', response);
             }
@@ -134,10 +134,11 @@ const SellerPetCard = ({pet})=>{
     
         try{
           const response= await axios.put(`http://localhost:4000/api/pet/pet/${pet._id}`,
-            {stockLevel: newQuantity}
-          )
+          {
+            stockLevel: newQuantity
+          })
           if(response.status===200){
-            dispatch(editPet({ id: pet.id, stockLevel: newQuantity }));
+            dispatch(updateQuantity({ id: pet._id, quantity: newQuantity }));
           }else {
             console.error('Failed to update pet quantity:', response);
           }

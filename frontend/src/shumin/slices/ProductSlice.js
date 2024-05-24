@@ -90,9 +90,16 @@ export const ProductSlice =createSlice({
             if (existingProduct) {
               existingProduct.stockLevel -= quantity;
             }
-        }
-    }
-})
+        },
+        updateQuantity(state, action) {
+          const { id, quantity } = action.payload;
+          const existingProduct = state.find((product) => product._id === id);
+          if (existingProduct) {
+            existingProduct.stockLevel = quantity;
+          }
+        },
+      },
+    });
 
 export const {
     setInitialProduct,
@@ -106,5 +113,6 @@ export const {
     addRating,
     removeComment,
     checkOutProduct,
+    updateQuantity
   } = ProductSlice.actions;
   export default ProductSlice.reducer;

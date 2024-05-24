@@ -2,7 +2,7 @@ import { useState, useEffect} from "react";
 import "../styles/SellerProductCard.css";
 import SellerProductCardSkeleton from "./SellerProductCardSkeleton";
 import { useDispatch } from "react-redux";
-import { editProduct, removeProduct } from "../slices/ProductSlice";
+import { editProduct, removeProduct,updateQuantity } from "../slices/ProductSlice";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
@@ -115,7 +115,7 @@ const SellerProductCard = ({ product }) => {
           stockLevel: newQuantity
         })
         if(response.status===200){
-          dispatch(editProduct({ id: product._id, stockLevel: newQuantity }));
+          dispatch(updateQuantity({ id: product._id, quantity: newQuantity }));
         }else {
           console.error('Failed to update product quantity:', response);
         }
@@ -146,7 +146,7 @@ const SellerProductCard = ({ product }) => {
         {stockLevel: newQuantity}
       )
       if(response.status===200){
-        dispatch(editProduct({ id: product.id, stockLevel: newQuantity }));
+        dispatch(updateQuantity({ id: product._id, quantity: newQuantity }));
       }else {
         console.error('Failed to update product quantity:', response);
       }

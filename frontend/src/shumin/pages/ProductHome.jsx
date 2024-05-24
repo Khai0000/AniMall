@@ -95,6 +95,7 @@ const ProductHome=()=>{
                     <EnterButtonIcon/>
                 </button>
             </div>
+           
             {products.length===0?
                 <p className="Product-category-row-content-noproduct">{`No ${category} product matched!`}</p>
                 :<div className="Product-category-row-content">

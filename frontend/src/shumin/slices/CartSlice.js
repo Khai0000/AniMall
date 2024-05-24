@@ -51,16 +51,16 @@ export const CartSlice = createSlice({
     },
 
     updateChecked: (state, action) => {
-      const { id, checked } = action.payload;
-      const itemToUpdate = state.find((item) => item._id === id);
+      const { productId, checked } = action.payload;
+      const itemToUpdate = state.find((item) => item._id === productId);
 
       if (itemToUpdate) {
         itemToUpdate.checked = checked;
       }
     },
     checkoutItems: (state, action) => {
-      const {itemId} =action.payload;
-      return state.filter((item) => item.productId===itemId);
+      const { itemId } = action.payload;
+      return state.filter((item) => item._id !== itemId);
     },
   },
 });

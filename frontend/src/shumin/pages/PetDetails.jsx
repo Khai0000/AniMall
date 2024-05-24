@@ -10,7 +10,6 @@ import AdvPopUp from "../components/AdvPopUp";
 import AdoptFormPopUp from '../components/AdoptFormPopUp';
 import axios from "axios";
 import SuccessfulModal from "../../ZongMing/components/SuccessfulModal";
-import { setInitialPet } from "../slices/PetSlice";
 
 const PetDetails = () => {
   const dispatch = useDispatch();
@@ -27,23 +26,7 @@ const PetDetails = () => {
     state.pets.find((pet) => pet._id === petId)
   );
 
-  useEffect(()=>{
-    const getPets = async () =>{
-        try{
-            const petsResponse = await axios.get(
-                "http://localhost:4000/api/pet"
-            );
-            if(petsResponse.status === 200){
-                dispatch(setInitialPet(petsResponse.data));
-            }else{
-                console.log(petsResponse);
-            }
-        }catch(error){
-            // Perform neccessary action;
-        }
-    };
-    getPets();
-  },[]);
+  
 
   const user = useSelector((state)=>state.user.user);
 
@@ -85,25 +68,25 @@ const PetDetails = () => {
     if (random === 2) {
       setShowAd(true);
     } else {
-      navigate(-1);
+      
     }
   }
 
   const handleOnAdoptButtonClick = () => {
-    const petDetails = {
-      id: pet.id,
-      title: pet.title,
-      description: pet.description,
-      image: pet.image,
-      birthdate: pet.birthdate,
-      animaltag: pet.animaltag,
-      price: pet.price,
-      stockLevel: pet.stockLevel,
-      hidden: pet.hidden,
-      type: "pet",
-      quantity: 1,
-      checked: true,
-    };
+    // const petDetails = {
+    //   id: pet.id,
+    //   title: pet.title,
+    //   description: pet.description,
+    //   image: pet.image,
+    //   birthdate: pet.birthdate,
+    //   animaltag: pet.animaltag,
+    //   price: pet.price,
+    //   stockLevel: pet.stockLevel,
+    //   hidden: pet.hidden,
+    //   type: "pet",
+    //   quantity: 1,
+    //   checked: true,
+    // };
     setShowForm(true);
     console.log("Form should show"); // Check if this code block is executed
   }
@@ -130,12 +113,12 @@ const PetDetails = () => {
               userId: user.userUid,
               items: petDetails,
             });
-            console.log("Add items response:", addItemsResponse.data);
+            
       
             if (addItemsResponse.status === 201) {
+              randomAdPopup();
               setShowSuccessModal(true);
               dispatch(addItemToCart(petDetails));
-              randomAdPopup();
             } else {
               alert("Add to Cart Failed. Please try again.");
             }

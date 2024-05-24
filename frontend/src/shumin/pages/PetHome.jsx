@@ -30,7 +30,6 @@ const PetHome = () => {
     setSearchTerm(value);
   };
 
-  // useEffect for filtering data
   useEffect(() => {
     let filteredData = [...memoizedPets];
     setIsLoading(true);
@@ -79,8 +78,8 @@ const PetHome = () => {
   };
 
   const handlePriceRangeSubmit = (event) => {
-    event.preventDefault(); // Prevent form submission
-    setShowPriceRange(false); // Hide the price range inputs after submission
+    event.preventDefault();
+    setShowPriceRange(false); 
   };
 
   const togglePriceRange = () => {

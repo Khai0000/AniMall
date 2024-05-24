@@ -10,7 +10,6 @@ import ProductPostComment from "../components/ProductPostComment";
 import "../styles/ProductDetails.css";
 import { addItemToCart } from "../slices/CartSlice";
 import AdvPopUp from "../components/AdvPopUp";
-import { setInitialProduct } from "../slices/ProductSlice";
 import axios from "axios";
 import SuccessfulModal from "../../ZongMing/components/SuccessfulModal";
 
@@ -29,23 +28,6 @@ const ProductDetails = () => {
 
   const user = useSelector((state)=>state.user.user);
 
-  useEffect(()=>{
-    const getProducts = async () =>{
-        try{
-            const productsResponse = await axios.get(
-                "http://localhost:4000/api/product"
-            );
-            if(productsResponse.status === 200){
-                dispatch(setInitialProduct(productsResponse.data));
-            }else{
-                console.log(productsResponse);
-            }
-        }catch(error){
-            // Perform neccessary action;
-        }
-    };
-    getProducts();
-  },[]);
 
   const cartItem = useSelector((state) => state.cart);
 
@@ -90,7 +72,6 @@ const ProductDetails = () => {
     if (random === 2) {
       setShowAd(true);
     } else {
-      navigate(-1);
     }
   }
 
