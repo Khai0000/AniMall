@@ -30,8 +30,9 @@ function MyCart() {
         };
 
         fetchCartItems();
-    }, [user.userUid,dispatch,cartItems.length,JSON.stringify(cartItems.map(item => item.quantity))]);
-    
+    }, []);
+
+    console.log(products);
 
     useEffect(() => {
         let newTotalPrice = 0;
@@ -52,6 +53,7 @@ function MyCart() {
     const handleOnCheckoutButtonClick = async () => {
         let numOfCheckedItem = 0;
         const checkedItems = cartItems.filter((item) => item.checked);
+        console.log("check",checkedItems)
 
         if (checkedItems.length === 0) {
             alert("No item to checkout!");
@@ -84,51 +86,61 @@ function MyCart() {
 
             if (response.status === 201) {
                 numOfCheckedItem = checkedItems.length;
-                dispatch(checkoutItems(checkedItems));
                 alert(`${numOfCheckedItem} item(s) checked out successfully!`);
 
-                // Remove checked items from cart
                 await Promise.all(
                     checkedItems.map(async (item) => {
                         try {
-                            await axios.delete(`http://localhost:4000/api/cart/remove/${user.userUid}/${item._id}`);
-
-                            // Update stock level if it's a product (not a service)
-                            if (item.type !== "service") {
-                                const product = products.find(p => p._id === item.productId);
-                                const pet= pets.find(p => p._id === item.productId);
-                                if (product) {
-                                    const newStockLevel = product.stockLevel - item.quantity;
-                                    const stockUpdateResponse = await axios.put(`http://localhost:4000/api/product/product/${item.productId}`, {
-                                        stockLevel: newStockLevel
-                                    });
-
-                                    if (stockUpdateResponse.status === 200) {
-                                        dispatch(editProduct({ id: item.productId, stockLevel: newStockLevel }));
-                                    } else {
-                                        console.error('Failed to update product stock level:', stockUpdateResponse);
-                                    }
-                                }else if (pet){
-                                    const newStockLevel = pet.stockLevel - item.quantity;
-                                    const stockUpdateResponse = await axios.put(`http://localhost:4000/api/pet/pet/${item.productId}`, {
-                                        stockLevel: newStockLevel
-                                    });
-
-                                    if (stockUpdateResponse.status === 200 && pet) {
-                                        dispatch(editPet({ _id: item.productId, stockLevel: newStockLevel }));
-                                    }else if(stockUpdateResponse.status === 200 && product){
-                                        dispatch(editProduct({ _id: item.productId, stockLevel: newStockLevel }));
-                                    }else {
-                                        console.error('Failed to update product stock level:', stockUpdateResponse);
-                                    }
-                                }
+                            const response = await axios.delete(`http://localhost:4000/api/cart/remove/${user.userUid}/${item._id}`);
+                            if (response.status === 200) {
+                                dispatch(checkoutItems({ itemId: item.productId }));
+                                return response.data;
                             }
                         } catch (error) {
-                            console.error(`Error removing item ${item._id} from cart or update stock level:`, error);
+                            console.error(`Error removing item ${item._id} from cart:`, error);
+                            throw error;
                         }
                     })
                 );
 
+                await Promise.all(
+                    checkedItems.map(async (item) => {
+                        if (item.type !== "service") {
+                            const product = products.find(p => p._id === item.productId);
+                            const pet = pets.find(p => p._id === item.productId);
+                
+                            let newStockLevel;
+                            let updateEndpoint;
+                            let dispatchAction;
+                
+                            if (product) {
+                                newStockLevel = product.stockLevel - item.quantity;
+                                updateEndpoint = `http://localhost:4000/api/product/product/${item.productId}`;
+                                dispatchAction = editProduct({ id: item.productId, stockLevel: newStockLevel });
+                            } else if (pet) {
+                                newStockLevel = pet.stockLevel - item.quantity;
+                                updateEndpoint = `http://localhost:4000/api/pet/pet/${item.productId}`;
+                                dispatchAction = editPet({ _id: item.productId, stockLevel: newStockLevel });
+                            }
+                
+                            if (newStockLevel !== undefined && updateEndpoint && dispatchAction) {
+                                try {
+                                    const stockUpdateResponse = await axios.put(updateEndpoint, {
+                                        stockLevel: newStockLevel
+                                    });
+                
+                                    if (stockUpdateResponse.status === 200) {
+                                        dispatch(dispatchAction);
+                                    } else {
+                                        console.error('Failed to update stock level:', stockUpdateResponse);
+                                    }
+                                } catch (error) {
+                                    console.error(`Error updating stock level for ${item.productId}:`, error);
+                                }
+                            }
+                        }
+                    })
+                );                
 
                 // refresh cart items after removal
                 const updatedCartResponse = await axios.get(`http://localhost:4000/api/cart/${user.userUid}`);
@@ -159,7 +171,7 @@ function MyCart() {
                         <div>
                             <Suspense fallback={<div>Loading...</div>}>
                                 {cartItems.map((item) => (
-                                    <CartCard key={item._id} product={item} />
+                                    <CartCard key={item.productId} product={item} />
                                 ))}
                             </Suspense>
                         </div>

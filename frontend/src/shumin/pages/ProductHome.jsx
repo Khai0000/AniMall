@@ -17,7 +17,8 @@ const ProductHome=()=>{
 
     const dispatch=useDispatch();
     const navigate = useNavigate();
-
+    
+    const user=useSelector((state)=> state.user.user);
     const products = useSelector((state)=> state.products);
     const memoizedProducts=useMemo(()=>products||[],[products]);
 
@@ -158,16 +159,13 @@ const ProductHome=()=>{
                     <p>No product matched!</p>
                 </div>}
             
-                <div className="Seller-product">
-                    <Link to={`/product/sellerProduct`} className="seller-link">
-                        Seller
-                    </Link>
-                </div>
-                <div>
-                    <Link to={`/product/order/seller`} className="seller-link">
-                        Seller Order
-                    </Link>
-                </div>
+                {user.role==="admin"?
+                    <div className="Seller-product">
+                        <Link to={`/product/sellerProduct`} className="seller-link">
+                            Seller
+                        </Link>
+                    </div>:""
+                }
             </div>
         </div>
     )

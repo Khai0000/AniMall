@@ -18,6 +18,7 @@ const PetHome = () => {
 
   const navigate = useNavigate();
 
+  const user= useSelector((state) => state.user.user);
   const pets = useSelector((state) => state.pets);
   const memoizedPets=useMemo(()=>pets||[],[pets]);
 
@@ -200,11 +201,13 @@ const PetHome = () => {
           </div>
         )}
 
-        <div className="Seller-product">
-          <Link to={`/pet/sellerPet`} className="seller-link">
-            Seller
-          </Link>
-        </div>
+        {user.role==="admin"?
+          <div className="Seller-product">
+            <Link to={`/pet/sellerPet`} className="seller-link">
+              Seller
+            </Link>
+          </div>:""
+        }
       </div>
     </div>
   );

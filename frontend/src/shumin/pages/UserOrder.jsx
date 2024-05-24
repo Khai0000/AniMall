@@ -11,16 +11,14 @@ const UserOrder = () => {
     const order = useSelector((state) => state.orders.order);
     const dispatch = useDispatch();
     const user = useSelector((state) => state.user);
-    const [receipt,setReceipts]=useState([]);
 
     useEffect(()=>{
         const fetchReceipts = async () =>{
             try{
                 const response = await axios.get(`http://localhost:4000/api/orders/user/receipts?userId=${user.user.userUid}`);
                 if(response.status===200){
-                    dispatch(setInitialOrders(response.data));
                     const userReceipts = response.data.flatMap(order => order.receipts);
-                    setReceipts(userReceipts);
+                    dispatch(setInitialOrders(userReceipts));
                 }
             }catch(error){
                 console.error('Error fetching receipts:', error);
@@ -28,8 +26,6 @@ const UserOrder = () => {
         };
         fetchReceipts();
     },[dispatch,user.user.userUid]);
-
-    console.log(receipt);
 
     return (
         <div>
@@ -42,7 +38,7 @@ const UserOrder = () => {
             <div>
                 {order && order.length !== 0 ?(
                     <Suspense fallback={<div>Loading...</div>}>
-                        {receipt.map((receipt) => (
+                        {order.map((receipt) => (
                             <OrderCard key={receipt._id} receipt={receipt} />
                         ))}
                     </Suspense>

@@ -24,6 +24,8 @@ const ServiceHome = () => {
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(1000);
 
+  const user= useSelector((state) => state.user.user);
+
   useEffect(() => {
     const fetchServices = async () => {
       try {
@@ -112,11 +114,14 @@ const ServiceHome = () => {
           )}
         </div>
       )}
-      <div className="sellerServiceBtn">
-        <Link to="/services/sellerService" className="seller-service-page-link">
-          Seller
-        </Link>
-      </div>
+      {user.role==="admin"?
+        <div className="sellerServiceBtn">
+          <Link to="/services/sellerService" className="seller-service-page-link">
+            Seller
+          </Link>
+        </div>:""
+      }
+      
     </div>
   );
 };

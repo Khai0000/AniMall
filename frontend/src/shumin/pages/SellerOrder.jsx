@@ -11,15 +11,8 @@ const SellerOrder =()=>{
     const order = useSelector((state) => state.orders.order);
     const selectedCategory = useSelector((state) => state.orders.selectedCategory);
     const dispatch = useDispatch();
-    const [receipt,setReceipts]=useState([]);
     const [filteredReceipts, setFilteredReceipts] = useState([]);
     const [sortedServiceReceipt, setSortedServiceReceipt] = useState([]);
-
-    const parseDateTime = (dateString, timeString) => {
-        const [day, month, year] = dateString.split('/').map(Number);
-        const [hour, minute] = timeString.split(':').map(Number);
-        return new Date(year, month - 1, day, hour, minute).getTime();
-    };
 
     const sortReceiptsByClosestService = (receipts) => {
         const currentTime = new Date().getTime();
@@ -29,7 +22,9 @@ const SellerOrder =()=>{
                 const closestService = receipt.products
                     .filter(product => product.type === 'service')
                     .reduce((closest, current) => {
-                        const currentServiceTime = new Date(parseDateTime(current.date,current.quantity)).getTime();
+                        const datePart = current.date.split('T')[0];
+                        const dateTimeString = `${datePart}T${current.quantity}:00.000Z`;
+                        const currentServiceTime = new Date(dateTimeString).getTime();
                         return currentServiceTime >= currentTime && currentServiceTime < closest
                             ? currentServiceTime
                             : closest;
@@ -63,7 +58,6 @@ const SellerOrder =()=>{
                             user: userDetails.find(user => user.userId === order.userId)
                         }))
                     );
-                    setReceipts(receiptsWithUsers);
                     dispatch(setInitialOrders(receiptsWithUsers)); 
                 }
             }catch(error){
@@ -71,15 +65,15 @@ const SellerOrder =()=>{
             }
         };
         fetchReceipts();
-    },[dispatch,order]);
+    },[]);
 
     useEffect(() => {
         let filteredReceipts = [];
     
         if (selectedCategory.includes("all")) {
-            filteredReceipts = receipt;
+            filteredReceipts = order;
         } else {
-            filteredReceipts = receipt.map(receiptItem => {
+            filteredReceipts = order.map(receiptItem => {
                 const filteredProducts = receiptItem.products.filter(product =>
                     selectedCategory.includes(product.type)
                 );
@@ -96,10 +90,8 @@ const SellerOrder =()=>{
         const sortedReceipts = sortReceiptsByClosestService(serviceReceipts);
         setSortedServiceReceipt(sortedReceipts);
         setFilteredReceipts(filteredReceipts);
-        
-    }, [selectedCategory, receipt]);
 
-    console.log(sortedServiceReceipt);
+    }, [selectedCategory, order]);
 
     const toggleButton = (button) => {
         let updatedCategories = [];
@@ -129,7 +121,6 @@ const SellerOrder =()=>{
     
         dispatch(setSelectedCategory(updatedCategories));
     }, [selectedCategory,dispatch]);
-    
 
     return(
         <div>

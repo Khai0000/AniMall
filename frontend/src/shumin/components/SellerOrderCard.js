@@ -27,29 +27,13 @@ const SellerOrderCard=({ receipt , selectedCategory, sortedServiceReceipt})=>{
         const [hour, minute] = timeString.split(':').map(Number);
         return new Date(year, month - 1, day, hour, minute).getTime();
     };
-
-    // const sortReceiptsByClosestService = (receipts) => {
-    //     return receipts.sort((a, b) => {
-    //         const closestToNow = (product) => {
-    //             if (product.type !== "service") return Infinity;
-    //             const serviceTime = parseDateTime(product.date, product.quantity);
-    //             return Math.abs(serviceTime - new Date().getTime());
-    //         };
-    //         return closestToNow(a.products[0]) - closestToNow(b.products[0]);
-    //     });
-    // };
-
-    // useEffect(() => {
-    //     if (receipt) {
-    //         const sorted = sortReceiptsByClosestService([receipt]); 
-    //         console.log([receipt]);
-    //         setSortedProducts(sorted);
-    //     }
-    // }, [receipt]);
     
     const checkDateStatus = (date, time) => {
+        const datePart = date.split('T')[0];
+        const dateTimeString = `${datePart}T${time}:00.000Z`;
+
         const currentTime = new Date().getTime();
-        const serviceTime = new Date(parseDateTime(date,time)).getTime();
+        const serviceTime = new Date(dateTimeString).getTime();
         return serviceTime > currentTime ? 'upcoming' : 'expired';
     };
 

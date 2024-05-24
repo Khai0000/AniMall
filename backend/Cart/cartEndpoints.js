@@ -4,7 +4,7 @@ import {
     removeFromCart,
     getCart,
     updateCartChecked,
-    updateCartQuantity
+    updateCartQuantity,
   } from "./cartController.js";
 
 

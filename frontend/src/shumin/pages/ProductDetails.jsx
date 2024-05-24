@@ -206,7 +206,7 @@ const ProductDetails = () => {
           <div className="commentBody">
             {product.comments.length === 0 ? (
               <div className="commentNotFound">
-                <p>No comments for this service yet.</p>
+                <p>No comments for this product yet.</p>
               </div>
             ) : (
               product.comments.map((comment) => (
