@@ -88,7 +88,6 @@ const ServicesAppointment = ({ serviceData }) => {
       console.log("Slot availability update response:", updateResponse.data);
 
       const fetchResponse = await axios.get(`http://localhost:4000/api/services/${serviceData._id}/update-availability/${formattedDateForDB}`);
-      console.log("Updated Slot availability response:", fetchResponse.data.availability);
       setSlotsAvailability(fetchResponse.data.availability);
 
     } catch (error) {

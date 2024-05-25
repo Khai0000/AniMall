@@ -22,8 +22,10 @@ function Services() {
       }
     };
 
-    !services && fetchServices();
-  });
+    if (!services.length) {
+      fetchServices();
+    }
+  }, [dispatch, services.length]);
 
   return <Outlet />;
 }

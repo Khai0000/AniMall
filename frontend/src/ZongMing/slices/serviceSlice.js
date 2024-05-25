@@ -1,11 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createSelector } from "reselect";
-// import dummyServiceData from "../data/dummyServiceData";
 
-// Create slice
 export const serviceSlice = createSlice({
   name: "services",
-  initialState: null,
+  initialState: [],
   reducers: {
     setInitialServices: (state, action) => {
       return [...action.payload];
@@ -14,10 +12,8 @@ export const serviceSlice = createSlice({
       return [action.payload, ...state];
     },
     addComment: (state, action) => {
-      const { serviceTitle, serviceComments } = action.payload;
-      const service = state.find(
-        (service) => service.serviceTitle === serviceTitle
-      );
+      const { serviceId, serviceComments } = action.payload;
+      const service = state.find((service) => service._id === serviceId);
       if (service) {
         service.serviceComments.unshift(serviceComments);
       }
@@ -28,19 +24,16 @@ export const serviceSlice = createSlice({
         (service) => service.serviceTitle === serviceTitle
       );
       if (service) {
-        // Update the total ratings count and specific rating count
         service.serviceRating.total++;
         service.serviceRating[serviceRating]++;
       }
     },
     removeComment: (state, action) => {
-      const { serviceTitle, commentContent } = action.payload;
-      const service = state.find(
-        (service) => service.serviceTitle === serviceTitle
-      );
+      const { serviceId, commentId } = action.payload;
+      const service = state.find((service) => service._id === serviceId);
       if (service) {
         service.serviceComments = service.serviceComments.filter(
-          (comment) => comment.content !== commentContent
+          (comment) => comment._id !== commentId
         );
       }
     },
@@ -68,8 +61,6 @@ export const serviceSlice = createSlice({
     },
   },
 });
-
-// Export actions
 export const {
   setInitialServices,
   addService,
@@ -79,6 +70,7 @@ export const {
   editService,
   removeService,
   hideService,
+  
 } = serviceSlice.actions;
 
 export const selectServiceSlice = (state) => state.service;

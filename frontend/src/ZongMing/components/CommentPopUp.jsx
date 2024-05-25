@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import "../styles/CommentPopUp.css";
 import { useDispatch, useSelector } from "react-redux";
-import { addComment, addRating } from "../slices/serviceSlice";
+import { addComment, addRating, setInitialServices } from "../slices/serviceSlice";
 import axios from "axios";
 
-const CommentPopUp = ({ setShowPopup, serviceId, serviceTitle, updateServiceCommentsAndRating }) => {
+const CommentPopUp = ({ setShowPopup, serviceId, serviceTitle }) => {
   const dispatch = useDispatch();
   const [bodyText, setBodyText] = useState("");
   const [selectedRating, setSelectedRating] = useState(null);
@@ -17,6 +17,19 @@ const CommentPopUp = ({ setShowPopup, serviceId, serviceTitle, updateServiceComm
 
   const handleRatingClick = (rating) => {
     setSelectedRating(rating === selectedRating ? null : rating);
+  };
+
+  const fetchServices = async () => {
+    try {
+      const serviceResponse = await axios.get("http://localhost:4000/api/services");
+      if (serviceResponse.status === 200) {
+        dispatch(setInitialServices(serviceResponse.data));
+      } else {
+        console.log(serviceResponse);
+      }
+    } catch (error) {
+      console.error("Error fetching services:", error);
+    }
   };
 
   const handleOnSubmitClick = async () => {
@@ -42,9 +55,11 @@ const CommentPopUp = ({ setShowPopup, serviceId, serviceTitle, updateServiceComm
         const addedComment = addCommentResponse.data;
         dispatch(addComment({ serviceId, serviceComments: addedComment }));
         dispatch(addRating({ serviceId, serviceRating: selectedRating }));
-        updateServiceCommentsAndRating(addedComment, selectedRating);
+
+        // Fetch the services after adding the comment and rating
+        await fetchServices();
+
         setShowPopup(false);
-        console.log("commentAlibaba:",addedComment);
       }
     } catch (error) {
       console.error("Error adding comment:", error);

@@ -1,88 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
 import ImageSlider from "../components/ImageSlider";
 import "../styles/ServiceDetails.css";
 import RatingChart from "../components/RatingChart";
 import ServicesAppointment from "../components/ServicesAppointment";
 import ServicePostComment from "../components/ServicePostComment";
 import CommentPopUp from "../components/CommentPopUp";
-import PulseLoader from "react-spinners/PulseLoader";
-import { NotFoundPages } from "../../pages";
 import { useSelector } from 'react-redux';
+
 
 const ServiceDetail = () => {
   const { serviceId } = useParams();
-  const [service, setService] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [showErrorPage, setShowErrorPage] = useState(false);
   const user = useSelector((state) => state.user.user);
-  const [comments, setComments] = useState([]);
 
-  useEffect(() => {
-    const getOneService = async () => {
-      try {
-        const response = await axios.get(`http://localhost:4000/api/services/${serviceId}`);
-        if (response.status === 200) {
-          setService(response.data.service);
-          setComments(response.data.service.serviceComments);
-        } else {
-          throw new Error("Service not found");
-        }
-      } catch (error) {
-        console.error("Error fetching service:", error);
-        setShowErrorPage(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    getOneService();
-  }, [serviceId,comments]);
-
-  const updateServiceCommentsAndRating = (newComment, newRating) => {
-    setComments((prevComments) => [...prevComments, newComment]);
-    setService((prevService) => {
-      const updatedService = { ...prevService };
-      updatedService.serviceComments = [...updatedService.serviceComments, newComment];
-      const ratingKey = `${newRating}_stars`;
-      const currentRatingCount = updatedService.serviceRating[ratingKey] || 0;
-      updatedService.serviceRating[ratingKey] = currentRatingCount + 1;
-      updatedService.serviceRating.total += 1;
-      return updatedService;
-    });
-    console.log("comment:", comments);
-    console.log("service:", service);
-  };
-
-  const handleDeleteComment = (commentId) => {
-    setComments((prevComments) => prevComments.filter((comment) => comment._id !== commentId));
-    setService((prevService) => {
-      const updatedService = { ...prevService };
-      updatedService.serviceComments = updatedService.serviceComments.filter(
-        (comment) => comment._id !== commentId
-      );
-      return updatedService;
-    });
-  };
-
+  const service = useSelector((state) =>
+    state.services.find((service) => service._id === serviceId)
+  );
 
   const handleAddComment = () => {
     setShowPopup(true);
   };
-
-  if (isLoading) {
-    return (
-      <div className="wj-loadingContainer">
-        <PulseLoader size={"1.5rem"} color="#3C95A9" />
-        <p className="wj-loadingText">Loading...</p>
-      </div>
-    );
-  }
-
-  if (showErrorPage) {
-    return <NotFoundPages />;
-  }
 
   return (
     <div className="serviceDetailsContainer">
@@ -126,17 +64,15 @@ const ServiceDetail = () => {
             </button>
           </div>
           <div className="commentBody">
-            {comments && comments.length === 0 ? (
+            {service.serviceComments.length === 0 ? (
               <div className="commentNotFound">
                 <p>No comments for this service yet.</p>
               </div>
             ) : (
-              comments.map((commentItem) => (
+              service.serviceComments.map((commentItem) => (
                 <ServicePostComment
                   comment={commentItem}
-                  key={commentItem._id}
-                  serviceId={service._id}
-                  onDelete={handleDeleteComment}
+                  serviceId={serviceId}
                   userId={user.userUid}
                 />
               ))
@@ -149,7 +85,6 @@ const ServiceDetail = () => {
           setShowPopup={setShowPopup}
           serviceId={serviceId}
           serviceTitle={service.serviceTitle}
-          updateServiceCommentsAndRating={updateServiceCommentsAndRating}
         />
       )}
     </div>

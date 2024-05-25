@@ -6,20 +6,18 @@
   import { removeComment } from "../slices/serviceSlice";
   import axios from "axios";
 
-  const ServicePostComment = ({ comment, serviceId,onDelete,userId }) => {
+  const ServicePostComment = ({ comment, serviceId,userId }) => {
     const [imageSource, setImageSource] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const dispatch = useDispatch();
-
-    const handleOnDeleteClick = async (commentId) => {
+    
+    const handleOnDeleteClick = async () => {
       try {
         const deleteCommentResponse = await axios.delete(
-          `http://localhost:4000/api/services/${serviceId}/comments/${commentId}`
+          `http://localhost:4000/api/services/${serviceId}/comments/${comment._id}`
         );
-
         if (deleteCommentResponse.status === 200) {
-          onDelete(commentId);
-          dispatch(removeComment({ serviceId: serviceId, commentId: commentId }));
+          dispatch(removeComment({ serviceId: serviceId, commentId: comment._id }));
         } else {
           console.error(
             "Unexpected response status:",
@@ -65,7 +63,7 @@
         </div>
 
         {comment.userUid === userId && (
-          <button className="deleteButtonSPC" onClick={() => handleOnDeleteClick(comment._id)} >
+          <button className="deleteButtonSPC"  onClick={handleOnDeleteClick}>
             <DeleteIcon />
           </button>
         )}

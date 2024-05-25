@@ -66,7 +66,6 @@ export const ProductSlice =createSlice({
           const productIndex = state.findIndex(product => product._id === id);
         
           if (productIndex !== -1) {
-            // Using map to create a new array for immutability
             state[productIndex] = {
               ...state[productIndex],
               comments: state[productIndex].comments.filter(comment => comment._id !== commentId),

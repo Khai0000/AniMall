@@ -96,7 +96,6 @@ const ProductDetails = () => {
               userId: user.userUid,
               items: productDetails,
           });
-          console.log("Add items response:", addItemsResponse.data);
 
           if (addItemsResponse.status === 201) {
               dispatch(addItemToCart(productDetails));

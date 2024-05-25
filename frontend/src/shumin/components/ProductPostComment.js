@@ -19,8 +19,6 @@ const ProductPostComment = ({comments, id}) => {
         `http://localhost:4000/api/product/comment/product/${id}/${comments._id}`
       );
 
-      console.log(deleteCommentResponse);
-
       if (deleteCommentResponse.status === 200) {
         dispatch(removeComment({ id, commentId: comments._id }));
       } else {

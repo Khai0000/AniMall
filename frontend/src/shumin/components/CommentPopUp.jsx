@@ -42,7 +42,6 @@ const CommentPopUp = ({ setShowPopup, id}) => {
         dispatch(addComment({ id, comment:commentRes.data}));
         dispatch(addRating({ id, rating: ratingRes.data }));
       }
-      // Close the popup
       setShowPopup(false);
     }catch (error){
       console.log("Error uploading comment: "+ error);
