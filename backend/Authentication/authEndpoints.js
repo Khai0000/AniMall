@@ -8,7 +8,9 @@ import {
     verifyUser,
     updateUserProfile,
     profile,
-    oauthcallback
+    oauthcallback,
+    getUser,
+    logout
 } from "./authController.js";
 import { protect } from './authMiddleware.js';
 
@@ -19,6 +21,8 @@ router.post('/authentication/verify', verifyUser);
 router.post('/authentication/create-admin', createAdmin);
 router.post('/authentication/login', loginUser);
 router.put('/authentication/profile', protect, updateUserProfile);
+router.get('/authentication/getuser', getUser);
+router.get('/authentication/logout', logout);
 router.get('/authentication/profile', protect, profile);
 router.get('/authentication/oauthcallback', (req, res) => {
     res.send('hello world')

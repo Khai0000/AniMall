@@ -9,10 +9,12 @@ import OAuth2Client from 'google-auth-library';
 import axios, { isCancel, AxiosError } from 'axios';
 import { generateVerificationCode, sendVerificationEmail } from "./emailUtils.js";
 
+
+
 const temporaryAccounts = {}
 
 const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' });
+    return jwt.sign({ id }, process.env.JWT_SECRET);//, { expiresIn: '30d' });
 };
 
 export const oauthcallback = async (req, res) => {
@@ -112,9 +114,6 @@ export const verifyUser = async (req, res) => {
     }
 };
 
-
-
-
 // In authController.js
 
 export const createAdmin = async (req, res) => {
@@ -153,8 +152,22 @@ export const loginUser = async (req, res) => {
             return res.status(403).json({ message: 'Your account has been blocked. Please contact administrator.' });
         }
 
-        res.json({
+        //res.cookie('token', generateToken(user._id));
+        // const responseHeaders = {
+        //     "Content-Type": "application/json",
+        //     "set-cookie": [
+        //         `authToken=${generateToken(user._id)}; Path=/; HttpOnly;`,
+        //     ],
+        // };
 
+        // res.writeHead(200, responseHeaders);
+        const oneYearInMilliseconds = 365 * 24 * 60 * 60 * 1000;
+        res.cookie('token', generateToken(user._id), {
+            httpOnly: true, secure: true, path: '/',
+            sameSite: 'None', maxAge: oneYearInMilliseconds
+        });
+
+        res.json({
             userUid: user._id,
             username: user.username,
             email: user.email,
@@ -245,22 +258,31 @@ export const profile = async (req, res) => {
 //     }
 // };
 
-// export const resetPassword = async (req, res) => {
-//     const { token, password } = req.body;
-//     try {
-//         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-//         const user = await AuthModel.findById(decoded.id);
-//         if (!user) {
-//             return res.status(404).json({ message: 'User not found' });
-//         }
+export const getUser = async (req, res) => {
+    //from cookie
+    const token = req.cookies.token;
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const user = await AuthModel.findById(decoded.id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
 
-//         user.password = password;
-//         await user.save();
-//         res.json({ message: 'Password reset successful' });
-//     } catch (error) {
-//         res.status(500).json({ message: error.message });
-//     }
-// };
+        res.json(user);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export const logout = async (req, res) => {
+    try {
+        res.clearCookie("token");
+        res.end();
+        res.json({ message: 'logout successfully' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
 
 export const sendPasswordResetEmail = async (req, res) => {
     const { email } = req.body;

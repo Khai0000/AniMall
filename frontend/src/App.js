@@ -11,12 +11,56 @@ import * as ZongMingPages from "./ZongMing/pages";
 import * as ShuminPages from "./shumin/pages";
 import * as GinkhaiPages from "./ginkhai/pages";
 import * as ShuhuiPages from "./shuhui/pages";
-import { useSelector } from "react-redux";
-
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { setUser } from "./shuhui/slices/userSlice";
 
 function App() {
+  const dispatch = useDispatch();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const user = useSelector((state) => state.user.user);
+
+
+  useEffect(() => {
+    try {
+      const response = axios.get(
+        "http://localhost:4000/api/auth/authentication/getuser",
+        { withCredentials: true }
+      ).then(response => {
+        console.log(response.data)
+        if (response.data) {
+          // Save the token in local storage or Redux store
+          //localStorage.setItem("token", response.data.token);
+          // Retrieve username from the response and set it in the Redux store
+          const {
+            username,
+            email,
+            userUid,
+            role,
+            verifyStatus,
+            address,
+            phone,
+          } = response.data;
+          dispatch(
+            setUser({
+              username,
+              email,
+              userUid,
+              role,
+              verifyStatus,
+              address,
+              phone,
+            })
+          );
+        }
+        //return d3.json(response.data.fileName)
+      }).catch(err => {
+        console.log("123")
+      })
+    } catch (error) {
+      //console.error("Error:", error);
+    }
+  }, []);
 
   useEffect(() => {
     setIsLoggedIn(user !== null);
@@ -28,7 +72,8 @@ function App() {
       element: <Layout />,
       errorElement: <CommonPages.NotFoundPages />,
       children: [
-        { path: "/", element: <Navigate to="authentication/login" /> },
+        { path: "/", element: <Navigate to="/product" /> },
+        // { path: "/", element: <Navigate to="authentication/login" /> },
         {
           path: "/authentication",
           children: [
@@ -79,7 +124,7 @@ function App() {
           // ) : (
           //   <Navigate to="/authentication/login" replace={false}  />
           // ),
-          element:<CommonPages.Community/>,
+          element: <CommonPages.Community />,
           children: [
             { path: "/community", element: <GinkhaiPages.ForumHome /> },
             {

@@ -42,12 +42,13 @@ function Login() {
           {
             email: email,
             password: password,
-          }
+          },
+          { withCredentials: true }
         );
 
         if (response.data.token) {
           // Save the token in local storage or Redux store
-          localStorage.setItem("token", response.data.token);
+          //localStorage.setItem("token", response.data.token);
           // Retrieve username from the response and set it in the Redux store
           const {
             username,
@@ -69,6 +70,9 @@ function Login() {
               phone,
             })
           );
+
+          //setCookie("token", response.data.token, { path: "/" });
+          // setCookie("token", response.data.token, { path: "/settoken" });
           navigate("/product");
         } else {
           setLoginError("Login failed. Please check your credentials.");

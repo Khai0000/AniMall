@@ -7,6 +7,7 @@ import logo from "../assets/images/logo.png";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import axios from "axios";
 
 function Header() {
   const [isLogin, setIsLogin] = useState(false);
@@ -18,11 +19,21 @@ function Header() {
     setIsLogin(user !== null);
   }, [user]);
 
-  const handleLogout = () => {
+  const handleLogout = async (e) => {
     setIsLogin(false);
     navigate("/authentication/login", { replace: true });
     // Dispatch action to remove user from Redux store
     dispatch(removeUser());
+
+    //res.clearCookie('authToken');
+    try {
+      const response = await axios.get(
+        "http://localhost:4000/api/auth/authentication/logout",
+        { withCredentials: true }
+      );
+    } catch (error) {
+      console.error("Error creating user:", error);
+    }
   };
 
   const goToProfile = () => {

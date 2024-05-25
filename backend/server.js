@@ -1,4 +1,5 @@
 import express from "express";
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import mongoose from "mongoose";
 import date from "./Date/date.js";
@@ -11,10 +12,12 @@ import authRouter from "./Authentication/authEndpoints.js";
 let gfs;
 
 dotenv.config();
-
 const app = express();
 
-app.use(cors());
+app.use(cookieParser());
+// app.use(cors({ origin: 'http://localhost:3000' }));
+app.use(cors({ origin: true, credentials: true, }));
+//app.use(cors());
 app.use(express.json());
 app.use((req, res, next) => {
   console.log("Method", req.method, "at", req.path, date);
