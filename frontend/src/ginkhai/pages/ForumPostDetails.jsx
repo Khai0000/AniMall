@@ -147,7 +147,7 @@ const ForumPostDetails = () => {
           </div>
           <div className="contentContainer">
             <span className="content">{post && post.content}</span>
-          </div>
+          </div>  
         </div>
       </div>
 
