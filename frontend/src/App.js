@@ -23,6 +23,7 @@ function App() {
     setIsLoggedIn(user !== null);
   }, [user]);
 
+
   const router = createBrowserRouter([
     {
       path: "/",
@@ -75,12 +76,11 @@ function App() {
         },
         {
           path: "/community",
-          // element: isLoggedIn ? (
-          //   <CommonPages.Community />
-          // ) : (
-          //   <Navigate to="/authentication/login" replace={false}  />
-          // ),
-          element:<CommonPages.Community/>,
+          element: isLoggedIn ? (
+            <CommonPages.Community />
+          ) : (
+            <Navigate to="/authentication/login" replace={false}  />
+          ),
           children: [
             { path: "/community", element: <GinkhaiPages.ForumHome /> },
             {
@@ -90,6 +90,10 @@ function App() {
             {
               path: "/community/post/add",
               element: <GinkhaiPages.ForumAddPost />,
+            },
+            {
+              path: "/community/post/:postId/edit",
+              element: <GinkhaiPages.ForumEditPost />,
             },
           ],
         },

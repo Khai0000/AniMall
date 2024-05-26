@@ -175,7 +175,7 @@
     margin-left: auto;
 }
 
-.postContainer .weijiePostBackButton {
+.postContainer .weijiePostBackButton,.weijieEditPostButton {
     background-color: transparent;
     border: 1px solid #3C95A9;
     color: #3C95A9;
@@ -186,9 +186,10 @@
     font-size: 1.25rem;
     padding: 5px 64px;
     margin-left: auto;
+    margin-right: 2em;
 }
 
-.postContainer .weijiePostBackButton:hover {
+.postContainer .weijiePostBackButton:hover,.weijieEditPostButton:hover {
     color: #f4b701;
     border: 1px solid #f4b701;
     text-shadow: 0 0 0px #f4b701, 0 0 1px #f4b701, 0 0 30px #f4b701;

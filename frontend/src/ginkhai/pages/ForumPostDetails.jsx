@@ -83,6 +83,10 @@ const ForumPostDetails = () => {
     navigate(-1);
   };
 
+  const handleOnEditClick = ()=>{
+    navigate(`/community/post/${postId}/edit`,{ state: { post: localPost } });
+  }
+
   const handleOnLikeClick = async () => {
     if (post.peopleWhoLikes.includes(user.userUid)) {
       dispatch(removeLike({ postId, userUid: user.userUid }));
@@ -137,9 +141,14 @@ const ForumPostDetails = () => {
               By: <span className="authorName">{ post && post.author.split("//useruid//")[0]}</span>
             </p>
           </div>
-          <button className="weijiePostBackButton" onClick={handleOnBackClick}>
-            Back
-          </button>
+          <div className="weijiePostButtonContainer">
+            {post.author.split("//useruid//")[1]===user.userUid && <button className="weijieEditPostButton" onClick={handleOnEditClick}>
+              Edit
+            </button>}
+            <button className="weijiePostBackButton" onClick={handleOnBackClick}>
+              Back
+            </button>
+          </div>
         </div>
         <div className="floatContainer">
           <div className="imageContainer">

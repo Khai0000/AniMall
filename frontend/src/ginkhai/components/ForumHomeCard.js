@@ -19,9 +19,6 @@ const ForumHomeCard = ({ post, index }) => {
   useEffect(() => {
     setIsLoading(true);
 
-    if (post.title === "cat") {
-      console.log(post.image[0]);
-    }
 
     if (post.image[0].startsWith("data:image/")) {
       // If the image URL starts with "data:image/", it indicates a base64 encoded image
@@ -85,8 +82,6 @@ const ForumHomeCard = ({ post, index }) => {
         </p>
         <p className="content">{post.content}</p>
       </div>
-      {console.log(authorDetails[1] && authorDetails[1] === user.userUid) ||
-        user.role === "admin"}
       {(authorDetails[1] && authorDetails[1] === user.userUid) ||
       user.role === "admin" ? (
         <button

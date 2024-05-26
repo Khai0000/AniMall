@@ -9,6 +9,7 @@ import {
   likePost,
   dislikePost,
   removeReaction,
+  editOnePost,
 } from "./forumPostsController.js";
 
 const router = express.Router();
@@ -19,6 +20,8 @@ router.get("/", getAllForumPosts);
 router.post("/post/add", addOneForumPost);
 
 router.get("/post/:id", getOnePost);
+
+router.put("/post/:id/edit", editOnePost);
 
 router.delete("/post/:id", deleteOnePost);
 
