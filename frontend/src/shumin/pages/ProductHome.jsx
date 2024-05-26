@@ -1,12 +1,10 @@
 import SearchBar from "../components/SearchBar";
 import "../styles/ProductHome.css";
-import React, { useState,useEffect,lazy,Suspense} from "react";
+import React, { useState,useEffect,lazy,Suspense, useMemo} from "react";
 import MyCartButton from "../components/MyCartButton";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useSelector, useDispatch } from "react-redux";
 import EnterButtonIcon from "../components/EnterButtonIcon";
-import { addProduct } from "../slices/ProductSlice";
-import { ProductData } from "../data/DummyProductData";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
@@ -19,29 +17,21 @@ const ProductHome=()=>{
 
     const dispatch=useDispatch();
     const navigate = useNavigate();
-
+    
+    const user=useSelector((state)=> state.user.user);
     const products = useSelector((state)=> state.products);
+    const memoizedProducts=useMemo(()=>products||[],[products]);
 
     const [filteredProducts,setFilteredProducts]=useState([]);
     const [isLoading,setIsLoading]=useState(true);
     const [searchTerm,setSearchTerm]=useState("");
-
-    useEffect(() => {
-        if ( products.length === 0) {
-            ProductData.forEach((product) => {
-                dispatch(addProduct(product));
-            }
-        );
-        }
-    }, [dispatch, products]);
     
     const handleSearch = (value) => {
         setSearchTerm(value);
     };
-
     
     useEffect(()=>{
-        let filteredData = [...products];
+        let filteredData = [...memoizedProducts];
         setIsLoading(true);
         
         filteredData = filteredData.filter((product) => !product.hidden);
@@ -74,7 +64,7 @@ const ProductHome=()=>{
 
         setIsLoading(false);
         setFilteredProducts(filteredData);
-    }, [searchTerm, products,minPrice,maxPrice, dispatch]);
+    }, [searchTerm, memoizedProducts,minPrice,maxPrice, dispatch]);
 
     const handlePriceRangeSubmit = (event) => {
         event.preventDefault(); // Prevent form submission
@@ -105,12 +95,13 @@ const ProductHome=()=>{
                     <EnterButtonIcon/>
                 </button>
             </div>
+           
             {products.length===0?
                 <p className="Product-category-row-content-noproduct">{`No ${category} product matched!`}</p>
                 :<div className="Product-category-row-content">
                     <Suspense fallback={<div>Loading...</div>}>
-                        {products.map((product,index)=>(
-                            <ProductCard key={product.id} product={product}/>
+                        {products.map((product)=>(
+                            <ProductCard key={product._id} product={product}/>
                         ))}
                     </Suspense>
                 </div>}
@@ -169,15 +160,16 @@ const ProductHome=()=>{
                     <p>No product matched!</p>
                 </div>}
             
-                <div className="Seller-product">
-                    <Link to={`/product/sellerProduct`} className="seller-link">
-                        Seller
-                    </Link>
-                </div>
+                {user.role==="admin"?
+                    <div className="Seller-product">
+                        <Link to={`/product/sellerProduct`} className="seller-link">
+                            Seller
+                        </Link>
+                    </div>:""
+                }
             </div>
         </div>
     )
 }
 
 export default ProductHome;
-

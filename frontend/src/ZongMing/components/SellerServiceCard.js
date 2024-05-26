@@ -2,52 +2,26 @@ import { useState, useEffect } from "react";
 import "../styles/SellerServiceCard.css";
 import SellerServiceCardSkeleton from "./SellerServiceCardSkeleton";
 import { useDispatch } from "react-redux";
-import {
-  removeService,
-  hideService,
-} from "../slices/serviceSlice";
+import { removeService, hideService } from "../slices/serviceSlice";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
-const SellerServiceCard = ({service}) => {
+const SellerServiceCard = ({ service }) => {
   const [image, setImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [isHidden, setIsHidden] = useState(service.hidden);
+  const [isHidden, setIsHidden] = useState(
+    localStorage.getItem(`${service._id}_isHidden`) === "true"
+      ? true
+      : service.hidden
+  );
   const [quantity] = useState(1);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // if (service.serviceImages && service.serviceImages.length > 0) {
-    //   const firstImage = service.serviceImages[0];
-    //   if (firstImage.includes("jpg")) {
-    //     let imageDir = firstImage.substring(0, firstImage.indexOf("."));
-    //     import(`../assets/image/${imageDir}.jpg`)
-    //       .then((image) => {
-    //         setImage(image.default);
-    //       })
-    //       .catch((error) => {
-    //         console.error("Error loading image:", error);
-    //       })
-    //       .finally(() => {
-    //         setIsLoading(false);
-    //       });
-    //   } else {
-    //     // If the image URL does not contain "jpg", assume it's a direct URL
-    //     setImage(firstImage);
-    //     setIsLoading(false);
-    //   }
-    // } else {
-    //   // Handle the case where serviceImages is empty or undefined
-    //   console.error(
-    //     "Service image is not defined or not in the expected format:",
-    //     service
-    //   );
-    //   setIsLoading(false);
-    // }
     if (service.serviceImages && service.serviceImages[0]) {
       if (service.serviceImages[0].includes("jpg")) {
-        
         let filename = service.serviceImages[0].split("/").pop();
-       
+
         let imageName = filename.split(".")[0] + ".jpg";
         import(`../assets/image/${imageName}`)
           .then((image) => {
@@ -61,27 +35,48 @@ const SellerServiceCard = ({service}) => {
           });
       } else {
         setImage(service.serviceImages[0]);
-        // console.log(service.serviceImages[0]);
-        // console.error(
-        //   "Service image is not in the expected format:",
-        //   service.serviceImages[0]
-        // );
         setIsLoading(false);
       }
     }
   }, [service]);
 
-  const handleOnRemoveClicked = () => {
-    dispatch(removeService(service.serviceTitle));
+  const handleOnRemoveClicked = async () => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:4000/api/services/${service._id}`
+      );
+      if (response.status === 200) {
+        dispatch(removeService(service.serviceTitle));
+      } else {
+        alert("Failed to delete the service. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error deleting service:", error);
+      alert("An error occurred while deleting the service. Please try again.");
+    }
   };
 
-  const handleCheckboxClick = () => {
-    setIsHidden(!isHidden);
-    dispatch(
-      hideService({
-        serviceTitle: service.serviceTitle,
-      })
-    );
+  const handleCheckboxClick = async () => {
+    try {
+      const response = await axios.put(
+        `http://localhost:4000/api/services/${service._id}/hide`,
+        {
+          isHidden: !isHidden,
+        }
+      );
+      if (response.status === 200) {
+        setIsHidden(!isHidden);
+        dispatch(hideService({ serviceTitle: service.serviceTitle }));
+        localStorage.setItem(`${service._id}_isHidden`, JSON.stringify(!isHidden));
+      } else {
+        alert("Failed to update service visibility. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error updating service visibility:", error);
+      alert(
+        "An error occurred while updating service visibility. Please try again."
+      );
+    }
   };
 
   return isLoading ? (
@@ -139,7 +134,7 @@ const SellerServiceCard = ({service}) => {
             </svg>
           )}
         </button>
-        <img src={image} alt="" className="seller-service-card-image" />
+        <img src={service.serviceImages[0]} alt="" className="seller-service-card-image" />
         <Link
           to={`add-service/${service.serviceTitle}`}
           className="seller-service-card-product-name"
@@ -150,26 +145,18 @@ const SellerServiceCard = ({service}) => {
           </h4>
         </Link>
 
-       
-        <button
-          className="seller-service-card-minus-button"
-          disabled
-        >
+        <button className="seller-service-card-minus-button" disabled>
           -
         </button>
         <input
           type="number"
           className="seller-service-card-quantity-input-zm"
           value={quantity}
-          readOnly 
+          readOnly
         />
-        <button
-          className="seller-service-card-plus-button"
-          disabled
-        >
+        <button className="seller-service-card-plus-button" disabled>
           +
         </button>
-    
 
         <h4 className="seller-service-card-price">{service.price}</h4>
         <button

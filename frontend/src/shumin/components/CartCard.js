@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import "../styles/SellerProductCard.css";
 import SellerProductCardSkeleton from "./SellerProductCardSkeleton";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   removeItemFromCart,
   updateQuantity,
   updateChecked,
 } from "../slices/CartSlice";
+import axios from "axios";
 
 const CartCard = ({ product }) => {
   const [image, setImage] = useState(null);
@@ -15,93 +16,129 @@ const CartCard = ({ product }) => {
   const [quantity, setQuantity] = useState(initialQuantity);
   const initialChecked = product.checked;
   const [isChecked, setIsChecked] = useState(initialChecked);
-
+  const [serviceId, setServiceId] = useState(null);
   const dispatch = useDispatch();
 
-  console.log("Product:", product);
+  const user = useSelector((state) => state.user.user);
+  const productInStock = useSelector((state) =>
+    state.products.find((products) => products._id === product.productId)
+  );  
+
+
+  
+  const petInStock = useSelector((state) =>
+    state.pets.find((pet) => pet._id === product.productId)
+);
 
   useEffect(() => {
-    if (product.type === "service") {
+    if (product.productId) {
+      setServiceId(product.productId);
+    }
+  }, [product]);
+
+  useEffect(() => {
+    const loadImage = () => {
       if (product.image && product.image[0]) {
-        if (product.image[0].includes("jpg")) {
-          // Extract the filename from the image path
-          let filename = product.image[0].split("/").pop();
-          // Remove the hash part from the filename
-          let imageName = filename.split(".")[0] + ".jpg";
-          import(`../../ZongMing/assets/image/${imageName}`)
-            .then((image) => {
-              setImage(image.default);
-            })
-            .catch((error) => {
-              console.error("Error loading image:", error);
-            })
-            .finally(() => {
-              setIsLoading(false);
-            });
-        } else {
-          setImage(product.image[0]);
-          // Handle the case where the image format is not as expected
-          // console.error(
-          //   "Service image is not in the expected format:",
-          //   product.image[0]
-          // );
-          // setIsLoading(false);
-        }
-      }
-    } else {
-      if (product.image && product.image[0].includes("jpg")) {
-        let imageDir = product.image[0].substring(
-          0,
-          product.image[0].indexOf(".")
-        );
-        import(`../assets/images/${imageDir}.jpg`)
-          .then((image) => {
-            setImage(image.default);
-          })
-          .catch((error) => {
-            console.error("Error loading image:", error);
-          })
-          .finally(() => {
-            setIsLoading(false);
-          });
-      } else if (product.image && product.image[0]) {
         setImage(product.image[0]);
-        setIsLoading(false);
       } else {
         console.error(
           "Product image is not defined or not in the expected format:",
           product
         );
-        setIsLoading(false);
       }
-    }
+      setIsLoading(false);
+    };
+
+    loadImage();
   }, [product]);
 
-  const handleOnRemoveClicked = () => {
-    dispatch(removeItemFromCart(product.title));
+  const handleOnRemoveClicked = async () => {
+    try {
+      const userId = user.userUid;
+      const itemIdDeId = product._id;
+      await axios.delete(
+        `http://localhost:4000/api/cart/remove/${userId}/${itemIdDeId}`
+      );
+
+      if (product.type === "service") {
+        await axios.post(
+          `http://localhost:4000/api/services/${serviceId}/update-availability`,
+          {
+            date: formatISODateToYMD(product.date),
+            selectedSlots: [product.slot],
+            action: "remove",
+          }
+        );
+      }
+
+      dispatch(removeItemFromCart(product._id));
+    } catch (error) {
+      console.error("Error removing cart item:", error);
+    }
   };
 
-  const handleCheckboxClick = () => {
+  const handleCheckboxClick = async () => {
     const newCheckedValue = !isChecked;
     setIsChecked(newCheckedValue);
-    dispatch(updateChecked({ title: product.title, checked: newCheckedValue }));
+    try {
+      const response = await axios.put(
+        `http://localhost:4000/api/cart/update/checked/${product._id}/${user.userUid}`,
+        { checked: newCheckedValue }
+      );
+      if (response.status === 200) {
+        dispatch(updateChecked({ productId: product._id, checked: newCheckedValue }));
+      }
+    } catch (error) {
+      console.error('Failed to update checkbox in cart', error);
+    }
   };
 
-  const handleQuantityChange = (event) => {
+  const handleQuantityChange = async (event) => {
     const newQuantity = parseInt(event.target.value, 10);
-    if (!isNaN(newQuantity) && newQuantity >= 0) {
-      if (product.type === "service" && newQuantity > 1) {
-        alert("Only one slot can be booked for this service.");
-        return; // Exit early if exceeding allowed quantity
-      } else if (
-        (product.type === "product" || product.type === "pet") &&
-        newQuantity > product.stockLevel
+
+    if (!isNaN(newQuantity) && newQuantity > 0) {
+      if (
+        product.type === "product" &&
+        newQuantity > productInStock.stockLevel
       ) {
-        alert("Cannot add more than available stock!");
+        alert(
+          "Cannot add more than available stock! (Only " +
+            productInStock.stockLevel +
+            " available)"
+        );
         return; // Exit early if exceeding stock level
+      } else if (
+        product.type === "pet" &&
+        newQuantity > petInStock.stockLevel
+      ) {
+        alert(
+          "Cannot add more than available stock! (Only " +
+            petInStock.stockLevel +
+            " available)"
+        );
+        return; // Exit early if exceeding stock level
+      } else {
+        setQuantity(newQuantity);
+        try {
+          const response = await axios.put(
+            `http://localhost:4000/api/cart/update/quantity/${product._id}/${user.userUid}`,
+            {
+              quantity: newQuantity,
+            }
+          );
+          if (response.status === 200) {
+            dispatch(
+              updateQuantity({
+                id: response.data.data._id,
+                quantity: newQuantity,
+              })
+            );
+            console.log("Successfully update the quantity of item in cart");
+          }
+        } catch (error) {
+          console.log("Fail to update quantity in cart: " + error);
+        }
       }
-      setQuantity(newQuantity);
-      dispatch(updateQuantity({ title: product.title, quantity: newQuantity }));
     } else if (event.target.value === "") {
       // Handle case when input is empty (allow deletion)
       setQuantity(""); // Assuming quantity is a string in your state
@@ -115,31 +152,67 @@ const CartCard = ({ product }) => {
     }
   };
 
-  const setNewQuantity = (operation) => {
+  const setNewQuantity = async (operation) => {
     let newQuantity = quantity;
     if (operation === "minus") {
-      newQuantity = Math.max(newQuantity - 1, 0); // Ensure the quantity doesn't go below 0
+      newQuantity = Math.max(newQuantity - 1, 1);
     } else if (operation === "plus") {
       newQuantity += 1;
     }
 
-    // Check for allowed quantity based on product type and stock level
-    if (product.type === "service" && newQuantity > 1) {
-      alert("Only one slot can be booked for this service.");
-      return; // Exit early if exceeding allowed quantity
-    } else if (
-      (product.type === "product" || product.type === "pet") &&
-      newQuantity > product.stockLevel
-    ) {
-      alert("Cannot add more than available stock!");
+    if (product.type === "product" && newQuantity > productInStock.stockLevel) {
+      alert(
+        "Cannot add more than available stock! (Only " +
+          productInStock.stockLevel +
+          " available)"
+      );
       return; // Exit early if exceeding stock level
+    } else if (product.type === "pet" && newQuantity > petInStock.stockLevel) {
+      alert(
+        "Cannot add more than available stock! (Only " +
+          petInStock.stockLevel +
+          " available)"
+      );
+      return; // Exit early if exceeding stock level
+    } else {
+      setQuantity(newQuantity);
+      try {
+        const response = await axios.put(
+          `http://localhost:4000/api/cart/update/quantity/${product._id}/${user.userUid}`,
+          {
+            quantity: newQuantity,
+          }
+        );
+        if (response.status === 200) {
+          // Dispatch editProduct action with updated quantity
+          dispatch(
+            updateQuantity({
+              id: response.data.data._id,
+              quantity: newQuantity,
+            })
+          );
+          console.log("Successfully update the quantity of item in cart");
+        }
+      } catch (error) {
+        console.log("Fail to update quantity in cart: " + error);
+      }
     }
-
-    setQuantity(newQuantity);
-
-    // Dispatch editProduct action with updated quantity
-    dispatch(updateQuantity({ title: product.title, quantity: newQuantity }));
   };
+
+  const formatSlot = (slot) => {
+    const [hour] = slot.split(":").map(Number);
+    const period = hour < 12 ? "AM" : "PM";
+    const formattedHour = hour % 12 || 12; // Convert 24-hour to 12-hour format
+    return `${formattedHour} ${period}`;
+  };
+
+  function formatISODateToYMD(isoDateString) {
+    const date = new Date(isoDateString);
+    const formattedDate = `${date.getUTCFullYear()}-${(date.getUTCMonth() + 1)
+      .toString()
+      .padStart(2, "0")}-${date.getUTCDate().toString().padStart(2, "0")}`;
+    return formattedDate;
+  }
 
   return isLoading ? (
     <SellerProductCardSkeleton />
@@ -206,11 +279,14 @@ const CartCard = ({ product }) => {
         <div className="seller-product-card-middle-container">
           {product.type === "service" ? (
             <>
-            <div className="seller-product-card-slot-container">
-              <div>
-              <p className="seller-product-card-slot">{product.slot<12?product.slot:product.slot-12+".00"} {product.slot<12?"AM":"PM"}&nbsp;&nbsp;{product.date}</p>
+              <div className="seller-product-card-slot-container">
+                <div>
+                  <p className="seller-product-card-slot">
+                    {formatSlot(product.slot)} &nbsp;&nbsp;
+                    {formatISODateToYMD(product.date)}
+                  </p>
+                </div>
               </div>
-            </div>
             </>
           ) : (
             <div className="seller-product-card-quantityControlContainer">

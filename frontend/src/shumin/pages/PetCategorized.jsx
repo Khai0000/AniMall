@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import SearchBar from "../components/SearchBar";
 import { useState, useEffect } from "react";
 import MyCartButton from "../components/MyCartButton";
@@ -7,8 +7,6 @@ import { lazy } from "react";
 import "../styles/ProductCategorized.css";
 import "../styles/ProductHome.css";
 import CircularProgress from "@mui/material/CircularProgress";
-import { PetData } from "../data/DummyPetData";
-import { addPet } from "../slices/PetSlice";
 import { useNavigate } from "react-router-dom";
 
 const PetCard = lazy(() => import("../components/PetCard"));
@@ -23,7 +21,6 @@ const PetCategorized = () => {
 
   const pets = useSelector((state) => state.pets);
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handlePriceRangeSubmit = (event) => {
@@ -92,16 +89,7 @@ const PetCategorized = () => {
 
     setIsLoading(false);
     setFilteredPets(filteredData);
-    console.log("hi");
   }, [searchTerm, pets, minPrice, maxPrice, isAdoptionFilterActive, category]);
-
-  useEffect(() => {
-    if (pets.length === 0) {
-      PetData.forEach((pet) => {
-        dispatch(addPet(pet));
-      });
-    }
-  }, [dispatch, pets]);
 
   function chunkArray(arr, size) {
     return arr.reduce(

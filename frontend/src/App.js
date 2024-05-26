@@ -17,6 +17,7 @@ import { useSelector } from "react-redux";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const user = useSelector((state) => state.user.user);
+  const isAdmin = user !== null && user.role === "admin";
 
   useEffect(() => {
     setIsLoggedIn(user !== null);
@@ -53,7 +54,7 @@ function App() {
           children: [
             { path: "/pet", element: <ShuminPages.PetHome /> },
             {
-              path: "/pet/:title",
+              path: "/pet/:petId",
               element: isLoggedIn ? (
                 <ShuminPages.PetDetails />
               ) : (
@@ -98,7 +99,7 @@ function App() {
           children: [
             { path: "/product", element: <ShuminPages.ProductHome /> },
             {
-              path: "/product/:title",
+              path: "/product/:productId",
               element: isLoggedIn ? (
                 <ShuminPages.ProductDetails />
               ) : (
@@ -134,7 +135,7 @@ function App() {
               element: <ZongMingPages.SellerService />,
             },
             {
-              path: "/services/serviceDetails/:title",
+              path: "/services/:serviceId",
               element: isLoggedIn ? (
                 <ZongMingPages.ServiceDetail />
               ) : (
@@ -158,6 +159,24 @@ function App() {
           ) : (
             <Navigate to="/authentication/login" replace={false} />
           ),
+        },
+        {
+          path: "/order",
+          element: <CommonPages.Order/>,
+          children: [
+            {
+              path: "/order",
+              element: isLoggedIn ? (
+                isAdmin ? (
+                  <ShuminPages.SellerOrder />
+                ) : (
+                  <ShuminPages.UserOrder />
+                )
+              ) : (
+                <Navigate to="/authentication/login" replace={false} />
+              ),
+            },
+          ],
         },
       ],
     },

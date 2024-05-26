@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import "../styles/ProductDetailsInputForm.css";
 import useToggle from "../hooks/useToggle.js";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addPet, editPet } from "../slices/PetSlice.js";
-import { PetData } from "../data/DummyPetData.js";
 import { Link, useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const AddPet = () => {
   const [showTitleInput, toggleTitle] = useToggle();
@@ -12,6 +12,7 @@ const AddPet = () => {
   const [showPriceInput, togglePrice] = useToggle();
   const [showBirthdateInput, toggleBirthdate] = useToggle();
   const [editMode, setEditMode] = useState(false);
+  const [imagesToDelete, setImagesToDelete] = useState([]);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -24,49 +25,47 @@ const AddPet = () => {
   const [isDogFocused, setIsDogFocused] = useState(false);
   const [isCatFocused, setIsCatFocused] = useState(false);
   const [isOthersFocused, setIsOthersFocused] = useState(false);
-  const pets = useSelector((state) => state.pets);
+
   const { id } = useParams();
-
-  //for image
-  const [images, setImages] = useState([]);
-  const [currentImageIndex, setCurrentImageIndex] = useState(-1);
-
-  useEffect(() => {
-    // Check if an ID is provided, indicating an edit mode
-    if (id) {
-      setEditMode(true);
-      // Find the product with the provided ID
-      const petToEdit = pets.find((pet) => pet.id === id);
-      if (petToEdit) {
-        // Populate the state with existing product details for editing
-        setTitle(petToEdit.title);
-        setDescription(petToEdit.description);
-        setPrice(petToEdit.price);
-        if (petToEdit.animaltag === "dog") {
-          setIsDogFocused(true);
-        } else if (petToEdit.animaltag === "cat") {
-          setIsCatFocused(true);
-        } else if (petToEdit.animaltag === "others") {
-          setIsOthersFocused(true);
-        }
-        setImages(petToEdit.image);
-        setHidden(petToEdit.hidden);
-        setStockLevel(petToEdit.stockLevel);
-        setBirthdate(petToEdit.birthdate);
-      }
-    }
-  }, [id, pets]);
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  //for image
+  const [images, setImages] = useState([]);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [currentImageIndex, setCurrentImageIndex] = useState(-1);
+
   useEffect(() => {
-    if (pets.length === 0) {
-      PetData.forEach((pet) => {
-        dispatch(addPet(pet));
-      });
+    const fetchPet = async() =>{
+      // Check if an ID is provided, indicating an edit mode
+      if (id) {
+        setEditMode(true);
+        try{
+          const response = await axios.get(`http://localhost:4000/api/pet/pet/${id}`);
+          const petToEdit = response.data;
+
+          setTitle(petToEdit.title);
+          setDescription(petToEdit.description);
+          setPrice(petToEdit.price);
+          if (petToEdit.animaltag === "dog") {
+            setIsDogFocused(true);
+          } else if (petToEdit.animaltag === "cat") {
+            setIsCatFocused(true);
+          } else if (petToEdit.animaltag === "others") {
+            setIsOthersFocused(true);
+          }
+          setImages(petToEdit.image);
+          setHidden(petToEdit.hidden);
+          setStockLevel(petToEdit.stockLevel);
+          setBirthdate(petToEdit.birthdate);
+        }catch(error){
+          console.error("Error fetching pet:"+error);
+          alert("Error fetching pet. Please try again later.");
+        }
+      }
     }
-  }, [dispatch, pets]);
+    fetchPet();
+  }, [id]);
 
   const toggleSelectedAnimalTag = (button) => {
     if (selectedAnimalTag === button) {
@@ -90,18 +89,6 @@ const AddPet = () => {
       setIsCatFocused(button === "cat");
       setIsOthersFocused(button === "others");
     }
-  };
-
-  const generatePetId = () => {
-    if (pets.length === 0) {
-      return "A0001"; // If no pets, start with A0001
-    }
-
-    const lastPetId = pets[0].id;
-    const lastIdNumber = parseInt(lastPetId.slice(1), 10);
-    const newIdNumber = lastIdNumber + 1;
-    const paddedNewId = String(newIdNumber).padStart(4, "0");
-    return `A${paddedNewId}`;
   };
 
   const handleKeyPress = (e, fieldType) => {
@@ -136,7 +123,7 @@ const AddPet = () => {
     return animalTag;
   };
 
-  const handleOnAddPetClick = () => {
+  const handleOnAddPetClick = async () => {
     const priceString = String(price);
     if (!title.trim()) {
       alert("Please provide a title for your pet.");
@@ -165,41 +152,101 @@ const AddPet = () => {
 
     const animalTag = getSelectedTags();
 
-    if (editMode) {
-      const updatedPet = {
-        id,
-        title,
-        description,
-        birthdate,
-        image: images.filter((image) => image !== null),
-        animaltag: animalTag,
-        price: parseInt(price),
-        stockLevel: stockLevel,
-        hidden: hidden,
-      };
-      // Dispatch editProduct action
-      dispatch(editPet(updatedPet));
-    } else {
-      // Generate ID for the new product
-      const newPetId = generatePetId();
+    const formData = new FormData();
+    uploadedFiles.forEach((file) => {
+      if (file) formData.append("file", file);
+    });
 
-      const newPet = {
-        title: title,
-        id: newPetId,
-        description: description,
-        image: images.filter((image) => image !== null),
-        animaltag: selectedAnimalTag,
-        price: parseInt(price),
-        birthdate: birthdate,
-        stockLevel: 1,
-        hidden: false,
-      };
+    try {
+      let uploadedImageUrls = [];
+      if (uploadedFiles.length > 0) {
+        const imageResponse = await axios.post(
+          "http://localhost:4000/image/upload",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        if (imageResponse.status === 200) {
+          uploadedImageUrls = imageResponse.data; // Assuming response contains URLs
+        } else {
+          console.error("Error uploading image:", imageResponse.statusText);
+          alert("Error uploading image. Please try again later.");
+          return;
+        }
+      }
 
-      dispatch(addPet(newPet));
+      if (editMode) {
+        for (const imageFileName of imagesToDelete) {
+          try {
+            const response = await axios.delete(`http://localhost:4000/image/${imageFileName}`);
+            if (response.status === 200) {
+              console.log(`Image ${imageFileName} deleted successfully`);
+            } else {
+              console.error(`Error deleting image ${imageFileName}:`, response.statusText);
+            }
+          } catch (error) {
+            console.error(`Error deleting image ${imageFileName}:`, error);
+          }
+        }
+
+        const filteredExistingImages = images.filter(image => !image.startsWith('blob:'));
+        const updatedPet = {
+          title,
+          description,
+          birthdate,
+          image: [...filteredExistingImages, ...uploadedImageUrls],
+          animaltag: animalTag,
+          price: parseFloat(price),
+          stockLevel,
+          hidden,
+        };
+
+        try {
+          const response = await axios.put(`http://localhost:4000/api/pet/pet/${id}`, updatedPet);
+          if (response.status === 200) {
+            dispatch(editPet(updatedPet));
+            navigate(-1);
+          } else {
+            console.error("Error updating pet:", response.statusText);
+            alert("Error updating pet: Please try again later.");
+          }
+        } catch (error) {
+          console.error("Error updating pet:", error);
+          alert("Error updating pet: Please try again later.");
+        }
+      } else {
+        const newPetResponse = await axios.post(
+          "http://localhost:4000/api/pet/pet/add",
+          {
+            title,
+            description,
+            image: uploadedImageUrls,
+            animaltag: animalTag,
+            price: parseFloat(price),
+            birthdate,
+            stockLevel: 1,
+            hidden: false,
+          }
+        );
+
+        if (newPetResponse.status === 200) {
+          const newPet = newPetResponse.data;
+          dispatch(addPet(newPet));
+          navigate(-1);
+        } else {
+          console.error("Error adding pet:", newPetResponse.statusText);
+          alert("Error adding pet. Please try again later.");
+        }
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      alert("Error uploading image. Please try again later.");
     }
-    navigate(-1);
   };
-
+  
   const triggerFileInput = () => {
     if (currentImageIndex === -1 || images.length === 0) {
       document.querySelector('input[type="file"]').click();
@@ -207,11 +254,18 @@ const AddPet = () => {
   };
 
   const handleImageChange = (e) => {
-    const newImages = Array.from(e.target.files).map((file) =>
-      URL.createObjectURL(file)
-    );
+    const file = e.target.files[0];
+
+    if (!file) {
+      return;
+    }
+
+    const newImages = Array.from(e.target.files).map((file) => URL.createObjectURL(file));
     setImages([...images, ...newImages]);
     setCurrentImageIndex(images.length + newImages.length - 1);
+
+    const newFiles = [...uploadedFiles, ...Array.from(e.target.files)];
+    setUploadedFiles(newFiles);
   };
 
   const navigateImage = (direction, e) => {
@@ -243,15 +297,16 @@ const AddPet = () => {
     }
 
     // Check if the image source is from the file explorer or already a URL
-    const isImageFromFileExplorer =
-      images[currentImageIndex].startsWith("blob:"); // Assuming file explorer URLs start with 'blob:'
-
-    if (isImageFromFileExplorer) {
+    const imageUrl = images[currentImageIndex];
+    const isImageFromFileExplorer = imageUrl.startsWith('blob:'); // Assuming file explorer URLs start with 'blob:'
+    const isRemoteImage = imageUrl.startsWith('http');
+  
+    if (isImageFromFileExplorer || isRemoteImage) {
       return (
         <img
-          src={images[currentImageIndex]}
+          src={imageUrl}
           alt="Pet for sales"
-          style={{ maxWidth: "100%", maxHeight: "100%" }}
+          style={{ maxWidth: '100%', maxHeight: '100%' }}
         />
       );
     } else {
@@ -296,13 +351,35 @@ const AddPet = () => {
     }
   };
 
+  const extractImageFileName = (imageUrl) => {
+    // Check if the imageUrl starts with "http://localhost:4000/image/"
+    if (imageUrl.startsWith("http://localhost:4000/image/")) {
+      // Get the substring starting after "http://localhost:4000/image/"
+      return imageUrl.substring("http://localhost:4000/image/".length);
+    } else {
+      // If the imageUrl format doesn't match, return the original imageUrl
+      return imageUrl;
+    }
+  };
+
   const handleDeleteImage = () => {
-    if (currentImageIndex !== -1) {
-      const updatedImages = images.filter(
-        (image, index) => index !== currentImageIndex
-      );
+    if (editMode && currentImageIndex !== -1) {
+      const imageFileName = extractImageFileName(images[currentImageIndex]); // Get the filename of the image to be deleted
+  
+      // Add the filename to the imagesToDelete array
+      setImagesToDelete([...imagesToDelete, imageFileName]);
+  
+      // Remove the image from the images array
+      const updatedImages = images.filter((_, index) => index !== currentImageIndex);
       setImages(updatedImages);
-      setCurrentImageIndex(updatedImages.length > 0 ? 0 : -1); // Set current index to the first image if there are remaining images, otherwise to -1
+      setCurrentImageIndex(updatedImages.length > 0 ? 0 : -1);
+    } else {
+      // Handle deletion from local state only (not in edit mode)
+      if (currentImageIndex !== -1) {
+        const updatedImages = images.filter((_, index) => index !== currentImageIndex);
+        setImages(updatedImages);
+        setCurrentImageIndex(updatedImages.length > 0 ? 0 : -1);
+      }
     }
   };
 
