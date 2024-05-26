@@ -3,7 +3,7 @@ import "../styles/ForumHomeCard.css";
 import ForumHomeCardSkeleton from "./ForumHomeCardSkeleton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { removePost } from "../slices/postSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -12,6 +12,9 @@ const ForumHomeCard = ({ post, index }) => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const user = useSelector((state) => state.user.user);
+  const authorDetails = post.author.split("//useruid//");
 
   useEffect(() => {
     setIsLoading(true);
@@ -78,11 +81,14 @@ const ForumHomeCard = ({ post, index }) => {
       <div className="cardDetails">
         <p className="title">{post.title}</p>
         <p className="author">
-          By: <span className="authorDetails">{post.author}</span>
+          By: <span className="authorDetails">{authorDetails[0]}</span>
         </p>
         <p className="content">{post.content}</p>
       </div>
-      {post.author === "Khai" && (
+      {console.log(authorDetails[1] && authorDetails[1] === user.userUid) ||
+        user.role === "admin"}
+      {(authorDetails[1] && authorDetails[1] === user.userUid) ||
+      user.role === "admin" ? (
         <button
           style={{ zIndex: 100 }}
           className="deleteButton"
@@ -92,7 +98,7 @@ const ForumHomeCard = ({ post, index }) => {
         >
           <DeleteIcon />
         </button>
-      )}
+      ) : null}
     </div>
   );
 };

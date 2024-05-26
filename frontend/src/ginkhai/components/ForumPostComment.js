@@ -2,13 +2,15 @@ import React, { useState, useEffect } from "react";
 import "../styles/ForumPostComment.css";
 import ForumPostCommentSkeleton from "./ForumPostCommentSkeleton";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { removeComment } from "../slices/postSlice";
 import axios from "axios";
 
 const ForumPostComment = ({ disable,comment, postId }) => {
   const [imageSource, setImageSource] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const user = useSelector((state)=>state.user.user);
 
   const dispatch = useDispatch();
 
@@ -59,11 +61,11 @@ const ForumPostComment = ({ disable,comment, postId }) => {
       </div>
 
       <div className="authorContainer">
-        <p className="author">{comment.name}</p>
+        <p className="author">{comment.name.split("//useruid//")[0]}</p>
         <p className="content">{comment.content}</p>
       </div>
 
-      {comment.name === "Khai" && (
+      {comment.name.split("//useruid//")[1]=== user.userUid&& (
         <button className="deleteButton" onClick={handleOnDeleteClick} disabled={disable}>
           <DeleteIcon />
         </button>
