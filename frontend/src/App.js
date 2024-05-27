@@ -12,7 +12,7 @@ import * as ShuminPages from "./shumin/pages";
 import * as GinkhaiPages from "./ginkhai/pages";
 import * as ShuhuiPages from "./shuhui/pages";
 import { useSelector } from "react-redux";
-
+import EditProfilePopup from "./shumin/components/EditProfilePopup";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -22,7 +22,6 @@ function App() {
   useEffect(() => {
     setIsLoggedIn(user !== null);
   }, [user]);
-
 
   const router = createBrowserRouter([
     {
@@ -79,7 +78,7 @@ function App() {
           element: isLoggedIn ? (
             <CommonPages.Community />
           ) : (
-            <Navigate to="/authentication/login" replace={false}  />
+            <Navigate to="/authentication/login" replace={false} />
           ),
           children: [
             { path: "/community", element: <GinkhaiPages.ForumHome /> },
@@ -166,7 +165,7 @@ function App() {
         },
         {
           path: "/order",
-          element: <CommonPages.Order/>,
+          element: <CommonPages.Order />,
           children: [
             {
               path: "/order",
@@ -182,6 +181,10 @@ function App() {
             },
           ],
         },
+        {
+          path:"/cartPopup",
+          element:<EditProfilePopup/>
+        }
       ],
     },
   ]);
