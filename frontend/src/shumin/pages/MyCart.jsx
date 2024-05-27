@@ -1,9 +1,11 @@
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import React, { useEffect, useState, lazy, Suspense } from 'react';
-import { checkoutItems,setCartItems ,removeItemFromCart} from '../slices/CartSlice';
+import { checkoutItems, setCartItems, removeItemFromCart } from '../slices/CartSlice';
 import { editPet } from '../slices/PetSlice';
 import { editProduct } from '../slices/ProductSlice';
+import moment from 'moment';
+
 
 const CartCard = lazy(() => import("../components/CartCard"));
 
@@ -31,7 +33,7 @@ function MyCart() {
         };
 
         fetchCartItems();
-    }, [dispatch,userUid]);
+    }, [dispatch, userUid]);
 
 
 
@@ -44,7 +46,7 @@ function MyCart() {
         });
         setTotalPrice(newTotalPrice);
     }, [cartItems]);
-    
+
 
     const handleOnCheckoutButtonClick = async () => {
         let numOfCheckedItem = 0;
@@ -66,7 +68,7 @@ function MyCart() {
                 username: user.username,
                 email: user.email,
                 address: user.address,
-                phone:user.phone,
+                phone: user.phone,
                 products: checkedItems.map(item => ({
                     productId: item.productId,
                     price: item.price,
@@ -104,28 +106,28 @@ function MyCart() {
                         if (item.type !== "service") {
                             const product = products.find(p => p._id === item.productId);
                             const pet = pets.find(p => p._id === item.productId);
-                
+
                             let newStockLevel;
                             let updateEndpoint;
                             let dispatchAction;
-                
+
                             if (product) {
                                 newStockLevel = product.stockLevel - item.quantity;
                                 updateEndpoint = `http://localhost:4000/api/product/product/${item.productId}`;
-                                dispatchAction = editProduct({ id: item.productId, stockLevel: newStockLevel,hidden:newStockLevel===0?true:false});
+                                dispatchAction = editProduct({ id: item.productId, stockLevel: newStockLevel, hidden: newStockLevel === 0 ? true : false });
                             } else if (pet) {
                                 newStockLevel = pet.stockLevel - item.quantity;
                                 updateEndpoint = `http://localhost:4000/api/pet/pet/${item.productId}`;
-                                dispatchAction = editPet({ _id: item.productId, stockLevel: newStockLevel,hidden:newStockLevel===0?true:false});
+                                dispatchAction = editPet({ _id: item.productId, stockLevel: newStockLevel, hidden: newStockLevel === 0 ? true : false });
                             }
-                
+
                             if (newStockLevel !== undefined && updateEndpoint && dispatchAction) {
                                 try {
                                     const stockUpdateResponse = await axios.put(updateEndpoint, {
                                         stockLevel: newStockLevel
-                                        ,hidden:newStockLevel===0?true:false
+                                        , hidden: newStockLevel === 0 ? true : false
                                     });
-                
+
                                     if (stockUpdateResponse.status === 200) {
                                         dispatch(dispatchAction);
                                     } else {
@@ -137,7 +139,23 @@ function MyCart() {
                             }
                         }
                     })
-                );                
+                );
+
+                // Schedule email reminder for service items
+                const serviceItems = checkedItems.filter(item => item.type === 'service');
+                for (const serviceItem of serviceItems) {
+                    const reminderDate = moment(serviceItem.date).subtract(1, 'day').format('YYYY-MM-DD');
+                    try {
+                        await axios.post('http://localhost:4000/api/reminders/schedule', {
+                            email: user.email,
+                            serviceName: serviceItem.title,
+                            serviceDate: serviceItem.date,
+                            reminderDate: reminderDate
+                        });
+                    } catch (error) {
+                        console.error('Error scheduling email reminder:', error);
+                    }
+                }
 
                 // refresh cart items after removal
                 const updatedCartResponse = await axios.get(`http://localhost:4000/api/cart/${user.userUid}`);
