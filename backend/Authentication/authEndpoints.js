@@ -24,18 +24,25 @@ router.put('/authentication/profile', protect, updateUserProfile);
 router.get('/authentication/getuser', getUser);
 router.get('/authentication/logout', logout);
 router.get('/authentication/profile', protect, profile);
-router.get('/authentication/oauthcallback', (req, res) => {
-    res.send('hello world')
+router.get('/authentication/oauthcallback', async (req, res) => {
+    //const code = '4/0AdLIrYfBUzlvEudRpfcvmKUjMoEf3MfC9AObu9X8fjtH7orhy0MNKJRWah_mjfES_48F1w'
+    const code = req.query.code
+    //res.send(code)
+    const oAuth2Client = new OAuth2(process.env.GMAIL_CLIENT_ID, process.env.GMAIL_CLIENT_SECRET, "http://localhost:4000/api/auth/authentication/oauthcallback");
+    //const oAuth2Client = new OAuth2(process.env.GMAIL_CLIENT_ID, process.env.GMAIL_CLIENT_SECRET);
+    const { tokens } = await oAuth2Client.getToken(code)
+    res.send(tokens)
 });
 
-router.get('/test', async (req, res) => {
-
-
-    // const oAuth2Client = new OAuth2(process.env.GMAIL_CLIENT_ID, process.env.GMAIL_CLIENT_SECRET, 'http://localhost:4000/api/auth/authentication/oauthcallback');
-
-    // const { tokens } = await oAuth2Client.getToken("4/0AdLIrYcvSLOAQ8J2c6y6OenA82qH1_Pz5GSO_aV5Q7ieXQdaHQpUE9zouW164Wlpj53b1g")
-
-
+router.get('/authentication/getauthcode', async (req, res) => {
+    const oAuth2Client = new OAuth2(process.env.GMAIL_CLIENT_ID, process.env.GMAIL_CLIENT_SECRET);
+    const authUrl = oAuth2Client.generateAuthUrl({
+        access_type: 'offline',
+        scope: ['https://mail.google.com/'],
+        redirect_uri: "http://localhost:4000/api/auth/authentication/oauthcallback"
+        // scope: ['https://www.googleapis.com/auth/gmail.send'],
+    });
+    res.send(authUrl)
 });
 
 router.get('/authentication/oauthcallback', (req, res) => {

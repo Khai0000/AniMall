@@ -30,6 +30,7 @@ function Profile() {
           }
         );
         const userData = response.data;
+        console.log(userData);
 
         setUsername(userData.username);
         setAddress(userData.address);
