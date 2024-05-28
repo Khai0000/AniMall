@@ -85,7 +85,6 @@ const ServicesAppointment = ({ serviceData }) => {
         selectedSlots: selectedButtons,
         action: "add"
       });
-      console.log("Slot availability update response:", updateResponse.data);
 
       const fetchResponse = await axios.get(`http://localhost:4000/api/services/${serviceData._id}/update-availability/${formattedDateForDB}`);
       setSlotsAvailability(fetchResponse.data.availability);

@@ -70,6 +70,7 @@ export const registerUser = async (req, res) => {
 
         res.status(201).json({ message: 'User registered successfully.', admin: email === 'animallpublic@gmail.com' });
     } catch (error) {
+        console.error('Error during registration:', error);
         res.status(500).json({ message: error.message });
     }
 };

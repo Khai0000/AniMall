@@ -2,50 +2,59 @@ import React, { useState, useRef, useEffect } from "react";
 import "../styles/ForumAddPost.css";
 import imageBackground from "../assets/images/imageBackground.png";
 import ClearIcon from "@mui/icons-material/Clear";
-import { useNavigate } from "react-router-dom";
-import { useDispatch,useSelector } from "react-redux";
-import { addPost } from "../slices/postSlice";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { updatePost } from "../slices/postSlice";
 import axios from "axios";
 
-const ForumAddPost = () => {
+const ForumEditPost = () => {
   const [titleText, setTitleText] = useState("");
   const [bodyText, setBodyText] = useState("");
   const [buttonCount, setButtonCount] = useState(3);
   const [selectedButtons, setSelectedButtons] = useState([]);
   const [uploadedImages, setUploadedImages] = useState([null, null, null]);
-  const [uploadedFiles, setUploadedFiles] = useState([null, null, null]);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
   const inputRefs = useRef([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
 
-  const user = useSelector((state)=>state.user.user);
+  const user = useSelector((state) => state.user.user);
+  const post = location.state?.post;
+
 
   useEffect(() => {
-    console.log(user);
+    console.log("hi");
+    if (post) {
+      setTitleText(post.title);
+      setBodyText(post.content);
+      setSelectedButtons(post.tag);
+      setUploadedImages([
+        ...post.image,
+        ...Array(3 - post.image.length).fill(null),
+      ]);
+      setButtonCount(Math.max(3, post.image.length));
+    }
+  }, [post]);
+
+  useEffect(() => {
     const allButtonsOccupied = uploadedImages.every((image) => image !== null);
-    if (allButtonsOccupied) {
+    if (allButtonsOccupied && buttonCount <= uploadedImages.length) {
       setButtonCount((prevCount) => prevCount + 1);
     }
-  }, [uploadedImages]);
+  }, [uploadedImages,buttonCount]);
 
   const toggleSelectButton = (button) => {
-    if (selectedButtons.includes(button)) {
-      setSelectedButtons(
-        selectedButtons.filter((currentButton) => {
-          return currentButton !== button;
-        })
-      );
-    } else {
-      setSelectedButtons([...selectedButtons, button]);
-    }
+    setSelectedButtons(
+      selectedButtons.includes(button)
+        ? selectedButtons.filter((currentButton) => currentButton !== button)
+        : [...selectedButtons, button]
+    );
   };
 
   const handleImageUpload = (index) => (event) => {
     const file = event.target.files[0];
-
-    if (!file) {
-      return;
-    }
+    if (!file) return;
 
     const newImages = [...uploadedImages];
     newImages[index] = URL.createObjectURL(file);
@@ -61,58 +70,42 @@ const ForumAddPost = () => {
   };
 
   const handleCarouselLeft = () => {
-    const container = document.querySelector(".imageButtonContainer");
-    container.scrollBy({
-      left: -180,
-      behavior: "smooth",
-    });
+    document
+      .querySelector(".imageButtonContainer")
+      .scrollBy({ left: -180, behavior: "smooth" });
   };
 
   const handleCarouselRight = () => {
-    const container = document.querySelector(".imageButtonContainer");
-    container.scrollBy({
-      left: 180,
-      behavior: "smooth",
-    });
+    document
+      .querySelector(".imageButtonContainer")
+      .scrollBy({ left: 180, behavior: "smooth" });
   };
 
   const handleDelete = (index) => {
+    const newImages = [...uploadedImages];
+    const newFiles = [...uploadedFiles];
+
     if (buttonCount <= 3) {
-      const newImages = [...uploadedImages];
       newImages[index] = null;
-      setUploadedImages(newImages);
+      newFiles[index] = null;
     } else {
-      const newImages = [...uploadedImages];
       newImages.splice(index, 1);
-      setUploadedImages(newImages);
+      newFiles.splice(index, 1);
       setButtonCount(buttonCount - 1);
     }
-
-    const newFiles = [...uploadedFiles];
-    newFiles[index] = null;
+    setUploadedImages(newImages);
     setUploadedFiles(newFiles);
   };
 
-  const handleOnBackClick = () => {
-    navigate(-1);
-  };
+  const handleOnBackClick = () => navigate(-1);
 
-  const handleOnTitleChange = (e) => {
-    setTitleText(e.target.value);
-  };
+  const handleOnTitleChange = (e) => setTitleText(e.target.value);
 
-  const handleOnBodyChange = (e) => {
-    setBodyText(e.target.value);
-  };
+  const handleOnBodyChange = (e) => setBodyText(e.target.value);
 
-  const handleOnAddPostClick = async () => {
-    if (!titleText.trim()) {
-      alert("Please provide a title for your post.");
-      return;
-    }
-
-    if (!bodyText.trim()) {
-      alert("Please provide the body text for your post.");
+  const handleOnUpdatePostClick = async () => {
+    if (!titleText.trim() || !bodyText.trim()) {
+      alert("Please provide a title and body text for your post.");
       return;
     }
 
@@ -125,54 +118,78 @@ const ForumAddPost = () => {
       alert("Please select at least one tag for your post.");
       return;
     }
-    const formData = new FormData();
-    uploadedFiles.forEach((file) => {
-      if (file) formData.append("file", file);
-    });
 
-    try {
-      const imageResponse = await axios.post(
-        "http://localhost:4000/image/upload",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data", // Make sure to set proper content type
-          },
-        }
-      );
-
-      if (imageResponse.status === 200) {
-        console.log("Image uploaded successfully", imageResponse.data);
-
-        const newPostResponse = await axios.post(
-          "http://localhost:4000/api/community/post/add",
+    const updatePostApiCall = async (imageUrls) => {
+      try {
+        const updatePostResponse = await axios.put(
+          `http://localhost:4000/api/community/post/${post._id}/edit`,
           {
             title: titleText,
-            image: imageResponse.data,
-            author: user.username+"//useruid//"+user.userUid,
+            image: imageUrls,
+            author: `${user.username}//useruid//${user.userUid}`,
             content: bodyText,
-            tag: [...selectedButtons],
+            tag: selectedButtons,
           }
         );
 
-        if (newPostResponse.status === 200) {
-          const newPost = newPostResponse.data;
-          dispatch(addPost(newPost));
+        if (updatePostResponse.status === 200) {
+          dispatch(updatePost({ updatedPost: updatePostResponse.data }));
           navigate(-1);
+        } else {
+          console.error("Error updating post:", updatePostResponse.statusText);
+          alert("Error updating post. Please try again later.");
         }
-        else{
-          console.error("Error uploading image:", newPostResponse.statusText);
-          alert("Error uploading post. Please try again later.");
-        }
-
-      } else {
-        console.error("Error uploading image:", imageResponse.statusText);
-        alert("Error uploading image. Please try again later.");
+      } catch (error) {
+        console.error("Error updating post:", error);
+        alert("Error updating post. Please try again later.");
       }
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      alert("Error uploading image. Please try again later.");
-    }
+    };
+
+    const uploadImages = async () => {
+      const formData = new FormData();
+      uploadedFiles.forEach((file, index) => {
+        if (file) {
+          formData.append("file", file);
+          const newImages = [...uploadedImages];
+          newImages[index] = null;
+          setUploadedImages(newImages);
+        }
+      });
+
+      try {
+        const imageResponse = await axios.post(
+          "http://localhost:4000/image/upload",
+          formData,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          }
+        );
+
+        if (imageResponse.status === 200) {
+          return imageResponse.data;
+        } else {
+          console.error("Error uploading image:", imageResponse.statusText);
+          alert("Error uploading image. Please try again later.");
+          return null;
+        }
+      } catch (error) {
+        console.error("Error uploading image:", error);
+        alert("Error uploading image. Please try again later.");
+        return [];
+      }
+    };
+
+    const newImageUrls = uploadedFiles.every((file)=> file!==null) && uploadedFiles.length!==0? await uploadImages() : [];
+
+    const updatedImages = [
+      ...(newImageUrls.length > 0 ? newImageUrls : []),
+      ...uploadedImages.filter(
+        (image) =>
+          image !== null && image.startsWith("http://localhost:4000/image/")
+      ),
+    ];
+
+    updatePostApiCall(updatedImages);
   };
 
   return (
@@ -243,28 +260,19 @@ const ForumAddPost = () => {
         <div className="tagContainer">
           <p>Select Your Tag!</p>
           <div className="tagButtonContainer">
-            <button
-              className={selectedButtons.includes("cat") ? "selected" : ""}
-              onClick={() => toggleSelectButton("cat")}
-            >
-              Cat
-            </button>
-            <button
-              className={selectedButtons.includes("dog") ? "selected" : ""}
-              onClick={() => toggleSelectButton("dog")}
-            >
-              Dog
-            </button>
-            <button
-              className={selectedButtons.includes("others") ? "selected" : ""}
-              onClick={() => toggleSelectButton("others")}
-            >
-              Others
-            </button>
+            {["cat", "dog", "others"].map((tag) => (
+              <button
+                key={tag}
+                className={selectedButtons.includes(tag) ? "selected" : ""}
+                onClick={() => toggleSelectButton(tag)}
+              >
+                {tag.charAt(0).toUpperCase() + tag.slice(1)}
+              </button>
+            ))}
           </div>
           <div className="actionButtonContainer">
-            <button className="wj-addButton" onClick={handleOnAddPostClick}>
-              Add
+            <button className="wj-addButton" onClick={handleOnUpdatePostClick}>
+              Update
             </button>
             <button className="wj-backButton" onClick={handleOnBackClick}>
               Back
@@ -276,4 +284,4 @@ const ForumAddPost = () => {
   );
 };
 
-export default ForumAddPost;
+export default ForumEditPost;

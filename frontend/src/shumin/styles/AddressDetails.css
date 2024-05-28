@@ -1,0 +1,87 @@
+.addressDetailsBackground{
+    position: fixed;
+    background-color: rgba(0,0,0,0.3);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    z-index: 10;
+}
+
+.addressDetailsBackground>.addressDetailsContainer{
+    background-color: white;
+    padding: 2em;
+    border-radius: 5px;
+    width: 45%;
+}
+
+.addressDetailsBackground>.addressDetailsContainer>h2{
+    margin-top: 0;
+    color: #3C95A9;
+    margin-bottom: 2em;
+}
+
+.addressDetailsBackground>.addressDetailsContainer>p{
+    margin-top: 0;
+    margin-bottom: 3em;
+    font-size: 0.8em;
+}
+
+.addressDetailsBackground>.addressDetailsContainer>div{
+    display: flex;
+    align-items: center;
+    gap: 2em;
+}
+
+.addressDetailsBackground>.addressDetailsContainer>div:not(:last-child){
+    margin-bottom: 2em;
+}
+
+.addressDetailsBackground>.addressDetailsContainer>div>strong{
+    min-width:8em;
+}
+
+.addressDetailsBackground>.addressDetailsContainer>div>input{
+    padding: 0.5em 1em;
+    width: 100%;
+}
+
+.addressDetailsBackground>.addressDetailsContainer>.addressDetailsButtonContainer{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 2em;
+}
+
+.addressDetailsBackground>.addressDetailsContainer>.addressDetailsButtonContainer>.proceedPaymentButton{
+    border: none;
+    border-radius: 5px;
+    background-color: #3C95A9;
+    padding: 0.5em 1em;
+    color: #fff;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.addressDetailsBackground>.addressDetailsContainer>.addressDetailsButtonContainer>.proceedPaymentButton:hover{
+    background-color: #f4b701;
+}
+
+.addressDetailsBackground>.addressDetailsContainer>.addressDetailsButtonContainer>.closeButton{
+    border: 1px solid #3C95A9;
+    border-radius: 5px;
+    background-color: transparent;
+    padding: 0.5em 1em;
+    color: #3C95A9;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.addressDetailsBackground>.addressDetailsContainer>.addressDetailsButtonContainer>.closeButton:hover{
+    color: #f4b701;
+    border: 1px solid #f4b701;
+}

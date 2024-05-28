@@ -4,7 +4,7 @@ import schedule from 'node-schedule';
 
 
 export const scheduleAppointment = async (req, res) => {
-    const { email, serviceName, serviceDate, reminderDate } = req.body;
+    const { email, serviceName, serviceDate } = req.body;
 
     try {
         const transporter = nodemailer.createTransport({
@@ -22,8 +22,8 @@ export const scheduleAppointment = async (req, res) => {
             text: `This is a reminder for your service appointment "${serviceName}" on ${serviceDate}.`
         };
 
-        const reminderDateObj = new Date(reminderDate);
-        const reminderDateMinusOneDay = new Date(reminderDateObj);
+        
+        const reminderDateMinusOneDay = new Date(serviceDate);
         reminderDateMinusOneDay.setDate(reminderDateMinusOneDay.getDate() - 1);
 
         schedule.scheduleJob(reminderDateMinusOneDay, () => {
@@ -36,7 +36,7 @@ export const scheduleAppointment = async (req, res) => {
             });
         });
 
-        res.status(200).send('Email reminder scheduled successfully.');
+        res.status(200).json({ message: 'Reminder scheduled successfully' });
 
     } catch (error) {
         res.status(500).send('Error scheduling email reminder: ' + error);

@@ -44,20 +44,60 @@ export const getOnePost = async (req, res) => {
   }
 };
 
+export const editOnePost = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id))
+    return res.status(400).json({ error: "Invalid post id" });
+
+  try {
+    const postToUpdate = await ForumPostModel.findById(id);
+    if (!postToUpdate)
+      return res.status(404).json({ error: "The post is not found" });
+
+    let imageUrls = postToUpdate.image;
+
+    await Promise.all(
+      imageUrls.map(async (imageUrl) => {
+        if (!req.body.image.includes(imageUrl)) {
+          const imageFileName = imageUrl.split("/").pop();
+          const deleteImageResponse = await fetch(
+            `http://localhost:4000/image/${imageFileName}`,
+            { method: "DELETE" }
+          );
+          if (!deleteImageResponse.ok) {
+            console.error(
+              `Failed to delete image ${imageFileName}:`,
+              await deleteImageResponse.text()
+            );
+          }
+        }
+      })
+    );
+
+    const updatedPost = await ForumPostModel.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+    if (!updatedPost)
+      return res.status(404).json({ error: "Failed to update the post" });
+
+    return res.status(200).json(updatedPost);
+  } catch (error) {
+    return res.status(400).json({ error: error.message });
+  }
+};
+
 export const deleteOnePost = async (req, res) => {
   const { id } = req.params;
 
   try {
-    // Step 1: Delete the post
     const postToDelete = await ForumPostModel.findByIdAndDelete(id);
     if (!postToDelete) {
       return res.status(404).json({ error: "The post to delete is not found" });
     }
 
-    // Step 2: Retrieve image URLs
     const imageUrls = postToDelete.image;
 
-    // Step 3: Delete images
     await Promise.all(
       imageUrls.map(async (imageUrl) => {
         const imageFileName = imageUrl.split("/").pop();
@@ -226,12 +266,16 @@ export const removeReaction = async (req, res) => {
     }
 
     if (!updated) {
-      return res.status(400).json({ error: "User has not reacted to this post" });
+      return res
+        .status(400)
+        .json({ error: "User has not reacted to this post" });
     }
 
     await postToUpdate.save();
 
-    return res.status(200).json({ message: "Reaction removed successfully", post: postToUpdate });
+    return res
+      .status(200)
+      .json({ message: "Reaction removed successfully", post: postToUpdate });
   } catch (error) {
     console.error("Error removing reaction:", error);
     res.status(500).json({ error: "Internal server error" });
