@@ -35,7 +35,6 @@ function MyCart() {
   const [popupMessage, setPopupMessage] = useState("");
   const [showAddressDetails, setShowAddressDetails] = useState(false);
   const [showPayment, setShowPayment] = useState(false);
-  const [waitingCheckout, setWaitingCheckout] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -70,10 +69,10 @@ function MyCart() {
         "http://localhost:4000/api/orders/receipts",
         {
           userId: user.userUid,
-          username: user.checkoutUsername,
+          username: checkoutUsername,
           email: user.email,
-          address: user.checkoutAddress,
-          phone: user.checkoutPhone,
+          address: checkoutAddress,
+          phone: checkoutPhone,
           products: checkedItems.map((item) => ({
             productId: item.productId,
             price: item.price,
