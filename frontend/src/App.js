@@ -14,11 +14,13 @@ import * as ShuhuiPages from "./shuhui/pages";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { setUser } from "./shuhui/slices/userSlice";
+import EditProfilePopup from "./shumin/components/EditProfilePopup";
 
 function App() {
   const dispatch = useDispatch();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const user = useSelector((state) => state.user.user);
+  const isAdmin = user !== null && user.role === "admin";
 
 
   useEffect(() => {
@@ -98,7 +100,7 @@ function App() {
           children: [
             { path: "/pet", element: <ShuminPages.PetHome /> },
             {
-              path: "/pet/:title",
+              path: "/pet/:petId",
               element: isLoggedIn ? (
                 <ShuminPages.PetDetails />
               ) : (
@@ -119,12 +121,11 @@ function App() {
         },
         {
           path: "/community",
-          // element: isLoggedIn ? (
-          //   <CommonPages.Community />
-          // ) : (
-          //   <Navigate to="/authentication/login" replace={false}  />
-          // ),
-          element: <CommonPages.Community />,
+          element: isLoggedIn ? (
+            <CommonPages.Community />
+          ) : (
+            <Navigate to="/authentication/login" replace={false} />
+          ),
           children: [
             { path: "/community", element: <GinkhaiPages.ForumHome /> },
             {
@@ -135,6 +136,10 @@ function App() {
               path: "/community/post/add",
               element: <GinkhaiPages.ForumAddPost />,
             },
+            {
+              path: "/community/post/:postId/edit",
+              element: <GinkhaiPages.ForumEditPost />,
+            },
           ],
         },
         {
@@ -143,7 +148,7 @@ function App() {
           children: [
             { path: "/product", element: <ShuminPages.ProductHome /> },
             {
-              path: "/product/:title",
+              path: "/product/:productId",
               element: isLoggedIn ? (
                 <ShuminPages.ProductDetails />
               ) : (
@@ -179,7 +184,7 @@ function App() {
               element: <ZongMingPages.SellerService />,
             },
             {
-              path: "/services/serviceDetails/:title",
+              path: "/services/:serviceId",
               element: isLoggedIn ? (
                 <ZongMingPages.ServiceDetail />
               ) : (
@@ -204,6 +209,28 @@ function App() {
             <Navigate to="/authentication/login" replace={false} />
           ),
         },
+        {
+          path: "/order",
+          element: <CommonPages.Order />,
+          children: [
+            {
+              path: "/order",
+              element: isLoggedIn ? (
+                isAdmin ? (
+                  <ShuminPages.SellerOrder />
+                ) : (
+                  <ShuminPages.UserOrder />
+                )
+              ) : (
+                <Navigate to="/authentication/login" replace={false} />
+              ),
+            },
+          ],
+        },
+        {
+          path: "/cartPopup",
+          element: <EditProfilePopup />
+        }
       ],
     },
   ]);

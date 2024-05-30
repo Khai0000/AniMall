@@ -3,9 +3,9 @@ import {useSelector,useDispatch} from 'react-redux';
 import React, { useEffect,lazy,Suspense, useState} from 'react';
 import CircularProgress from "@mui/material/CircularProgress";
 import "../styles/ProductCard.css";
-import { addPet } from "../slices/PetSlice";
-import { PetData } from "../data/DummyPetData";
+import { setInitialPet } from "../slices/PetSlice";
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const SellerPetCard=lazy(()=>import("../components/SellerPetCard"));
 
@@ -17,14 +17,23 @@ function SellerPet(){
 
     useEffect(() => {
         setIsLoading(true);
-        if ( pets.length === 0) {
-            PetData.forEach((pet) => {
-                dispatch(addPet(pet));
+        const getPets = async () => {
+          try {
+            const petsResponse = await axios.get("http://localhost:4000/api/pet");
+            if (petsResponse.status === 200) {
+              dispatch(setInitialPet(petsResponse.data));
+            } else {
+              console.log(petsResponse);
             }
-        );
-        }
-        setIsLoading(false);
-    }, [dispatch, pets]);
+          } catch (error) {
+            console.error("Error fetching pets:", error);
+          } finally {
+            setIsLoading(false);
+          }
+        };
+      
+        getPets();
+      }, [dispatch, pets.length]);
 
     const navigate = useNavigate();
 
@@ -55,8 +64,8 @@ function SellerPet(){
                     <>
                     <div>
                         <Suspense fallback={<div>Loading...</div>}>
-                        {pets.map((pet,index)=>(
-                            <SellerPetCard key={pet.id} pet={pet}/>
+                        {pets.map((pet)=>(
+                            <SellerPetCard pet={pet}/>
                         ))}
                         </Suspense>
                     </div>

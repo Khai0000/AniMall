@@ -14,33 +14,40 @@ const PetCard = ({pet})=>{
         return text.slice(0,maxLength);
     }
         
-    useEffect(()=>{
+    useEffect(() => {
         setIsLoading(true);
-
-        if(pet.image &&pet.image[0].includes("jpg")){
-            let imageDir=pet.image[0].substring(0,pet.image[0].indexOf("."));
-            import(`../assets/images/${imageDir}.jpg`)
-                .then((image)=>{
-                    setImage(image.default);
-                })
-                .catch((error)=>{
-                    console.error("Error loading image:", error);
-                })
-                .finally(()=>{
-                    setIsLoading(false);
-                })
-        } else if (pet.image && pet.image[0]) {
-            setImage(pet.image[0]);
-            setIsLoading(false);
+    
+        if (pet.image && pet.image[0]) {
+            if (pet.image[0].startsWith("http://") || pet.image[0].startsWith("https://")) {
+                // Handle remote image URLs
+                setImage(pet.image[0]);
+                setIsLoading(false);
+            } else {
+                // Handle local image imports
+                let imageDir = pet.image[0].substring(0, pet.image[0].indexOf("."));
+                import(`../assets/images/${imageDir}.jpg`)
+                    .then((image) => {
+                        setImage(image.default);
+                    })
+                    .catch((error) => {
+                        console.error("Error loading image:", error);
+                    })
+                    .finally(() => {
+                        setIsLoading(false);
+                    });
+            }
         } else {
             setIsLoading(false);
         }
-    },[pet]);
+    }, [pet]);
+      
+
+    const petId= pet._id;
 
     return isLoading?(
         <ProductCardSkeleton/>
     ):(
-        <Link to={`/pet/${pet.title}`} style={{ textDecoration: 'none' }}>
+        <Link to={`/pet/${petId}`} style={ {textDecoration: 'none' }}>
         <div>
             <button className="product-button" >
                 <div className="product-image">

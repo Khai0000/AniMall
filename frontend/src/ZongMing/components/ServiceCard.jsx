@@ -1,18 +1,18 @@
 import React from "react";
 import "../styles/ServiceCard.css";
 
-const ServiceCard = ({ title, image, description }) => {
+const ServiceCard = ({service}) => {
   return (
     <div className="serviceCardContainer">
       <div className="serviceImageContainer">
-        <img src={image} alt="servicePicture" />
+        <img src={service.serviceImages[0]} alt="servicePicture" />
       </div>
 
       <div className="serviceCardContent">
-        <h2 className="title">{title}</h2>
+        <h2 className="title">{service.serviceTitle}</h2>
         <p className="serviceDescriptionWord">Description:</p>
         <div className="serviceDescriptionContainer">
-          <p className="serviceDescription">{description}</p>
+          <p className="serviceDescription">{service.serviceDescription}</p>
         </div>
       </div>
     </div>

@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import "../styles/PopupDialog.css";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { addComment } from "../slices/postSlice";
 import axios from "axios";
 
 const PopupDialog = ({ setShowPopup, postId }) => {
   const dispatch = useDispatch();
+
+  const user = useSelector((state)=>state.user.user);
+  console.log(user);
 
   const [bodyText, setBodyText] = useState("");
 
@@ -29,7 +32,7 @@ const PopupDialog = ({ setShowPopup, postId }) => {
       const addCommentResponse = await axios.post(
         `http://localhost:4000/api/community/comment/post/${postId}`,
         {
-          name: "Khai",
+          name: user.username+"//useruid//"+user.userUid,
           content: bodyText,
         }
       );

@@ -176,6 +176,7 @@
 
 .dateContainerZM {
     margin-top: 2vh;
+    margin-bottom: 2vh;
 }
 
 .chooseDateZM {
@@ -184,6 +185,7 @@
     flex: 1;
     max-width: 50vw;
     align-items: center;
+    
 }
 
 
@@ -195,9 +197,14 @@
     color: #3C95A9;
     background-color: transparent;
     font-size: 1.125rem;
-    height: fit-content;
+    min-height: 30px; 
+    min-width: 170px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: padding 0.3s ease;
 }
+
 
 .chooseDateZM button:hover {
     color: #f4b701;
@@ -220,6 +227,7 @@
     border: 3px solid #3C95A9;
     color: white;
     padding: 3px 32px 3px 50px;
+    display: inline-block; 
 }
 
 

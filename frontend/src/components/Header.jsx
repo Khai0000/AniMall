@@ -22,7 +22,6 @@ function Header() {
   const handleLogout = async (e) => {
     setIsLogin(false);
     navigate("/authentication/login", { replace: true });
-    // Dispatch action to remove user from Redux store
     dispatch(removeUser());
 
     //res.clearCookie('authToken');
@@ -37,8 +36,9 @@ function Header() {
   };
 
   const goToProfile = () => {
-    navigate("/authentication/profile"); // Navigate to the profile page
+    navigate("/authentication/profile"); 
   };
+
 
   return (
     <header>
@@ -51,6 +51,8 @@ function Header() {
         <NavLink to={"/community"}>Community</NavLink>
         <span className="separator">|</span>
         <NavLink to={"/services"}>Services</NavLink>
+        <span className="separator">|</span>
+        <NavLink to={"/order"}>Order</NavLink>
       </div>
 
       <div className="actionContainer">

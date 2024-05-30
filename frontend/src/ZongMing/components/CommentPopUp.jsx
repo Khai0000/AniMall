@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import "../styles/CommentPopUp.css";
-import { useDispatch } from "react-redux";
-import { addComment ,addRating} from "../slices/serviceSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { addComment, addRating, setInitialServices } from "../slices/serviceSlice";
+import axios from "axios";
 
-const CommentPopUp = ({ setShowPopup, serviceTitle }) => {
+const CommentPopUp = ({ setShowPopup, serviceId, serviceTitle }) => {
   const dispatch = useDispatch();
-
   const [bodyText, setBodyText] = useState("");
   const [selectedRating, setSelectedRating] = useState(null);
+  const user = useSelector((state) => state.user.user);
 
   const handleOnBodyTextChange = (e) => {
     setBodyText(e.target.value);
@@ -18,39 +19,53 @@ const CommentPopUp = ({ setShowPopup, serviceTitle }) => {
     setSelectedRating(rating === selectedRating ? null : rating);
   };
 
-  const handleOnSubmitClick = () => {
+  const fetchServices = async () => {
+    try {
+      const serviceResponse = await axios.get("http://localhost:4000/api/services");
+      if (serviceResponse.status === 200) {
+        dispatch(setInitialServices(serviceResponse.data));
+      } else {
+        console.log(serviceResponse);
+      }
+    } catch (error) {
+      console.error("Error fetching services:", error);
+    }
+  };
+
+  const handleOnSubmitClick = async () => {
     if (bodyText.trim() === "" || !selectedRating) {
       alert("Body can't be empty OR Please select a rating");
       return;
     }
 
     const newComment = {
-      image: null,
-      name: "Khai",
+      username: user.username,
+      userUid: user.userUid,
       content: bodyText,
       rating: selectedRating,
     };
 
-  //  // Find the service in the dummy data array
-  //  const serviceIndex = dummyServiceData.findIndex(
-  //   (service) => service.serviceTitle === serviceTitle
-  // );
+    try {
+      const addCommentResponse = await axios.post(
+        `http://localhost:4000/api/services/${serviceId}/comments`,
+        newComment
+      );
 
-  // if (serviceIndex !== -1) {
-  //   // Add the new comment to the comments array of the service
-  //   dummyServiceData[serviceIndex].comments.push(newComment);
+      if (addCommentResponse.status === 201) {
+        const addedComment = addCommentResponse.data;
+        dispatch(addComment({ serviceId, serviceComments: addedComment }));
+        dispatch(addRating({ serviceId, serviceRating: selectedRating }));
 
-  //   // Update the total ratings count and specific rating count
-  //   dummyServiceData[serviceIndex].ratings.total++;
-  //   dummyServiceData[serviceIndex].ratings[selectedRating]++;
+        // Fetch the services after adding the comment and rating
+        await fetchServices();
 
-   // Dispatch the addComment action
-  dispatch(addComment({ serviceTitle, comment: newComment }));
-  dispatch(addRating({ serviceTitle, rating: selectedRating }));
-
-  // Close the popup
-  setShowPopup(false);
-};
+        setShowPopup(false);
+      }
+    } catch (error) {
+      console.error("Error adding comment:", error);
+      alert("Failed to submit comment. Please try again later.");
+    }
+  };
 
   return (
     <div className="servicePopupDialog">

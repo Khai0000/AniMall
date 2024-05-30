@@ -5,9 +5,15 @@ import mongoose from "mongoose";
 import date from "./Date/date.js";
 import dotenv from "dotenv";
 import forumPostRouter from "./ForumPosts/forumPostsEndpoints.js";
+import productRouter from "./Products/productsEndpoint.js";
+import petRouter from "./Pets/petsEndpoint.js";
+import authRouter from "./Authentication/authEndpoints.js";
+import orderRouter from "./CheckoutFile/checkoutEndpoints.js"
+import servicesRouter from "./ServicesFile/serviceItemEndpoints.js";
+import cartRouter from "./Cart/cartEndpoints.js";
+import reminderRouter from "./Reminder/reminderEndpoints.js";
 import upload from "./ImageUploadRoute/upload.js";
 import Grid from "gridfs-stream";
-import authRouter from "./Authentication/authEndpoints.js";
 
 let gfs;
 
@@ -30,7 +36,13 @@ app.get("/", (req, res) => {
 
 app.use("/api/community", forumPostRouter);
 app.use("/image", upload);
+app.use("/api/product", productRouter);
+app.use("/api/pet", petRouter);
+app.use("/api/services", servicesRouter);
+app.use("/api/cart",cartRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/orders",orderRouter);
+app.use("/api/reminders",reminderRouter);
 
 mongoose
   .connect(process.env.MONGODB_URL)

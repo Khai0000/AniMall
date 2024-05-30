@@ -32,6 +32,7 @@ router.get("/:imageFileName", async (req, res) => {
     const bucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
       bucketName: "photos",
     });
+    res.set('Content-Type', response.contentType);
     const readStream = bucket.openDownloadStreamByName(response.filename);
     readStream.pipe(res);
 

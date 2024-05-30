@@ -6,6 +6,7 @@ import postSlice from "../ginkhai/slices/postSlice";
 import forumHistorySlice from "../ginkhai/slices/forumHistorySlice";
 import serviceSlice from "../ZongMing/slices/serviceSlice";
 import userSlice from "../shuhui/slices/userSlice";
+import orderSlice from "../ZongMing/slices/orderSlice";
 
 
 export default configureStore({
@@ -17,6 +18,7 @@ export default configureStore({
     pets:PetSlice,
     cart:CartSlice,
     services: serviceSlice,
+    orders:orderSlice,
   },
 });
 
