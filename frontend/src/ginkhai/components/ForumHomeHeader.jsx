@@ -71,6 +71,7 @@ const ForumHomeHeader = () => {
         </button>
 
         <button
+          id="wjDatePickerButton"
           className={`datePickerButton ${
             selectedDate ? "dateButtonSelected" : ""
           }`}
