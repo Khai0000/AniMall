@@ -20,6 +20,8 @@ const ForumAddPost = () => {
 
   const user = useSelector((state)=>state.user.user);
 
+  console.log(user);
+
   useEffect(() => {
     console.log(user);
     const allButtonsOccupied = uploadedImages.every((image) => image !== null);

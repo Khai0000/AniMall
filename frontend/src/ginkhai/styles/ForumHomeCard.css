@@ -90,7 +90,7 @@
     max-width: 72vw;
 }
 
-.cardContainer>.deleteButton {
+.cardContainer>.wjDeleteButton {
     position: absolute;
     border: none;
     cursor: pointer;

@@ -86,7 +86,7 @@ const ForumHomeCard = ({ post, index }) => {
       user.role === "admin" ? (
         <button
           style={{ zIndex: 100 }}
-          className="deleteButton"
+          className="wjDeleteButton"
           onClick={(e) => {
             handleOnDeleteClick(e, post.title);
           }}
