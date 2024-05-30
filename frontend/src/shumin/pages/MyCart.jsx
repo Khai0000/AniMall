@@ -47,9 +47,10 @@ function MyCart() {
         email: user.email,
         serviceName: item.title,
         serviceDate: item.date,
+        serviceTime: item.slot,
       });
   
-      if (response.status === 200 && response.data.message === 'Reminder scheduled successfully') {
+      if (response.status === 200 && response.data.message === 'Email sent successfully') {
         console.log(`Reminder for ${item.title} scheduled successfully.`);
       } else {
         console.error(`Failed to schedule reminder for ${item.title}.`);

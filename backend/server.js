@@ -39,7 +39,6 @@ app.use("/api/services", servicesRouter);
 app.use("/api/cart",cartRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/orders",orderRouter);
-app.use("/api/orders",orderRouter);
 app.use("/api/reminders",reminderRouter);
 
 mongoose
