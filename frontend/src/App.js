@@ -25,26 +25,14 @@ function App() {
   const isAdmin = user && user.role === "admin";
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:4000/api/auth/authentication/getuser",
-          {
-            withCredentials: true,
-          }
-        );
-        if (response.data) {
-          const {
-            username,
-            email,
-            userUid,
-            role,
-            verifyStatus,
-            address,
-            phone,
-          } = response.data;
-          dispatch(
-            setUser({
+    try {
+      const response = axios.get(
+        "http://localhost:4000/api/auth/authentication/getuser",
+        { withCredentials: true }
+      )
+        .then(response => {
+          if (response.data) {
+            const {
               username,
               email,
               userUid,
@@ -52,16 +40,29 @@ function App() {
               verifyStatus,
               address,
               phone,
-            }));
-        }
-      }
-      catch (err) {
-        console.error("Error:", err);
-        setIsLoggedIn(false);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+            } = response.data;
+            dispatch(
+              setUser({
+                username,
+                email,
+                userUid,
+                role,
+                verifyStatus,
+                address,
+                phone,
+              }));
+          }
+        })
+        .catch(err => {
+          console.error("Error");
+          setIsLoggedIn(false);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        })
+    } catch (error) {
+      //console.error("Error:", error);
+    }
   }, []);
 
   useEffect(() => {
@@ -69,15 +70,6 @@ function App() {
       setIsLoggedIn(true);
     }
   }, [user]);
-
-  if (isLoading) {
-    return (
-      <div className="wj-loadingContainer">
-        <PulseLoader size={"1.5rem"} color="#3C95A9" />
-        <p className="wj-loadingText">Loading...</p>
-      </div>
-    );
-  }
 
   const router = createBrowserRouter([
     {
@@ -221,7 +213,10 @@ function App() {
     },
   ]);
 
-  return <RouterProvider router={router} />;
+  return isLoading ? (<div className="wj-loadingContainer">
+    <PulseLoader size={"1.5rem"} color="#3C95A9" />
+    <p className="wj-loadingText">Loading...</p>
+  </div>) : <RouterProvider router={router} />;
 }
 
 export default App;
