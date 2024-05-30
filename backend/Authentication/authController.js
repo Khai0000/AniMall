@@ -324,8 +324,9 @@ export const logout = async (req, res) => {
             secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
         });
-        res.end();
+
         res.json({ message: 'logout successfully' });
+        res.end();
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
