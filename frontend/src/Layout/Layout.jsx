@@ -1,10 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-//import AdvPopUp from "../shumin/components/AdvPopUp"; // Import AdvPopUp
-
-import { default as LoginPage } from "../shuhui/pages/Login";
-import { useSelector } from "react-redux";
 import { Outlet, useLocation } from "react-router-dom";
 
 function Layout() {
@@ -15,7 +11,6 @@ function Layout() {
   const location = useLocation();
   const bodyRef = useRef(null);
 
-  const user = useSelector((state) => state.user.user);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -82,7 +77,6 @@ function Layout() {
     <div className="App">
       <Header />
       <main ref={bodyRef}>
-        {/* <div>{user !== null ? <Outlet /> : <LoginPage />}</div> */}
         <Outlet />
       </main>
       <div style={{ height: spacing }}></div>

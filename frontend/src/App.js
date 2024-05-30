@@ -15,23 +15,36 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { setUser } from "./shuhui/slices/userSlice";
 import EditProfilePopup from "./shumin/components/EditProfilePopup";
+import PulseLoader from "react-spinners/PulseLoader";
 
 function App() {
   const dispatch = useDispatch();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const user = useSelector((state) => state.user.user);
-  const isAdmin = user !== null && user.role === "admin";
+  const isAdmin = user && user.role === "admin";
 
   useEffect(() => {
-    try {
-      axios
-        .get("http://localhost:4000/api/auth/authentication/getuser", {
-          withCredentials: true,
-        })
-        .then((response) => {
-          console.log(response.data);
-          if (response.data) {
-            const {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:4000/api/auth/authentication/getuser",
+          {
+            withCredentials: true,
+          }
+        );
+        if (response.data) {
+          const {
+            username,
+            email,
+            userUid,
+            role,
+            verifyStatus,
+            address,
+            phone,
+          } = response.data;
+          dispatch(
+            setUser({
               username,
               email,
               userUid,
@@ -39,31 +52,31 @@ function App() {
               verifyStatus,
               address,
               phone,
-            } = response.data;
-            dispatch(
-              setUser({
-                username,
-                email,
-                userUid,
-                role,
-                verifyStatus,
-                address,
-                phone,
-              })
-            );
-          }
-        })
-        .catch((err) => {
-          console.error("Error:", err);
-        });
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  },[]);
+            })
+          );
+        }
+      } catch (err) {
+        console.error("Error:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, [dispatch]);
 
   useEffect(() => {
-    setIsLoggedIn(user !== null);
+    setIsLoggedIn(!!user);
   }, [user]);
+
+  if (isLoading) {
+    return (
+      <div className="wj-loadingContainer">
+        <PulseLoader size={"1.5rem"} color="#3C95A9" />
+        <p className="wj-loadingText">Loading...</p>
+      </div>
+    );
+  }
 
   const router = createBrowserRouter([
     {
@@ -71,23 +84,21 @@ function App() {
       element: <Layout />,
       errorElement: <CommonPages.NotFoundPages />,
       children: [
-        { path: "/", element: <Navigate to="authentication/login" /> },
+        {
+          path: "/",
+          element: isLoggedIn ? (
+            <Navigate to="/product" />
+          ) : (
+            <Navigate to="/authentication/login" />
+          ),
+        },
         {
           path: "/authentication",
           children: [
-            { path: "/authentication/login", element: <ShuhuiPages.Login /> },
-            {
-              path: "/authentication/register",
-              element: <ShuhuiPages.Register />,
-            },
-            {
-              path: "/authentication/reset-password",
-              element: <ShuhuiPages.ResetPassword />,
-            },
-            {
-              path: "/authentication/profile",
-              element: <ShuhuiPages.Profile />,
-            },
+            { path: "login", element: <ShuhuiPages.Login /> },
+            { path: "register", element: <ShuhuiPages.Register /> },
+            { path: "reset-password", element: <ShuhuiPages.ResetPassword /> },
+            { path: "profile", element: <ShuhuiPages.Profile /> },
           ],
         },
         {
@@ -98,25 +109,15 @@ function App() {
             <Navigate to="/authentication/login" replace={false} />
           ),
           children: [
-            { path: "/pet", element: isLoggedIn? <ShuminPages.PetHome /> : <Navigate to="/authentication/login" replace={false} />},
+            { path: "", element: <ShuminPages.PetHome /> },
+            { path: ":petId", element: <ShuminPages.PetDetails /> },
             {
-              path: "/pet/:petId",
-              element: isLoggedIn ? (
-                <ShuminPages.PetDetails />
-              ) : (
-                <Navigate to="/authentication/login" replace={false} />
-              ),
-            },
-            {
-              path: "/pet/PetCategorized/:category",
+              path: "PetCategorized/:category",
               element: <ShuminPages.PetCategorized />,
             },
-            { path: "/pet/sellerPet/add-pet", element: <ShuminPages.AddPet /> },
-            { path: "/pet/sellerPet", element: <ShuminPages.SellerPet /> },
-            {
-              path: "/pet/sellerPet/add-pet/:id",
-              element: <ShuminPages.AddPet />,
-            },
+            { path: "sellerPet/add-pet", element: <ShuminPages.AddPet /> },
+            { path: "sellerPet", element: <ShuminPages.SellerPet /> },
+            { path: "sellerPet/add-pet/:id", element: <ShuminPages.AddPet /> },
           ],
         },
         {
@@ -127,76 +128,60 @@ function App() {
             <Navigate to="/authentication/login" replace={false} />
           ),
           children: [
-            { path: "/community", element: <GinkhaiPages.ForumHome /> },
+            { path: "", element: <GinkhaiPages.ForumHome /> },
             {
-              path: "/community/post/:postId",
+              path: "post/:postId",
               element: <GinkhaiPages.ForumPostDetails />,
             },
+            { path: "post/add", element: <GinkhaiPages.ForumAddPost /> },
             {
-              path: "/community/post/add",
-              element: <GinkhaiPages.ForumAddPost />,
-            },
-            {
-              path: "/community/post/:postId/edit",
+              path: "post/:postId/edit",
               element: <GinkhaiPages.ForumEditPost />,
             },
           ],
         },
         {
           path: "/product",
-          element: isLoggedIn? <CommonPages.Product />: <Navigate to="/authentication/login" replace={false} />,
+          element: isLoggedIn ? (
+            <CommonPages.Product />
+          ) : (
+            <Navigate to="/authentication/login" replace={false} />
+          ),
           children: [
-            { path: "/product", element: <ShuminPages.ProductHome /> },
+            { path: "", element: <ShuminPages.ProductHome /> },
+            { path: ":productId", element: <ShuminPages.ProductDetails /> },
             {
-              path: "/product/:productId",
-              element: isLoggedIn ? (
-                <ShuminPages.ProductDetails />
-              ) : (
-                <Navigate to="/authentication/login" replace={false} />
-              ),
-            },
-            {
-              path: "/product/ProductCategorized/:category",
+              path: "ProductCategorized/:category",
               element: <ShuminPages.ProductCategorized />,
             },
             {
-              path: "/product/sellerProduct/add-product",
+              path: "sellerProduct/add-product",
               element: <ShuminPages.AddProduct />,
             },
+            { path: "sellerProduct", element: <ShuminPages.SellerProduct /> },
             {
-              path: "/product/sellerProduct",
-              element: <ShuminPages.SellerProduct />,
-            },
-            {
-              path: "/product/sellerProduct/add-product/:id",
+              path: "sellerProduct/add-product/:id",
               element: <ShuminPages.AddProduct />,
             },
           ],
         },
-
         {
           path: "/services",
-          element:isLoggedIn?<CommonPages.Services />: <Navigate to="/authentication/login" replace={false} />,
+          element: isLoggedIn ? (
+            <CommonPages.Services />
+          ) : (
+            <Navigate to="/authentication/login" replace={false} />
+          ),
           children: [
-            { path: "/services", element: <ZongMingPages.ServiceHome /> },
+            { path: "", element: <ZongMingPages.ServiceHome /> },
+            { path: "sellerService", element: <ZongMingPages.SellerService /> },
+            { path: ":serviceId", element: <ZongMingPages.ServiceDetail /> },
             {
-              path: "/services/sellerService",
-              element: <ZongMingPages.SellerService />,
-            },
-            {
-              path: "/services/:serviceId",
-              element: isLoggedIn ? (
-                <ZongMingPages.ServiceDetail />
-              ) : (
-                <Navigate to="/authentication/login" replace={false} />
-              ),
-            },
-            {
-              path: "/services/sellerService/add-service",
+              path: "sellerService/add-service",
               element: <ZongMingPages.AddServiceComponent />,
             },
             {
-              path: "/services/sellerService/add-service/:serviceTitle",
+              path: "sellerService/add-service/:serviceTitle",
               element: <ZongMingPages.AddServiceComponent />,
             },
           ],
@@ -214,7 +199,7 @@ function App() {
           element: <CommonPages.Order />,
           children: [
             {
-              path: "/order",
+              path: "",
               element: isLoggedIn ? (
                 isAdmin ? (
                   <ShuminPages.SellerOrder />

@@ -25,7 +25,7 @@ const ProductHome=()=>{
     const [filteredProducts,setFilteredProducts]=useState([]);
     const [isLoading,setIsLoading]=useState(true);
     const [searchTerm,setSearchTerm]=useState("");
-    
+
     const handleSearch = (value) => {
         setSearchTerm(value);
     };

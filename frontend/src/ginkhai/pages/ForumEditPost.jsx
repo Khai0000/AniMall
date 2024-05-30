@@ -5,6 +5,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { updatePost } from "../slices/postSlice";
+import PulseLoader from "react-spinners/PulseLoader";
 import axios from "axios";
 
 const ForumEditPost = () => {
@@ -14,6 +15,11 @@ const ForumEditPost = () => {
   const [selectedButtons, setSelectedButtons] = useState([]);
   const [uploadedImages, setUploadedImages] = useState([null, null, null]);
   const [uploadedFiles, setUploadedFiles] = useState([]);
+
+  const [isUploading, setIsUploading] = useState(false);
+  const [showSuccessfulPopup, setShowSuccessfulPopup] = useState(false);
+  const [updatedPost, setUpdatedPost] = useState(null);
+
   const inputRefs = useRef([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -22,9 +28,7 @@ const ForumEditPost = () => {
   const user = useSelector((state) => state.user.user);
   const post = location.state?.post;
 
-
   useEffect(() => {
-    console.log("hi");
     if (post) {
       setTitleText(post.title);
       setBodyText(post.content);
@@ -42,7 +46,7 @@ const ForumEditPost = () => {
     if (allButtonsOccupied && buttonCount <= uploadedImages.length) {
       setButtonCount((prevCount) => prevCount + 1);
     }
-  }, [uploadedImages,buttonCount]);
+  }, [uploadedImages, buttonCount]);
 
   const toggleSelectButton = (button) => {
     setSelectedButtons(
@@ -120,6 +124,8 @@ const ForumEditPost = () => {
     }
 
     const updatePostApiCall = async (imageUrls) => {
+      setIsUploading(true);
+
       try {
         const updatePostResponse = await axios.put(
           `http://localhost:4000/api/community/post/${post._id}/edit`,
@@ -133,8 +139,8 @@ const ForumEditPost = () => {
         );
 
         if (updatePostResponse.status === 200) {
-          dispatch(updatePost({ updatedPost: updatePostResponse.data }));
-          navigate(-1);
+          setShowSuccessfulPopup(true);
+          setUpdatedPost(updatePostResponse.data);
         } else {
           console.error("Error updating post:", updatePostResponse.statusText);
           alert("Error updating post. Please try again later.");
@@ -142,6 +148,8 @@ const ForumEditPost = () => {
       } catch (error) {
         console.error("Error updating post:", error);
         alert("Error updating post. Please try again later.");
+      } finally {
+        setIsUploading(false);
       }
     };
 
@@ -179,7 +187,10 @@ const ForumEditPost = () => {
       }
     };
 
-    const newImageUrls = uploadedFiles.every((file)=> file!==null) && uploadedFiles.length!==0? await uploadImages() : [];
+    const newImageUrls =
+      uploadedFiles.every((file) => file !== null) && uploadedFiles.length !== 0
+        ? await uploadImages()
+        : [];
 
     const updatedImages = [
       ...(newImageUrls.length > 0 ? newImageUrls : []),
@@ -236,7 +247,7 @@ const ForumEditPost = () => {
                 />
                 {uploadedImages[index] && (
                   <button
-                    className="deleteButton"
+                    className="wjImageDeleteButton"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleDelete(index);
@@ -280,6 +291,48 @@ const ForumEditPost = () => {
           </div>
         </div>
       </div>
+      {isUploading && (
+        <div className="forumPostAddingLoadingBackground">
+          <div className="forumPostAddingLoadingContainer">
+            <PulseLoader size={"1.5rem"} color="#3C95A9" />
+            <p className="forumPostAddingContainerLoadingText">Uploading...</p>
+          </div>
+        </div>
+      )}
+      {showSuccessfulPopup && (
+        <div
+          style={{ zIndex: 100 }}
+          className="forumPostDeleteBackground"
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowSuccessfulPopup(false);
+            dispatch(updatePost({ updatedPost: updatedPost }));
+            navigate(-1);
+          }}
+        >
+          <div
+            className="forumPostDeleteContainer"
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            <h2>Post Updated Successfully !</h2>
+            <div className="forumPostDeleteButtonContainer">
+              <button
+                className="deleteForumPostButton"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowSuccessfulPopup(false);
+                  dispatch(updatePost({ updatedPost: updatedPost }));
+                  navigate(-1);
+                }}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
