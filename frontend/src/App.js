@@ -14,6 +14,7 @@ import * as ShuhuiPages from "./shuhui/pages";
 import { useSelector } from "react-redux";
 
 
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const user = useSelector((state) => state.user.user);
@@ -66,6 +67,7 @@ function App() {
             },
             { path: "/pet/sellerPet/add-pet", element: <ShuminPages.AddPet /> },
             { path: "/pet/sellerPet", element: <ShuminPages.SellerPet /> },
+            { path: "/pet/adoptionformcheck", element: <ShuminPages.AdoptionFormHome /> },
             {
               path: "/pet/sellerPet/add-pet/:id",
               element: <ShuminPages.AddPet />,
@@ -74,11 +76,12 @@ function App() {
         },
         {
           path: "/community",
-          element: isLoggedIn ? (
-            <CommonPages.Community />
-          ) : (
-            <Navigate to="/authentication/login" replace={false}  />
-          ),
+          // element: isLoggedIn ? (
+          //   <CommonPages.Community />
+          // ) : (
+          //   <Navigate to="/authentication/login" replace={false}  />
+          // ),
+          element:<CommonPages.Community/>,
           children: [
             { path: "/community", element: <GinkhaiPages.ForumHome /> },
             {

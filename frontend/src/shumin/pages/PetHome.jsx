@@ -188,7 +188,7 @@ const PetHome = () => {
           }`}
           onClick={toggleAdoptionFilter}
         >
-          {isAdoptionFilterActive ? "✓ Adoption" : "Adoption"}
+          {isAdoptionFilterActive ? "Adoption" : "Adoption"}
         </button>
         <MyCartButton page="pet" onClick={handleMyCartButtonClick} />
       </div>
@@ -211,9 +211,13 @@ const PetHome = () => {
 
 
         <div className="Seller-product">
+            {isAdoptionFilterActive?
+            <Link to={`/pet/adoptionformcheck`} className="seller-link">
+                Adoption Form
+            </Link>:
             <Link to={`/pet/sellerPet`} className="seller-link">
                 Seller
-            </Link>
+            </Link>}
         </div>
       </div>
     </div>

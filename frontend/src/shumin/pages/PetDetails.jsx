@@ -149,7 +149,7 @@ const PetDetails = () => {
               onClick={pet.price === 0 ? handleOnAdoptButtonClick : handleOnAddToCartButtonClick}
             >
               {pet.price === 0 ?
-                <svg style={{ marginRight: "10%" }} width="23" height="22" viewBox="0 0 23 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg style={{ marginRight: "10%" }} width="19" height="16" viewBox="0 0 23 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path fill-rule="evenodd" clip-rule="evenodd" d="M11.4995 20.4866L7.11505 15.9866L2.76505 11.4866C0.411651 8.99962 0.411651 5.10714 2.76505 2.62013C3.91741 1.51262 5.47822 0.933871 7.07405 1.02234C8.66988 1.11081 10.1572 1.85854 11.18 3.08663L11.4995 3.40013L11.816 3.07313C12.8389 1.84504 14.3262 1.09731 15.922 1.00884C17.5179 0.920371 19.0787 1.49912 20.231 2.60663C22.5844 5.09364 22.5844 8.98612 20.231 11.4731L15.881 15.9731L11.4995 20.4866Z" fill="white" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                 </svg> :
                 <svg style={{ marginRight: "10%" }} xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -171,3 +171,4 @@ const PetDetails = () => {
 };
 
 export default PetDetails;
+

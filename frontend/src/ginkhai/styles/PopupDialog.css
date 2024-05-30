@@ -4,6 +4,7 @@
     left: 50%;
     width: 90vw;
     transform: translate(-50%, -50%);
+    z-index: 100;
 }
 
 .popupContainer {
@@ -80,4 +81,5 @@
 .popupCommentContainer>button:hover{
     color: #F3B801;
     background-color: #fff;
+    border: 1px solid #F3B801;
 }

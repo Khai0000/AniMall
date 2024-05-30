@@ -1,0 +1,105 @@
+.skeleton {
+    opacity: .7;
+    animation: skeleton-loading 1s linear infinite alternate;
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-color: hsl(200, 20%, 70%);
+    }
+
+    100% {
+        background-color: hsl(200, 20%, 95%);
+    }
+}
+
+.skeletonText {
+    width: 100%;
+    height: .5rem;
+    margin-bottom: 3rem;
+    border-radius: .125rem;
+}
+
+.formCardContainer {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1px solid #3C95A9;
+    margin-bottom: 8px;
+    cursor: pointer;
+    padding: 2vh 0;
+    position: relative;
+}
+
+.formCardContainer img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 15px;
+}
+
+.formCardContainer .formCardDetails {
+    flex: 1;
+}
+
+.formCardContainer .imageContainer {
+    flex: 1;
+    margin-right: 5vw;
+    height: 18vh;
+    max-width: 10vw;
+}
+
+.formCardContainer .formCardDetails .title {
+    color: #000;
+    font-size: 24px;
+    font-weight: 500;
+    margin-top: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    /* Number of lines to show */
+    -webkit-box-orient: vertical;
+    max-width: 60vw;
+}
+
+.formCardContainer .formCardDetails .detailsRow {
+    display: flex;
+    gap: 10px; 
+}
+
+.formCardContainer .formCardDetails .author {
+    color: #000;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.formCardContainer .formCardDetails .authorDetails {
+    color: #868686;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.formCardContainer .formCardDetails .content {
+    color: #868686;
+    font-size: 1rem;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    /* Number of lines to show */
+    -webkit-box-orient: vertical;
+    margin-bottom: 0;
+    max-width: 72vw;
+}
+
+.formCardContainer > .deleteButton {
+    position: absolute;
+    border: none;
+    cursor: pointer;
+    background-color: transparent;
+    color: red;
+    right: 0;
+}

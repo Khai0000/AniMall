@@ -470,7 +470,7 @@ const AddProduct =()=>{
               xmlns="http://www.w3.org/2000/svg"
               width="20"
               height="17"
-              viewBox="0 0 25 26"
+              viewBox="0 0 25 24"
               fill="none"
             >
               <path
@@ -483,7 +483,7 @@ const AddProduct =()=>{
               :<span id="Product-details-form-add-button-text">Add</span>}
           </button>
           <Link to={`/product/sellerProduct`} id="Product-details-form-back-button">
-              Go Back
+              Back
           </Link>
         </div>
       </div>

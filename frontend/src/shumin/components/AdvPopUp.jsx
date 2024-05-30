@@ -21,7 +21,7 @@ function AdvPopUp({ show, onClose }) {  // Assuming show and onClose are passed 
       <div className="advPopupContainer">
         <div className="advPopupDialog">
           <img src={selectedImage} alt="Advertisement"/>
-          <button className="closeButton" onClick={onClose}><CloseIcon className="closeIcon" /></button>
+          <button className="sx-closeButton" onClick={onClose}><CloseIcon className="sx-closeIcon" /></button>
         </div>
       </div>
     </div>

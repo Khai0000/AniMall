@@ -9,3 +9,4 @@ export { default as SellerPet } from './SellerPet';
 export { default as AddPet } from './AddPet';
 export { default as ProductHome } from './ProductHome';
 export { default as PetHome } from './PetHome';
+export { default as AdoptionFormHome } from './AdoptionFormHome';

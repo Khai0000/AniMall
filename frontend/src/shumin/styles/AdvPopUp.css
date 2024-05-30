@@ -25,22 +25,3 @@
   max-width: 100%; /* Ensures the image is responsive */
   border-radius: 10px; /* Optional: if you want rounded corners for the image */
 }
-
-.closeButton {
-  position: absolute;
-  border: none;
-  background-color: #3C95A9;
-  color: white;
-  width: 35px;
-  height: 35px;
-  border-radius: 10px;
-  padding-top: 5px;
-  transform: rotate(45deg);
-  cursor: pointer;
-  right: 4vw;
-  top: 5.5vh;
-}
-
-.closeButton:hover {
-  background-color: #F3B801;
-}

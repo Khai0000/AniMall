@@ -27,6 +27,7 @@
     cursor: pointer;
     right: 4vw;
     top: 5.5vh;
+    padding-top: 5px;
 }
 
 .servicePopupContainer .closeButton:hover {
@@ -142,6 +143,7 @@
 .servicePopupCommentContainer>.buttonContainer .submitBtn:hover {
     color: #F3B801;
     background-color: #fff;
+    border: 1px solid #F3B801;
 }
 
 .popupTitle .titlePopUp {
