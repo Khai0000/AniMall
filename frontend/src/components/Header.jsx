@@ -30,7 +30,6 @@ function Header() {
       const response = await axios.get(
         "http://localhost:4000/api/auth/authentication/logout",
         { withCredentials: true }
-        
       );
     } catch (error) {
       console.error("Error creating user:", error);

@@ -37,6 +37,10 @@
   text-align: center;
   margin-top: 6%;
 }
+.password-container {
+  position: relative;
+  right: 12.5%;
+}
 
 .register-container input {
   border: none;
@@ -211,4 +215,67 @@ input[type="number"]::-webkit-outer-spin-button {
 .resend-button:hover {
   background-color: #f3b801;
   cursor: pointer;
+}
+
+.password-toggle-icon {
+  position: absolute;
+  top: 70%;
+  margin-left: -5%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #3c95a9;
+}
+.error-message {
+  color: #f44747;
+  margin-bottom: 0%;
+  text-shadow: 0px 1px 1px rgb(60, 60, 60);
+  width: 70%;
+  margin-left: 15%;
+}
+
+.error-register {
+  color: #f44747;
+  margin-top: 2%;
+  text-shadow: 0px 1px 1px rgb(60, 60, 60);
+  width: 70%;
+  margin-left: 15%;
+  margin-bottom: -2%;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.modal-content h2 {
+  margin-top: 0;
+}
+
+.modal-content button {
+  margin-top: 10px;
+  padding: 5px 10px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.modal-content button:hover {
+  background: #0056b3;
 }

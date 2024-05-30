@@ -114,6 +114,31 @@ export const verifyUser = async (req, res) => {
     }
 };
 
+
+export const resendVerificationCode = async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        const user = temporaryAccounts[email];
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Generate a new verification code
+        const newVerificationCode = generateVerificationCode();
+        user.verificationCode = newVerificationCode;
+        user.creationDate = new Date(); // Update the creation date
+
+        // Resend the verification email
+        await sendVerificationEmail(email, newVerificationCode);
+
+        res.status(200).json({ message: 'Verification code resent to your email' });
+    } catch (error) {
+        console.error('Error resending verification code:', error);
+        res.status(500).json({ message: 'An error occurred while resending the verification code' });
+    }
+};
+
 // In authController.js
 
 export const createAdmin = async (req, res) => {
@@ -235,6 +260,23 @@ export const profile = async (req, res) => {
 };
 
 
+export const deleteUser = async (req, res) => {
+    try {
+        const userId = req.user._id;
+        await AuthModel.findByIdAndDelete(userId);
+        res.clearCookie("token", {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+        });
+        res.status(200).json({ message: 'User deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
+
+
+
 
 
 
@@ -276,7 +318,11 @@ export const getUser = async (req, res) => {
 
 export const logout = async (req, res) => {
     try {
-        res.clearCookie("token");
+        res.clearCookie("token", {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+        });
         res.end();
         res.json({ message: 'logout successfully' });
     } catch (error) {
@@ -303,6 +349,32 @@ export const sendPasswordResetEmail = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+// Add this endpoint to handle resending verification code for password reset
+export const resendPasswordResetCode = async (req, res) => {
+    const { email } = req.body;
+    try {
+        const user = await AuthModel.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Generate a new verification code
+        const newVerificationCode = generateVerificationCode();
+        user.verificationCode = newVerificationCode;
+        user.creationDate = new Date(); // Update the creation date
+        await user.save();
+
+        // Resend the verification email
+        await sendVerificationEmail(email, newVerificationCode);
+
+        res.status(200).json({ message: 'Verification code resent to your email' });
+    } catch (error) {
+        console.error('Error resending verification code:', error);
+        res.status(500).json({ message: 'An error occurred while resending the verification code' });
+    }
+};
+
 
 
 export const verifyAndResetPassword = async (req, res) => {

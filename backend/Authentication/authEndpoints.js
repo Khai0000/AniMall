@@ -10,7 +10,10 @@ import {
     profile,
     oauthcallback,
     getUser,
-    logout
+    logout,
+    deleteUser,
+    resendVerificationCode,
+    resendPasswordResetCode
 } from "./authController.js";
 import { protect } from './authMiddleware.js';
 
@@ -18,12 +21,14 @@ const router = express.Router();
 
 router.post('/authentication/register', registerUser);
 router.post('/authentication/verify', verifyUser);
+router.post('/authentication/resendcode', resendVerificationCode);
 router.post('/authentication/create-admin', createAdmin);
 router.post('/authentication/login', loginUser);
-router.put('/authentication/profile', protect, updateUserProfile);
+router.put('/authentication/updateprofile', protect, updateUserProfile);
 router.get('/authentication/getuser', getUser);
 router.get('/authentication/logout', logout);
 router.get('/authentication/profile', protect, profile);
+router.delete('/authentication/delete', protect, deleteUser);
 router.get('/authentication/oauthcallback', async (req, res) => {
     //const code = '4/0AdLIrYfBUzlvEudRpfcvmKUjMoEf3MfC9AObu9X8fjtH7orhy0MNKJRWah_mjfES_48F1w'
     const code = req.query.code
@@ -51,5 +56,6 @@ router.get('/authentication/oauthcallback', (req, res) => {
 
 router.post('/authentication/send-reset-email', sendPasswordResetEmail);
 router.post('/authentication/verify-reset-password', verifyAndResetPassword);
+router.post('/authentication/resend-reset-code', resendPasswordResetCode);
 
 export default router;
