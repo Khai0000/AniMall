@@ -306,12 +306,18 @@ export const getUser = async (req, res) => {
     const token = req.cookies.token;
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const user = await AuthModel.findById(decoded.id);
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
+        // const user = await AuthModel.findById(decoded.id);
+        await AuthModel.findById(decoded.id).then(function (result) {
+            let user = result._doc
+            if (!user) {
+                return res.status(404).json({ message: 'User not found' });
+            }
 
-        res.json(user);
+            user.userUid = user["_id"]
+            delete user["_id"]
+            res.json(user);
+            console.log("Result : ", user);
+        });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

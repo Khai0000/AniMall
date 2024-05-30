@@ -27,7 +27,7 @@ const ForumHomeCard = ({ post, index }) => {
     } else {
       // Handle other image types using existing logic
       import(`../assets/images/dog2.jpg`)
-        .then((image) => {})
+        .then((image) => { })
         .catch((error) => {
           console.error("Error loading image:", error);
         })
@@ -83,7 +83,7 @@ const ForumHomeCard = ({ post, index }) => {
         <p className="content">{post.content}</p>
       </div>
       {(authorDetails[1] && authorDetails[1] === user.userUid) ||
-      user.role === "admin" ? (
+        user != null && user.role === "admin" ? (
         <button
           style={{ zIndex: 100 }}
           className="wjDeleteButton"

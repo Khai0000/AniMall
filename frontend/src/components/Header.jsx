@@ -20,25 +20,24 @@ function Header() {
   }, [user]);
 
   const handleLogout = async (e) => {
-    setIsLogin(false);
-    navigate("/authentication/login", { replace: true });
-    dispatch(removeUser());
-
     //res.clearCookie('authToken');
     try {
       const response = await axios.get(
         "http://localhost:4000/api/auth/authentication/logout",
         { withCredentials: true }
       );
+      //dispatch(removeUser());
+      //setIsLogin(false);
+      window.location.replace("/authentication/login");
+      // navigate("/authentication/login", { replace: false });
     } catch (error) {
-      console.error("Error creating user:", error);
+      console.error("Error logout user:", error);
     }
   };
 
   const goToProfile = () => {
-    navigate("/authentication/profile"); 
+    navigate("/authentication/profile");
   };
-
 
   return (
     <header>

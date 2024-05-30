@@ -18,7 +18,7 @@ import EditProfilePopup from "./shumin/components/EditProfilePopup";
 
 function App() {
   const dispatch = useDispatch();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(null);
   const user = useSelector((state) => state.user.user);
   const isAdmin = user !== null && user.role === "admin";
 
@@ -52,17 +52,22 @@ function App() {
               })
             );
           }
+
         })
         .catch((err) => {
           console.error("Error:", err);
+          setIsLoggedIn(false);
         });
     } catch (error) {
       console.error("Error:", error);
+      setIsLoggedIn(false);
     }
-  },[]);
+  }, []);
 
   useEffect(() => {
-    setIsLoggedIn(user !== null);
+    if (user !== null) {
+      setIsLoggedIn(true);
+    }
   }, [user]);
 
   const router = createBrowserRouter([
@@ -75,7 +80,10 @@ function App() {
         {
           path: "/authentication",
           children: [
-            { path: "/authentication/login", element: <ShuhuiPages.Login /> },
+            {
+              path: "/authentication/login", element: isLoggedIn ? (
+                <Navigate to="/product" replace={false} />) : <ShuhuiPages.Login />
+            },
             {
               path: "/authentication/register",
               element: <ShuhuiPages.Register />,
@@ -92,19 +100,17 @@ function App() {
         },
         {
           path: "/pet",
-          element: isLoggedIn ? (
-            <CommonPages.Pet />
-          ) : (
-            <Navigate to="/authentication/login" replace={false} />
-          ),
+          element: isLoggedIn === true ? <CommonPages.Pet /> : (isLoggedIn === false ? <ShuhuiPages.Login /> : <></>),
           children: [
-            { path: "/pet", element: isLoggedIn? <ShuminPages.PetHome /> : <Navigate to="/authentication/login" replace={false} />},
+            {
+              path: "/pet", element: isLoggedIn === true ? <ShuminPages.PetHome /> : (isLoggedIn === false ? <ShuhuiPages.Login /> : <></>)
+            },
             {
               path: "/pet/:petId",
               element: isLoggedIn ? (
                 <ShuminPages.PetDetails />
               ) : (
-                <Navigate to="/authentication/login" replace={false} />
+                <ShuhuiPages.Login />
               ),
             },
             {
@@ -121,11 +127,7 @@ function App() {
         },
         {
           path: "/community",
-          element: isLoggedIn ? (
-            <CommonPages.Community />
-          ) : (
-            <Navigate to="/authentication/login" replace={false} />
-          ),
+          element: isLoggedIn === true ? <CommonPages.Community /> : (isLoggedIn === false ? <ShuhuiPages.Login /> : <></>),
           children: [
             { path: "/community", element: <GinkhaiPages.ForumHome /> },
             {
@@ -144,16 +146,12 @@ function App() {
         },
         {
           path: "/product",
-          element: isLoggedIn? <CommonPages.Product />: <Navigate to="/authentication/login" replace={false} />,
+          element: isLoggedIn === true ? <CommonPages.Product /> : (isLoggedIn === false ? <ShuhuiPages.Login /> : <></>),
           children: [
             { path: "/product", element: <ShuminPages.ProductHome /> },
             {
               path: "/product/:productId",
-              element: isLoggedIn ? (
-                <ShuminPages.ProductDetails />
-              ) : (
-                <Navigate to="/authentication/login" replace={false} />
-              ),
+              element: isLoggedIn === true ? <ShuminPages.ProductDetails /> : (isLoggedIn === false ? <ShuhuiPages.Login /> : <></>),
             },
             {
               path: "/product/ProductCategorized/:category",
@@ -176,7 +174,7 @@ function App() {
 
         {
           path: "/services",
-          element:isLoggedIn?<CommonPages.Services />: <Navigate to="/authentication/login" replace={false} />,
+          element: isLoggedIn === true ? <CommonPages.Services /> : (isLoggedIn === false ? <ShuhuiPages.Login /> : <></>),
           children: [
             { path: "/services", element: <ZongMingPages.ServiceHome /> },
             {
@@ -185,11 +183,7 @@ function App() {
             },
             {
               path: "/services/:serviceId",
-              element: isLoggedIn ? (
-                <ZongMingPages.ServiceDetail />
-              ) : (
-                <Navigate to="/authentication/login" replace={false} />
-              ),
+              element: isLoggedIn ? <ZongMingPages.ServiceDetail /> : (isLoggedIn === false ? <ShuhuiPages.Login /> : <></>),
             },
             {
               path: "/services/sellerService/add-service",
@@ -203,11 +197,7 @@ function App() {
         },
         {
           path: "/mycart",
-          element: isLoggedIn ? (
-            <ShuminPages.MyCart />
-          ) : (
-            <Navigate to="/authentication/login" replace={false} />
-          ),
+          element: isLoggedIn === true ? <ShuminPages.MyCart /> : (isLoggedIn === false ? <ShuhuiPages.Login /> : <></>),
         },
         {
           path: "/order",
@@ -215,14 +205,7 @@ function App() {
           children: [
             {
               path: "/order",
-              element: isLoggedIn ? (
-                isAdmin ? (
-                  <ShuminPages.SellerOrder />
-                ) : (
-                  <ShuminPages.UserOrder />
-                )
-              ) : (
-                <Navigate to="/authentication/login" replace={false} />
+              element: isLoggedIn === true ? (isAdmin ? <ShuminPages.SellerOrder /> : <ShuminPages.UserOrder />) : (isLoggedIn === false ? <ShuhuiPages.Login /> : <></>
               ),
             },
           ],

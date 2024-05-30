@@ -39,10 +39,10 @@ app.use("/image", upload);
 app.use("/api/product", productRouter);
 app.use("/api/pet", petRouter);
 app.use("/api/services", servicesRouter);
-app.use("/api/cart",cartRouter);
+app.use("/api/cart", cartRouter);
 app.use("/api/auth", authRouter);
-app.use("/api/orders",orderRouter);
-app.use("/api/reminders",reminderRouter);
+app.use("/api/orders", orderRouter);
+app.use("/api/reminders", reminderRouter);
 
 mongoose
   .connect(process.env.MONGODB_URL)

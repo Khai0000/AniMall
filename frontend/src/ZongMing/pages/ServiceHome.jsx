@@ -24,7 +24,7 @@ const ServiceHome = () => {
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(1000);
 
-  const user= useSelector((state) => state.user.user);
+  const user = useSelector((state) => state.user.user);
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -46,13 +46,16 @@ const ServiceHome = () => {
     let filteredData = allServices;
 
     filteredData = filteredData.filter((service) => !service.serviceHide);
-    filteredData = filteredData.filter((service) =>
-      service.serviceTitle && service.serviceTitle.toLowerCase().includes(searchTerm.toLowerCase())
+    filteredData = filteredData.filter(
+      (service) =>
+        service.serviceTitle &&
+        service.serviceTitle.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     if (minPrice !== 0 || maxPrice !== 0) {
       filteredData = filteredData.filter(
-        (service) => service.servicePrice >= minPrice && service.servicePrice <= maxPrice
+        (service) =>
+          service.servicePrice >= minPrice && service.servicePrice <= maxPrice
       );
     }
 
@@ -81,7 +84,10 @@ const ServiceHome = () => {
   };
 
   function chunkArray(arr, size) {
-    return arr.reduce((acc, _, i) => (i % size ? acc : [...acc, arr.slice(i, i + size)]), []);
+    return arr.reduce(
+      (acc, _, i) => (i % size ? acc : [...acc, arr.slice(i, i + size)]),
+      []
+    );
   }
 
   return (
@@ -100,13 +106,13 @@ const ServiceHome = () => {
             </div>
           ) : (
             chunkArray(filteredServices, 3).map((row, index) => (
-              <div key={index} className={index % 2 === 0 ? "odd-row" : "even-row"}>
+              <div
+                key={index}
+                className={index % 2 === 0 ? "odd-row" : "even-row"}
+              >
                 {row.map((service) => (
                   <CustomLink key={service._id} service={service}>
-                    <ServiceCard
-                      key={service._id}
-                      service={service}
-                    />
+                    <ServiceCard key={service._id} service={service} />
                   </CustomLink>
                 ))}
               </div>
@@ -114,14 +120,18 @@ const ServiceHome = () => {
           )}
         </div>
       )}
-      {user.role==="admin"?
+      {user != null && user.role === "admin" ? (
         <div className="sellerServiceBtn">
-          <Link to="/services/sellerService" className="seller-service-page-link">
+          <Link
+            to="/services/sellerService"
+            className="seller-service-page-link"
+          >
             Seller
           </Link>
-        </div>:""
-      }
-      
+        </div>
+      ) : (
+        ""
+      )}
     </div>
   );
 };

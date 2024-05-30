@@ -1,9 +1,9 @@
 import SearchBar from "../components/SearchBar";
 import "../styles/ProductHome.css";
-import React, { useState, useEffect, lazy, Suspense ,useMemo} from "react";
+import React, { useState, useEffect, lazy, Suspense, useMemo } from "react";
 import MyCartButton from "../components/MyCartButton";
 import CircularProgress from "@mui/material/CircularProgress";
-import { useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 import EnterButtonIcon from "../components/EnterButtonIcon";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -18,9 +18,9 @@ const PetHome = () => {
 
   const navigate = useNavigate();
 
-  const user= useSelector((state) => state.user.user);
+  const user = useSelector((state) => state.user.user);
   const pets = useSelector((state) => state.pets);
-  const memoizedPets=useMemo(()=>pets||[],[pets]);
+  const memoizedPets = useMemo(() => pets || [], [pets]);
 
   const [filteredPets, setFilteredPets] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -79,7 +79,7 @@ const PetHome = () => {
 
   const handlePriceRangeSubmit = (event) => {
     event.preventDefault();
-    setShowPriceRange(false); 
+    setShowPriceRange(false);
   };
 
   const togglePriceRange = () => {
@@ -200,13 +200,15 @@ const PetHome = () => {
           </div>
         )}
 
-        {user.role==="admin"?
+        {user != null && user.role === "admin" ? (
           <div className="Seller-product">
             <Link to={`/pet/sellerPet`} className="seller-link">
               Seller
             </Link>
-          </div>:""
-        }
+          </div>
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );
