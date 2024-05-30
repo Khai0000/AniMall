@@ -11,13 +11,55 @@ import * as ZongMingPages from "./ZongMing/pages";
 import * as ShuminPages from "./shumin/pages";
 import * as GinkhaiPages from "./ginkhai/pages";
 import * as ShuhuiPages from "./shuhui/pages";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { setUser } from "./shuhui/slices/userSlice";
 import EditProfilePopup from "./shumin/components/EditProfilePopup";
 
 function App() {
+  const dispatch = useDispatch();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const user = useSelector((state) => state.user.user);
   const isAdmin = user !== null && user.role === "admin";
+
+  useEffect(() => {
+    try {
+      axios
+        .get("http://localhost:4000/api/auth/authentication/getuser", {
+          withCredentials: true,
+        })
+        .then((response) => {
+          console.log(response.data);
+          if (response.data) {
+            const {
+              username,
+              email,
+              userUid,
+              role,
+              verifyStatus,
+              address,
+              phone,
+            } = response.data;
+            dispatch(
+              setUser({
+                username,
+                email,
+                userUid,
+                role,
+                verifyStatus,
+                address,
+                phone,
+              })
+            );
+          }
+        })
+        .catch((err) => {
+          console.error("Error:", err);
+        });
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  },[]);
 
   useEffect(() => {
     setIsLoggedIn(user !== null);
@@ -50,9 +92,13 @@ function App() {
         },
         {
           path: "/pet",
-          element: <CommonPages.Pet />,
+          element: isLoggedIn ? (
+            <CommonPages.Pet />
+          ) : (
+            <Navigate to="/authentication/login" replace={false} />
+          ),
           children: [
-            { path: "/pet", element: <ShuminPages.PetHome /> },
+            { path: "/pet", element: isLoggedIn? <ShuminPages.PetHome /> : <Navigate to="/authentication/login" replace={false} />},
             {
               path: "/pet/:petId",
               element: isLoggedIn ? (
@@ -98,7 +144,7 @@ function App() {
         },
         {
           path: "/product",
-          element: <CommonPages.Product />,
+          element: isLoggedIn? <CommonPages.Product />: <Navigate to="/authentication/login" replace={false} />,
           children: [
             { path: "/product", element: <ShuminPages.ProductHome /> },
             {
@@ -130,7 +176,7 @@ function App() {
 
         {
           path: "/services",
-          element: <CommonPages.Services />,
+          element:isLoggedIn?<CommonPages.Services />: <Navigate to="/authentication/login" replace={false} />,
           children: [
             { path: "/services", element: <ZongMingPages.ServiceHome /> },
             {
@@ -182,9 +228,9 @@ function App() {
           ],
         },
         {
-          path:"/cartPopup",
-          element:<EditProfilePopup/>
-        }
+          path: "/cartPopup",
+          element: <EditProfilePopup />,
+        },
       ],
     },
   ]);

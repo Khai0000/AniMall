@@ -5,6 +5,8 @@ import "../styles/ResetPassword.css";
 import YellowTop from "../assets/images/yellow_top.png";
 import VerifyIcon from "../assets/images/verify_icon.png";
 import VerifyIconError from "../assets/images/error_verify_icon.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 function ResetPassword() {
   const [showVerify, setShowVerify] = useState(false);
@@ -15,6 +17,11 @@ function ResetPassword() {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  const [resetError, setResetError] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+
   const [codeError, setCodeError] = useState(false);
   const inputRefs = useRef([]);
   const navigate = useNavigate();
@@ -37,6 +44,14 @@ function ResetPassword() {
       document.removeEventListener("keydown", handleBackspace);
     };
   }, []);
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setConfirmPasswordVisible(!confirmPasswordVisible);
+  };
 
   const handleResetClick = async (e) => {
     e.preventDefault();
@@ -67,10 +82,10 @@ function ResetPassword() {
         { email }
       );
       if (response.data.message) {
-        setShowVerify(true);
+        setShowSuccessMessage(true);
       }
     } catch (error) {
-      setEmailError("Error sending verification code");
+      setResetError("Server is not connected.");
     }
   };
 
@@ -132,18 +147,24 @@ function ResetPassword() {
 
   const handleResendClick = async () => {
     try {
-      await axios.post(
-        "http://localhost:4000/api/auth/authentication/send-reset-email",
-        { email }
+      const response = await axios.post(
+        "http://localhost:4000/api/auth/authentication/resend-reset-code",
+        { email: email }
       );
-      setCodeError(false);
-      setTimeout(() => {
-        inputRefs.current.forEach((inputRef) => {
-          inputRef.classList.remove("invalid");
-        });
-      }, 100);
+      if (response.status === 200) {
+        setCodeError(false);
+        setTimeout(() => {
+          inputRefs.current.forEach((inputRef) => {
+            inputRef.classList.remove("invalid");
+          });
+        }, 100);
+        setShowSuccessMessage(true);
+      }
     } catch (error) {
-      console.error("Error resending verification code", error);
+      console.error("Error resending verification code:", error);
+      alert(
+        "An error occurred while resending the verification code. Please try again later."
+      );
     }
   };
 
@@ -167,34 +188,50 @@ function ResetPassword() {
                 }}
               />
               {emailError && <p className="error-message">{emailError}</p>}
-              <input
-                required
-                className="reset-password"
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  setPasswordError("");
-                }}
-              />
+              <div className="password-container">
+                <input
+                  required
+                  className="reset-password"
+                  type={passwordVisible ? "text" : "password"}
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setPasswordError("");
+                  }}
+                />
+                <FontAwesomeIcon
+                  icon={passwordVisible ? faEyeSlash : faEye}
+                  className="password-toggle-icon"
+                  onClick={togglePasswordVisibility}
+                />
+              </div>
               {passwordError && (
                 <p className="error-message">{passwordError}</p>
               )}
-              <input
-                required
-                className="reset-confirmpassword"
-                type="password"
-                placeholder="Confirmed Password"
-                value={confirmedPassword}
-                onChange={(e) => {
-                  setConfirmedPassword(e.target.value);
-                  setConfirmPasswordError("");
-                }}
-              />
+              <div className="password-container">
+                <input
+                  required
+                  className="reset-confirmpassword"
+                  type={confirmPasswordVisible ? "text" : "password"}
+                  placeholder="Confirmed Password"
+                  value={confirmedPassword}
+                  onChange={(e) => {
+                    setConfirmedPassword(e.target.value);
+                    setConfirmPasswordError("");
+                  }}
+                />
+                <FontAwesomeIcon
+                  icon={confirmPasswordVisible ? faEyeSlash : faEye}
+                  className="password-toggle-icon"
+                  onClick={toggleConfirmPasswordVisibility}
+                />
+              </div>
               {confirmPasswordError && (
                 <p className="error-message">{confirmPasswordError}</p>
               )}
+
+              {resetError && <div className="error-register">{resetError}</div>}
               <button className="reset-button" type="submit">
                 RESET
               </button>
@@ -251,6 +288,22 @@ function ResetPassword() {
               Send Again
             </button>
           </p>
+        </div>
+      )}
+      {showSuccessMessage && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h2>Success!</h2>
+            <p>The verification code has been sent to your email.</p>
+            <button
+              onClick={() => {
+                setShowSuccessMessage(false);
+                setShowVerify(true);
+              }}
+            >
+              Close
+            </button>
+          </div>
         </div>
       )}
     </div>

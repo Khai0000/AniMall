@@ -1,4 +1,5 @@
 import express from "express";
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import mongoose from "mongoose";
 import date from "./Date/date.js";
@@ -17,10 +18,12 @@ import Grid from "gridfs-stream";
 let gfs;
 
 dotenv.config();
-
 const app = express();
 
-app.use(cors());
+app.use(cookieParser());
+// app.use(cors({ origin: 'http://localhost:3000' }));
+app.use(cors({ origin: true, credentials: true, }));
+//app.use(cors());
 app.use(express.json());
 app.use((req, res, next) => {
   console.log("Method", req.method, "at", req.path, date);
@@ -38,7 +41,6 @@ app.use("/api/pet", petRouter);
 app.use("/api/services", servicesRouter);
 app.use("/api/cart",cartRouter);
 app.use("/api/auth", authRouter);
-app.use("/api/orders",orderRouter);
 app.use("/api/orders",orderRouter);
 app.use("/api/reminders",reminderRouter);
 

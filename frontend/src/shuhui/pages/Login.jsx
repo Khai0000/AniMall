@@ -6,6 +6,8 @@ import "../styles/Login.css";
 import DogPaw from "../assets/images/dog_paw.png";
 import YellowCircle from "../assets/images/yellow_circle.png";
 import AnimalPic from "../assets/images/animal_pic.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios"; // Import axios for making HTTP requests
 
 function Login() {
@@ -17,6 +19,17 @@ function Login() {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [loginError, setLoginError] = useState("");
+
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setConfirmPasswordVisible(!confirmPasswordVisible);
+  };
 
   const validateEmail = (email) => {
     const isValidEmail = /\S+@\S+\.\S+/.test(email);
@@ -42,13 +55,12 @@ function Login() {
           {
             email: email,
             password: password,
-          }
+          },
+          { withCredentials: true }
         );
 
         if (response.data.token) {
-          // Save the token in local storage or Redux store
           localStorage.setItem("token", response.data.token);
-          // Retrieve username from the response and set it in the Redux store
           const {
             username,
             email,
@@ -74,8 +86,16 @@ function Login() {
           setLoginError("Login failed. Please check your credentials.");
         }
       } catch (error) {
-        console.error("Error:", error);
-        setLoginError("An error occurred. Please try again later.");
+        if (error.response && error.response.status === 401) {
+          setLoginError("Invalid email or password.");
+        } else if (error.response && error.response.status === 403) {
+          setLoginError(
+            "Your account has been blocked. Please contact administrator."
+          );
+        } else {
+          console.error("Error:", error);
+          setLoginError("Server is not connected.");
+        }
       }
     }
   };
@@ -85,7 +105,7 @@ function Login() {
       <div className="login-component">
         <div className="login-column">
           <h1 className="login-title">Login To Your Account</h1>
-          {loginError && <div className="error">{loginError}</div>}
+
           <p className="login-register">
             New Customer?{" "}
             <Link className="login-register-link" to="/authentication/register">
@@ -101,14 +121,23 @@ function Login() {
               onChange={(e) => setEmail(e.target.value)}
             />
             {emailError && <div className="error">{emailError}</div>}
-            <input
-              className="login-password"
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            {passwordError && <div className="error">{passwordError}</div>}
+
+            <div className="password-container-login">
+              <input
+                required
+                className="login-password"
+                type={passwordVisible ? "text" : "password"}
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <FontAwesomeIcon
+                icon={passwordVisible ? faEyeSlash : faEye}
+                className="password-toggle-icon-login"
+                onClick={togglePasswordVisibility}
+              />
+              {passwordError && <div className="error">{passwordError}</div>}
+            </div>
             <p className="login-reset">
               <Link
                 className="login-reset-link"
@@ -117,10 +146,12 @@ function Login() {
                 Forgot password?
               </Link>
             </p>
+            {loginError && <div className="error">{loginError}</div>}
             <button className="login-button" type="submit">
               LOGIN
             </button>
           </form>
+
           <img className="dog-paw" src={DogPaw} alt="dog paw" />
         </div>
       </div>
