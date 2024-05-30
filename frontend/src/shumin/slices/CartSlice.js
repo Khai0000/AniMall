@@ -4,30 +4,46 @@ export const CartSlice = createSlice({
   name: "cart",
   initialState: [],
   reducers: {
+    setCartItems: (state, action) => {
+      return action.payload;
+    },
     addItemToCart: (state, action) => {
-      const newItem = action.payload;
-      const existingItem = state.find((item) => item.title === newItem.title);
-
-      if (existingItem) {
-        // Item already exists, update its quantity
-        existingItem.quantity += 1;
+      const newItem = action.payload[0]; // Extract the object from the array
+    
+      if (newItem && newItem.productId) {
+        const existingItemIndex = state.findIndex(item => item.productId === newItem.productId);
+    
+        if (existingItemIndex !== -1) {
+          // Item already exists, update its quantity
+          state[existingItemIndex].quantity += newItem.quantity;
+        } else {
+          // Item is new, add it to the cart
+          state.unshift(newItem);
+        }
       } else {
-        // Item is new, add it to the cart
-        state.push(newItem);
+        console.error('Invalid payload format:', action.payload);
+      }
+    },    
+    addServiceToCart: (state, action) => {
+      const newServices = action.payload;
+
+      if (Array.isArray(newServices)) {
+        newServices.forEach((newService) => {
+          state.push(newService);
+        });
+      } else {
+        state.push(newServices);
       }
     },
-    addServiceToCart: (state, action) => {
-      const newService = action.payload;
-      state.push(newService);
-    },
     removeItemFromCart: (state, action) => {
-      return state.filter((item) => item.title !== action.payload);
+      const id = action.payload;
+      return state.filter((item) => item._id !== id);
     },
 
     updateQuantity: (state, action) => {
-      const { title, quantity } = action.payload;
+      const { id, quantity } = action.payload;
 
-      const itemToUpdateIndex = state.findIndex((item) => item.title === title);
+      const itemToUpdateIndex = state.findIndex((item) => item._id === id);
 
       if (itemToUpdateIndex !== -1) {
         state[itemToUpdateIndex].quantity = quantity;
@@ -35,20 +51,22 @@ export const CartSlice = createSlice({
     },
 
     updateChecked: (state, action) => {
-      const { title, checked } = action.payload;
-      const itemToUpdate = state.find((item) => item.title === title);
+      const { productId, checked } = action.payload;
+      const itemToUpdate = state.find((item) => item._id === productId);
 
       if (itemToUpdate) {
         itemToUpdate.checked = checked;
       }
     },
     checkoutItems: (state, action) => {
-      return state.filter((item) => !item.checked);
+      const { itemId } = action.payload;
+      return state.filter((item) => item._id !== itemId);
     },
   },
 });
 
 export const {
+  setCartItems,
   addItemToCart,
   addServiceToCart,
   removeItemFromCart,

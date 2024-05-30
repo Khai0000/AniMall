@@ -6,7 +6,8 @@ import postSlice from "../ginkhai/slices/postSlice";
 import forumHistorySlice from "../ginkhai/slices/forumHistorySlice";
 import serviceSlice from "../ZongMing/slices/serviceSlice";
 import userSlice from "../shuhui/slices/userSlice";
-import formHistorySlice from "../shumin/slices/formHistorySlice";
+import orderSlice from "../ZongMing/slices/orderSlice";
+
 
 export default configureStore({
   reducer: {
@@ -17,7 +18,7 @@ export default configureStore({
     pets:PetSlice,
     cart:CartSlice,
     services: serviceSlice,
-    form: formHistorySlice,
+    orders:orderSlice,
   },
 });
 

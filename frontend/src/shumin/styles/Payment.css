@@ -1,0 +1,93 @@
+.paymentDetailsBackground {
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.3);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    z-index: 10;
+}
+
+.paymentDetailsBackground>.paymentDetailsContainer {
+    background-color: white;
+    padding: 2em;
+    border-radius: 5px;
+    width: 32%;
+}
+
+.paymentDetailsBackground>.paymentDetailsContainer>h2 {
+    margin-top: 0;
+    color: #3C95A9;
+    margin-bottom: 2em;
+}
+
+.paymentDetailsBackground>.paymentDetailsContainer>div {
+    margin-bottom: 2em;
+}
+
+.paymentDetailsBackground>.paymentDetailsContainer>div>input {
+    padding: 0.5em 1em;
+    width: 100%;
+    font-size: 1em;
+}
+
+.paymentDetailsBackground>.paymentDetailsContainer>div.cardCredentialsContainer {
+    display: flex;
+    gap: 1.5em;
+    width: 100%;
+}
+
+.paymentDetailsBackground>.paymentDetailsContainer>div.cardCredentialsContainer>.cardExpiredDate {
+    width: 60%;
+}
+
+.paymentDetailsBackground>.paymentDetailsContainer>div.cardCredentialsContainer>.cardCVV {
+    width: 40%;
+}
+
+.paymentDetailsBackground>.paymentDetailsContainer>div>.cardNumberInput,
+.paymentDetailsBackground>.paymentDetailsContainer>div>.cardHolderNameInput {
+    max-width: 100%;
+}
+
+.paymentDetailsBackground>.paymentDetailsContainer>.paymentButtonContainer {
+    width: 100%;
+    display: flex;
+    gap: 1em;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0em;
+}
+
+.paymentDetailsBackground>.paymentDetailsContainer>.paymentButtonContainer>.closeButton {
+    border: 1px solid #3C95A9;
+    border-radius: 5px;
+    background-color: transparent;
+    padding: 0.5em 1em;
+    color: #3C95A9;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.paymentDetailsBackground>.paymentDetailsContainer>.paymentButtonContainer>.closeButton:hover {
+    color: #f4b701;
+    border: 1px solid #f4b701;
+}
+
+.paymentDetailsBackground>.paymentDetailsContainer>.paymentButtonContainer>.proceedPaymentButton {
+    border: none;
+    border-radius: 5px;
+    background-color: #3C95A9;
+    padding: 0.5em 1em;
+    color: #fff;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.paymentDetailsBackground>.paymentDetailsContainer>.paymentButtonContainer>.proceedPaymentButton:hover {
+    background-color: #f4b701;
+}

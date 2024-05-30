@@ -3,7 +3,7 @@ import "../styles/ForumAddPost.css";
 import imageBackground from "../assets/images/imageBackground.png";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { addPost } from "../slices/postSlice";
 import axios from "axios";
 
@@ -18,7 +18,10 @@ const ForumAddPost = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const user = useSelector((state)=>state.user.user);
+
   useEffect(() => {
+    console.log(user);
     const allButtonsOccupied = uploadedImages.every((image) => image !== null);
     if (allButtonsOccupied) {
       setButtonCount((prevCount) => prevCount + 1);
@@ -146,7 +149,7 @@ const ForumAddPost = () => {
           {
             title: titleText,
             image: imageResponse.data,
-            author: "Khai",
+            author: user.username+"//useruid//"+user.userUid,
             content: bodyText,
             tag: [...selectedButtons],
           }

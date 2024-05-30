@@ -3,9 +3,9 @@ import { useSelector, useDispatch } from "react-redux";
 import React, { useEffect, useState, lazy, Suspense } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import "../styles/ProductCard.css";
-import { addProduct } from "../slices/ProductSlice";
-import { ProductData } from "../data/DummyProductData";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { setInitialProduct } from "../slices/ProductSlice";
 
 const SellerProductCard = lazy(() => import("../components/SellerProductCard"));
 
@@ -18,13 +18,24 @@ function SellerProduct() {
 
   useEffect(() => {
     setIsLoading(true);
-    if (products.length === 0) {
-      ProductData.forEach((product) => {
-        dispatch(addProduct(product));
-      });
-    }
-    setIsLoading(false);
-  }, [dispatch, products]);
+    const getProducts = async () => {
+      try {
+        const productsResponse = await axios.get("http://localhost:4000/api/product");
+        if (productsResponse.status === 200) {
+          dispatch(setInitialProduct(productsResponse.data));
+        } else {
+          console.log(productsResponse);
+        }
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+  
+    getProducts();
+  }, [dispatch, products.length]);
+  
 
   const navigate = useNavigate();
 
@@ -80,8 +91,8 @@ function SellerProduct() {
           <>
             <div>
               <Suspense fallback={<div>Loading...</div>}>
-                {products.map((product, index) => (
-                  <SellerProductCard key={product.id} product={product} />
+                {products.map((product) => (
+                  <SellerProductCard key={product._id} product={product} />
                 ))}
               </Suspense>
             </div>

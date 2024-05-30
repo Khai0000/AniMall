@@ -1,11 +1,17 @@
 import React, { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import "../styles/CommentPopUp.css";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addComment ,addRating} from "../slices/ProductSlice";
+import axios from "axios";
 
-const CommentPopUp = ({ setShowPopup, title }) => {
+const CommentPopUp = ({ setShowPopup, id}) => {
   const dispatch = useDispatch();
+  const user = useSelector((state)=>state.user);
+
+  const product = useSelector((state) =>
+    state.products.find((product) => product._id === id)
+  );
 
   const [bodyText, setBodyText] = useState("");
   const [selectedRating, setSelectedRating] = useState(null);
@@ -18,25 +24,28 @@ const CommentPopUp = ({ setShowPopup, title }) => {
     setSelectedRating(rating === selectedRating ? null : rating);
   };
 
-  const handleOnSubmitClick = () => {
+  const handleOnSubmitClick = async () => {
     if (bodyText.trim() === "" || !selectedRating) {
       alert("Body can't be empty OR Please select a rating");
       return;
     }
 
-    const newComment = {
-      image: null,
-      name: "Khai",
-      content: bodyText,
-      rating: selectedRating,
-    };
+    try{
+      const commentRes= await axios.post(`http://localhost:4000/api/product/comment/product/${id}`,{
+          name: user.user.username,
+          content: bodyText,
+        }
+      );
+      const ratingRes = await axios.post(`http://localhost:4000/api/product/rating/product/${id}`,{rating: selectedRating});
 
-   // Dispatch the addComment action
-  dispatch(addComment({ title, comment: newComment }));
-  dispatch(addRating({ title, rating: selectedRating }));
-
-  // Close the popup
-  setShowPopup(false);
+      if (commentRes.status === 201 && ratingRes.status===200){
+        dispatch(addComment({ id, comment:commentRes.data}));
+        dispatch(addRating({ id, rating: ratingRes.data }));
+      }
+      setShowPopup(false);
+    }catch (error){
+      console.log("Error uploading comment: "+ error);
+    }
 };
 
   return (
@@ -52,7 +61,7 @@ const CommentPopUp = ({ setShowPopup, title }) => {
         </button>
         <p className="popupTitle">
           Hey Drop Your Rating for our{" "}
-          <span className="titlePopUp">{title}</span>!
+          <span className="titlePopUp">{product.title}</span>!
         </p>
 
         <div className="servicePopupCommentContainer">

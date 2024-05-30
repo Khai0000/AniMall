@@ -10,3 +10,5 @@ export { default as AddPet } from './AddPet';
 export { default as ProductHome } from './ProductHome';
 export { default as PetHome } from './PetHome';
 export { default as AdoptionFormHome } from './AdoptionFormHome';
+export { default as UserOrder } from './UserOrder';
+export { default as SellerOrder } from './SellerOrder';

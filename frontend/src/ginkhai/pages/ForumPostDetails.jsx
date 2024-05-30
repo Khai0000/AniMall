@@ -28,6 +28,8 @@ const ForumPostDetails = () => {
   const [loadedImageUrls, setLoadedImageUrls] = useState([]);
   const [disableButton, setDisableButton] = useState(false);
 
+  const user = useSelector((state)=> state.user.user);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -81,36 +83,40 @@ const ForumPostDetails = () => {
     navigate(-1);
   };
 
+  const handleOnEditClick = ()=>{
+    navigate(`/community/post/${postId}/edit`,{ state: { post: localPost } });
+  }
+
   const handleOnLikeClick = async () => {
-    if (post.peopleWhoLikes.includes("Khai")) {
-      dispatch(removeLike({ postId, userUid: "Khai" }));
+    if (post.peopleWhoLikes.includes(user.userUid)) {
+      dispatch(removeLike({ postId, userUid: user.userUid }));
       await axios.post(
         `http://localhost:4000/api/community/post/${postId}/neutral`,
-        { userUid: "Khai" }
+        { userUid: user.userUid }
       );
     } else {
-      dispatch(addLike({ postId, userUid: "Khai" }));
+      dispatch(addLike({ postId, userUid: user.userUid }));
       await axios.post(
         `http://localhost:4000/api/community/post/${postId}/like`,
-        { userUid: "Khai" }
+        { userUid: user.userUid }
       );
     }
   };
   const handleOnDislikeClick = async () => {
     try {
-      if (post.peopleWhoDislikes.includes("Khai")) {
-        dispatch(removeDislike({ postId, userUid: "Khai" }));
+      if (post.peopleWhoDislikes.includes(user.userUid)) {
+        dispatch(removeDislike({ postId, userUid: user.userUid }));
 
         await axios.post(
           `http://localhost:4000/api/community/post/${postId}/neutral`,
-          { userUid: "Khai" }
+          { userUid: user.userUid }
         );
       } else {
-        dispatch(addDislike({ postId, userUid: "Khai" }));
+        dispatch(addDislike({ postId, userUid: user.userUid}));
 
         await axios.post(
           `http://localhost:4000/api/community/post/${postId}/dislike`,
-          { userUid: "Khai" }
+          { userUid: user.userUid }
         );
       }
     } catch (error) {
@@ -132,12 +138,17 @@ const ForumPostDetails = () => {
           <div>
             <p className="title">{post && post.title}</p>
             <p className="author">
-              By: <span className="authorName">{ post && post.author}</span>
+              By: <span className="authorName">{ post && post.author.split("//useruid//")[0]}</span>
             </p>
           </div>
-          <button className="weijiePostBackButton" onClick={handleOnBackClick}>
-            Back
-          </button>
+          <div className="weijiePostButtonContainer">
+            {post.author.split("//useruid//")[1]===user.userUid && <button className="weijieEditPostButton" onClick={handleOnEditClick}>
+              Edit
+            </button>}
+            <button className="weijiePostBackButton" onClick={handleOnBackClick}>
+              Back
+            </button>
+          </div>
         </div>
         <div className="floatContainer">
           <div className="imageContainer">
@@ -145,7 +156,7 @@ const ForumPostDetails = () => {
           </div>
           <div className="contentContainer">
             <span className="content">{post && post.content}</span>
-          </div>
+          </div>  
         </div>
       </div>
 
@@ -158,7 +169,7 @@ const ForumPostDetails = () => {
               onClick={handleOnLikeClick}
               disabled={disableButton}
             >
-              {post && post.peopleWhoLikes.includes("Khai") ? (
+              {post && post.peopleWhoLikes.includes(user.userUid) ? (
                 <ThumbUpIcon className="reactionIcon" color="success" />
               ) : (
                 <ThumbUpOffAltIcon className="reactionIcon" color="success" />
@@ -172,7 +183,7 @@ const ForumPostDetails = () => {
               onClick={handleOnDislikeClick}
               disabled={disableButton}
             >
-              {post && post.peopleWhoDislikes.includes("Khai") ? (
+              {post && post.peopleWhoDislikes.includes(user.userUid) ? (
                 <ThumbDownAltIcon className="reactionIcon" color="error" />
               ) : (
                 <ThumbDownOffAltIcon className="reactionIcon" color="error" />
