@@ -22,30 +22,32 @@ import axios from "axios";
 
 const ForumPostDetails = () => {
   const { postId } = useParams();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [showErrorPage, setShowErrorPage] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [loadedImageUrls, setLoadedImageUrls] = useState([]);
   const [disableButton, setDisableButton] = useState(false);
 
-  const user = useSelector((state)=> state.user.user);
+  const user = useSelector((state) => state.user.user);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const localPost = useSelector((state) =>
     state.posts?.find((post) => {
-      return post._id === postId;
+      return post._id === postId ;
     })
   );
 
-  const postRef = useRef(localPost); 
-  postRef.current=localPost;
+  const postRef = useRef(localPost);
+  postRef.current = localPost;
   let post = postRef.current;
 
   useEffect(() => {
     const fetchSpecificPost = async () => {
+      console.log("hahaha");
       try {
+        setIsLoading(true);
         if (!postRef.current) {
           const specificPostResponse = await axios.get(
             `http://localhost:4000/api/community/post/${postId}`
@@ -68,8 +70,8 @@ const ForumPostDetails = () => {
       }
     };
 
-    fetchSpecificPost();
-  });
+    !postRef.current && fetchSpecificPost();
+  },[postId]);
 
   useEffect(() => {
     post && setLoadedImageUrls(post.image);
@@ -83,9 +85,9 @@ const ForumPostDetails = () => {
     navigate(-1);
   };
 
-  const handleOnEditClick = ()=>{
-    navigate(`/community/post/${postId}/edit`,{ state: { post: localPost } });
-  }
+  const handleOnEditClick = () => {
+    navigate(`/community/post/${postId}/edit`, { state: { post: localPost } });
+  };
 
   const handleOnLikeClick = async () => {
     if (post.peopleWhoLikes.includes(user.userUid)) {
@@ -112,7 +114,7 @@ const ForumPostDetails = () => {
           { userUid: user.userUid }
         );
       } else {
-        dispatch(addDislike({ postId, userUid: user.userUid}));
+        dispatch(addDislike({ postId, userUid: user.userUid }));
 
         await axios.post(
           `http://localhost:4000/api/community/post/${postId}/dislike`,
@@ -138,14 +140,25 @@ const ForumPostDetails = () => {
           <div>
             <p className="title">{post && post.title}</p>
             <p className="author">
-              By: <span className="authorName">{ post && post.author.split("//useruid//")[0]}</span>
+              By:{" "}
+              <span className="authorName">
+                {post && post.author.split("//useruid//")[0]}
+              </span>
             </p>
           </div>
           <div className="weijiePostButtonContainer">
-            {post.author.split("//useruid//")[1]===user.userUid && <button className="weijieEditPostButton" onClick={handleOnEditClick}>
-              Edit
-            </button>}
-            <button className="weijiePostBackButton" onClick={handleOnBackClick}>
+            {post && post.author.split("//useruid//")[1] === user.userUid && (
+              <button
+                className="weijieEditPostButton"
+                onClick={handleOnEditClick}
+              >
+                Edit
+              </button>
+            )}
+            <button
+              className="weijiePostBackButton"
+              onClick={handleOnBackClick}
+            >
               Back
             </button>
           </div>
@@ -156,7 +169,7 @@ const ForumPostDetails = () => {
           </div>
           <div className="contentContainer">
             <span className="content">{post && post.content}</span>
-          </div>  
+          </div>
         </div>
       </div>
 
@@ -224,7 +237,8 @@ const ForumPostDetails = () => {
                 <p>The topic have no comment yet! Add yours here!</p>
               </div>
             ) : (
-              post && post.comments
+              post &&
+              post.comments
                 .slice()
                 .reverse()
                 .map((comment) => {

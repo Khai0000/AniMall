@@ -30,7 +30,7 @@ const ForumHomeCard = ({ post, index }) => {
     } else {
       // Handle other image types using existing logic
       import(`../assets/images/dog2.jpg`)
-        .then((image) => { })
+        .then((image) => {})
         .catch((error) => {
           console.error("Error loading image:", error);
         })
@@ -39,7 +39,6 @@ const ForumHomeCard = ({ post, index }) => {
         });
     }
   }, [post]);
-  
 
   const handleOnDeleteClick = async (e) => {
     e.stopPropagation();
@@ -49,7 +48,6 @@ const ForumHomeCard = ({ post, index }) => {
       const deletePostResponse = await axios.delete(
         `http://localhost:4000/api/community/post/${post._id}`
       );
-
 
       if (deletePostResponse.status === 200) {
         setShowSuccessfulPopup(true);
@@ -90,7 +88,7 @@ const ForumHomeCard = ({ post, index }) => {
         <p className="content">{post.content}</p>
       </div>
       {(authorDetails[1] && authorDetails[1] === user.userUid) ||
-        user != null && user.role === "admin" ? (
+      (user && user.role === "admin") ? (
         <button
           style={{ zIndex: 100 }}
           className="wjDeleteButton"
