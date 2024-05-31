@@ -23,6 +23,8 @@ function ForumHome() {
   const [isLoading, setIsLoading] = useState(true);
   const containerRef = useRef(null);
 
+
+
   // useEffect for restoring last scrolling position
   useEffect(() => {
     if (containerRef.current && scrollPosition) {

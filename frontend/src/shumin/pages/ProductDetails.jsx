@@ -26,6 +26,7 @@ const ProductDetails = () => {
     state.products.find((product) => product._id === productId)
   );
 
+
   const user = useSelector((state)=>state.user.user);
 
 

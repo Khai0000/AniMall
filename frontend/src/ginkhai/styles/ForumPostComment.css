@@ -63,7 +63,7 @@
     
 }
 
-.commentDetailsContainer .deleteButton{
+.commentDetailsContainer .wjDeleteButton{
     position: absolute;
     right: 0;
     color: red;

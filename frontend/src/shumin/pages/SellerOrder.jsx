@@ -4,6 +4,8 @@ import React, { useEffect, Suspense, useState } from 'react';
 import { setInitialOrders,setSelectedCategory } from '../../ZongMing/slices/orderSlice';
 import axios from 'axios';
 import { lazy } from 'react';
+import PulseLoader from "react-spinners/PulseLoader";
+
 
 const SellerOrderCard=lazy(()=>import("../components/SellerOrderCard"));
 
@@ -162,7 +164,10 @@ const SellerOrder =()=>{
             </div>
             <div>
                 {filteredReceipts && filteredReceipts.length !== 0 ?(
-                    <Suspense fallback={<div>Loading...</div>}>
+                    <Suspense fallback={<div className="wj-loadingContainer">
+                    <PulseLoader size={"1.5rem"} color="#3C95A9" />
+                    <p className="wj-loadingText">Loading...</p>
+                  </div>}>
                         {(selectedCategory.length === 1 && selectedCategory[0] === 'service'?sortedServiceReceipt:filteredReceipts).map((receipt) => (
                             <SellerOrderCard key={receipt._id} receipt={receipt} selectedCategory={selectedCategory} sortedServiceReceipt={sortedServiceReceipt}/>
                         ))}

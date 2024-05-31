@@ -140,8 +140,7 @@ const CartCard = ({ product }) => {
         }
       }
     } else if (event.target.value === "") {
-      // Handle case when input is empty (allow deletion)
-      setQuantity(""); // Assuming quantity is a string in your state
+      setQuantity(""); 
     }
   };
 

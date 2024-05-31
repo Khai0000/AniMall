@@ -66,7 +66,7 @@ const ForumPostComment = ({ disable,comment, postId }) => {
       </div>
 
       {comment.name.split("//useruid//")[1]=== user.userUid&& (
-        <button className="deleteButton" onClick={handleOnDeleteClick} disabled={disable}>
+        <button className="wjDeleteButton" onClick={handleOnDeleteClick} disabled={disable}>
           <DeleteIcon />
         </button>
       )}

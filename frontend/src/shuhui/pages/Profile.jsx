@@ -5,6 +5,8 @@ import { updateUser, removeUser } from "../slices/userSlice";
 import "../styles/Profile.css";
 import profileImage from "../assets/images/dog_profile.jpg";
 import axios from "axios";
+import PulseLoader from "react-spinners/PulseLoader";
+
 
 function Profile() {
   const dispatch = useDispatch();
@@ -19,23 +21,27 @@ function Profile() {
   const [isEditMode, setIsEditMode] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (user) {
-      // Simulate a delay to fetch user data
-      const timer = setTimeout(() => {
-        setUsername(user.username);
-        setAddress(user.address);
-        setPhone(user.phone);
-        setLoading(false); // Stop loading once the data is set
-      }, 100); // 500ms delay
+    setUsername(user.username);
+    setAddress(user.address);
+    setPhone(user.phone);
+    setLoading(false);  
+    // if (user) {
+    //   // Simulate a delay to fetch user data
+    //   const timer = setTimeout(() => {
+    //     setUsername(user.username);
+    //     setAddress(user.address);
+    //     setPhone(user.phone);
+    //     setLoading(false); // Stop loading once the data is set
+    //   },10); // 500ms delay
 
-      return () => clearTimeout(timer); // Clean up the timer
-    } else {
-      setLoading(false);
-    }
-  },[user]);
+    //   return () => clearTimeout(timer); // Clean up the timer
+    // } else {
+    //   setLoading(false);
+    // }
+  }, [user]);
 
   const validateUsername = (username) => {
     const isValidUsername = /^[a-z]+$/.test(username);
@@ -77,7 +83,7 @@ function Profile() {
     if (isUsernameValid && isAddressValid && isPhoneValid) {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.put(
+        await axios.put(
           "http://localhost:4000/api/auth/authentication/updateprofile",
           {
             username: username,
@@ -140,7 +146,10 @@ function Profile() {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="wj-loadingContainer">
+      <PulseLoader size={"1.5rem"} color="#3C95A9" />
+      <p className="wj-loadingText">Loading...</p>
+    </div>;
   }
 
   if (showSuccessMessage) {

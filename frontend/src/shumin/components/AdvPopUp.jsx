@@ -14,8 +14,6 @@ function AdvPopUp({ show, onClose }) {  // Assuming show and onClose are passed 
   // Select an image at the random index
   const selectedImage = images[randomIndex];
 
-
-
   return (
     <div className="advPopUp" style={{ display: show ? 'block' : 'none' }}>
       <div className="advPopupContainer">

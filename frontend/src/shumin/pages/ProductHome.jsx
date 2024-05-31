@@ -30,6 +30,7 @@ const ProductHome = () => {
     setSearchTerm(value);
   };
 
+
   useEffect(() => {
     let filteredData = [...memoizedProducts];
     setIsLoading(true);
@@ -113,7 +114,7 @@ const ProductHome = () => {
         <p className="Product-category-row-content-noproduct">{`No ${category} product matched!`}</p>
       ) : (
         <div className="Product-category-row-content">
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense >
             {products.map((product) => (
               <ProductCard key={product._id} product={product} />
             ))}
@@ -185,7 +186,7 @@ const ProductHome = () => {
           </>
         ) : (
           <div className="NoProductContainer">
-            <p>No product matched!</p>
+           
           </div>
         )}
 

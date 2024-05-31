@@ -1,6 +1,7 @@
 import React from "react";
 import "../styles/Payment.css";
 
+
 const Payment = ({ setShowPayment,checkoutApiCall,totalPrice }) => {
     console.log(checkoutApiCall);
   return (
@@ -38,7 +39,7 @@ const Payment = ({ setShowPayment,checkoutApiCall,totalPrice }) => {
               await checkoutApiCall();
             }}
           >
-            Pay RM{totalPrice}
+            Pay RM{totalPrice.toFixed(2)}
           </button>
           <button className="closeButton" onClick={() => setShowPayment(false)}>
             Cancel

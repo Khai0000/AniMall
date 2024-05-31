@@ -9,14 +9,17 @@ import CommentPopUp from "../components/CommentPopUp";
 import { useSelector } from 'react-redux';
 
 
+
 const ServiceDetail = () => {
   const { serviceId } = useParams();
   const [showPopup, setShowPopup] = useState(false);
   const user = useSelector((state) => state.user.user);
 
+
   const service = useSelector((state) =>
     state.services.find((service) => service._id === serviceId)
   );
+
 
   const handleAddComment = () => {
     setShowPopup(true);
@@ -69,7 +72,7 @@ const ServiceDetail = () => {
                 <p>No comments for this service yet.</p>
               </div>
             ) : (
-              service.serviceComments.map((commentItem) => (
+              service.serviceComments.slice().reverse().map((commentItem) => (
                 <ServicePostComment
                   comment={commentItem}
                   serviceId={serviceId}
@@ -80,6 +83,7 @@ const ServiceDetail = () => {
           </div>
         </div>
       </div>
+      
       {showPopup && (
         <CommentPopUp
           setShowPopup={setShowPopup}

@@ -25,6 +25,7 @@ function App() {
   const isAdmin = user && user.role === "admin";
 
   useEffect(() => {
+    if(!user)
     try {
       axios.get(
         "http://localhost:4000/api/auth/authentication/getuser",

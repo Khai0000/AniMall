@@ -154,6 +154,7 @@
     width: 100%;
     display: flex;
     justify-content: space-around;
+    gap: 2em;
     margin-bottom: 3vh;
 }
 
@@ -244,6 +245,6 @@
     z-index: 50;
 }
 .forumPostAddingLoadingBackground>.forumPostAddingLoadingContainer>p {
-    font-size: 2em;
+    font-size: 1.25em;
     margin-bottom: 0;
 }
