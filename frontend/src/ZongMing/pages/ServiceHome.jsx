@@ -101,7 +101,7 @@ const ServiceHome = () => {
       {loading ? (
         <div className="wj-loadingContainer">
           <PulseLoader size={"1.5rem"} color="#3C95A9" />
-          <p className="wj-loadingText">Loading...</p>
+          <p className="wj-loadingText">Loading ...</p>
         </div>
 
       ) : (

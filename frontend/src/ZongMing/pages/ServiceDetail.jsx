@@ -7,7 +7,7 @@ import ServicesAppointment from "../components/ServicesAppointment";
 import ServicePostComment from "../components/ServicePostComment";
 import CommentPopUp from "../components/CommentPopUp";
 import { useSelector } from 'react-redux';
-
+import PulseLoader from "react-spinners/PulseLoader";
 
 
 const ServiceDetail = () => {
@@ -15,15 +15,22 @@ const ServiceDetail = () => {
   const [showPopup, setShowPopup] = useState(false);
   const user = useSelector((state) => state.user.user);
 
-
   const service = useSelector((state) =>
     state.services.find((service) => service._id === serviceId)
   );
 
-
   const handleAddComment = () => {
     setShowPopup(true);
   };
+
+  if (!service) {
+    return (
+      <div className="wj-loadingContainer">
+          <PulseLoader size={"1.5rem"} color="#3C95A9" />
+          <p className="wj-loadingText">Loading Service Details...</p>
+        </div>
+    );
+  }
 
   return (
     <div className="serviceDetailsContainer">
@@ -74,6 +81,7 @@ const ServiceDetail = () => {
             ) : (
               service.serviceComments.slice().reverse().map((commentItem) => (
                 <ServicePostComment
+                  key={commentItem._id} 
                   comment={commentItem}
                   serviceId={serviceId}
                   userId={user.userUid}
