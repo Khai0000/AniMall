@@ -65,7 +65,7 @@ const SellerOrder =()=>{
             }
         };
         fetchReceipts();
-    },[]);
+    },[dispatch]);
 
     useEffect(() => {
         let filteredReceipts = [];

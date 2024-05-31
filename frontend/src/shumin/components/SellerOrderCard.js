@@ -22,11 +22,6 @@ const SellerOrderCard=({ receipt , selectedCategory, sortedServiceReceipt})=>{
         setShowPopup(!showPopup); 
     };
 
-    const parseDateTime = (dateString, timeString) => {
-        const [day, month, year] = dateString.split('/').map(Number);
-        const [hour, minute] = timeString.split(':').map(Number);
-        return new Date(year, month - 1, day, hour, minute).getTime();
-    };
     
     const checkDateStatus = (date, time) => {
         const datePart = date.split('T')[0];

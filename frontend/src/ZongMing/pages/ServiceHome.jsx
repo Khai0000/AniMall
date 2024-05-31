@@ -6,6 +6,8 @@ import ServicesHeader from "../components/ServicesHeader";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setInitialServices } from "../slices/serviceSlice";
+import PulseLoader from "react-spinners/PulseLoader";
+
 
 const CustomLink = ({ service, children }) => {
   return (
@@ -31,7 +33,7 @@ const ServiceHome = () => {
       try {
         const response = await axios.get("http://localhost:4000/api/services");
         dispatch(setInitialServices(response.data));
-        setLoading(false); // Set loading to false when data fetching is complete
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching services:", error);
       }
@@ -40,7 +42,7 @@ const ServiceHome = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    // Check if loading is true, if so, return early to prevent further execution
+
     if (loading) return;
 
     let filteredData = allServices;
@@ -96,8 +98,12 @@ const ServiceHome = () => {
         onSearch={handleSearch}
         onPriceRangeChange={handlePriceRangeChange}
       />
-      {loading ? ( // Render loading indicator if data is still being fetched
-        <div>Loading...</div>
+      {loading ? (
+        <div className="wj-loadingContainer">
+          <PulseLoader size={"1.5rem"} color="#3C95A9" />
+          <p className="wj-loadingText">Loading...</p>
+        </div>
+
       ) : (
         <div className="service-container">
           {filteredServices.length === 0 ? (
