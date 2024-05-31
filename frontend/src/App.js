@@ -26,7 +26,7 @@ function App() {
 
   useEffect(() => {
     try {
-      const response = axios.get(
+      axios.get(
         "http://localhost:4000/api/auth/authentication/getuser",
         { withCredentials: true }
       )
@@ -63,7 +63,7 @@ function App() {
     } catch (error) {
       //console.error("Error:", error);
     }
-  }, []);
+  },);
 
   useEffect(() => {
     if (user !== null) {
@@ -93,7 +93,7 @@ function App() {
                 <Navigate to="/product" replace={false} />) : <ShuhuiPages.Login />
             },
             {
-              path: "egister",
+              path: "register",
               element: <ShuhuiPages.Register />,
             },
             {

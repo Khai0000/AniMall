@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector} from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
-import { removeUser } from "../shuhui/slices/userSlice";
 import "../styles/Header.css";
 import logo from "../assets/images/logo.png";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -12,7 +11,6 @@ import axios from "axios";
 function Header() {
   const [isLogin, setIsLogin] = useState(false);
   const user = useSelector((state) => state.user.user);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,7 +20,7 @@ function Header() {
   const handleLogout = async (e) => {
     //res.clearCookie('authToken');
     try {
-      const response = await axios.get(
+      await axios.get(
         "http://localhost:4000/api/auth/authentication/logout",
         { withCredentials: true }
       );
