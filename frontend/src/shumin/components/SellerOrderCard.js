@@ -2,7 +2,7 @@ import React from "react";
 import "../styles/OrderCard.css";
 import { useState } from "react";
 
-const SellerOrderCard=({ receipt , selectedCategory, sortedServiceReceipt})=>{
+const SellerOrderCard=({ receipt , selectedCategory})=>{
     const [showPopup, setShowPopup] = useState(false);
     // const [sortedProducts, setSortedProducts] = useState([]);
 
@@ -22,7 +22,6 @@ const SellerOrderCard=({ receipt , selectedCategory, sortedServiceReceipt})=>{
         setShowPopup(!showPopup); 
     };
 
-    
     const checkDateStatus = (date, time) => {
         const datePart = date.split('T')[0];
         const dateTimeString = `${datePart}T${time}:00.000Z`;

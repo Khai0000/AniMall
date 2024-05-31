@@ -1,5 +1,4 @@
 import axios from "axios";
-import CircularProgress from "@mui/material/CircularProgress";
 import { useSelector, useDispatch } from "react-redux";
 import React, { useEffect, useState, lazy, Suspense } from "react";
 import {
@@ -14,7 +13,7 @@ import AddressDetails from "../components/AddressDetails";
 import Payment from "../components/Payment";
 import SuccessfulModal from "../components/SuccessfulModel";
 import PulseLoader from "react-spinners/PulseLoader";
-
+import "../styles/SellerProduct.css";
 
 
 const CartCard = lazy(() => import("../components/CartCard"));
@@ -42,7 +41,6 @@ function MyCart() {
   const [isCheckouting, setIsCheckouting] = useState(false);
 
   const scheduleReminder = async (item, user) => {
-    setLoading(true);
     try {
       const response = await axios.post("http://localhost:4000/api/reminders/schedule", {
         email: user.email,
@@ -89,9 +87,6 @@ function MyCart() {
       );
 
       if (response.status === 201) {
-        numOfCheckedItem = checkedItems.length;
-        setPopupMessage(`${numOfCheckedItem} item(s) checked out successfully!`);
-        setShowSuccessModal(true);
         for (const item of checkedItems) {
           try {
             const response = await axios.delete(
@@ -185,6 +180,9 @@ function MyCart() {
         if (updatedCartResponse.status === 200) {
           dispatch(setCartItems(updatedCartResponse.data.items));
           setIsCheckouting(false);
+          numOfCheckedItem = checkedItems.length;
+          setPopupMessage(`${numOfCheckedItem} item(s) checked out successfully!`);
+          setShowSuccessModal(true);
         }
       } else {
         alert("Checkout failed. Please try again.");
@@ -204,6 +202,7 @@ function MyCart() {
         );
         if (response.status === 200) {
           dispatch(setCartItems(response.data.items));
+          setLoading(false);
         }
       } catch (error) {
         console.error("Error fetching cart items:", error);
@@ -285,8 +284,9 @@ function MyCart() {
       <div className="checkout-container">
         <span className="total-price">Total : RM {totalPrice.toFixed(2)} </span>
         {loading ? (
-          <div className="loadingContainer">
-            <CircularProgress className="circularProgress" />
+          <div className="wj-loadingContainer">
+            <PulseLoader size={"1.5rem"} color="#3C95A9" />
+            <p className="wj-loadingText">Loading...</p>
           </div>
         ) : (
           <button
@@ -328,11 +328,9 @@ function MyCart() {
       )}
 
       {isCheckouting && (
-        <div className="forumPostDeleteLoadingBackground">
-          <div className="forumPostDeleteLoadingContainer">
-            <PulseLoader size={"1.5rem"} color="#3C95A9" />
-            <p className="forumPostDeletingContainerLoadingText">Checkouting...</p>
-          </div>
+        <div className="wj-loadingContainer">
+          <PulseLoader size={"1.5rem"} color="#3C95A9" />
+          <p className="wj-loadingText">Checkouting...</p>
         </div>
       )}
 

@@ -7,8 +7,7 @@ import ServicesAppointment from "../components/ServicesAppointment";
 import ServicePostComment from "../components/ServicePostComment";
 import CommentPopUp from "../components/CommentPopUp";
 import { useSelector } from 'react-redux';
-
-
+import PulseLoader from "react-spinners/PulseLoader";
 
 const ServiceDetail = () => {
   const { serviceId } = useParams();
@@ -24,6 +23,15 @@ const ServiceDetail = () => {
   const handleAddComment = () => {
     setShowPopup(true);
   };
+
+  if (!service) {
+    return (
+      <div className="wj-loadingContainer">
+          <PulseLoader size={"1.5rem"} color="#3C95A9" />
+          <p className="wj-loadingText">Loading Service Details...</p>
+        </div>
+    );
+  }
 
   return (
     <div className="serviceDetailsContainer">

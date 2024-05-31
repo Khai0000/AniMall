@@ -18,17 +18,14 @@ const CartCard = ({ product }) => {
   const [isChecked, setIsChecked] = useState(initialChecked);
   const [serviceId, setServiceId] = useState(null);
   const dispatch = useDispatch();
-
   const user = useSelector((state) => state.user.user);
   const productInStock = useSelector((state) =>
-    state.products.find((products) => products._id === product.productId)
-  );  
-
-
+    state.products.find(products => products._id === product.productId)
+  );
   
   const petInStock = useSelector((state) =>
-    state.pets.find((pet) => pet._id === product.productId)
-);
+    state.pets.find(pet => pet._id === product.productId)
+  );
 
   useEffect(() => {
     if (product.productId) {
@@ -60,7 +57,7 @@ const CartCard = ({ product }) => {
         `http://localhost:4000/api/cart/remove/${userId}/${itemIdDeId}`
       );
 
-      if (product.type === "service") {
+      if(product.type==="service"){
         await axios.post(
           `http://localhost:4000/api/services/${serviceId}/update-availability`,
           {
@@ -80,16 +77,18 @@ const CartCard = ({ product }) => {
   const handleCheckboxClick = async () => {
     const newCheckedValue = !isChecked;
     setIsChecked(newCheckedValue);
-    try {
-      const response = await axios.put(
-        `http://localhost:4000/api/cart/update/checked/${product._id}/${user.userUid}`,
-        { checked: newCheckedValue }
-      );
-      if (response.status === 200) {
-        dispatch(updateChecked({ productId: product._id, checked: newCheckedValue }));
-      }
-    } catch (error) {
-      console.error('Failed to update checkbox in cart', error);
+    try{
+       const response = await axios.put(`http://localhost:4000/api/cart/update/checked/${product._id}/${user.userUid}`,{
+        checked:newCheckedValue
+       });
+       if(response.status===200){
+          dispatch(
+            updateChecked({ productId: product.productId, checked: newCheckedValue })
+          );
+          console.log("checkbox update successfully");
+       }
+    }catch(error){
+      console.log("Fail to update checkbox in cart");
     }
   };
 
@@ -97,51 +96,30 @@ const CartCard = ({ product }) => {
     const newQuantity = parseInt(event.target.value, 10);
 
     if (!isNaN(newQuantity) && newQuantity > 0) {
-      if (
-        product.type === "product" &&
-        newQuantity > productInStock.stockLevel
-      ) {
-        alert(
-          "Cannot add more than available stock! (Only " +
-            productInStock.stockLevel +
-            " available)"
-        );
-        return; // Exit early if exceeding stock level
-      } else if (
-        product.type === "pet" &&
-        newQuantity > petInStock.stockLevel
-      ) {
-        alert(
-          "Cannot add more than available stock! (Only " +
-            petInStock.stockLevel +
-            " available)"
-        );
-        return; // Exit early if exceeding stock level
-      } else {
-        setQuantity(newQuantity);
-        try {
-          const response = await axios.put(
-            `http://localhost:4000/api/cart/update/quantity/${product._id}/${user.userUid}`,
-            {
-              quantity: newQuantity,
+        if ((product.type === "product" )&& (newQuantity > productInStock.stockLevel)){
+          alert("Cannot add more than available stock! (Only "+productInStock.stockLevel+" available)");
+          return; // Exit early if exceeding stock level
+        }else if((product.type === "pet" )&& (newQuantity > petInStock.stockLevel)){
+          alert("Cannot add more than available stock! (Only "+petInStock.stockLevel+" available)");
+          return; // Exit early if exceeding stock level
+        }else{
+          setQuantity(newQuantity);
+          try{
+            const response = await axios.put(`http://localhost:4000/api/cart/update/quantity/${product._id}/${user.userUid}`,{
+              quantity:newQuantity
+            });
+            if(response.status===200){
+              dispatch(updateQuantity({ id: response.data.data._id, quantity: newQuantity }));
+              console.log("Successfully update the quantity of item in cart");
             }
-          );
-          if (response.status === 200) {
-            dispatch(
-              updateQuantity({
-                id: response.data.data._id,
-                quantity: newQuantity,
-              })
-            );
-            console.log("Successfully update the quantity of item in cart");
+          }catch(error){
+              console.log("Fail to update quantity in cart: "+error);
           }
-        } catch (error) {
-          console.log("Fail to update quantity in cart: " + error);
         }
+      }else if (event.target.value === "") {
+        // Handle case when input is empty (allow deletion)
+        setQuantity(""); // Assuming quantity is a string in your state
       }
-    } else if (event.target.value === "") {
-      setQuantity(""); 
-    }
   };
 
   const handleKeyPress = (event) => {
@@ -154,46 +132,30 @@ const CartCard = ({ product }) => {
   const setNewQuantity = async (operation) => {
     let newQuantity = quantity;
     if (operation === "minus") {
-      newQuantity = Math.max(newQuantity - 1, 1);
+      newQuantity = Math.max(newQuantity - 1, 1); // Ensure the quantity doesn't go below 1
     } else if (operation === "plus") {
       newQuantity += 1;
     }
 
-    if (product.type === "product" && newQuantity > productInStock.stockLevel) {
-      alert(
-        "Cannot add more than available stock! (Only " +
-          productInStock.stockLevel +
-          " available)"
-      );
+    if ((product.type === "product" )&& (newQuantity > productInStock.stockLevel)){
+      alert("Cannot add more than available stock! (Only "+productInStock.stockLevel+" available)");
       return; // Exit early if exceeding stock level
-    } else if (product.type === "pet" && newQuantity > petInStock.stockLevel) {
-      alert(
-        "Cannot add more than available stock! (Only " +
-          petInStock.stockLevel +
-          " available)"
-      );
+    }else if((product.type === "pet" )&& (newQuantity > petInStock.stockLevel)){
+      alert("Cannot add more than available stock! (Only "+petInStock.stockLevel+" available)");
       return; // Exit early if exceeding stock level
-    } else {
+    }else{
       setQuantity(newQuantity);
-      try {
-        const response = await axios.put(
-          `http://localhost:4000/api/cart/update/quantity/${product._id}/${user.userUid}`,
-          {
-            quantity: newQuantity,
-          }
-        );
-        if (response.status === 200) {
+      try{
+        const response = await axios.put(`http://localhost:4000/api/cart/update/quantity/${product._id}/${user.userUid}`,{
+          quantity:newQuantity
+        });
+        if(response.status===200){
           // Dispatch editProduct action with updated quantity
-          dispatch(
-            updateQuantity({
-              id: response.data.data._id,
-              quantity: newQuantity,
-            })
-          );
+          dispatch(updateQuantity({ id: response.data.data._id, quantity: newQuantity }));
           console.log("Successfully update the quantity of item in cart");
         }
-      } catch (error) {
-        console.log("Fail to update quantity in cart: " + error);
+      }catch(error){
+          console.log("Fail to update quantity in cart: "+error);
       }
     }
   };

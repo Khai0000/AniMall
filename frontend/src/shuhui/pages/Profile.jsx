@@ -7,7 +7,6 @@ import profileImage from "../assets/images/dog_profile.jpg";
 import axios from "axios";
 import PulseLoader from "react-spinners/PulseLoader";
 
-
 function Profile() {
   const dispatch = useDispatch();
   const navigate = useNavigate();

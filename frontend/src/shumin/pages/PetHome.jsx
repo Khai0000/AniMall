@@ -2,7 +2,7 @@ import SearchBar from "../components/SearchBar";
 import "../styles/ProductHome.css";
 import React, { useState, useEffect, lazy, Suspense, useMemo } from "react";
 import MyCartButton from "../components/MyCartButton";
-import CircularProgress from "@mui/material/CircularProgress";
+import PulseLoader from "react-spinners/PulseLoader";
 import { useSelector } from "react-redux";
 import EnterButtonIcon from "../components/EnterButtonIcon";
 import { Link } from "react-router-dom";
@@ -185,8 +185,9 @@ const PetHome = () => {
       </div>
       <div>
         {isLoading ? (
-          <div className="loadingContainer">
-            <CircularProgress className="circularProgress" />
+          <div className="wj-loadingContainer">
+            <PulseLoader size={"1.5rem"} color="#3C95A9" />
+            <p className="wj-loadingText">Loading...</p>
           </div>
         ) : filteredPets.length !== 0 ? (
           <>

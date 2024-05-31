@@ -1,11 +1,11 @@
 import "../styles/SellerProduct.css";
 import { useSelector, useDispatch } from "react-redux";
 import React, { useEffect, useState, lazy, Suspense } from "react";
-import CircularProgress from "@mui/material/CircularProgress";
 import "../styles/ProductCard.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { setInitialProduct } from "../slices/ProductSlice";
+import PulseLoader from "react-spinners/PulseLoader";
 
 const SellerProductCard = lazy(() => import("../components/SellerProductCard"));
 
@@ -84,13 +84,14 @@ function SellerProduct() {
       </div>
       <div>
         {isLoading ? (
-          <div className="loadingContainer">
-            <CircularProgress className="circularProgress" />
+          <div className="wj-loadingContainer">
+            <PulseLoader size={"1.5rem"} color="#3C95A9" />
+            <p className="wj-loadingText">Loading...</p>
           </div>
         ) : products.length !== 0 ? (
           <>
             <div>
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense>
                 {products.map((product) => (
                   <SellerProductCard key={product._id} product={product} />
                 ))}
