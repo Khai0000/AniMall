@@ -1,64 +1,13 @@
 import "../styles/AdoptFormCheck.css";
 import CloseIcon from "@mui/icons-material/Close";
-import React, { useRef, useEffect } from 'react';
-import { useSelector, useDispatch } from "react-redux";
-import axios from 'axios';
-//import { setInitialPost } from '../redux/actions'; // Adjust the import path according to your project structure
+import React, { useState } from 'react';
 
-function AdoptFormCheck({ show, onClose, whenApprove, whenReject }) {
-  const dispatch = useDispatch();
-  const form = useSelector((state) => state.form);
+  function AdoptFormCheck({ show, onClose, whenApprove, whenReject, whenSave, form }) {
 
-  const formRef = useRef(form);
-  formRef.current = form;
-  let forms = formRef.current;
-
-  // useEffect(() => {
-  //   const getFormPosts = async () => {
-  //     try {
-  //       const formPostsResponse = await axios.get(
-  //         `http://localhost:4000/api/pet/post/${form._id}`
-  //       );
-  //       if (formPostsResponse.status === 200) {
-  //         dispatch(setInitialPost(formPostsResponse.data));
-  //       } else {
-  //         console.log(formPostsResponse);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching form posts:", error);
-  //     }
-  //   };
-
-  //   if (!form) {
-  //     getFormPosts();
-  //   }
-  // }, [dispatch, form]);
-
-  useEffect(() => {
-    const fetchSpecificPost = async () => {
-      try {
-        if (!formRef.current) {
-          const specificPostResponse = await axios.get(
-            `http://localhost:4000/api/pet/post/${form._id}`
-          );
-
-          if (specificPostResponse.status === 200) {
-            formRef.current = specificPostResponse.data;
-          } else {
-            throw new Error({ error: "Form not found" });
-          }
-        } else {
-          console.log("Error happen")
-        }
-      } catch (error) {
-        console.error("Error fetching post:", error);
-      } 
-    };
-    fetchSpecificPost();
-  });
+  if (!show) return null;
 
   return (
-    <div className="adoption-form-container" style={{ display: show ? 'block' : 'none' }}>
+    <div className="adoption-form-container">
       <div className="adoption-form-dialog">
         <div className="terms-and-conditions">
           <h3>Terms & Conditions</h3>
@@ -79,78 +28,78 @@ function AdoptFormCheck({ show, onClose, whenApprove, whenReject }) {
           <input
             type="text"
             name="firstName"
-            placeholder={forms && forms.firstName}
-            value={forms ? forms.firstName : ''}
+            placeholder="First Name"
+            value={form.firstName}
             readOnly
             required
           />
           <input
             type="text"
             name="lastName"
-            placeholder={forms && forms.lastName}
-            value={forms ? forms.lastName : ''}
+            placeholder="Last Name"
+            value={form.lastName}
             readOnly
             required
           />
           <input
             type="email"
             name="email"
-            placeholder={forms && forms.email}
-            value={forms ? forms.email : ''}
+            placeholder="Email"
+            value={form.email}
             readOnly
             required
           />
           <input
             type="tel"
             name="phone"
-            placeholder={forms && forms.phone}
-            value={forms ? forms.phone : ''}
+            placeholder="Phone"
+            value={form.phone}
             readOnly
             required
           />
           <input
             name="address"
-            placeholder={forms && forms.address}
-            value={forms ? forms.address : ''}
+            placeholder="Address"
+            value={form.address}
             readOnly
             required
-          ></input>
+          />
           <input
             type="text"
             name="city"
-            placeholder={forms && forms.city}
-            value={forms ? forms.city : ''}
+            placeholder="City"
+            value={form.city}
             readOnly
             required
           />
           <input
             type="text"
             name="postalCode"
-            placeholder={forms && forms.postalCode}
-            value={forms ? forms.postalCode : ''}
-            readOnly
+            placeholder="Postal Code"
+            value={form.postalCode}
+            readOnlyform
             required
           />
           <input
             type="number"
             name="salary"
-            placeholder={forms && forms.salary}
-            value={forms ? forms.salary : ''}
+            placeholder="Salary"
+            value={form.salary}
             readOnly
             required
           />
           <input
             type="number"
             name="petnum"
-            placeholder={forms && forms.petnum}
-            value={forms ? forms.petnum : ''}
+            placeholder="Number of Pets"
+            value={form.petnum}
             readOnly
             required
           />
           <div className="button-container">
             <button type="button" className="ApprovedButton" onClick={whenApprove}>Approve</button>
             <button type="button" className="RejectedButton" onClick={whenReject}>Reject</button>
-          </div>
+          </div>   
           <button type="button" className="sx-closeButton" onClick={onClose}>
             <CloseIcon className="sx-closeIcon" />
           </button>

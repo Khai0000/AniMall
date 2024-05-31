@@ -200,12 +200,25 @@ const PetHome = () => {
           </div>
         )}
 
-
-        <div className="Seller-product">
+        {user.role==="admin"?
+          <div className="Seller-product">
+            {isAdoptionFilterActive?
+            <Link to={`/pet/adoptionformcheck`} className="seller-link">
+                Adoption Form
+            </Link>
+            :
             <Link to={`/pet/sellerPet`} className="seller-link">
               Seller
-            </Link>
-          </div>:""
+            </Link>}
+          </div>:
+          <div className="Seller-product">
+          {isAdoptionFilterActive?
+          <Link to={`/pet/adoptionformcheck`} className="seller-link">
+              My Adoption
+          </Link>
+          :
+          ""}
+        </div>
         }
       </div>
     </div>

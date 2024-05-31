@@ -5,16 +5,25 @@ import axios from "axios";
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import SuccessMessage from "./SuccessMessage"; 
-import AdvPopUp from "../components/AdvPopUp";
 
-function AdoptFormPopUp({ show, onClose}) {
+function AdoptFormPopUp({ show, onClose,form}) {
  
   const navigate = useNavigate();
   const [message,setMessage]=useState(false);
   const [sentmessage,setSentMessage]=useState('');
-  const user = useSelector((state) => state.user.user);
-  const [showAd, setShowAd] = useState(false); // State to control the advertisement popup
 
+  const updateForm = async (e) => {
+    e.stopPropagation();
+    
+    try {
+      const response = await axios.put(`http://localhost:4000/api/pet/adoption/post/${form._id}`, formData);
+      console.log("Form updated successfully:", response.data);
+      setSentMessage('Form updated successfully.');
+      setMessage(true);
+    } catch (error) {
+      console.error("Error updating form:", error);
+    }
+  };
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -27,36 +36,6 @@ function AdoptFormPopUp({ show, onClose}) {
     petnum: '',
   });
 
-  const formSubmit = async () => {
-    const dataToSend = {
-      ...formData,
-      salary: Number(formData.salary),
-      petnum: Number(formData.petnum),
-      userID: user.userUid,
-    };
-
-    try {
-      const newPostResponse = await axios.post(
-        "http://localhost:4000/api/pet/adoption/post/add",
-        dataToSend
-      );
-
-      if (newPostResponse.status === 200) {
-        console.log("Form submitted successfully:", newPostResponse.data);
-        setSentMessage('Form submitted successfully');
-        setMessage(true);
-      } else {
-        console.error("Error submitting form:", newPostResponse.statusText);
-        setSentMessage('Error submitting form. Please try again later.');
-        setMessage(true);
-      }
-    } catch (error) {
-      console.error("Error submitting form:", error.response ? error.response.data : error.message);
-      setSentMessage('Error submitting form. Please try again later.');
-      setMessage(true);
-    }
-  };
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -64,7 +43,7 @@ function AdoptFormPopUp({ show, onClose}) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    formSubmit();
+    updateForm();
   };
 
   return (
@@ -157,14 +136,13 @@ function AdoptFormPopUp({ show, onClose}) {
             onChange={handleInputChange}
             required
           />
-          <button type="submit" className="submitButton">Submit</button>
+          <button type="submit" className="submitButton">Save</button>
           <button type="button" className="sx-closeButton" onClick={onClose}>
             <CloseIcon className="sx-closeIcon" />
           </button>
         </form>
       </div>
-      <SuccessMessage show={message} onClose={() => { setMessage(false);setShowAd(true);}} message={sentmessage}></SuccessMessage>
-      <AdvPopUp show={showAd} onClose={() => { setShowAd(false);navigate(-1)}} />
+      <SuccessMessage show={message} onClose={() => { setMessage(false);navigate(-1)}} message={sentmessage}></SuccessMessage>
     </div>
   );
 }

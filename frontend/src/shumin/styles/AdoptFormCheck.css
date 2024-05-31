@@ -11,7 +11,7 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-start;
-  z-index: 1000;
+  z-index: 999;
   overflow-y: auto;
 }
 
@@ -125,7 +125,7 @@
 
 .RejectedButton {
   background-color: #ffffff;
-  border: none;
+  border: 1px solid #F3B801;
   color: #F3B801;
   border-radius: 15px;
   padding: 6px 64px;

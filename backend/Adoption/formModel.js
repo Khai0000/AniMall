@@ -1,8 +1,7 @@
 import mongoose from "mongoose";
 
 const formSchema = new mongoose.Schema(
-  {
-   
+  {  
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     email: { type: String, required: true },
@@ -12,7 +11,7 @@ const formSchema = new mongoose.Schema(
     postalCode: { type: String, required: true },
     salary: { type: Number, required: true },
     petnum: { type: Number, required: true },
-    
+    userID: { type: String, required: true },
   },
   { timestamps: true }
 );

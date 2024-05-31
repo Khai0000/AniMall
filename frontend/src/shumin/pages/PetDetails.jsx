@@ -169,8 +169,8 @@ const PetDetails = () => {
           </div>
         </div>
       </div>
-      <AdoptFormPopUp show={showForm} onClose={() => { setShowForm(false) }} whenSubmit={() => { setShowForm(false); alert("Your form is submitted. Thank you for your kindness."); setShowAd(true); }} />
-      <AdvPopUp show={showAd} onClose={() => { setShowAd(false);}} />
+      <AdoptFormPopUp show={showForm} onClose={() => { setShowForm(false) }} />
+      <AdvPopUp show={showAd} onClose={() => { setShowAd(false);navigate(-1)}} />
       <SuccessfulModal show={showSuccessModal} onClose={() => setShowSuccessModal(false)} />
     </div >
   );
