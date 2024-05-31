@@ -38,9 +38,10 @@ const CommentPopUp = ({ setShowPopup, id}) => {
       );
       const ratingRes = await axios.post(`http://localhost:4000/api/product/rating/product/${id}`,{rating: selectedRating});
 
+
       if (commentRes.status === 201 && ratingRes.status===200){
         dispatch(addComment({ id, comment:commentRes.data}));
-        dispatch(addRating({ id, rating: ratingRes.data }));
+        dispatch(addRating({ id, rating: selectedRating }));
       }
       setShowPopup(false);
     }catch (error){

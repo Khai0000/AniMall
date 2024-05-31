@@ -1,6 +1,6 @@
 import React from "react";
 import ImageSlider from "../components/ImageSlider";
-import { useState, useEffect} from "react";
+import { useState} from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -10,6 +10,7 @@ import AdvPopUp from "../components/AdvPopUp";
 import AdoptFormPopUp from '../components/AdoptFormPopUp';
 import axios from "axios";
 import SuccessfulModal from "../../ZongMing/components/SuccessfulModal";
+import PulseLoader from "react-spinners/PulseLoader";
 
 const PetDetails = () => {
   const dispatch = useDispatch();
@@ -17,47 +18,25 @@ const PetDetails = () => {
 
   const { petId } = useParams(); 
 
-  const [imagesLoading, setImagesLoading] = useState(true);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showAd, setShowAd] = useState(false); // State to control the advertisement popup
   const [showForm, setShowForm] = useState(false); // State to control the advertisement popup
 
+  const user = useSelector((state)=>state.user.user);
+
+  const cartItem = useSelector((state) => state.cart);
   const pet = useSelector((state) =>
     state.pets.find((pet) => pet._id === petId)
   );
 
-  
-
-  const user = useSelector((state)=>state.user.user);
-
-  const cartItem = useSelector((state) => state.cart);
-
-  const [loadedImageUrls, setLoadedImageUrls] = useState([]);
-
-  useEffect(() => {
-    const loadImageUrls = async () => {
-      const loadedImages = [];
-      for (const image of pet.image) {
-        try {
-          if (image.startsWith("http://") || image.startsWith("https://")) {
-            loadedImages.push(image);
-          } else if (image.includes("jpg")) {
-            let imageDir = image.substring(0, image.indexOf("."));
-            const imageData = await import(`../assets/images/${imageDir}.jpg`);
-            loadedImages.push(imageData.default);
-          } else {
-            loadedImages.push(image);
-          }
-        } catch (error) {
-          console.error("Error loading image:", error);
-        }
-      }
-      setLoadedImageUrls(loadedImages);
-      setImagesLoading(false);
-    };
-
-    loadImageUrls();
-  }, [pet.image]);
+  if (!pet) {
+    return (
+      <div className="wj-loadingContainer">
+          <PulseLoader size={"1.5rem"} color="#3C95A9" />
+          <p className="wj-loadingText">Loading Pet Details...</p>
+        </div>
+    );
+  }
 
   const handleNavigateBack = () => {
     navigate(-1); // Navigate back one step in history
@@ -133,11 +112,7 @@ const PetDetails = () => {
     <div className="product-details-container">
       <div className="top-side-container">
         <div className="left-side">
-          {imagesLoading ? (
-            <p>Loading images...</p>
-          ) : (
-            <ImageSlider images={loadedImageUrls} />
-          )}
+            <ImageSlider images={pet.image} />
         </div>
         <div className="right-side">
           <p className="product-details-title">{pet.title}</p>
@@ -148,7 +123,7 @@ const PetDetails = () => {
           <span className="product-details-birthdate">Birth Date: </span>
           <p className="product-details-birthdate-content">{pet.birthdate}</p>
           <p className="product-details-price">Price: RM {pet.price}</p>
-          <div className="button-container">
+          <div className="product-button-container">
             <button
               className="add-to-cart-button"
               onClick={pet.price === 0 ? handleOnAdoptButtonClick : handleOnAddToCartButtonClick}
@@ -171,7 +146,7 @@ const PetDetails = () => {
       </div>
       <AdoptFormPopUp show={showForm} onClose={() => { setShowForm(false) }} />
       <AdvPopUp show={showAd} onClose={() => { setShowAd(false);navigate(-1)}} />
-      <SuccessfulModal show={showSuccessModal} onClose={() => setShowSuccessModal(false)} />
+      <SuccessfulModal show={showSuccessModal} onClose={() => setShowSuccessModal(false)} message={"The pet has been added to your cart."} />
     </div >
   );
 };

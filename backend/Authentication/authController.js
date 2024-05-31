@@ -9,10 +9,12 @@ import OAuth2Client from 'google-auth-library';
 import axios, { isCancel, AxiosError } from 'axios';
 import { generateVerificationCode, sendVerificationEmail } from "./emailUtils.js";
 
+
+
 const temporaryAccounts = {}
 
 const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' });
+    return jwt.sign({ id }, process.env.JWT_SECRET);//, { expiresIn: '30d' });
 };
 
 export const oauthcallback = async (req, res) => {
@@ -114,7 +116,29 @@ export const verifyUser = async (req, res) => {
 };
 
 
+export const resendVerificationCode = async (req, res) => {
+    const { email } = req.body;
 
+    try {
+        const user = temporaryAccounts[email];
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Generate a new verification code
+        const newVerificationCode = generateVerificationCode();
+        user.verificationCode = newVerificationCode;
+        user.creationDate = new Date(); // Update the creation date
+
+        // Resend the verification email
+        await sendVerificationEmail(email, newVerificationCode);
+
+        res.status(200).json({ message: 'Verification code resent to your email' });
+    } catch (error) {
+        console.error('Error resending verification code:', error);
+        res.status(500).json({ message: 'An error occurred while resending the verification code' });
+    }
+};
 
 // In authController.js
 
@@ -154,8 +178,22 @@ export const loginUser = async (req, res) => {
             return res.status(403).json({ message: 'Your account has been blocked. Please contact administrator.' });
         }
 
-        res.json({
+        //res.cookie('token', generateToken(user._id));
+        // const responseHeaders = {
+        //     "Content-Type": "application/json",
+        //     "set-cookie": [
+        //         `authToken=${generateToken(user._id)}; Path=/; HttpOnly;`,
+        //     ],
+        // };
 
+        // res.writeHead(200, responseHeaders);
+        const oneYearInMilliseconds = 365 * 24 * 60 * 60 * 1000;
+        res.cookie('token', generateToken(user._id), {
+            httpOnly: true, secure: true, path: '/',
+            sameSite: 'None', maxAge: oneYearInMilliseconds
+        });
+
+        res.json({
             userUid: user._id,
             username: user.username,
             email: user.email,
@@ -223,6 +261,23 @@ export const profile = async (req, res) => {
 };
 
 
+export const deleteUser = async (req, res) => {
+    try {
+        const userId = req.user._id;
+        await AuthModel.findByIdAndDelete(userId);
+        res.clearCookie("token", {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+        });
+        res.status(200).json({ message: 'User deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
+
+
+
 
 
 
@@ -246,22 +301,42 @@ export const profile = async (req, res) => {
 //     }
 // };
 
-// export const resetPassword = async (req, res) => {
-//     const { token, password } = req.body;
-//     try {
-//         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-//         const user = await AuthModel.findById(decoded.id);
-//         if (!user) {
-//             return res.status(404).json({ message: 'User not found' });
-//         }
+export const getUser = async (req, res) => {
+    //from cookie
+    const token = req.cookies.token;
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        // const user = await AuthModel.findById(decoded.id);
+        await AuthModel.findById(decoded.id).then(function (result) {
+            let user = result._doc
+            if (!user) {
+                return res.status(404).json({ message: 'User not found' });
+            }
 
-//         user.password = password;
-//         await user.save();
-//         res.json({ message: 'Password reset successful' });
-//     } catch (error) {
-//         res.status(500).json({ message: error.message });
-//     }
-// };
+            user.userUid = user["_id"]
+            delete user["_id"]
+            res.json(user);
+            console.log("Result : ", user);
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export const logout = async (req, res) => {
+    try {
+        res.clearCookie("token", {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+        });
+
+        res.json({ message: 'logout successfully' });
+        res.end();
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
 
 export const sendPasswordResetEmail = async (req, res) => {
     const { email } = req.body;
@@ -282,6 +357,32 @@ export const sendPasswordResetEmail = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+// Add this endpoint to handle resending verification code for password reset
+export const resendPasswordResetCode = async (req, res) => {
+    const { email } = req.body;
+    try {
+        const user = await AuthModel.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Generate a new verification code
+        const newVerificationCode = generateVerificationCode();
+        user.verificationCode = newVerificationCode;
+        user.creationDate = new Date(); // Update the creation date
+        await user.save();
+
+        // Resend the verification email
+        await sendVerificationEmail(email, newVerificationCode);
+
+        res.status(200).json({ message: 'Verification code resent to your email' });
+    } catch (error) {
+        console.error('Error resending verification code:', error);
+        res.status(500).json({ message: 'An error occurred while resending the verification code' });
+    }
+};
+
 
 
 export const verifyAndResetPassword = async (req, res) => {

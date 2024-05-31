@@ -16,14 +16,7 @@ const AddService = () => {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(0);
   const [hidden, setHidden] = useState();
-  const [rating, setRating] = useState({
-    total: 0,
-    1: 0,
-    2: 0,
-    3: 0,
-    4: 0,
-    5: 0,
-  });
+  const [rating, setRating] = useState("");
   const [comment, setComment] = useState([]);
   const [serviceId, setServiceId] = useState([]);
 

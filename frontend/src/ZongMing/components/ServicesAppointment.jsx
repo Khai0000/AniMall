@@ -1,4 +1,4 @@
-import React, { useState, useEffect, forwardRef } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/ServicesAppointment.css";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Datepicker from "react-datepicker";
@@ -38,7 +38,7 @@ const ServicesAppointment = ({ serviceData }) => {
       }
     };
     fetchSlotAvailability();
-  }, [selectedDate, serviceData._id]);
+  }, [selectedDate, serviceData._id, formattedDateForDB]);
 
 
   const toggleButton = (button) => {
@@ -78,14 +78,13 @@ const ServicesAppointment = ({ serviceData }) => {
       alert("Please select a time slot before adding to cart.");
       return;
     }
-    
+
     try {
-      const updateResponse = await axios.post(`http://localhost:4000/api/services/${serviceData._id}/update-availability`, {
+      await axios.post(`http://localhost:4000/api/services/${serviceData._id}/update-availability`, {
         date: formattedDateForDB,
         selectedSlots: selectedButtons,
         action: "add"
       });
-      console.log("Slot availability update response:", updateResponse.data);
 
       const fetchResponse = await axios.get(`http://localhost:4000/api/services/${serviceData._id}/update-availability/${formattedDateForDB}`);
       setSlotsAvailability(fetchResponse.data.availability);
@@ -118,6 +117,7 @@ const ServicesAppointment = ({ serviceData }) => {
       if (addItemsResponse.status === 201) {
         dispatch(addServiceToCart(itemsToAdd));
         setShowSuccessModal(true);
+        randomAdPopup();
         setSelectedButtons([]);
       } else {
         alert("Add to Cart Failed. Please try again.");
@@ -140,7 +140,7 @@ const ServicesAppointment = ({ serviceData }) => {
         <div className="appointmentTitle">
           <h1>{serviceTitle}</h1>
         </div>
-        
+
         <div className="appointmentDate">
           <button
             className={`datePickerButtonZM `}>
@@ -156,7 +156,7 @@ const ServicesAppointment = ({ serviceData }) => {
                 today.setHours(0, 0, 0, 0);
                 return date.getTime() > today.getTime();
               }}
-              
+
               minDate={new Date()}
             />
           </button>

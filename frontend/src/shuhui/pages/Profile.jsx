@@ -1,48 +1,46 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { updateUser } from "../slices/userSlice";
+import { useNavigate } from "react-router-dom";
+import { updateUser, removeUser } from "../slices/userSlice";
 import "../styles/Profile.css";
 import profileImage from "../assets/images/dog_profile.jpg";
 import axios from "axios";
+import PulseLoader from "react-spinners/PulseLoader";
 
 function Profile() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const user = useSelector((state) => state.user.user);
   const [username, setUsername] = useState("");
-  const [address, setAddress] = useState("");
-  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("Please enter your address");
+  const [phone, setPhone] = useState("Please enter your phone number");
   const [usernameError, setUsernameError] = useState("");
   const [addressError, setAddressError] = useState("");
   const [phoneError, setPhoneError] = useState("");
   const [isEditMode, setIsEditMode] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const token = localStorage.getItem("token"); // Ensure your token is stored in localStorage
-        const response = await axios.get(
-          "http://localhost:4000/api/auth/authentication/profile",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const userData = response.data;
+    setUsername(user.username);
+    setAddress(user.address);
+    setPhone(user.phone);
+    setLoading(false);  
+    // if (user) {
+    //   // Simulate a delay to fetch user data
+    //   const timer = setTimeout(() => {
+    //     setUsername(user.username);
+    //     setAddress(user.address);
+    //     setPhone(user.phone);
+    //     setLoading(false); // Stop loading once the data is set
+    //   },10); // 500ms delay
 
-        setUsername(userData.username);
-        setAddress(userData.address);
-        setPhone(userData.phone);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-        setLoading(false);
-      }
-    };
-
-    fetchUserData();
-  }, []);
+    //   return () => clearTimeout(timer); // Clean up the timer
+    // } else {
+    //   setLoading(false);
+    // }
+  }, [user]);
 
   const validateUsername = (username) => {
     const isValidUsername = /^[a-z]+$/.test(username);
@@ -83,9 +81,9 @@ function Profile() {
 
     if (isUsernameValid && isAddressValid && isPhoneValid) {
       try {
-        const token = localStorage.getItem("token"); // Ensure your token is stored in localStorage
-        const response = await axios.put(
-          "http://localhost:4000/api/auth/authentication/profile",
+        const token = localStorage.getItem("token");
+        await axios.put(
+          "http://localhost:4000/api/auth/authentication/updateprofile",
           {
             username: username,
             email: user.email,
@@ -99,7 +97,6 @@ function Profile() {
           }
         );
 
-        console.log(response.data);
         setIsEditMode(false);
         dispatch(updateUser({ username, address, phone }));
       } catch (error) {
@@ -110,10 +107,86 @@ function Profile() {
 
   const handleBackButton = () => {
     setIsEditMode(false);
+    setUsername(user.username);
+    setAddress(user.address);
+    setPhone(user.phone);
+  };
+
+  const handleLogout = async () => {
+    navigate("/authentication/login", { replace: true });
+    dispatch(removeUser());
+    try {
+      await axios.get("http://localhost:4000/api/auth/authentication/logout", {
+        withCredentials: true,
+      });
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
+  };
+
+  const handleDeleteUser = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.delete(
+        "http://localhost:4000/api/auth/authentication/delete",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (response.status === 200) {
+        setShowSuccessMessage(true); // Show success message
+      } else {
+        console.error("Error deleting user:", response.data.message);
+      }
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="wj-loadingContainer">
+      <PulseLoader size={"1.5rem"} color="#3C95A9" />
+      <p className="wj-loadingText">Loading...</p>
+    </div>;
+  }
+
+  if (showSuccessMessage) {
+    return (
+      <div className="confirm-overlay">
+        <div className="confirm-dialog">
+          <h2>Success!</h2>
+          <p>Your account has been deleted.</p>
+          <button
+            onClick={() => {
+              setShowConfirm(false);
+              handleLogout();
+            }}
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="confirm-overlay">
+        <div className="confirm-dialog">
+          <h2>Success!</h2>
+          <p>Your account has been deleted.</p>
+          <button
+            onClick={() => {
+              setShowConfirm(false);
+              handleLogout();
+            }}
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -122,7 +195,7 @@ function Profile() {
       <div className="profileInfo">
         <img src={profileImage} alt="Profile" className="profileImage" />
         <div className="profileDetails">
-          <form onSubmit={handleSaveChanges}>
+          <form>
             <div className="profileField">
               <span className="fieldName">Username :</span>
               {isEditMode ? (
@@ -155,14 +228,16 @@ function Profile() {
                     className="fieldValue"
                     type="text"
                     name="address"
-                    placeholder="Fill in your address here"
+                    placeholder="Please enter your address"
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
                   />
                   {addressError && <div className="error">{addressError}</div>}
                 </div>
               ) : (
-                <span className="fieldValue">{address}</span>
+                <span className="fieldValue">
+                  {address || "Please enter your address"}
+                </span>
               )}
             </div>
             <div className="profileField">
@@ -173,33 +248,77 @@ function Profile() {
                     className="fieldValue"
                     type="text"
                     name="phone"
-                    placeholder="Write down your phone number"
+                    placeholder="Please enter your phone number"
                     value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
+                    onChange={(e) => {
+                      setPhone(e.target.value);
+                      setPhoneError("");
+                    }}
                   />
                   {phoneError && <div className="error">{phoneError}</div>}
                 </div>
               ) : (
-                <span className="fieldValue">{phone}</span>
+                <span className="fieldValue">
+                  {phone || "Please enter your phone number"}
+                </span>
               )}
             </div>
             <div className="buttonContainer">
               {isEditMode ? (
                 <div className="editmodeButton">
-                  <button className="profileButton" type="submit">
+                  <button className="profileButton" onClick={handleSaveChanges}>
                     Save
                   </button>
-                  <button className="backButton" onClick={handleBackButton}>
+                  <button
+                    className="backButton"
+                    type="button"
+                    onClick={handleBackButton}
+                  >
                     Back
                   </button>
                 </div>
               ) : (
-                <button
-                  className="profileButton"
-                  onClick={() => setIsEditMode(true)}
-                >
-                  Edit
-                </button>
+                <div className="editmodeButton">
+                  <button
+                    className="profileButton"
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setIsEditMode(true);
+                    }}
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    className="deleteButton"
+                    type="button"
+                    onClick={() => setShowConfirm(true)}
+                  >
+                    Delete Account
+                  </button>
+                </div>
+              )}
+              {showConfirm && (
+                <div className="confirm-overlay">
+                  <div className="confirm-dialog">
+                    <p>Are you sure you want to delete your account?</p>
+                    <div className="button-container">
+                      <button
+                        className="confirm-button"
+                        onClick={handleDeleteUser}
+                      >
+                        Yes
+                      </button>
+                      <button
+                        className="confirm-button"
+                        onClick={() => setShowConfirm(false)}
+                      >
+                        No
+                      </button>
+                    </div>
+                  </div>
+                </div>
               )}
             </div>
           </form>

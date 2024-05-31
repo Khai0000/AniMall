@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import CircularProgress from "@mui/material/CircularProgress";
+import PulseLoader from "react-spinners/PulseLoader";
 import ForumHomeHeader from "../components/ForumHomeHeader";
 import ForumHomeCardSkeleton from "../components/ForumHomeCardSkeleton";
 import "../styles/ForumHome.css";
@@ -22,6 +22,8 @@ function ForumHome() {
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const containerRef = useRef(null);
+
+
 
   // useEffect for restoring last scrolling position
   useEffect(() => {
@@ -93,8 +95,9 @@ function ForumHome() {
       <ForumHomeHeader />
       <div className="forumBody" ref={containerRef}>
         {isLoading ? (
-          <div className="loadingContainer">
-            <CircularProgress className="circularProgress" />
+          <div className="wj-loadingContainer">
+            <PulseLoader size={"1.5rem"} color="#3C95A9" />
+            <p className="wj-loadingText">Loading...</p>
           </div>
         ) : filteredPosts.length !== 0 ? (
           <Suspense fallback={<ForumHomeCardSkeleton />}>

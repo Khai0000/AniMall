@@ -1,17 +1,19 @@
 import "../styles/SellerService.css";
-import React, { useState, lazy, Suspense ,useEffect} from "react";
+import React, { useState, lazy, Suspense, useEffect } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setInitialServices } from "../slices/serviceSlice";
+import PulseLoader from "react-spinners/PulseLoader";
+
 
 
 const SellerServiceCard = lazy(() => import("../components/SellerServiceCard"));
 
 function SellerService() {
   const dispatch = useDispatch();
-  const allServices = useSelector((state) => state.services);  
+  const allServices = useSelector((state) => state.services);
 
   const [isLoading] = useState(false);
 
@@ -30,7 +32,7 @@ function SellerService() {
       }
     };
     fetchServices();
-  }, []);
+  }, [dispatch]);
 
   return (
     <div>
@@ -78,7 +80,10 @@ function SellerService() {
         ) : allServices.length !== 0 ? (
           <>
             <div>
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<div className="wj-loadingContainer">
+                <PulseLoader size={"1.5rem"} color="#3C95A9" />
+                <p className="wj-loadingText">Loading...</p>
+              </div>}>
                 {allServices.map((service, index) => (
                   <SellerServiceCard key={index} service={service} />
                 ))}

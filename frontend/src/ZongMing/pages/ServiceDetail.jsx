@@ -7,20 +7,31 @@ import ServicesAppointment from "../components/ServicesAppointment";
 import ServicePostComment from "../components/ServicePostComment";
 import CommentPopUp from "../components/CommentPopUp";
 import { useSelector } from 'react-redux';
-
+import PulseLoader from "react-spinners/PulseLoader";
 
 const ServiceDetail = () => {
   const { serviceId } = useParams();
   const [showPopup, setShowPopup] = useState(false);
   const user = useSelector((state) => state.user.user);
 
+
   const service = useSelector((state) =>
     state.services.find((service) => service._id === serviceId)
   );
 
+
   const handleAddComment = () => {
     setShowPopup(true);
   };
+
+  if (!service) {
+    return (
+      <div className="wj-loadingContainer">
+          <PulseLoader size={"1.5rem"} color="#3C95A9" />
+          <p className="wj-loadingText">Loading Service Details...</p>
+        </div>
+    );
+  }
 
   return (
     <div className="serviceDetailsContainer">
@@ -69,7 +80,7 @@ const ServiceDetail = () => {
                 <p>No comments for this service yet.</p>
               </div>
             ) : (
-              service.serviceComments.map((commentItem) => (
+              service.serviceComments.slice().reverse().map((commentItem) => (
                 <ServicePostComment
                   comment={commentItem}
                   serviceId={serviceId}
@@ -80,6 +91,7 @@ const ServiceDetail = () => {
           </div>
         </div>
       </div>
+      
       {showPopup && (
         <CommentPopUp
           setShowPopup={setShowPopup}

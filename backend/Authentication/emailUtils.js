@@ -55,7 +55,7 @@ export const sendVerificationEmail = async (email, verificationCode) => {
     //const { tokens } = await oauth2Client.getToken(code)
     //oauth2Client.setCredentials(tokens);
 
-    const oAuth2Client = new OAuth2(process.env.GMAIL_CLIENT_ID, process.env.GMAIL_CLIENT_SECRET);
+    const oAuth2Client = new OAuth2(process.env.GMAIL_CLIENT_ID, process.env.GMAIL_CLIENT_SECRET, "http://localhost:4000/api/auth/authentication/oauthcallback");
 
     oAuth2Client.setCredentials({
         refresh_token: process.env.GMAIL_REFRESH_TOKEN,
@@ -63,15 +63,26 @@ export const sendVerificationEmail = async (email, verificationCode) => {
 
     // const accessToken = process.env.GMAIL_ACCESS_TOKEN
 
-    const accessToken = await new Promise((resolve, reject) => {
-        oAuth2Client.getAccessToken((err, token) => {
-            if (err) {
-                console.log("*ERR: ", err)
-                reject();
+    let accessToken
+    try {
+        accessToken = await new Promise((resolve, reject) => {
+            try {
+                oAuth2Client.getAccessToken((err, token) => {
+                    if (err) {
+                        console.log("*ERR: ", err)
+                        reject();
+                    }
+                    resolve(token);
+                });
             }
-            resolve(token);
+            catch (error) {
+                console.error("Login Error:", error); // Log the error for debugging
+            }
         });
-    });
+    }
+    catch (err) {
+        console.error("Login Error:", error); // Log the error for debugging
+    }
 
     let transporter = nodemailer.createTransport({
         host: "smtp.gmail.com",

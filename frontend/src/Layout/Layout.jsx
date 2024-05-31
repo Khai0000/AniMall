@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-//import AdvPopUp from "../shumin/components/AdvPopUp"; // Import AdvPopUp
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation } from "react-router-dom";
 
 function Layout() {
   const [isFooterIntersecting, setIsFooterIntersecting] = useState(false);
@@ -11,6 +10,7 @@ function Layout() {
 
   const location = useLocation();
   const bodyRef = useRef(null);
+
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -29,9 +29,9 @@ function Layout() {
 
   useEffect(() => {
     const calculateSpacerHeight = () => {
-      const headerElement = document.querySelector('header');
-      const mainElement = document.querySelector('main');
-      
+      const headerElement = document.querySelector("header");
+      const mainElement = document.querySelector("main");
+
       if (!headerElement || !mainElement) return;
 
       const headerHeight = headerElement.clientHeight;
@@ -49,9 +49,9 @@ function Layout() {
 
     calculateSpacerHeight();
 
-    const headerElement = document.querySelector('header');
-    const mainElement = document.querySelector('main');
-    
+    const headerElement = document.querySelector("header");
+    const mainElement = document.querySelector("main");
+
     const resizeObserver = new ResizeObserver(() => {
       calculateSpacerHeight();
     });

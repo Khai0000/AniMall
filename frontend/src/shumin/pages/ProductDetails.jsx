@@ -1,6 +1,6 @@
 import React from "react";
 import ImageSlider from "../components/ImageSlider";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -12,6 +12,7 @@ import { addItemToCart } from "../slices/CartSlice";
 import AdvPopUp from "../components/AdvPopUp";
 import axios from "axios";
 import SuccessfulModal from "../../ZongMing/components/SuccessfulModal";
+import PulseLoader from "react-spinners/PulseLoader";
 
 const ProductDetails = () => {
   const dispatch = useDispatch();
@@ -20,42 +21,16 @@ const ProductDetails = () => {
   const { productId } = useParams();
   const [showAd, setShowAd] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [imagesLoading, setImagesLoading] = useState(true);
 
   const product = useSelector((state) =>
     state.products.find((product) => product._id === productId)
   );
 
+
   const user = useSelector((state)=>state.user.user);
 
 
   const cartItem = useSelector((state) => state.cart);
-
-  const [loadedImageUrls, setLoadedImageUrls] = useState([]);
-
-  useEffect(() => {
-    const loadImageUrls = async () => {
-      const loadedImages = [];
-      for (const image of product.image) {
-        try {
-          if (image.startsWith("http://") || image.startsWith("https://")) {
-            loadedImages.push(image);
-          } else if (image.includes("jpg")) {
-            let imageDir = image.substring(0, image.indexOf("."));
-            const imageData = await import(`../assets/images/${imageDir}.jpg`);
-            loadedImages.push(imageData.default);
-          } else {
-            loadedImages.push(image);
-          }
-        } catch (error) {
-          console.error("Error loading image:", error);
-        }
-      }
-      setLoadedImageUrls(loadedImages);
-      setImagesLoading(false);
-    };
-    loadImageUrls();
-  }, [product.image]);
 
   const [showPopup, setShowPopup] = useState(false);
 
@@ -66,6 +41,15 @@ const ProductDetails = () => {
   const handleNavigateBack = () => {
     navigate(-1);
   };
+
+  if (!product) {
+    return (
+      <div className="wj-loadingContainer">
+          <PulseLoader size={"1.5rem"} color="#3C95A9" />
+          <p className="wj-loadingText">Loading Product Details...</p>
+        </div>
+    );
+  }
 
   const randomAdPopup = () => {
     const random = Math.floor(Math.random() * 3) + 1;
@@ -116,11 +100,7 @@ const ProductDetails = () => {
     <div className="product-details-container">
       <div className="top-side-container">
         <div className="left-side">
-          {imagesLoading ? (
-            <p>Loading images...</p>
-          ) : (
-            <ImageSlider images={loadedImageUrls} />
-          )}
+          <ImageSlider images={product.image} />
         </div>
 
         <div className="right-side">
@@ -130,7 +110,7 @@ const ProductDetails = () => {
             {product.description}
           </p>
           <p className="product-details-price">Price: RM {product.price}</p>
-          <div className="button-container">
+          <div className="product-button-container">
             <button
               className="add-to-cart-button"
               onClick={handleOnAddToCartButtonClick}
@@ -203,7 +183,7 @@ const ProductDetails = () => {
         )}
       </div>
       <AdvPopUp show={showAd} onClose={() => { setShowAd(false); navigate(-1); }} />
-      <SuccessfulModal show={showSuccessModal} onClose={() => setShowSuccessModal(false)} />
+      <SuccessfulModal show={showSuccessModal} onClose={() => setShowSuccessModal(false)} message={"The product has been added to your cart."} />
     </div>
   );
 };

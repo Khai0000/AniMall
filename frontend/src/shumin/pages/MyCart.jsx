@@ -11,6 +11,10 @@ import { editProduct } from "../slices/ProductSlice";
 import EditProfilePopup from "../components/EditProfilePopup";
 import AddressDetails from "../components/AddressDetails";
 import Payment from "../components/Payment";
+import SuccessfulModal from "../components/SuccessfulModel";
+import PulseLoader from "react-spinners/PulseLoader";
+import "../styles/SellerProduct.css";
+
 
 const CartCard = lazy(() => import("../components/CartCard"));
 
@@ -32,10 +36,32 @@ function MyCart() {
   const [popupMessage, setPopupMessage] = useState("");
   const [showAddressDetails, setShowAddressDetails] = useState(false);
   const [showPayment, setShowPayment] = useState(false);
-  const [waitingCheckout,setWaitingCheckout]= useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [isCheckouting, setIsCheckouting] = useState(false);
 
+  const scheduleReminder = async (item, user) => {
+    try {
+      const response = await axios.post("http://localhost:4000/api/reminders/schedule", {
+        email: user.email,
+        serviceName: item.title,
+        serviceDate: item.date,
+        serviceTime: item.slot,
+      });
 
-  const checkoutApiCall=async()=>{
+      if (response.status === 200 && response.data.message === 'Email sent successfully') {
+        console.log(`Reminder for ${item.title} scheduled successfully.`);
+      } else {
+        console.error(`Failed to schedule reminder for ${item.title}.`);
+      }
+    } catch (error) {
+      console.error(`Error scheduling reminder for ${item.title}:`, error);
+
+    }
+  };
+
+  const checkoutApiCall = async () => {
+    setIsCheckouting(true);
     let numOfCheckedItem = 0;
     const checkedItems = cartItems.filter((item) => item.checked);
     try {
@@ -43,10 +69,10 @@ function MyCart() {
         "http://localhost:4000/api/orders/receipts",
         {
           userId: user.userUid,
-          username: user.checkoutUsername,
+          username: checkoutUsername,
           email: user.email,
-          address: user.checkoutAddress,
-          phone: user.checkoutPhone,
+          address: checkoutAddress,
+          phone: checkoutPhone,
           products: checkedItems.map((item) => ({
             productId: item.productId,
             price: item.price,
@@ -61,9 +87,6 @@ function MyCart() {
       );
 
       if (response.status === 201) {
-        numOfCheckedItem = checkedItems.length;
-        alert(`${numOfCheckedItem} item(s) checked out successfully!`);
-
         for (const item of checkedItems) {
           try {
             const response = await axios.delete(
@@ -72,8 +95,13 @@ function MyCart() {
             if (response.status === 200) {
               dispatch(removeItemFromCart(item._id));
               dispatch(checkoutItems({ itemId: item._id }));
-              console.log("Item removed successfully:", response);
+
+              if (item.type === "service") {
+                await scheduleReminder(item, user);
+              }
             }
+
+
           } catch (error) {
             console.error(
               `Error removing item ${item._id} from cart:`,
@@ -151,6 +179,10 @@ function MyCart() {
         );
         if (updatedCartResponse.status === 200) {
           dispatch(setCartItems(updatedCartResponse.data.items));
+          setIsCheckouting(false);
+          numOfCheckedItem = checkedItems.length;
+          setPopupMessage(`${numOfCheckedItem} item(s) checked out successfully!`);
+          setShowSuccessModal(true);
         }
       } else {
         alert("Checkout failed. Please try again.");
@@ -158,7 +190,8 @@ function MyCart() {
     } catch (error) {
       console.error("Error during checkout:", error);
       alert("An error occurred during checkout. Please try again.");
-    } 
+      setIsCheckouting(false);
+    }
   }
 
   useEffect(() => {
@@ -169,6 +202,7 @@ function MyCart() {
         );
         if (response.status === 200) {
           dispatch(setCartItems(response.data.items));
+          setLoading(false);
         }
       } catch (error) {
         console.error("Error fetching cart items:", error);
@@ -231,10 +265,13 @@ function MyCart() {
         {cartItems.length !== 0 ? (
           <>
             <div>
-              <Suspense fallback={<div>Loading...</div>}>
-                {cartItems.map((item) => (
-                  <CartCard key={item.productId} product={item} />
-                ))}
+              <Suspense fallback={<div className="wj-loadingContainer">
+                <PulseLoader size={"1.5rem"} color="#3C95A9" />
+                <p className="wj-loadingText">Loading...</p>
+              </div>}>
+                {cartItems.map((item) =>
+                  <CartCard key={item._id} product={item} />
+                )}
               </Suspense>
             </div>
           </>
@@ -246,12 +283,20 @@ function MyCart() {
       </div>
       <div className="checkout-container">
         <span className="total-price">Total : RM {totalPrice.toFixed(2)} </span>
-        <button
-          className="checkout-button"
-          onClick={handleOnCheckoutButtonClick}
-        >
-          CHECK OUT
-        </button>
+        {loading ? (
+          <div className="wj-loadingContainer">
+            <PulseLoader size={"1.5rem"} color="#3C95A9" />
+            <p className="wj-loadingText">Loading...</p>
+          </div>
+        ) : (
+          <button
+            className="checkout-button"
+            onClick={handleOnCheckoutButtonClick}
+            disabled={loading}
+          >
+            {loading ? 'Processing...' : 'CHECK OUT'}
+          </button>
+        )}
       </div>
       {showPopup && (
         <EditProfilePopup
@@ -281,6 +326,19 @@ function MyCart() {
           totalPrice={totalPrice}
         />
       )}
+
+      {isCheckouting && (
+        <div className="wj-loadingContainer">
+          <PulseLoader size={"1.5rem"} color="#3C95A9" />
+          <p className="wj-loadingText">Checkouting...</p>
+        </div>
+      )}
+
+      <SuccessfulModal
+        show={showSuccessModal}
+        onClose={() => setShowSuccessModal(false)}
+        message={popupMessage}
+      />
     </div>
   );
 }

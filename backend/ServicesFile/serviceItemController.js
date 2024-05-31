@@ -90,24 +90,6 @@ export const deleteOneService = async (req, res) => {
         .json({ error: "The service to delete is not found" });
     }
 
-    // const imageUrls = serviceToDelete.image;
-
-    // await Promise.all(
-    //   imageUrls.map(async (imageUrl) => {
-    //     const imageFileName = imageUrl.split("/").pop();
-    //     const deleteImageResponse = await fetch(
-    //       `http://localhost:4000/image/${imageFileName}`,
-    //       { method: "DELETE" }
-    //     );
-    //     if (!deleteImageResponse.ok) {
-    //       console.error(
-    //         `Failed to delete image ${imageFileName}:`,
-    //         await deleteImageResponse.text()
-    //       );
-    //     }
-    //   })
-    // );
-
     return res
       .status(200)
       .json({ message: "Service and related photos deleted successfully" });
@@ -190,8 +172,6 @@ export const updateSlotAvailability = async (req, res) => {
     if (!Array.isArray(selectedSlots)) {
       return res.status(400).json({ error: "selectedSlots must be an array" });
     }
-
-    // Convert date string to Date object
     const dateObj = new Date(date);
 
     console.log("serviceId type:", typeof serviceId);

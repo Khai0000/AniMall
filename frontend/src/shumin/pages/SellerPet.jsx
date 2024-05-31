@@ -1,11 +1,12 @@
 import '../styles/SellerProduct.css';
 import {useSelector,useDispatch} from 'react-redux';
 import React, { useEffect,lazy,Suspense, useState} from 'react';
-import CircularProgress from "@mui/material/CircularProgress";
 import "../styles/ProductCard.css";
 import { setInitialPet } from "../slices/PetSlice";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import PulseLoader from "react-spinners/PulseLoader";
+
 
 const SellerPetCard=lazy(()=>import("../components/SellerPetCard"));
 
@@ -57,16 +58,17 @@ function SellerPet(){
             </div>
             <div>
                 {isLoading?(
-                    <div className="loadingContainer">
-                        <CircularProgress className="circularProgress" />
-                  </div>
+                    <div className="wj-loadingContainer">
+                        <PulseLoader size={"1.5rem"} color="#3C95A9" />
+                        <p className="wj-loadingText">Loading...</p>
+                    </div>
                 ): pets.length !== 0 ? (
                     <>
                     <div>
-                        <Suspense fallback={<div>Loading...</div>}>
-                        {pets.map((pet)=>(
-                            <SellerPetCard pet={pet}/>
-                        ))}
+                        <Suspense >
+                            {pets.map((pet)=>(
+                                <SellerPetCard pet={pet}/>
+                            ))}
                         </Suspense>
                     </div>
                     </>

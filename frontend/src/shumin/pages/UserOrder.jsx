@@ -1,31 +1,33 @@
 import '../styles/UserOrder.css';
 import { useSelector, useDispatch } from 'react-redux';
-import React, { useEffect, Suspense, useState } from 'react';
+import React, { useEffect, Suspense } from 'react';
 import { setInitialOrders } from '../../ZongMing/slices/orderSlice';
 import { lazy } from 'react';
 import axios from 'axios';
+import PulseLoader from "react-spinners/PulseLoader";
 
-const OrderCard=lazy(()=>import("../components/OrderCard"));
+
+const OrderCard = lazy(() => import("../components/OrderCard"));
 
 const UserOrder = () => {
     const order = useSelector((state) => state.orders.order);
     const dispatch = useDispatch();
     const user = useSelector((state) => state.user);
 
-    useEffect(()=>{
-        const fetchReceipts = async () =>{
-            try{
+    useEffect(() => {
+        const fetchReceipts = async () => {
+            try {
                 const response = await axios.get(`http://localhost:4000/api/orders/user/receipts?userId=${user.user.userUid}`);
-                if(response.status===200){
+                if (response.status === 200) {
                     const userReceipts = response.data.flatMap(order => order.receipts);
                     dispatch(setInitialOrders(userReceipts));
                 }
-            }catch(error){
+            } catch (error) {
                 console.error('Error fetching receipts:', error);
             }
         };
         fetchReceipts();
-    },[dispatch,user.user.userUid]);
+    }, [dispatch, user.user.userUid]);
 
     return (
         <div>
@@ -36,8 +38,11 @@ const UserOrder = () => {
                 <span id='Upper-section-order'>My Order</span>
             </div>
             <div>
-                {order && order.length !== 0 ?(
-                    <Suspense fallback={<div>Loading...</div>}>
+                {order && order.length !== 0 ? (
+                    <Suspense fallback={<div className="wj-loadingContainer">
+                        <PulseLoader size={"1.5rem"} color="#3C95A9" />
+                        <p className="wj-loadingText">Loading...</p>
+                    </div>}>
                         {order.map((receipt) => (
                             <OrderCard key={receipt._id} receipt={receipt} />
                         ))}

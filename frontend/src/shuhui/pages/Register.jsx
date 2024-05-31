@@ -5,6 +5,8 @@ import "../styles/Register.css";
 import YellowTop from "../assets/images/yellow_top.png";
 import VerifyIcon from "../assets/images/verify_icon.png";
 import VerifyIconError from "../assets/images/error_verify_icon.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 function Register() {
   const [showVerify, setShowVerify] = useState(false);
@@ -18,7 +20,12 @@ function Register() {
   const [usernameError, setUsernameError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [registerError, setRegisterError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+
   const [codeError, setCodeError] = useState(false);
   const inputRefs = useRef([]);
   const navigate = useNavigate();
@@ -84,13 +91,13 @@ function Register() {
         }
       );
 
-      setShowVerify(true);
+      setShowSuccessMessage(true);
 
       // Handle successful registration here, such as displaying a success message or navigating to another page
       console.log("User registered successfully:", newUserCreate.data);
     } catch (error) {
       console.error("Error creating user:", error);
-      alert("Error creating user. Please try again later.");
+      setRegisterError("Server is not connected.");
     }
   };
 
@@ -143,22 +150,37 @@ function Register() {
     }
   };
 
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setConfirmPasswordVisible(!confirmPasswordVisible);
+  };
+
   const handleResendClick = async () => {
     try {
-      await axios.post(
-        "http://localhost:4000/api/auth/authentication/send-reset-email",
-        { email }
+      const response = await axios.post(
+        "http://localhost:4000/api/auth/authentication/resendcode",
+        { email: email }
       );
-      setCodeError(false);
-      setTimeout(() => {
-        inputRefs.current.forEach((inputRef) => {
-          inputRef.classList.remove("invalid");
-        });
-      }, 100);
+      if (response.status === 200) {
+        setCodeError(false);
+        setTimeout(() => {
+          inputRefs.current.forEach((inputRef) => {
+            inputRef.classList.remove("invalid");
+          });
+        }, 100);
+        setShowSuccessMessage(true);
+      }
     } catch (error) {
-      console.error("Error resending verification code", error);
+      console.error("Error resending verification code:", error);
+      alert(
+        "An error occurred while resending the verification code. Please try again later."
+      );
     }
   };
+
   return (
     <div className="register-pages-container">
       <img className="yellow-top" src={YellowTop} alt="yellowtop" />
@@ -193,34 +215,52 @@ function Register() {
                 }}
               />
               {emailError && <p className="error-message">{emailError}</p>}
-              <input
-                required
-                className="register-password"
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  setPasswordError("");
-                }}
-              />
+              <div className="password-container">
+                <input
+                  required
+                  className="register-password"
+                  type={passwordVisible ? "text" : "password"}
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setPasswordError("");
+                  }}
+                />
+                <FontAwesomeIcon
+                  icon={passwordVisible ? faEyeSlash : faEye}
+                  className="password-toggle-icon"
+                  onClick={togglePasswordVisibility}
+                />
+              </div>
               {passwordError && (
                 <p className="error-message">{passwordError}</p>
               )}
-              <input
-                required
-                className="register-confirmpassword"
-                type="password"
-                placeholder="Confirmed Password"
-                value={confirmedPassword}
-                onChange={(e) => {
-                  setConfirmedPassword(e.target.value);
-                  setPasswordError("");
-                }}
-              />
+              <div className="password-container">
+                <input
+                  required
+                  className="register-confirmpassword"
+                  type={confirmPasswordVisible ? "text" : "password"}
+                  placeholder="Confirmed Password"
+                  value={confirmedPassword}
+                  onChange={(e) => {
+                    setConfirmedPassword(e.target.value);
+                    setConfirmPasswordError("");
+                  }}
+                />
+                <FontAwesomeIcon
+                  icon={confirmPasswordVisible ? faEyeSlash : faEye}
+                  className="password-toggle-icon"
+                  onClick={toggleConfirmPasswordVisibility}
+                />
+              </div>
               {confirmPasswordError && (
                 <p className="error-message">{confirmPasswordError}</p>
               )}
+              {registerError && (
+                <div className="error-register">{registerError}</div>
+              )}
+
               <button className="register-button" type="submit">
                 REGISTER
               </button>
@@ -270,6 +310,23 @@ function Register() {
               Send Again
             </button>
           </p>
+        </div>
+      )}
+
+      {showSuccessMessage && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h2>Success!</h2>
+            <p>The verification code has been sent to your email.</p>
+            <button
+              onClick={() => {
+                setShowSuccessMessage(false);
+                setShowVerify(true);
+              }}
+            >
+              Close
+            </button>
+          </div>
         </div>
       )}
     </div>
