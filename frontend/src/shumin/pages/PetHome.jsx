@@ -201,7 +201,7 @@ const PetHome = () => {
           </div>
         )}
 
-        {user != null && user.role === "admin" ? (
+        {user != null && user.role === "admin" ? 
           <div className="Seller-product">
             {isAdoptionFilterActive?
             <Link to={`/pet/adoptionformcheck`} className="seller-link">

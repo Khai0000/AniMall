@@ -413,6 +413,7 @@ export const verifyAndResetPassword = async (req, res) => {
 
 
 
+
 // Utility function to generate reset token
 const generateResetToken = (userId) => {
     return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: '1h' });

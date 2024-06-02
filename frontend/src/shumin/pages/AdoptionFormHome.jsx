@@ -9,23 +9,25 @@ function AdoptionFormHome() {
   const user = useSelector((state) => state.user.user);
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
+  const [update, setUpdate] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
     const getFormPosts = async () => {
       try {
-        const formResponse = await axios.get(
-          "http://localhost:4000/api/pet/adoption"
-        );
+        const formResponse = await axios.get("http://localhost:4000/api/pet/adoption");
         if (formResponse.status === 200) {
-          setFilteredPosts(formResponse.data); // Update the local state with the fetched data
-          if(user.role!=="admin"){
-            if(formResponse.data.userID === user.userUid){
-              setFilteredPosts(formResponse.data);
+          const posts = formResponse.data;
+          if (user.role === "admin") {
+            setFilteredPosts(posts); // Admin gets all posts
+          } else {
+            const userPosts = posts.filter(post => post.userID === user.userUid);
+            setFilteredPosts(userPosts);
+            if (userPosts.length > 0) {
+              setUpdate(true);
             }
           }
-          console.log(formResponse.data);
+          console.log(posts);
         } else {
           console.log(formResponse);
         }
@@ -36,15 +38,16 @@ function AdoptionFormHome() {
       }
     };
     getFormPosts();
-  }, []);
+  }, [user.role, user.userUid]);
 
-  
+
 
   const handlePostDelete = (deletedPostId) => {
     setFilteredPosts((prevPosts) =>
       prevPosts.filter((post) => post._id !== deletedPostId)
     );
   };
+
 
   return (
     <div className="formContainer">
@@ -54,19 +57,22 @@ function AdoptionFormHome() {
             <CircularProgress className="circularProgress" />
           </div>
         ) : Array.isArray(filteredPosts) && filteredPosts.length !== 0 ? (
-          filteredPosts.map((form, index) => (
+          filteredPosts.map((form) =>
+          (
             <FormHomeCard
-              form={form}
-              index={index}
               key={form._id}
+              form={form}
               onPostDelete={handlePostDelete}
+              update={update}
             />
-          ))
-        ) : (
-          <div className="formNoDiscussionContainer">
-            <p>There is no adoption application.</p>
-          </div>
-        )}
+          )
+          )
+        )
+          : (
+            <div className="formNoDiscussionContainer">
+              <p>There is no adoption application.</p>
+            </div>
+          )}
       </div>
     </div>
   );

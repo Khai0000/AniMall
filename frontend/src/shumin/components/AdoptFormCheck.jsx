@@ -1,10 +1,8 @@
 import "../styles/AdoptFormCheck.css";
 import CloseIcon from "@mui/icons-material/Close";
-import React, { useState } from 'react';
+import React from 'react';
 
-  function AdoptFormCheck({ show, onClose, whenApprove, whenReject, whenSave, form }) {
-
-  if (!show) return null;
+function AdoptFormCheck({  whenApprove, whenReject, form, setShowAdoptFormCheck }) {
 
   return (
     <div className="adoption-form-container">
@@ -99,8 +97,11 @@ import React, { useState } from 'react';
           <div className="button-container">
             <button type="button" className="ApprovedButton" onClick={whenApprove}>Approve</button>
             <button type="button" className="RejectedButton" onClick={whenReject}>Reject</button>
-          </div>   
-          <button type="button" className="sx-closeButton" onClick={onClose}>
+          </div>
+          <button className="sx-closeButton" onClick={(e) => {
+            e.stopPropagation();
+            setShowAdoptFormCheck(false);
+          }}>
             <CloseIcon className="sx-closeIcon" />
           </button>
         </form>

@@ -13,6 +13,7 @@
   align-items: flex-start; /* Align items to the start */
   z-index: 1000; /* Ensure the container is above other content */
   overflow-y: auto;
+  scrollbar-width: none;  
 }
 
 .adoption-form-dialog {

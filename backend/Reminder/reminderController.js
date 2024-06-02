@@ -78,3 +78,68 @@ export const scheduleAppointment = async (req, res) => {
     res.status(500).json({ message: "Failed to schedule reminder" });
   }
 };
+
+export const sendAdoptionEmail = async (req, res) => {
+  const { email, message } = req.body;
+  try {
+
+    const request = mailjet.post("send", { version: "v3.1" }).request({
+      Messages: [
+        {
+          From: {
+            Email: "animallpublic@gmail.com",
+            Name: "Animall",
+          },
+          To: [
+            {
+              Email: email,
+              Name: "Our VIP Customer",
+            },
+          ],
+          Subject: "Adoption Application Review",
+          HTMLPart: `
+            <html>
+              <head>
+                <style>
+                  body {
+                    font-family: Arial, sans-serif;
+                    background-color: #f4f4f4;
+                  }
+                  .container {
+                    max-width: 600px;
+                    margin: 0 auto;
+                    padding: 20px;
+                    background-color: #fff;
+                    border-radius: 10px;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                  }
+                  h1 {
+                    color: #333;
+                    text-align: center;
+                  }
+                  p {
+                    color: #666;
+                  }
+                </style>
+              </head>
+              <body>
+                <div class="container">
+                  <h1>Adoption Application Review</h1>
+                  <p>${message}</p>
+                </div>
+              </body>
+            </html>
+          `,
+        },
+      ],
+    });
+
+    const result = await request;
+    console.log("Email reminder sent:", result.body);
+
+    res.status(200).json({ message: "Email sent successfully" });
+  } catch (error) {
+    console.error("Error scheduling reminder:", error);
+    res.status(500).json({ message: "Failed to schedule reminder" });
+  }
+};

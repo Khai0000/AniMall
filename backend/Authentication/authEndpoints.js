@@ -13,7 +13,7 @@ import {
     logout,
     deleteUser,
     resendVerificationCode,
-    resendPasswordResetCode
+    resendPasswordResetCode,
 } from "./authController.js";
 import { protect } from './authMiddleware.js';
 
@@ -57,5 +57,6 @@ router.get('/authentication/oauthcallback', (req, res) => {
 router.post('/authentication/send-reset-email', sendPasswordResetEmail);
 router.post('/authentication/verify-reset-password', verifyAndResetPassword);
 router.post('/authentication/resend-reset-code', resendPasswordResetCode);
+
 
 export default router;
