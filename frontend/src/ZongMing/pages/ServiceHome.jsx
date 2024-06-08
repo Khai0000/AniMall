@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { setInitialServices } from "../slices/serviceSlice";
 import PulseLoader from "react-spinners/PulseLoader";
 
-
 const CustomLink = ({ service, children }) => {
   return (
     <Link to={`/services/${service._id}`} className="service-card-link">
@@ -24,7 +23,7 @@ const ServiceHome = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredServices, setFilteredServices] = useState([]);
   const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(1000);
+  const [maxPrice, setMaxPrice] = useState(0);
 
   const user = useSelector((state) => state.user.user);
 
@@ -42,7 +41,6 @@ const ServiceHome = () => {
   }, [dispatch]);
 
   useEffect(() => {
-
     if (loading) return;
 
     let filteredData = allServices;
@@ -54,10 +52,23 @@ const ServiceHome = () => {
         service.serviceTitle.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    if (minPrice !== 0 || maxPrice !== 0) {
+    if (minPrice.length !== 0 && maxPrice.length === 0) {
+      filteredData = filteredData.filter(
+        (service) => service.servicePrice > minPrice
+      );
+    }
+
+    if (minPrice.length === 0 && maxPrice.length !== 0) {
+      filteredData = filteredData.filter(
+        (service) => service.servicePrice < maxPrice
+      );
+    }
+
+    if (minPrice.length !== 0 && maxPrice.length !== 0) {
       filteredData = filteredData.filter(
         (service) =>
-          service.servicePrice >= minPrice && service.servicePrice <= maxPrice
+          service.servicePrice > minPrice &&
+          service.servicePrice < maxPrice
       );
     }
 
@@ -103,7 +114,6 @@ const ServiceHome = () => {
           <PulseLoader size={"1.5rem"} color="#3C95A9" />
           <p className="wj-loadingText">Loading...</p>
         </div>
-
       ) : (
         <div className="service-container">
           {filteredServices.length === 0 ? (

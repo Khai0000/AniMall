@@ -2,15 +2,16 @@ import React, { useState, useEffect } from "react";
 import "../styles/ForumPostComment.css";
 import ForumPostCommentSkeleton from "./ForumPostCommentSkeleton";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useDispatch,useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { removeComment } from "../slices/postSlice";
 import axios from "axios";
 
-const ForumPostComment = ({ disable,comment, postId }) => {
+const ForumPostComment = ({ disable, comment, postId }) => {
   const [imageSource, setImageSource] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showDeleteCommentPopup, setShowDeleteCommentPopup] = useState(false);
 
-  const user = useSelector((state)=>state.user.user);
+  const user = useSelector((state) => state.user.user);
 
   const dispatch = useDispatch();
 
@@ -30,6 +31,8 @@ const ForumPostComment = ({ disable,comment, postId }) => {
       }
     } catch (error) {
       console.error("Error deleting comment:", error);
+    } finally {
+      setShowDeleteCommentPopup(false);
     }
   };
 
@@ -65,10 +68,50 @@ const ForumPostComment = ({ disable,comment, postId }) => {
         <p className="content">{comment.content}</p>
       </div>
 
-      {(comment.name.split("//useruid//")[1]=== user.userUid||user.role==="admin")&& (
-        <button className="wjDeleteButton" onClick={handleOnDeleteClick} disabled={disable}>
+      {(comment.name.split("//useruid//")[1] === user.userUid ||
+        user.role === "admin") && (
+        <button
+          className="wjDeleteButton"
+          onClick={() => setShowDeleteCommentPopup(true)}
+          disabled={disable}
+        >
           <DeleteIcon />
         </button>
+      )}
+      {showDeleteCommentPopup && (
+        <div
+          className="forumPostDeleteBackground"
+          onClick={(e) => {
+            setShowDeleteCommentPopup(false);
+            e.stopPropagation();
+          }}
+        >
+          <div
+            className="forumPostDeleteContainer"
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            <h2>Are you sure you want to delete this comment?</h2>
+            <div className="forumPostDeleteButtonContainer">
+              <button
+                className="deleteForumPostButton"
+                onClick={handleOnDeleteClick}
+              >
+                Delete
+              </button>
+              <button
+                className="deleteForumCloseButton"
+                onClick={(e) => {
+                  setShowDeleteCommentPopup(false);
+                  e.stopPropagation();
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

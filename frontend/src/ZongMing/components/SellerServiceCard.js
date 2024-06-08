@@ -24,25 +24,9 @@ const SellerServiceCard = ({ service }) => {
   useEffect(() => {
     setIsLoading(true);
     if (service.serviceImages && service.serviceImages[0]) {
-      if (service.serviceImages[0].includes("jpg")) {
-        let filename = service.serviceImages[0].split("/").pop();
-
-        let imageName = filename.split(".")[0] + ".jpg";
-        import(`../assets/image/${imageName}`)
-          .then((image) => {
-            setImage(image.default);
-          })
-          .catch((error) => {
-            console.error("Error loading image:", error);
-          })
-          .finally(() => {
-            setIsLoading(false);
-          });
-      } else {
-        setImage(service.serviceImages[0]);
-        setIsLoading(false);
-      }
+      setImage(service.serviceImages[0]);
     }
+    setIsLoading(false);
   }, [service]);
 
   const handleOnRemoveClicked = async () => {
@@ -59,7 +43,7 @@ const SellerServiceCard = ({ service }) => {
     } catch (error) {
       console.error("Error deleting service:", error);
       alert("An error occurred while deleting the service. Please try again.");
-    }finally{
+    } finally {
       setIsDeleting(false);
     }
   };
@@ -218,7 +202,7 @@ const SellerServiceCard = ({ service }) => {
               e.stopPropagation();
             }}
           >
-            <h2>Are you sure you want to delete this post?</h2>
+            <h2>Are you sure you want to remove this service?</h2>
             <div className="forumPostDeleteButtonContainer">
               <button
                 className="deleteForumPostButton"
@@ -263,7 +247,7 @@ const SellerServiceCard = ({ service }) => {
               e.stopPropagation();
             }}
           >
-            <h2>Post Deleted Successfully !</h2>
+            <h2>Service Removed Successfully !</h2>
             <div className="forumPostDeleteButtonContainer">
               <button
                 className="deleteForumPostButton"

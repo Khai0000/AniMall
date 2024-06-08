@@ -20,6 +20,7 @@ function SellerService() {
     navigate("/services/sellerService/add-service");
   };
 
+
   useEffect(() => {
     const fetchServices = async () => {
       try {

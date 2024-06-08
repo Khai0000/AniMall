@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
 import "../styles/ProductPostComment.css";
 import ProductPostCommentSkeleton from "./ProductPostCommentSkeleton";
-import DeleteIcon from '@mui/icons-material/Delete';
-import { useDispatch,useSelector } from 'react-redux';
+import DeleteIcon from "@mui/icons-material/Delete";
+import { useDispatch, useSelector } from "react-redux";
 import { removeComment } from "../slices/ProductSlice";
 import axios from "axios";
 
-const ProductPostComment = ({comments, id}) => { 
-
+const ProductPostComment = ({ comments, id }) => {
   const [imageSource, setImageSource] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showDeleteCommentPopup, setShowDeleteCommentPopup] = useState(false);
   const dispatch = useDispatch();
-  const user = useSelector((state)=>state.user);
+  const user = useSelector((state) => state.user);
 
   const handleOnDeleteClick = async () => {
     try {
@@ -29,6 +29,8 @@ const ProductPostComment = ({comments, id}) => {
       }
     } catch (error) {
       console.error("Error deleting comment:", error);
+    } finally {
+      setShowDeleteCommentPopup(false);
     }
   };
 
@@ -51,7 +53,6 @@ const ProductPostComment = ({comments, id}) => {
     fetchImage();
   }, []);
 
-
   return isLoading ? (
     <ProductPostCommentSkeleton />
   ) : (
@@ -65,10 +66,48 @@ const ProductPostComment = ({comments, id}) => {
         <p className="contentSPC">{comments.content}</p>
       </div>
 
-      {(comments.name === user.user.username||user.role==='admin') && (
-        <button className="deleteButtonSPC" onClick={handleOnDeleteClick}>
+      {(comments.name === user.user.username || user.role === "admin") && (
+        <button
+          className="deleteButtonSPC"
+          onClick={() => setShowDeleteCommentPopup(true)}
+        >
           <DeleteIcon />
         </button>
+      )}
+      {showDeleteCommentPopup && (
+        <div
+          className="forumPostDeleteBackground"
+          onClick={(e) => {
+            setShowDeleteCommentPopup(false);
+            e.stopPropagation();
+          }}
+        >
+          <div
+            className="forumPostDeleteContainer"
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            <h2>Are you sure you want to delete this comment?</h2>
+            <div className="forumPostDeleteButtonContainer">
+              <button
+                className="deleteForumPostButton"
+                onClick={handleOnDeleteClick}
+              >
+                Delete
+              </button>
+              <button
+                className="deleteForumCloseButton"
+                onClick={(e) => {
+                  setShowDeleteCommentPopup(false);
+                  e.stopPropagation();
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

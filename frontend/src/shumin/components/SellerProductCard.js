@@ -308,7 +308,7 @@ const SellerProductCard = ({ product }) => {
               e.stopPropagation();
             }}
           >
-            <h2>Are you sure you want to delete this post?</h2>
+            <h2>Are you sure you want to remove this product?</h2>
             <div className="forumPostDeleteButtonContainer">
               <button
                 className="deleteForumPostButton"
@@ -353,7 +353,7 @@ const SellerProductCard = ({ product }) => {
               e.stopPropagation();
             }}
           >
-            <h2>Post Deleted Successfully !</h2>
+            <h2>Product Removed Successfully !</h2>
             <div className="forumPostDeleteButtonContainer">
               <button
                 className="deleteForumPostButton"

@@ -140,8 +140,6 @@ const AddService = () => {
   };
 
 
-
-
   const triggerFileInput = () => {
     if (currentImageIndex === -1 || images.length === 0) {
       document.querySelector('input[type="file"]').click();
