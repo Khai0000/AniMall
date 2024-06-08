@@ -161,7 +161,7 @@
   margin-bottom: 20px;
 }
 
-.button-container {
+.confirm-button-container {
   display: flex;
   justify-content: space-between;
   margin-left: 35%;
@@ -172,7 +172,7 @@
 .confirm-dialog button {
   margin-top: 10px;
   padding: 5px 10px;
-  background: #007bff;
+  background: #3c95a9;
   color: white;
   border: none;
   border-radius: 3px;
@@ -193,5 +193,58 @@
 }
 
 .confirm-dialog button:hover {
-  background: #0056b3;
+  background: #f3b801;
+}
+
+.forumPostDeleteBackground>.forumPostDeleteContainer {
+  background-color: white;
+  padding: 2em;
+  border-radius: 5px;
+  width: 45%;
+  z-index: 100;
+}
+
+.forumPostDeleteBackground>.forumPostDeleteContainer>h2 {
+  margin-top: 0;
+  color: #3c95a9;
+  margin-bottom: 1.5em;
+  text-align: center;
+}
+
+.forumPostDeleteBackground>.forumPostDeleteContainer>.forumPostDeleteButtonContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 2em;
+}
+
+.forumPostDeleteBackground>.forumPostDeleteContainer>.forumPostDeleteButtonContainer>.deleteForumPostButton {
+  border: none;
+  border-radius: 5px;
+  background-color: #3c95a9;
+  padding: 0.5em 1em;
+  color: #fff;
+  font-size: 1em;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.forumPostDeleteBackground>.forumPostDeleteContainer>.forumPostDeleteButtonContainer>.deleteForumPostButton:hover {
+  background-color: #f4b701;
+}
+
+.forumPostDeleteBackground>.forumPostDeleteContainer>.forumPostDeleteButtonContainer>.deleteForumCloseButton {
+  border: 1px solid #3c95a9;
+  border-radius: 5px;
+  background-color: transparent;
+  padding: 0.5em 1em;
+  color: #3c95a9;
+  font-size: 1em;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.forumPostDeleteBackground>.forumPostDeleteContainer>.forumPostDeleteButtonContainer>.deleteForumCloseButton:hover {
+  color: #f4b701;
+  border: 1px solid #f4b701;
 }

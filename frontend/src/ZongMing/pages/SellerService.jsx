@@ -7,8 +7,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { setInitialServices } from "../slices/serviceSlice";
 import PulseLoader from "react-spinners/PulseLoader";
 
-
-
 const SellerServiceCard = lazy(() => import("../components/SellerServiceCard"));
 
 function SellerService() {
@@ -80,12 +78,16 @@ function SellerService() {
         ) : allServices.length !== 0 ? (
           <>
             <div>
-              <Suspense fallback={<div className="wj-loadingContainer">
-                <PulseLoader size={"1.5rem"} color="#3C95A9" />
-                <p className="wj-loadingText">Loading...</p>
-              </div>}>
+              <Suspense
+                fallback={
+                  <div className="wj-loadingContainer">
+                    <PulseLoader size={"1.5rem"} color="#3C95A9" />
+                    <p className="wj-loadingText">Loading...</p>
+                  </div>
+                }
+              >
                 {allServices.map((service, index) => (
-                  <SellerServiceCard key={index} service={service} />
+                  <SellerServiceCard key={service._id} service={service} />
                 ))}
               </Suspense>
             </div>

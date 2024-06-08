@@ -65,7 +65,7 @@ const ProductPostComment = ({comments, id}) => {
         <p className="contentSPC">{comments.content}</p>
       </div>
 
-      {comments.name === user.user.username && (
+      {(comments.name === user.user.username||user.role==='admin') && (
         <button className="deleteButtonSPC" onClick={handleOnDeleteClick}>
           <DeleteIcon />
         </button>

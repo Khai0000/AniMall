@@ -9,6 +9,7 @@ import PulseLoader from "react-spinners/PulseLoader";
 import axios from "axios";
 
 const ForumHomeCard = ({ post, index }) => {
+  
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);

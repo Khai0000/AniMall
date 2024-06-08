@@ -26,7 +26,7 @@ function Profile() {
     setUsername(user.username);
     setAddress(user.address);
     setPhone(user.phone);
-    setLoading(false);  
+    setLoading(false);
     // if (user) {
     //   // Simulate a delay to fetch user data
     //   const timer = setTimeout(() => {
@@ -114,8 +114,8 @@ function Profile() {
 
   const handleLogout = async () => {
     navigate("/authentication/login", { replace: true });
-    dispatch(removeUser());
     try {
+      dispatch(removeUser());
       await axios.get("http://localhost:4000/api/auth/authentication/logout", {
         withCredentials: true,
       });
@@ -145,30 +145,53 @@ function Profile() {
   };
 
   if (loading) {
-    return <div className="wj-loadingContainer">
-      <PulseLoader size={"1.5rem"} color="#3C95A9" />
-      <p className="wj-loadingText">Loading...</p>
-    </div>;
+    return (
+      <div className="wj-loadingContainer">
+        <PulseLoader size={"1.5rem"} color="#3C95A9" />
+        <p className="wj-loadingText">Loading...</p>
+      </div>
+    );
   }
 
   if (showSuccessMessage) {
     return (
-      <div className="confirm-overlay">
-        <div className="confirm-dialog">
-          <h2>Success!</h2>
-          <p>Your account has been deleted.</p>
-          <button
-            onClick={() => {
-              setShowConfirm(false);
-              handleLogout();
-            }}
-          >
-            Close
-          </button>
+      <div style={{ zIndex: 100 }} className="forumPostDeleteBackground">
+        <div className="forumPostDeleteContainer">
+          <h2>Your account has been deleted successfully.</h2>
+          <div className="forumPostDeleteButtonContainer">
+            <button
+              className="deleteForumPostButton"
+              onClick={() => {
+                setShowConfirm(false);
+                handleLogout();
+              }}
+            >
+              Close
+            </button>
+          </div>
         </div>
       </div>
     );
   }
+
+  // if (showSuccessMessage) {
+  //   return (
+  //     <div className="confirm-overlay">
+  //       <div className="confirm-dialog">
+  //         <h2>Success!</h2>
+  //         <p>Your account has been deleted.</p>
+  //         <button
+  //           onClick={() => {
+  //             setShowConfirm(false);
+  //             handleLogout();
+  //           }}
+  //         >
+  //           Close
+  //         </button>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   if (!user) {
     return (
@@ -299,11 +322,40 @@ function Profile() {
                   </button>
                 </div>
               )}
+
               {showConfirm && (
+                <div
+                  className="forumPostDeleteBackground"
+                  onClick={() => {
+                    setShowConfirm(false);
+                  }}
+                >
+                  <div className="forumPostDeleteContainer">
+                    <h2>Are you sure you want to delete your account?</h2>
+                    <div className="forumPostDeleteButtonContainer">
+                      <button
+                        className="deleteForumPostButton"
+                        onClick={handleDeleteUser}
+                      >
+                        Delete
+                      </button>
+                      <button
+                        className="deleteForumCloseButton"
+                        onClick={(e) => {
+                          setShowConfirm(false);
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+              {/* {showConfirm && (
                 <div className="confirm-overlay">
                   <div className="confirm-dialog">
                     <p>Are you sure you want to delete your account?</p>
-                    <div className="button-container">
+                    <div className="confirm-button-container">
                       <button
                         className="confirm-button"
                         onClick={handleDeleteUser}
@@ -319,7 +371,7 @@ function Profile() {
                     </div>
                   </div>
                 </div>
-              )}
+              )} */}
             </div>
           </form>
         </div>

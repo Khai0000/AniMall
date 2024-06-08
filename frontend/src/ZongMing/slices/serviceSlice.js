@@ -48,12 +48,12 @@ export const serviceSlice = createSlice({
       }
     },
     removeService: (state, action) => {
-      return state.filter((service) => service.serviceTitle !== action.payload);
+      return state.filter((service) => service._id !== action.payload);
     },
     hideService(state, action) {
-      const { serviceTitle } = action.payload;
+      const { serviceId } = action.payload;
       const existingService = state.find(
-        (service) => service.serviceTitle === serviceTitle
+        (service) => service._id === serviceId
       );
       if (existingService) {
         existingService.hidden = !existingService.hidden;
@@ -70,7 +70,6 @@ export const {
   editService,
   removeService,
   hideService,
-  
 } = serviceSlice.actions;
 
 export const selectServiceSlice = (state) => state.service;

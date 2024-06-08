@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { removeService, hideService } from "../slices/serviceSlice";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import PulseLoader from "react-spinners/PulseLoader";
 
 const SellerServiceCard = ({ service }) => {
   const [image, setImage] = useState(null);
@@ -16,8 +17,12 @@ const SellerServiceCard = ({ service }) => {
   );
   const [quantity] = useState(1);
   const dispatch = useDispatch();
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [showSuccessfulPopup, setShowSuccessfulPopup] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
     if (service.serviceImages && service.serviceImages[0]) {
       if (service.serviceImages[0].includes("jpg")) {
         let filename = service.serviceImages[0].split("/").pop();
@@ -41,18 +46,21 @@ const SellerServiceCard = ({ service }) => {
   }, [service]);
 
   const handleOnRemoveClicked = async () => {
+    setIsDeleting(true);
     try {
       const response = await axios.delete(
         `http://localhost:4000/api/services/${service._id}`
       );
       if (response.status === 200) {
-        dispatch(removeService(service.serviceTitle));
+        setShowSuccessfulPopup(true);
       } else {
         alert("Failed to delete the service. Please try again.");
       }
     } catch (error) {
       console.error("Error deleting service:", error);
       alert("An error occurred while deleting the service. Please try again.");
+    }finally{
+      setIsDeleting(false);
     }
   };
 
@@ -66,8 +74,11 @@ const SellerServiceCard = ({ service }) => {
       );
       if (response.status === 200) {
         setIsHidden(!isHidden);
-        dispatch(hideService({ serviceTitle: service.serviceTitle }));
-        localStorage.setItem(`${service._id}_isHidden`, JSON.stringify(!isHidden));
+        dispatch(hideService({ serviceId: service._id }));
+        localStorage.setItem(
+          `${service._id}_isHidden`,
+          JSON.stringify(!isHidden)
+        );
       } else {
         alert("Failed to update service visibility. Please try again.");
       }
@@ -134,7 +145,11 @@ const SellerServiceCard = ({ service }) => {
             </svg>
           )}
         </button>
-        <img src={service.serviceImages[0]} alt="" className="seller-service-card-image" />
+        <img
+          src={service.serviceImages[0]}
+          alt=""
+          className="seller-service-card-image"
+        />
         <Link
           to={`add-service/${service.serviceTitle}`}
           className="seller-service-card-product-name"
@@ -161,7 +176,7 @@ const SellerServiceCard = ({ service }) => {
         <h4 className="seller-service-card-price">{service.price}</h4>
         <button
           className="seller-service-card-remove-button"
-          onClick={handleOnRemoveClicked}
+          onClick={() => setShowDeletePopup(true)}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -189,6 +204,81 @@ const SellerServiceCard = ({ service }) => {
           strokeWidth="1"
         />
       </svg>
+      {showDeletePopup && (
+        <div
+          className="forumPostDeleteBackground"
+          onClick={(e) => {
+            setShowDeletePopup(false);
+            e.stopPropagation();
+          }}
+        >
+          <div
+            className="forumPostDeleteContainer"
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            <h2>Are you sure you want to delete this post?</h2>
+            <div className="forumPostDeleteButtonContainer">
+              <button
+                className="deleteForumPostButton"
+                onClick={handleOnRemoveClicked}
+              >
+                Delete
+              </button>
+              <button
+                className="deleteForumCloseButton"
+                onClick={(e) => {
+                  setShowDeletePopup(false);
+                  e.stopPropagation();
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {isDeleting && (
+        <div className="forumPostDeleteLoadingBackground">
+          <div className="forumPostDeleteLoadingContainer">
+            <PulseLoader size={"1.5rem"} color="#3C95A9" />
+            <p className="forumPostDeletingContainerLoadingText">Deleting...</p>
+          </div>
+        </div>
+      )}
+      {showSuccessfulPopup && (
+        <div
+          style={{ zIndex: 100 }}
+          className="forumPostDeleteBackground"
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowSuccessfulPopup(false);
+            dispatch(removeService(service._id));
+          }}
+        >
+          <div
+            className="forumPostDeleteContainer"
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            <h2>Post Deleted Successfully !</h2>
+            <div className="forumPostDeleteButtonContainer">
+              <button
+                className="deleteForumPostButton"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowSuccessfulPopup(false);
+                  dispatch(removeService(service._id));
+                }}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

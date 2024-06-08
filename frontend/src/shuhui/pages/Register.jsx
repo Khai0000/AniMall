@@ -314,6 +314,24 @@ function Register() {
       )}
 
       {showSuccessMessage && (
+        <div style={{ zIndex: 100 }} className="forumPostDeleteBackground">
+          <div className="forumPostDeleteContainer">
+            <h2>The verification code has been sent to your email.</h2>
+            <div className="forumPostDeleteButtonContainer">
+              <button
+                className="deleteForumPostButton"
+                onClick={() => {
+                  setShowSuccessMessage(false);
+                  setShowVerify(true);
+                }}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* {showSuccessMessage && (
         <div className="modal-overlay">
           <div className="modal-content">
             <h2>Success!</h2>
@@ -328,7 +346,7 @@ function Register() {
             </button>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 }

@@ -4,7 +4,7 @@ import { ServiceAvailabilityModel } from "../ServicesFile/serviceSlotAvailabilit
 
 export const getAllServices = async (req, res) => {
   try {
-    const services = await ServiceItemsModel.find();
+    const services = await ServiceItemsModel.find().sort({ createdAt: -1 });
     return res.status(200).json(services);
   } catch (error) {
     return res.status(500).json({ error: error.message });
@@ -168,7 +168,6 @@ export const updateSlotAvailability = async (req, res) => {
       return res.status(400).json({ error: "Missing required parameters" });
     }
 
-    
     if (!Array.isArray(selectedSlots)) {
       return res.status(400).json({ error: "selectedSlots must be an array" });
     }
@@ -186,7 +185,6 @@ export const updateSlotAvailability = async (req, res) => {
     });
 
     console.log("selectedSlotsssssss:", availability);
-
 
     if (!availability) {
       availability = new ServiceAvailabilityModel({
@@ -211,7 +209,9 @@ export const updateSlotAvailability = async (req, res) => {
 
       if (fullyBookedSlots.length > 0) {
         return res.status(400).json({
-          error: `Slots ${fullyBookedSlots.join(", ")} are already fully booked`,
+          error: `Slots ${fullyBookedSlots.join(
+            ", "
+          )} are already fully booked`,
         });
       }
     } else if (action === "remove") {
@@ -243,8 +243,6 @@ export const updateSlotAvailability = async (req, res) => {
     return res.status(500).json({ error: "Internal server error" });
   }
 };
-
-
 
 export const getSlotAvailability = async (req, res) => {
   const { serviceId, date } = req.params;
@@ -278,14 +276,23 @@ export const getSlotAvailability = async (req, res) => {
 
 const getDefaultSlotsAvailability = () => {
   const defaultSlots = new Map();
-  const timeSlots = ["08:00", "09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00"];
-  timeSlots.forEach(slot => {
+  const timeSlots = [
+    "08:00",
+    "09:00",
+    "10:00",
+    "11:00",
+    "13:00",
+    "14:00",
+    "15:00",
+    "16:00",
+  ];
+  timeSlots.forEach((slot) => {
     defaultSlots.set(slot, 0);
   });
   return defaultSlots;
 };
 
-export const updateServiceHide = async (req, res) =>{
+export const updateServiceHide = async (req, res) => {
   try {
     const { serviceId } = req.params;
     const { isHidden } = req.body;

@@ -2,7 +2,7 @@
   import "../styles/ServicePostComment.css";
   import ServicePostCommentSkeleton from "./ServicePostCommentSkeleton";
   import DeleteIcon from '@mui/icons-material/Delete';
-  import { useDispatch } from 'react-redux';
+  import { useDispatch,useSelector } from 'react-redux';
   import { removeComment } from "../slices/serviceSlice";
   import axios from "axios";
 
@@ -10,6 +10,8 @@
     const [imageSource, setImageSource] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const dispatch = useDispatch();
+
+    const user = useSelector(state=>state.user.user);
     
     const handleOnDeleteClick = async () => {
       try {
@@ -62,7 +64,7 @@
           <p className="contentSPC">{comment.content}</p>
         </div>
 
-        {comment.userUid === userId && (
+        {(comment.userUid === userId||user.role==='admin') && (
           <button className="deleteButtonSPC"  onClick={handleOnDeleteClick}>
             <DeleteIcon />
           </button>
