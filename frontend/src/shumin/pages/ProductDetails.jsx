@@ -1,6 +1,6 @@
 import React from "react";
 import ImageSlider from "../components/ImageSlider";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -10,44 +10,27 @@ import ProductPostComment from "../components/ProductPostComment";
 import "../styles/ProductDetails.css";
 import { addItemToCart } from "../slices/CartSlice";
 import AdvPopUp from "../components/AdvPopUp";
+import axios from "axios";
+import SuccessfulModal from "../../ZongMing/components/SuccessfulModal";
+import PulseLoader from "react-spinners/PulseLoader";
 
 const ProductDetails = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { title } = useParams();
+  const { productId } = useParams();
   const [showAd, setShowAd] = useState(false);
-
-  const [imagesLoading, setImagesLoading] = useState(true);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const product = useSelector((state) =>
-    state.products.find((product) => product.title === title)
+    state.products.find((product) => product._id === productId)
   );
+
+
+  const user = useSelector((state)=>state.user.user);
+
+
   const cartItem = useSelector((state) => state.cart);
-
-  const [loadedImageUrls, setLoadedImageUrls] = useState([]);
-
-  useEffect(() => {
-    const loadImageUrls = async () => {
-      const loadedImages = [];
-      for (const image of product.image) {
-        try {
-          if (image.includes("jpg")) {
-            let imageDir = image.substring(0, image.indexOf("."));
-            const imageData = await import(`../assets/images/${imageDir}.jpg`);
-            loadedImages.push(imageData.default);
-          } else {
-            loadedImages.push(image);
-          }
-        } catch (error) {
-          console.error("Error loading image:", error);
-        }
-      }
-      setLoadedImageUrls(loadedImages);
-      setImagesLoading(false);
-    };
-    loadImageUrls();
-  }, [product.image]);
 
   const [showPopup, setShowPopup] = useState(false);
 
@@ -59,71 +42,65 @@ const ProductDetails = () => {
     navigate(-1);
   };
 
+  if (!product) {
+    return (
+      <div className="wj-loadingContainer">
+          <PulseLoader size={"1.5rem"} color="#3C95A9" />
+          <p className="wj-loadingText">Loading Product Details...</p>
+        </div>
+    );
+  }
+
   const randomAdPopup = () => {
     const random = Math.floor(Math.random() * 3) + 1;
     if (random === 2) {
       setShowAd(true);
     } else {
-      navigate(-1);
     }
   }
 
-  const handleOnAddToCartButtonClick = () => {
-    const existingCartItem = cartItem.find(item => item.id === product.id);
-    if (existingCartItem) {
-      if (existingCartItem.stockLevel > existingCartItem.quantity) {
-        const productDetails = {
-          id: product.id,
+  const handleOnAddToCartButtonClick = async () => {
+    const existingCartItem = cartItem.find(item => item.productId === product._id);
+    if (existingCartItem && existingCartItem.quantity >= product.stockLevel) {
+        alert('Cannot add more of this item. Stock level reached.');
+        return;
+    }else if((existingCartItem && existingCartItem.quantity < product.stockLevel)||(!existingCartItem)){
+        const productDetails = [{
+          productId: product._id,
           title: product.title,
-          description: product.description,
           image: product.image,
-          animaltag: product.animaltag,
-          producttag: product.producttag,
           price: product.price,
-          ratings: product.ratings,
-          comments: product.comments,
-          stockLevel: product.stockLevel,
-          hidden: product.hidden,
           type: "product",
-          quantity: existingCartItem.quantity + 1,
+          quantity: 1,
           checked: true,
-        };
-        dispatch(addItemToCart(productDetails));
-        randomAdPopup();
-      } else {
-        alert("Stock is not enough!");
+        }];
+        try {
+          const addItemsResponse = await axios.post('http://localhost:4000/api/cart/add', {
+              username: user.username,
+              userId: user.userUid,
+              items: productDetails,
+          });
+
+          if (addItemsResponse.status === 201) {
+              dispatch(addItemToCart(productDetails));
+              randomAdPopup();
+              setShowSuccessModal(true);
+          } else {
+              console.error("Error: Unable to add items to cart. Server responded with status:", addItemsResponse.status);
+              alert("Add to Cart Failed. Please try again.");
+          }
+      } catch (error) {
+          console.error("Error adding items to database:", error.response.data);
+          alert("Checkout failed. Please try again.");
       }
-    } else {
-      const productDetails = {
-        id: product.id,
-        title: product.title,
-        description: product.description,
-        image: product.image,
-        animaltag: product.animaltag,
-        producttag: product.producttag,
-        price: product.price,
-        ratings: product.ratings,
-        comments: product.comments,
-        stockLevel: product.stockLevel,
-        hidden: product.hidden,
-        type: "product",
-        quantity: 1,
-        checked: true,
-      };
-      dispatch(addItemToCart(productDetails));
-      randomAdPopup();
     }
-  }
+  };
 
   return (
     <div className="product-details-container">
       <div className="top-side-container">
         <div className="left-side">
-          {imagesLoading ? (
-            <p>Loading images...</p>
-          ) : (
-            <ImageSlider images={loadedImageUrls} />
-          )}
+          <ImageSlider images={product.image} />
         </div>
 
         <div className="right-side">
@@ -133,7 +110,7 @@ const ProductDetails = () => {
             {product.description}
           </p>
           <p className="product-details-price">Price: RM {product.price}</p>
-          <div className="button-container">
+          <div className="product-button-container">
             <button
               className="add-to-cart-button"
               onClick={handleOnAddToCartButtonClick}
@@ -189,24 +166,24 @@ const ProductDetails = () => {
           <div className="commentBody">
             {product.comments.length === 0 ? (
               <div className="commentNotFound">
-                <p>No comments for this service yet.</p>
+                <p>No comments for this product yet.</p>
               </div>
             ) : (
-              product.comments.map((comment, index) => (
+              product.comments.map((comment) => (
                 <ProductPostComment
                   comments={comment}
-                  key={index}
-                  title={title}
+                  id={productId}
                 />
               ))
             )}
           </div>
         </div>
         {showPopup && (
-          <CommentPopUp setShowPopup={setShowPopup} title={title} />
+          <CommentPopUp setShowPopup={setShowPopup} id={productId} />
         )}
       </div>
       <AdvPopUp show={showAd} onClose={() => { setShowAd(false); navigate(-1); }} />
+      <SuccessfulModal show={showSuccessModal} onClose={() => setShowSuccessModal(false)} message={"The product has been added to your cart."} />
     </div>
   );
 };

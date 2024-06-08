@@ -1,0 +1,143 @@
+.adoption-form-container {
+  position: fixed;
+  top: 5%;
+  left: 5%;
+  right: 5%;
+  bottom: 5%;
+  background-color: rgba(255, 255, 255, 1);
+  border: 2px solid #3C95A9;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  z-index: 999;
+  overflow-y: auto;
+  scrollbar-width: none;  
+}
+
+.adoption-form-dialog {
+  background-color: white;
+  color: #3C95A9;
+  padding: 2%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.terms-and-conditions {
+  width: 50%;
+  font-size: 1rem;
+  padding: 2%;
+  border: 2px solid #3C95A9;
+  border-radius: 15px;
+  text-align: justify;
+  height: auto;
+  overflow-y: auto;
+}
+
+.adoption-form {
+  width: 45%;
+  padding: 2%;
+  font-size: 1rem;
+  border: 2px solid #3C95A9;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.adoption-form input {
+  border: 2px solid #3C95A9;
+  border-radius: 20px;
+  padding: 4.5%;
+  min-width: 100%;
+  padding-left: 7%;
+  margin-top: 8%;
+  font-size: 90%;
+  color: #3C95A9;
+}
+
+.adoption-form input::placeholder {
+  color: #3C95A9;
+}
+
+.adoption-form input:focus {
+  outline: none;
+  border-color: #F3B801;
+  color: #F3B801;
+}
+
+.adoption-form input:hover {
+  background-image: url('../assets/images/input_paw.png');
+  background-color: transparent;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center right;
+}
+
+.sx-closeButton {
+  position: absolute;
+  border: none;
+  background-color: #3C95A9;
+  color: white;
+  width: 35px;
+  height: 35px;
+  border-radius: 10px;
+  padding-top: 5px;
+  transform: rotate(45deg);
+  cursor: pointer;
+  right: 4vw;
+  top: 5.5vh;
+}
+
+.sx-closeButton:hover {
+  background-color: #F3B801;
+}
+
+.sx-closeIcon {
+  transform: rotate(45deg);
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin-top: 35px;
+}
+
+.ApprovedButton {
+  background-color: #F3B801;
+  border: none;
+  color: #fff;
+  border-radius: 15px;
+  padding: 6px 64px;
+  cursor: pointer;
+  transition: background-color 0.5s ease;
+}
+
+.ApprovedButton:hover {
+  border: 1px solid #F3B801;
+  border-radius: 15px;
+  color: #F3B801;
+  background-color: #fff;
+}
+
+.RejectedButton {
+  background-color: #ffffff;
+  border: 1px solid #F3B801;
+  color: #F3B801;
+  border-radius: 15px;
+  padding: 6px 64px;
+  cursor: pointer;
+  margin-left: 10px; /* Add some space between the buttons */
+  transition: background-color 0.5s ease;
+}
+
+.RejectedButton:hover {
+  border: 1px solid #F3B801;
+  border-radius: 15px;
+  color: #ffffff;
+  background-color: #F3B801;
+}

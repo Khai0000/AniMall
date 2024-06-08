@@ -2,86 +2,76 @@ import { useState, useEffect } from "react";
 import "../styles/SellerServiceCard.css";
 import SellerServiceCardSkeleton from "./SellerServiceCardSkeleton";
 import { useDispatch } from "react-redux";
-import {
-  removeService,
-  hideService,
-} from "../slices/serviceSlice";
+import { removeService, hideService } from "../slices/serviceSlice";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import PulseLoader from "react-spinners/PulseLoader";
 
-const SellerServiceCard = ({service}) => {
+const SellerServiceCard = ({ service }) => {
   const [image, setImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [isHidden, setIsHidden] = useState(service.hidden);
+  const [isHidden, setIsHidden] = useState(
+    localStorage.getItem(`${service._id}_isHidden`) === "true"
+      ? true
+      : service.hidden
+  );
   const [quantity] = useState(1);
   const dispatch = useDispatch();
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [showSuccessfulPopup, setShowSuccessfulPopup] = useState(false);
 
   useEffect(() => {
-    // if (service.serviceImages && service.serviceImages.length > 0) {
-    //   const firstImage = service.serviceImages[0];
-    //   if (firstImage.includes("jpg")) {
-    //     let imageDir = firstImage.substring(0, firstImage.indexOf("."));
-    //     import(`../assets/image/${imageDir}.jpg`)
-    //       .then((image) => {
-    //         setImage(image.default);
-    //       })
-    //       .catch((error) => {
-    //         console.error("Error loading image:", error);
-    //       })
-    //       .finally(() => {
-    //         setIsLoading(false);
-    //       });
-    //   } else {
-    //     // If the image URL does not contain "jpg", assume it's a direct URL
-    //     setImage(firstImage);
-    //     setIsLoading(false);
-    //   }
-    // } else {
-    //   // Handle the case where serviceImages is empty or undefined
-    //   console.error(
-    //     "Service image is not defined or not in the expected format:",
-    //     service
-    //   );
-    //   setIsLoading(false);
-    // }
+    setIsLoading(true);
     if (service.serviceImages && service.serviceImages[0]) {
-      if (service.serviceImages[0].includes("jpg")) {
-        
-        let filename = service.serviceImages[0].split("/").pop();
-       
-        let imageName = filename.split(".")[0] + ".jpg";
-        import(`../assets/image/${imageName}`)
-          .then((image) => {
-            setImage(image.default);
-          })
-          .catch((error) => {
-            console.error("Error loading image:", error);
-          })
-          .finally(() => {
-            setIsLoading(false);
-          });
-      } else {
-        setImage(service.serviceImages[0]);
-        // console.log(service.serviceImages[0]);
-        // console.error(
-        //   "Service image is not in the expected format:",
-        //   service.serviceImages[0]
-        // );
-        setIsLoading(false);
-      }
+      setImage(service.serviceImages[0]);
     }
+    setIsLoading(false);
   }, [service]);
 
-  const handleOnRemoveClicked = () => {
-    dispatch(removeService(service.serviceTitle));
+  const handleOnRemoveClicked = async () => {
+    setIsDeleting(true);
+    try {
+      const response = await axios.delete(
+        `http://localhost:4000/api/services/${service._id}`
+      );
+      if (response.status === 200) {
+        setShowSuccessfulPopup(true);
+      } else {
+        alert("Failed to delete the service. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error deleting service:", error);
+      alert("An error occurred while deleting the service. Please try again.");
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
-  const handleCheckboxClick = () => {
-    setIsHidden(!isHidden);
-    dispatch(
-      hideService({
-        serviceTitle: service.serviceTitle,
-      })
-    );
+  const handleCheckboxClick = async () => {
+    try {
+      const response = await axios.put(
+        `http://localhost:4000/api/services/${service._id}/hide`,
+        {
+          isHidden: !isHidden,
+        }
+      );
+      if (response.status === 200) {
+        setIsHidden(!isHidden);
+        dispatch(hideService({ serviceId: service._id }));
+        localStorage.setItem(
+          `${service._id}_isHidden`,
+          JSON.stringify(!isHidden)
+        );
+      } else {
+        alert("Failed to update service visibility. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error updating service visibility:", error);
+      alert(
+        "An error occurred while updating service visibility. Please try again."
+      );
+    }
   };
 
   return isLoading ? (
@@ -139,7 +129,11 @@ const SellerServiceCard = ({service}) => {
             </svg>
           )}
         </button>
-        <img src={image} alt="" className="seller-service-card-image" />
+        <img
+          src={service.serviceImages[0]}
+          alt=""
+          className="seller-service-card-image"
+        />
         <Link
           to={`add-service/${service.serviceTitle}`}
           className="seller-service-card-product-name"
@@ -150,31 +144,23 @@ const SellerServiceCard = ({service}) => {
           </h4>
         </Link>
 
-       
-        <button
-          className="seller-service-card-minus-button"
-          disabled
-        >
+        <button className="seller-service-card-minus-button" disabled>
           -
         </button>
         <input
           type="number"
           className="seller-service-card-quantity-input-zm"
           value={quantity}
-          readOnly 
+          readOnly
         />
-        <button
-          className="seller-service-card-plus-button"
-          disabled
-        >
+        <button className="seller-service-card-plus-button" disabled>
           +
         </button>
-    
 
         <h4 className="seller-service-card-price">{service.price}</h4>
         <button
           className="seller-service-card-remove-button"
-          onClick={handleOnRemoveClicked}
+          onClick={() => setShowDeletePopup(true)}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -202,6 +188,81 @@ const SellerServiceCard = ({service}) => {
           strokeWidth="1"
         />
       </svg>
+      {showDeletePopup && (
+        <div
+          className="forumPostDeleteBackground"
+          onClick={(e) => {
+            setShowDeletePopup(false);
+            e.stopPropagation();
+          }}
+        >
+          <div
+            className="forumPostDeleteContainer"
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            <h2>Are you sure you want to remove this service?</h2>
+            <div className="forumPostDeleteButtonContainer">
+              <button
+                className="deleteForumPostButton"
+                onClick={handleOnRemoveClicked}
+              >
+                Delete
+              </button>
+              <button
+                className="deleteForumCloseButton"
+                onClick={(e) => {
+                  setShowDeletePopup(false);
+                  e.stopPropagation();
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {isDeleting && (
+        <div className="forumPostDeleteLoadingBackground">
+          <div className="forumPostDeleteLoadingContainer">
+            <PulseLoader size={"1.5rem"} color="#3C95A9" />
+            <p className="forumPostDeletingContainerLoadingText">Deleting...</p>
+          </div>
+        </div>
+      )}
+      {showSuccessfulPopup && (
+        <div
+          style={{ zIndex: 100 }}
+          className="forumPostDeleteBackground"
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowSuccessfulPopup(false);
+            dispatch(removeService(service._id));
+          }}
+        >
+          <div
+            className="forumPostDeleteContainer"
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            <h2>Service Removed Successfully !</h2>
+            <div className="forumPostDeleteButtonContainer">
+              <button
+                className="deleteForumPostButton"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowSuccessfulPopup(false);
+                  dispatch(removeService(service._id));
+                }}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

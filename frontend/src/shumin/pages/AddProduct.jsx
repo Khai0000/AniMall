@@ -1,16 +1,17 @@
 import React, { useState,useEffect } from "react";
 import "../styles/ProductDetailsInputForm.css";
 import useToggle from "../hooks/useToggle.js";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch} from "react-redux";
 import { addProduct,editProduct} from "../slices/ProductSlice.js";
-import { ProductData } from "../data/DummyProductData.js";
 import { Link ,useParams,useNavigate} from "react-router-dom";
+import axios from "axios";
 
 const AddProduct =()=>{
   const [showTitleInput, toggleTitle] = useToggle();
   const [showDesciptionInput, toggleDescription] = useToggle();
   const [showPriceInput, togglePrice] = useToggle();
   const [editMode, setEditMode] = useState(false);
+  const [imagesToDelete, setImagesToDelete] = useState([]);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -34,58 +35,49 @@ const AddProduct =()=>{
   const [isFoodFocused, setIsFoodFocused] = useState(false);
   const [isAccessoriesFocused, setIsAccessoriesFocused] = useState(false);
   const [isOthersFocused, setIsOthersFocused] = useState(false);
-  const products = useSelector((state)=> state.products);
+
+  //const products = useSelector((state)=> state.products);
   const { id } = useParams(); 
-
-  //for image
-  const [images, setImages] = useState([]);
-  const [currentImageIndex, setCurrentImageIndex] = useState(-1);
-
-  useEffect(() => {
-    // Check if an ID is provided, indicating an edit mode
-    if (id) {
-      setEditMode(true);
-      // Find the product with the provided ID
-      const productToEdit = products.find((product) => product.id === id);
-      if (productToEdit) {
-        // Populate the state with existing product details for editing
-        setTitle(productToEdit.title);
-        setDescription(productToEdit.description);
-        setPrice(productToEdit.price);
-        if(productToEdit.animaltag==="dog"){
-          setIsDogFocused(true);
-        }else if(productToEdit.animaltag==="cat"){
-          setIsCatFocused(true);
-        }else if(productToEdit.animaltag==="others"){
-          setIsOthersFocused(true);
-        }
-
-        if(productToEdit.producttag==="food"){
-          setIsFoodFocused(true);
-        }else{
-          setIsAccessoriesFocused(true);
-        }
-        setImages(productToEdit.image);
-
-        setHidden(productToEdit.hidden);
-        setStockLevel(productToEdit.stockLevel);
-        setRating(productToEdit.ratings);
-        setComment(productToEdit.comments);
-      }
-    }
-  }, [id, products]);
-
   const navigate = useNavigate();
   const dispatch=useDispatch();
 
+  //for image
+  const [images, setImages] = useState([]);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [currentImageIndex, setCurrentImageIndex] = useState(-1);
+
   useEffect(() => {
-    if ( products.length === 0) {
-        ProductData.forEach((product) => {
-            dispatch(addProduct(product));
+    const fetchProduct = async() =>{
+      // Check if an ID is provided, indicating an edit mode
+      if (id) {
+        setEditMode(true);
+        try{
+          const response = await axios.get(`http://localhost:4000/api/product/product/${id}`);
+          const productToEdit = response.data;
+
+          setTitle(productToEdit.title);
+          setDescription(productToEdit.description);
+          setPrice(productToEdit.price);
+          setImages(productToEdit.image);
+          setHidden(productToEdit.hidden);
+          setStockLevel(productToEdit.stockLevel);
+          setRating(productToEdit.ratings);
+          setComment(productToEdit.comments);
+
+          if (productToEdit.animaltag === "dog") setIsDogFocused(true);
+          else if (productToEdit.animaltag === "cat") setIsCatFocused(true);
+          else if (productToEdit.animaltag === "others") setIsOthersFocused(true);
+
+          if (productToEdit.producttag === "food") setIsFoodFocused(true);
+          else setIsAccessoriesFocused(true);
+        }catch(error){
+          console.error("Error fetching product:"+error);
+          alert("Error fetching product. Please try again later.");
         }
-    );
     }
-  }, [dispatch, products]);
+  };
+  fetchProduct();
+}, [id]);
 
   const toggleSelectedAnimalTag= (button) => {
     if (selectedAnimalTag === button) {
@@ -131,19 +123,6 @@ const AddProduct =()=>{
     }
   };
 
-  const generateProductId = () => {
-    if (products.length === 0) {
-      return "P0001"; // If no products, start with P0001
-    }
-
-    const lastProductId = products[0].id;
-    const lastIdNumber = parseInt(lastProductId.slice(1), 10);
-    const newIdNumber = lastIdNumber + 1;
-    const paddedNewId = String(newIdNumber).padStart(4, "0");
-
-    return `P${paddedNewId}`;
-  };
-
   const handleKeyPress = (e, fieldType) => {
     if (e.key === "Enter") {
       if (fieldType === "title") {
@@ -184,7 +163,7 @@ const AddProduct =()=>{
   };
   
 
-  const handleOnAddProductClick = () => {
+  const handleOnAddProductClick = async () => {
     const priceString = String(price);
     if (!title.trim()) {
       alert("Please provide a title for your product.");
@@ -208,46 +187,102 @@ const AddProduct =()=>{
   
     const { animalTag, productTag } = getSelectedTags();
   
-    if (editMode) {
-      const updatedProduct = {
-        id,
-        title,
-        description,
-        image: images.filter((image) => image !== null),
-        animaltag: animalTag,
-        producttag: productTag,
-        price:parseInt(price),
-        ratings: rating,
-        comments: comment,
-        stockLevel: stockLevel,
-        hidden: hidden,
-      };
-      // Dispatch editProduct action
-      dispatch(editProduct(updatedProduct));
-    } else {
-      // Generate ID for the new product
-      const newProductId = generateProductId();
-  
-      const newProduct = {
-        title: title,
-        id: newProductId,
-        description: description,
-        image: images.filter((image) => image !== null),
-        animaltag: selectedAnimalTag,
-        producttag: selectedProductTag,
-        price: parseInt(price),
-        ratings: rating,
-        comments: comment,
-        stockLevel: 1,
-        hidden: false,
-      };
-  
-      dispatch(addProduct(newProduct));
-    }
-    navigate(-1);
-  };
-  
+    const formData = new FormData();
+    uploadedFiles.forEach((file) => {
+      if (file) formData.append("file", file);
+    });
 
+    try {
+      let uploadedImageUrls = [];
+      if (uploadedFiles.length > 0) {
+        const imageResponse = await axios.post(
+          "http://localhost:4000/image/upload",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        if (imageResponse.status === 200) {
+          uploadedImageUrls = imageResponse.data; // Assuming response contains URLs
+        } else {
+          console.error("Error uploading image:", imageResponse.statusText);
+          alert("Error uploading image. Please try again later.");
+          return;
+        }
+      }
+
+      if (editMode) {
+        for (const imageFileName of imagesToDelete) {
+          try {
+            const response = await axios.delete(`http://localhost:4000/image/${imageFileName}`);
+            if (response.status === 200) {
+              console.log(`Image ${imageFileName} deleted successfully`);
+            } else {
+              console.error(`Error deleting image ${imageFileName}:`, response.statusText);
+            }
+          } catch (error) {
+            console.error(`Error deleting image ${imageFileName}:`, error);
+          }
+        }
+
+        const filteredExistingImages = images.filter(image => !image.startsWith('blob:'));
+        const updatedProduct = {
+          title,
+          description,
+          image:  [...filteredExistingImages, ...uploadedImageUrls],
+          animaltag: animalTag,
+          producttag: productTag,
+          price:parseFloat(price),
+          ratings: rating,
+          comments: comment,
+          stockLevel: stockLevel,
+          hidden: hidden,
+        };
+          
+        try{
+            const response=await axios.put(`http://localhost:4000/api/product/product/${id}`,updatedProduct);
+            if(response.status === 200){
+              dispatch(editProduct(updatedProduct));
+              navigate(-1);
+            }
+          }catch(error){
+            console.error("Error updating product:", error);
+            alert("Error updating product/ Please try again later.");
+        }
+      } else {
+        const newProductResponse = await axios.post(
+          "http://localhost:4000/api/product/product/add",
+          {
+            title:title,
+            description: description,
+            image: uploadedImageUrls,
+            animaltag: selectedAnimalTag,
+            producttag: selectedProductTag,
+            price: parseFloat(parseFloat(priceString).toFixed(2)),
+            ratings: rating,
+            comments: comment,
+            stockLevel: 1,
+            hidden: false,
+          }
+        );
+
+        if (newProductResponse.status === 200) {
+          const newProduct = newProductResponse.data;
+          dispatch(addProduct(newProduct));
+          navigate(-1);
+        } else {
+          console.error("Error adding product:", newProductResponse.statusText);
+          alert("Error adding pet. Please try again later.");
+        }
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      alert("Error uploading image. Please try again later.");
+    }
+  };
+    
   const triggerFileInput = () => {
     if (currentImageIndex === -1 || images.length === 0) {
       document.querySelector('input[type="file"]').click();
@@ -255,9 +290,18 @@ const AddProduct =()=>{
   };
 
   const handleImageChange = (e) => {
+    const file = e.target.files[0];
+
+    if (!file) {
+      return;
+    }
+
     const newImages = Array.from(e.target.files).map((file) => URL.createObjectURL(file));
     setImages([...images, ...newImages]);
     setCurrentImageIndex(images.length + newImages.length - 1);
+
+    const newFiles = [...uploadedFiles, ...Array.from(e.target.files)];
+    setUploadedFiles(newFiles);
   };
 
   const navigateImage = (direction, e) => {
@@ -281,69 +325,93 @@ const AddProduct =()=>{
     if (currentImageIndex === -1) {
       return <div className="placeholder">Click to add image</div>;
     }
-
+  
     // Check if the image source is from the file explorer or already a URL
-    const isImageFromFileExplorer = images[currentImageIndex].startsWith('blob:'); // Assuming file explorer URLs start with 'blob:'
-
-    if (isImageFromFileExplorer) {
+    const imageUrl = images[currentImageIndex];
+    const isImageFromFileExplorer = imageUrl.startsWith('blob:'); // Assuming file explorer URLs start with 'blob:'
+    const isRemoteImage = imageUrl.startsWith('http');
+  
+    if (isImageFromFileExplorer || isRemoteImage) {
+      return (
+        <img
+          src={imageUrl}
+          alt="Product for sales"
+          style={{ maxWidth: '100%', maxHeight: '100%' }}
+        />
+      );
+    } else {
+      if (images.length === 0) {
+        return null;
+      } else if (images.length === 1) {
         return (
           <img
-            src={images[currentImageIndex]}
+            src={require(`../assets/images/${images[0]}`)}
             alt="Product for sales"
-            style={{ maxWidth: '100%', maxHeight: '100%' }}
+            style={{ maxWidth: "100%", maxHeight: "100%" }}
           />
         );
-        } else {
-          if (images.length === 0) {
-            return null;
-          } else if (images.length === 1) {
-            return (
+      } else if (images.length === 2) {
+        return (
+          <>
+            {currentImageIndex === 0 && (
               <img
                 src={require(`../assets/images/${images[0]}`)}
                 alt="Product for sales"
                 style={{ maxWidth: "100%", maxHeight: "100%" }}
               />
-            );
-          } else if (images.length === 2) {
-            return (
-              <>
-                {currentImageIndex === 0 && (
-                  <img
-                    src={require(`../assets/images/${images[0]}`)}
-                    alt="Product for sales"
-                    style={{ maxWidth: "100%", maxHeight: "100%" }}
-                  />
-                )}
-                {currentImageIndex === 1 && (
-                  <img
-                    src={require(`../assets/images/${images[1]}`)}
-                    alt="Product for sales"
-                    style={{ maxWidth: "100%", maxHeight: "100%" }}
-                  />
-                )}
-              </>
-            );
-          } else {
-            return (
+            )}
+            {currentImageIndex === 1 && (
               <img
-                src={require(`../assets/images/${images[currentImageIndex]}`)}
+                src={require(`../assets/images/${images[1]}`)}
                 alt="Product for sales"
                 style={{ maxWidth: "100%", maxHeight: "100%" }}
               />
-            );
-          }
-        }
+            )}
+          </>
+        );
+      } else {
+        return (
+          <img
+            src={require(`../assets/images/${images[currentImageIndex]}`)}
+            alt="Product for sales"
+            style={{ maxWidth: "100%", maxHeight: "100%" }}
+          />
+        );
+      }
+    }
   };
   
-  
-  const handleDeleteImage=()=>{
-    if (currentImageIndex !== -1) {
-      const updatedImages = images.filter((image, index) => index !== currentImageIndex);
-      setImages(updatedImages);
-      setCurrentImageIndex(updatedImages.length > 0 ? 0 : -1); // Set current index to the first image if there are remaining images, otherwise to -1
+  const extractImageFileName = (imageUrl) => {
+    // Check if the imageUrl starts with "http://localhost:4000/image/"
+    if (imageUrl.startsWith("http://localhost:4000/image/")) {
+      // Get the substring starting after "http://localhost:4000/image/"
+      return imageUrl.substring("http://localhost:4000/image/".length);
+    } else {
+      // If the imageUrl format doesn't match, return the original imageUrl
+      return imageUrl;
     }
-  }
-
+  };
+  
+  const handleDeleteImage = () => {
+    if (editMode && currentImageIndex !== -1) {
+      const imageFileName = extractImageFileName(images[currentImageIndex]); // Get the filename of the image to be deleted
+  
+      // Add the filename to the imagesToDelete array
+      setImagesToDelete([...imagesToDelete, imageFileName]);
+  
+      // Remove the image from the images array
+      const updatedImages = images.filter((_, index) => index !== currentImageIndex);
+      setImages(updatedImages);
+      setCurrentImageIndex(updatedImages.length > 0 ? 0 : -1);
+    } else {
+      // Handle deletion from local state only (not in edit mode)
+      if (currentImageIndex !== -1) {
+        const updatedImages = images.filter((_, index) => index !== currentImageIndex);
+        setImages(updatedImages);
+        setCurrentImageIndex(updatedImages.length > 0 ? 0 : -1);
+      }
+    }
+  };
 
   return (
     <div>

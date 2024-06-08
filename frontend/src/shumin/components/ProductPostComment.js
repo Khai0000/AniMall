@@ -1,18 +1,38 @@
 import React, { useState, useEffect } from "react";
 import "../styles/ProductPostComment.css";
 import ProductPostCommentSkeleton from "./ProductPostCommentSkeleton";
-import DeleteIcon from '@mui/icons-material/Delete';
-import { useDispatch } from 'react-redux';
+import DeleteIcon from "@mui/icons-material/Delete";
+import { useDispatch, useSelector } from "react-redux";
 import { removeComment } from "../slices/ProductSlice";
+import axios from "axios";
 
-const ProductPostComment = ({ comments, title }) => { 
+const ProductPostComment = ({ comments, id }) => {
   const [imageSource, setImageSource] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showDeleteCommentPopup, setShowDeleteCommentPopup] = useState(false);
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
 
-  const handleOnDeleteClick = () => {
-    dispatch(removeComment({ title, commentContent: comments.content }));
-  }
+  const handleOnDeleteClick = async () => {
+    try {
+      const deleteCommentResponse = await axios.delete(
+        `http://localhost:4000/api/product/comment/product/${id}/${comments._id}`
+      );
+
+      if (deleteCommentResponse.status === 200) {
+        dispatch(removeComment({ id, commentId: comments._id }));
+      } else {
+        console.error(
+          "Unexpected response status:",
+          deleteCommentResponse.status
+        );
+      }
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+    } finally {
+      setShowDeleteCommentPopup(false);
+    }
+  };
 
   useEffect(() => {
     setIsLoading(true);
@@ -33,7 +53,6 @@ const ProductPostComment = ({ comments, title }) => {
     fetchImage();
   }, []);
 
-
   return isLoading ? (
     <ProductPostCommentSkeleton />
   ) : (
@@ -47,10 +66,48 @@ const ProductPostComment = ({ comments, title }) => {
         <p className="contentSPC">{comments.content}</p>
       </div>
 
-      {comments.name === "Khai" && (
-        <button className="deleteButtonSPC" onClick={handleOnDeleteClick}>
+      {(comments.name === user.user.username || user.role === "admin") && (
+        <button
+          className="deleteButtonSPC"
+          onClick={() => setShowDeleteCommentPopup(true)}
+        >
           <DeleteIcon />
         </button>
+      )}
+      {showDeleteCommentPopup && (
+        <div
+          className="forumPostDeleteBackground"
+          onClick={(e) => {
+            setShowDeleteCommentPopup(false);
+            e.stopPropagation();
+          }}
+        >
+          <div
+            className="forumPostDeleteContainer"
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            <h2>Are you sure you want to delete this comment?</h2>
+            <div className="forumPostDeleteButtonContainer">
+              <button
+                className="deleteForumPostButton"
+                onClick={handleOnDeleteClick}
+              >
+                Delete
+              </button>
+              <button
+                className="deleteForumCloseButton"
+                onClick={(e) => {
+                  setShowDeleteCommentPopup(false);
+                  e.stopPropagation();
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

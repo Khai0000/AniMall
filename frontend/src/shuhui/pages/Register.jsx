@@ -1,13 +1,18 @@
 import React, { useState, useRef, useEffect } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../styles/Register.css";
 import YellowTop from "../assets/images/yellow_top.png";
 import VerifyIcon from "../assets/images/verify_icon.png";
 import VerifyIconError from "../assets/images/error_verify_icon.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 function Register() {
   const [showVerify, setShowVerify] = useState(false);
-  const [verificationCode, setVerificationCode] = useState("");
+  const [verificationCode, setVerificationCode] = useState(
+    Array.from({ length: 6 }).fill("")
+  );
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -15,7 +20,12 @@ function Register() {
   const [usernameError, setUsernameError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [registerError, setRegisterError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+
   const [codeError, setCodeError] = useState(false);
   const inputRefs = useRef([]);
   const navigate = useNavigate();
@@ -26,9 +36,9 @@ function Register() {
         (inputRef) => inputRef === document.activeElement
       );
       if (event.key === "Backspace" && index > 0 && !event.target.value) {
-        event.preventDefault(); // Prevent default backspace behavior
-        inputRefs.current[index - 1].value = ""; // Clear the value of the previous input
-        inputRefs.current[index - 1].focus(); // Focus on the previous input field
+        event.preventDefault();
+        inputRefs.current[index - 1].value = "";
+        inputRefs.current[index - 1].focus();
       }
     };
 
@@ -39,7 +49,7 @@ function Register() {
     };
   }, []);
 
-  const handleRegisterClick = (e) => {
+  const handleRegisterClick = async (e) => {
     e.preventDefault();
 
     // Validate username
@@ -56,8 +66,9 @@ function Register() {
     }
 
     // Validate password
-    const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    // const passwordRegex =
+    //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const passwordRegex = /^[A-Za-z\d@.$!%#*?&]{8,}$/;
     if (!passwordRegex.test(password)) {
       setPasswordError(
         "Password must have at least 8 characters, including 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character"
@@ -70,47 +81,104 @@ function Register() {
       return;
     }
 
-    setShowVerify(true);
-    // Logic to send verification email and proceed
+    try {
+      const newUserCreate = await axios.post(
+        "http://localhost:4000/api/auth/authentication/register",
+        {
+          username: username,
+          email: email,
+          password: password,
+        }
+      );
+
+      setShowSuccessMessage(true);
+
+      // Handle successful registration here, such as displaying a success message or navigating to another page
+      console.log("User registered successfully:", newUserCreate.data);
+    } catch (error) {
+      console.error("Error creating user:", error);
+      setRegisterError("Server is not connected.");
+    }
   };
 
-  const handleInputChange = (index, value, event) => {
+  const handleInputChange = async (index, value) => {
     const newCode = [...verificationCode];
     newCode[index] = value;
-    setVerificationCode(newCode.join(""));
+    setVerificationCode(newCode);
 
     if (value !== "" && index < inputRefs.current.length - 1) {
       inputRefs.current[index + 1].focus();
     }
 
-    if (newCode.length === 6) {
-      if (newCode.join("") === "123456") {
-        navigate("/authentication/login"); // Redirect to product page if code is correct
-      } else {
+    if (newCode.every((digit) => digit !== "")) {
+      const enteredCode = newCode.join("");
+
+      try {
+        const response = await axios.post(
+          "http://localhost:4000/api/auth/authentication/verify",
+          {
+            email: email, // Send the email as well
+            verificationCode: enteredCode, // Send the verification code
+          }
+        );
+
+        if (response.data.success) {
+          navigate("/authentication/login");
+        } else {
+          console.log(response.data);
+          setCodeError(true);
+          setVerificationCode(Array.from({ length: 6 }).fill(""));
+          inputRefs.current[0].focus();
+          inputRefs.current.forEach((inputRef) => {
+            inputRef.classList.add("invalid");
+          });
+        }
+      } catch (error) {
+        console.error("Error:", error);
         setCodeError(true);
-        // Clear all input fields if code is incorrect
-        setVerificationCode("");
-        inputRefs.current[0].focus(); // Focus on the first input field
+        setVerificationCode(Array.from({ length: 6 }).fill(""));
+        inputRefs.current[0].focus();
         inputRefs.current.forEach((inputRef) => {
-          inputRef.classList.add("invalid"); // Add "invalid" class to all input fields
+          inputRef.classList.add("invalid");
         });
       }
     } else {
       inputRefs.current.forEach((inputRef) => {
-        inputRef.classList.remove("invalid"); // Remove "invalid" class
-      }); // Reset codeError when code is being retyped
+        inputRef.classList.remove("invalid");
+      });
+      setCodeError(false);
     }
   };
 
-  const handleResendClick = () => {
-    // Add logic to resend verification code
-    setCodeError(false);
-    setTimeout(() => {
-      // Reset the input fields to original color after 1 second
-      inputRefs.current.forEach((inputRef) => {
-        inputRef.classList.remove("invalid"); // Remove "invalid" class
-      });
-    }, 100);
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setConfirmPasswordVisible(!confirmPasswordVisible);
+  };
+
+  const handleResendClick = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:4000/api/auth/authentication/resendcode",
+        { email: email }
+      );
+      if (response.status === 200) {
+        setCodeError(false);
+        setTimeout(() => {
+          inputRefs.current.forEach((inputRef) => {
+            inputRef.classList.remove("invalid");
+          });
+        }, 100);
+        setShowSuccessMessage(true);
+      }
+    } catch (error) {
+      console.error("Error resending verification code:", error);
+      alert(
+        "An error occurred while resending the verification code. Please try again later."
+      );
+    }
   };
 
   return (
@@ -147,34 +215,52 @@ function Register() {
                 }}
               />
               {emailError && <p className="error-message">{emailError}</p>}
-              <input
-                required
-                className="register-password"
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  setPasswordError("");
-                }}
-              />
+              <div className="password-container">
+                <input
+                  required
+                  className="register-password"
+                  type={passwordVisible ? "text" : "password"}
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setPasswordError("");
+                  }}
+                />
+                <FontAwesomeIcon
+                  icon={passwordVisible ? faEyeSlash : faEye}
+                  className="password-toggle-icon"
+                  onClick={togglePasswordVisibility}
+                />
+              </div>
               {passwordError && (
                 <p className="error-message">{passwordError}</p>
               )}
-              <input
-                required
-                className="register-confirmpassword"
-                type="password"
-                placeholder="Confirmed Password"
-                value={confirmedPassword}
-                onChange={(e) => {
-                  setConfirmedPassword(e.target.value);
-                  setPasswordError("");
-                }}
-              />
+              <div className="password-container">
+                <input
+                  required
+                  className="register-confirmpassword"
+                  type={confirmPasswordVisible ? "text" : "password"}
+                  placeholder="Confirmed Password"
+                  value={confirmedPassword}
+                  onChange={(e) => {
+                    setConfirmedPassword(e.target.value);
+                    setConfirmPasswordError("");
+                  }}
+                />
+                <FontAwesomeIcon
+                  icon={confirmPasswordVisible ? faEyeSlash : faEye}
+                  className="password-toggle-icon"
+                  onClick={toggleConfirmPasswordVisibility}
+                />
+              </div>
               {confirmPasswordError && (
                 <p className="error-message">{confirmPasswordError}</p>
               )}
+              {registerError && (
+                <div className="error-register">{registerError}</div>
+              )}
+
               <button className="register-button" type="submit">
                 REGISTER
               </button>
@@ -226,6 +312,41 @@ function Register() {
           </p>
         </div>
       )}
+
+      {showSuccessMessage && (
+        <div style={{ zIndex: 100 }} className="forumPostDeleteBackground">
+          <div className="forumPostDeleteContainer">
+            <h2>The verification code has been sent to your email.</h2>
+            <div className="forumPostDeleteButtonContainer">
+              <button
+                className="deleteForumPostButton"
+                onClick={() => {
+                  setShowSuccessMessage(false);
+                  setShowVerify(true);
+                }}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* {showSuccessMessage && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h2>Success!</h2>
+            <p>The verification code has been sent to your email.</p>
+            <button
+              onClick={() => {
+                setShowSuccessMessage(false);
+                setShowVerify(true);
+              }}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )} */}
     </div>
   );
 }

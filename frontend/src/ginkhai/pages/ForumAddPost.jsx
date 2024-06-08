@@ -3,8 +3,9 @@ import "../styles/ForumAddPost.css";
 import imageBackground from "../assets/images/imageBackground.png";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addPost } from "../slices/postSlice";
+import PulseLoader from "react-spinners/PulseLoader";
 import axios from "axios";
 
 const ForumAddPost = () => {
@@ -14,9 +15,17 @@ const ForumAddPost = () => {
   const [selectedButtons, setSelectedButtons] = useState([]);
   const [uploadedImages, setUploadedImages] = useState([null, null, null]);
   const [uploadedFiles, setUploadedFiles] = useState([null, null, null]);
+
+  const [isUploading, setIsUploading] = useState(false);
+  const [showSuccessfulPopup, setShowSuccessfulPopup] = useState(false);
+  const [newPost, setNewPost] = useState(null);
+
   const inputRefs = useRef([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.user.user);
+
 
   useEffect(() => {
     const allButtonsOccupied = uploadedImages.every((image) => image !== null);
@@ -128,6 +137,7 @@ const ForumAddPost = () => {
     });
 
     try {
+      setIsUploading(true);
       const imageResponse = await axios.post(
         "http://localhost:4000/image/upload",
         formData,
@@ -146,22 +156,19 @@ const ForumAddPost = () => {
           {
             title: titleText,
             image: imageResponse.data,
-            author: "Khai",
+            author: user.username + "//useruid//" + user.userUid,
             content: bodyText,
             tag: [...selectedButtons],
           }
         );
 
         if (newPostResponse.status === 200) {
-          const newPost = newPostResponse.data;
-          dispatch(addPost(newPost));
-          navigate(-1);
-        }
-        else{
+          setShowSuccessfulPopup(true);
+          setNewPost(newPostResponse.data);
+        } else {
           console.error("Error uploading image:", newPostResponse.statusText);
           alert("Error uploading post. Please try again later.");
         }
-
       } else {
         console.error("Error uploading image:", imageResponse.statusText);
         alert("Error uploading image. Please try again later.");
@@ -169,6 +176,8 @@ const ForumAddPost = () => {
     } catch (error) {
       console.error("Error uploading image:", error);
       alert("Error uploading image. Please try again later.");
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -216,7 +225,7 @@ const ForumAddPost = () => {
                 />
                 {uploadedImages[index] && (
                   <button
-                    className="deleteButton"
+                    className="wjImageDeleteButton"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleDelete(index);
@@ -269,6 +278,50 @@ const ForumAddPost = () => {
           </div>
         </div>
       </div>
+      {isUploading && (
+        <div className="forumPostAddingLoadingBackground">
+          <div className="forumPostAddingLoadingContainer">
+            <PulseLoader size={"1.5rem"} color="#3C95A9" />
+            <p className="forumPostAddingContainerLoadingText">
+              Uploading...
+            </p>
+          </div>
+        </div>
+      )}
+      {showSuccessfulPopup && (
+        <div
+          style={{ zIndex: 100 }}
+          className="forumPostDeleteBackground"
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowSuccessfulPopup(false);
+            dispatch(addPost(newPost));
+            navigate(-1);
+          }}
+        >
+          <div
+            className="forumPostDeleteContainer"
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            <h2>Post Added Successfully !</h2>
+            <div className="forumPostDeleteButtonContainer">
+              <button
+                className="deleteForumPostButton"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowSuccessfulPopup(false);
+                  dispatch(addPost(newPost));
+                  navigate(-1);
+                }}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

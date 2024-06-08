@@ -152,6 +152,7 @@
 }
 
 .seller-product-card-remove-button {
+    cursor: pointer;
     background-color: transparent;
     border: none;
 }
@@ -217,4 +218,101 @@
         display: flex;
         justify-content: center
     }
+}
+
+.forumPostDeleteBackground {
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.3);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    left: 0;
+    z-index: 100;
+}
+
+.forumPostDeleteBackground>.forumPostDeleteContainer {
+    background-color: white;
+    padding: 2em;
+    border-radius: 5px;
+    width: 45%;
+    z-index: 100;
+}
+
+.forumPostDeleteBackground>.forumPostDeleteContainer>h2 {
+    margin-top: 0;
+    color: #3c95a9;
+    margin-bottom: 1.5em;
+    text-align: center;
+}
+
+.forumPostDeleteBackground>.forumPostDeleteContainer>.forumPostDeleteButtonContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 2em;
+}
+
+.forumPostDeleteBackground>.forumPostDeleteContainer>.forumPostDeleteButtonContainer>.deleteForumPostButton {
+    border: none;
+    border-radius: 5px;
+    background-color: #3c95a9;
+    padding: 0.5em 1em;
+    color: #fff;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.forumPostDeleteBackground>.forumPostDeleteContainer>.forumPostDeleteButtonContainer>.deleteForumPostButton:hover {
+    background-color: #f4b701;
+}
+
+.forumPostDeleteBackground>.forumPostDeleteContainer>.forumPostDeleteButtonContainer>.deleteForumCloseButton {
+    border: 1px solid #3c95a9;
+    border-radius: 5px;
+    background-color: transparent;
+    padding: 0.5em 1em;
+    color: #3c95a9;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.forumPostDeleteBackground>.forumPostDeleteContainer>.forumPostDeleteButtonContainer>.deleteForumCloseButton:hover {
+    color: #f4b701;
+    border: 1px solid #f4b701;
+}
+
+#wjDatePickerButton{
+    z-index: 0 !important ;
+}
+
+.forumPostDeleteLoadingBackground{
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+}
+
+.forumPostDeleteLoadingBackground>.forumPostDeleteLoadingContainer{
+    background-color: white;
+    padding: 2em;
+    border-radius: 5px;
+    width: 20%;
+    text-align: center;
+    z-index: 50;
+}
+
+.forumPostDeleteLoadingContainer>.forumPostDeletingContainerLoadingText{
+    font-size: 1.10em;
+    margin-bottom: 0;
 }

@@ -1,11 +1,12 @@
 import '../styles/SellerProduct.css';
 import {useSelector,useDispatch} from 'react-redux';
 import React, { useEffect,lazy,Suspense, useState} from 'react';
-import CircularProgress from "@mui/material/CircularProgress";
 import "../styles/ProductCard.css";
-import { addPet } from "../slices/PetSlice";
-import { PetData } from "../data/DummyPetData";
+import { setInitialPet } from "../slices/PetSlice";
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import PulseLoader from "react-spinners/PulseLoader";
+
 
 const SellerPetCard=lazy(()=>import("../components/SellerPetCard"));
 
@@ -17,14 +18,23 @@ function SellerPet(){
 
     useEffect(() => {
         setIsLoading(true);
-        if ( pets.length === 0) {
-            PetData.forEach((pet) => {
-                dispatch(addPet(pet));
+        const getPets = async () => {
+          try {
+            const petsResponse = await axios.get("http://localhost:4000/api/pet");
+            if (petsResponse.status === 200) {
+              dispatch(setInitialPet(petsResponse.data));
+            } else {
+              console.log(petsResponse);
             }
-        );
-        }
-        setIsLoading(false);
-    }, [dispatch, pets]);
+          } catch (error) {
+            console.error("Error fetching pets:", error);
+          } finally {
+            setIsLoading(false);
+          }
+        };
+      
+        getPets();
+      }, [dispatch, pets.length]);
 
     const navigate = useNavigate();
 
@@ -48,16 +58,17 @@ function SellerPet(){
             </div>
             <div>
                 {isLoading?(
-                    <div className="loadingContainer">
-                        <CircularProgress className="circularProgress" />
-                  </div>
+                    <div className="wj-loadingContainer">
+                        <PulseLoader size={"1.5rem"} color="#3C95A9" />
+                        <p className="wj-loadingText">Loading...</p>
+                    </div>
                 ): pets.length !== 0 ? (
                     <>
                     <div>
-                        <Suspense fallback={<div>Loading...</div>}>
-                        {pets.map((pet,index)=>(
-                            <SellerPetCard key={pet.id} pet={pet}/>
-                        ))}
+                        <Suspense >
+                            {pets.map((pet)=>(
+                                <SellerPetCard pet={pet}/>
+                            ))}
                         </Suspense>
                     </div>
                     </>

@@ -1,0 +1,75 @@
+.checkoutPopupContainer {
+    position: fixed;
+    background-color: rgba(0,0,0,0.3);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    z-index: 10;
+}
+
+.checkoutPopupContainer>.checkoutInfoPopupContainer{
+    background-color: white;
+    padding: 2em;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 45%;
+    text-align: center;
+}
+
+.checkoutPopupContainer>.checkoutInfoPopupContainer>p{
+    font-size: 1.5em;
+}
+
+.checkoutPopupContainer>.checkoutInfoPopupContainer>.checkoutPopupButtonContainer>.closeButton,
+.checkoutPopupContainer>.checkoutInfoPopupContainer>.checkoutPopupButtonContainer>.editButton{
+    border: none;
+    background-color: #3C95A9;
+    color: #fff;
+    padding: 0.5em 1em;
+    font-size: 1em;
+    border-radius: 5px;
+    text-align: center;
+    transition: 0.3s background-color;
+    cursor: pointer;
+}
+
+.checkoutPopupContainer>.checkoutInfoPopupContainer>.checkoutPopupButtonContainer>.closeButton:hover,
+.checkoutPopupContainer>.checkoutInfoPopupContainer>.checkoutPopupButtonContainer>.editButton:hover{
+    background-color: #f4b701;
+}
+
+.checkoutPopupContainer>.checkoutInfoPopupContainer>.checkoutPopupButtonContainer{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin-top: 0.5em;
+}
+
+.checkoutPopupContainer>.checkoutInfoPopupContainer>.checkoutPopupButtonContainer>.editButton{
+    padding: 0.5em 2em;
+}
+
+
+.checkoutPopupContainer>.checkoutInfoPopupContainer>.checkoutPopupButtonContainer>.editCloseButton{
+    border: none;
+    background-color: transparent;
+    color: #3C95A9;
+    border: 1px solid #3C95A9;
+    padding: 0.5em 1em;
+    font-size: 1em;
+    border-radius: 5px;
+    text-align: center;
+    transition: 0.3s all;
+    cursor: pointer;
+}
+
+.checkoutPopupContainer>.checkoutInfoPopupContainer>.checkoutPopupButtonContainer>.editCloseButton:hover{
+    color: #f4b701;
+    border: 1px solid #f4b701;
+}

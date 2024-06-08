@@ -13,6 +13,7 @@
   align-items: flex-start; /* Align items to the start */
   z-index: 1000; /* Ensure the container is above other content */
   overflow-y: auto;
+  scrollbar-width: none;  
 }
 
 .adoption-form-dialog {
@@ -31,7 +32,7 @@
 
 .terms-and-conditions {
   width: 50%; /* Adjust width as necessary */
-  margin-right: 2%; /* Ensure some space between sections */
+ /* margin-right: 0.2%; Ensure some space between sections */
   font-size: 1rem;
   padding: 2%;
   border: 2px solid #3C95A9;

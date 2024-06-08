@@ -1,32 +1,40 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector} from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
-import { removeUser } from "../shuhui/slices/userSlice";
 import "../styles/Header.css";
 import logo from "../assets/images/logo.png";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import axios from "axios";
 
 function Header() {
   const [isLogin, setIsLogin] = useState(false);
   const user = useSelector((state) => state.user.user);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
     setIsLogin(user !== null);
   }, [user]);
 
-  const handleLogout = () => {
-    setIsLogin(false);
-    navigate("/authentication/login", { replace: true });
-    // Dispatch action to remove user from Redux store
-    dispatch(removeUser());
+  const handleLogout = async (e) => {
+    //res.clearCookie('authToken');
+    try {
+      await axios.get(
+        "http://localhost:4000/api/auth/authentication/logout",
+        { withCredentials: true }
+      );
+      //dispatch(removeUser());
+      //setIsLogin(false);
+      window.location.replace("/authentication/login");
+      // navigate("/authentication/login", { replace: false });
+    } catch (error) {
+      console.error("Error logout user:", error);
+    }
   };
 
   const goToProfile = () => {
-    navigate("/authentication/profile"); // Navigate to the profile page
+    navigate("/authentication/profile");
   };
 
   return (
@@ -40,6 +48,8 @@ function Header() {
         <NavLink to={"/community"}>Community</NavLink>
         <span className="separator">|</span>
         <NavLink to={"/services"}>Services</NavLink>
+        <span className="separator">|</span>
+        <NavLink to={"/order"}>Order</NavLink>
       </div>
 
       <div className="actionContainer">
@@ -47,7 +57,7 @@ function Header() {
           <>
             <div className="profile" onClick={goToProfile}>
               <PersonIcon className="profileIcon" />
-              {user && <span>{user.username}...</span>}
+              {user && <span>{user.username}</span>}
             </div>
 
             <button className="logoutButton" onClick={handleLogout}>

@@ -11,15 +11,65 @@ import * as ZongMingPages from "./ZongMing/pages";
 import * as ShuminPages from "./shumin/pages";
 import * as GinkhaiPages from "./ginkhai/pages";
 import * as ShuhuiPages from "./shuhui/pages";
-import { useSelector } from "react-redux";
-
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { setUser } from "./shuhui/slices/userSlice";
+import EditProfilePopup from "./shumin/components/EditProfilePopup";
+import PulseLoader from "react-spinners/PulseLoader";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const dispatch = useDispatch();
+  const [isLoggedIn, setIsLoggedIn] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const user = useSelector((state) => state.user.user);
+  const isAdmin = user && user.role === "admin";
 
   useEffect(() => {
-    setIsLoggedIn(user !== null);
+    if(!user)
+    try {
+      axios.get(
+        "http://localhost:4000/api/auth/authentication/getuser",
+        { withCredentials: true }
+      )
+        .then(response => {
+          if (response.data) {
+            const {
+              username,
+              email,
+              userUid,
+              role,
+              verifyStatus,
+              address,
+              phone,
+            } = response.data;
+            dispatch(
+              setUser({
+                username,
+                email,
+                userUid,
+                role,
+                verifyStatus,
+                address,
+                phone,
+              }));
+          }
+        })
+        .catch(err => {
+          console.error("Error");
+          setIsLoggedIn(false);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        })
+    } catch (error) {
+      //console.error("Error:", error);
+    }
+  },);
+
+  useEffect(() => {
+    if (user !== null) {
+      setIsLoggedIn(true);
+    }
   }, [user]);
 
   const router = createBrowserRouter([
@@ -28,142 +78,147 @@ function App() {
       element: <Layout />,
       errorElement: <CommonPages.NotFoundPages />,
       children: [
-        { path: "/", element: <Navigate to="authentication/login" /> },
+        {
+          path: "/",
+          element: isLoggedIn ? (
+            <Navigate to="/product" />
+          ) : (
+            <Navigate to="/authentication/login" />
+          ),
+        },
         {
           path: "/authentication",
           children: [
-            { path: "/authentication/login", element: <ShuhuiPages.Login /> },
             {
-              path: "/authentication/register",
+              path: "login", element: isLoggedIn ? (
+                <Navigate to="/product" replace={false} />) : <ShuhuiPages.Login />
+            },
+            {
+              path: "register",
               element: <ShuhuiPages.Register />,
             },
             {
-              path: "/authentication/reset-password",
+              path: "reset-password",
               element: <ShuhuiPages.ResetPassword />,
             },
             {
-              path: "/authentication/profile",
+              path: "profile",
               element: <ShuhuiPages.Profile />,
             },
           ],
         },
         {
           path: "/pet",
-          element: <CommonPages.Pet />,
+          element: isLoggedIn === true ? <CommonPages.Pet /> : (isLoggedIn === false ? <ShuhuiPages.Login /> : <></>),
           children: [
-            { path: "/pet", element: <ShuminPages.PetHome /> },
             {
-              path: "/pet/:title",
+              path: "", element: isLoggedIn === true ? <ShuminPages.PetHome /> : (isLoggedIn === false ? <ShuhuiPages.Login /> : <></>)
+            },
+            {
+              path: ":petId",
               element: isLoggedIn ? (
                 <ShuminPages.PetDetails />
               ) : (
-                <Navigate to="/authentication/login" replace={false} />
+                <ShuhuiPages.Login />
               ),
             },
             {
-              path: "/pet/PetCategorized/:category",
+              path: "PetCategorized/:category",
               element: <ShuminPages.PetCategorized />,
             },
-            { path: "/pet/sellerPet/add-pet", element: <ShuminPages.AddPet /> },
-            { path: "/pet/sellerPet", element: <ShuminPages.SellerPet /> },
-            {
-              path: "/pet/sellerPet/add-pet/:id",
-              element: <ShuminPages.AddPet />,
-            },
+            { path: "sellerPet/add-pet", element: <ShuminPages.AddPet /> },
+            { path: "sellerPet", element: <ShuminPages.SellerPet /> },
+            { path: "/pet/adoptionformcheck", element: <ShuminPages.AdoptionFormHome /> },
+            { path: "sellerPet/add-pet/:id", element: <ShuminPages.AddPet /> },
           ],
         },
         {
           path: "/community",
-          // element: isLoggedIn ? (
-          //   <CommonPages.Community />
-          // ) : (
-          //   <Navigate to="/authentication/login" replace={false}  />
-          // ),
-          element:<CommonPages.Community/>,
+          element: isLoggedIn === true ? <CommonPages.Community /> : (isLoggedIn === false ? <ShuhuiPages.Login /> : <></>),
           children: [
-            { path: "/community", element: <GinkhaiPages.ForumHome /> },
+            { path: "", element: <GinkhaiPages.ForumHome /> },
             {
-              path: "/community/post/:postId",
+              path: "post/:postId",
               element: <GinkhaiPages.ForumPostDetails />,
             },
+            { path: "post/add", element: <GinkhaiPages.ForumAddPost /> },
             {
-              path: "/community/post/add",
-              element: <GinkhaiPages.ForumAddPost />,
+              path: "post/:postId/edit",
+              element: <GinkhaiPages.ForumEditPost />,
             },
           ],
         },
         {
           path: "/product",
-          element: <CommonPages.Product />,
+          element: isLoggedIn === true ? <CommonPages.Product /> : (isLoggedIn === false ? <ShuhuiPages.Login /> : <></>),
           children: [
-            { path: "/product", element: <ShuminPages.ProductHome /> },
+            { path: "", element: <ShuminPages.ProductHome /> },
             {
-              path: "/product/:title",
-              element: isLoggedIn ? (
-                <ShuminPages.ProductDetails />
-              ) : (
-                <Navigate to="/authentication/login" replace={false} />
-              ),
+              path: ":productId",
+              element: isLoggedIn === true ? <ShuminPages.ProductDetails /> : (isLoggedIn === false ? <ShuhuiPages.Login /> : <></>),
             },
             {
-              path: "/product/ProductCategorized/:category",
+              path: "ProductCategorized/:category",
               element: <ShuminPages.ProductCategorized />,
             },
             {
-              path: "/product/sellerProduct/add-product",
+              path: "sellerProduct/add-product",
               element: <ShuminPages.AddProduct />,
             },
+            { path: "sellerProduct", element: <ShuminPages.SellerProduct /> },
             {
-              path: "/product/sellerProduct",
-              element: <ShuminPages.SellerProduct />,
-            },
-            {
-              path: "/product/sellerProduct/add-product/:id",
+              path: "sellerProduct/add-product/:id",
               element: <ShuminPages.AddProduct />,
             },
           ],
         },
-
         {
           path: "/services",
-          element: <CommonPages.Services />,
+          element: isLoggedIn === true ? <CommonPages.Services /> : (isLoggedIn === false ? <ShuhuiPages.Login /> : <></>),
           children: [
-            { path: "/services", element: <ZongMingPages.ServiceHome /> },
+            { path: "", element: <ZongMingPages.ServiceHome /> },
+            { path: "sellerService", element: <ZongMingPages.SellerService /> },
             {
-              path: "/services/sellerService",
-              element: <ZongMingPages.SellerService />,
+              path: ":serviceId",
+              element: isLoggedIn ? <ZongMingPages.ServiceDetail /> : (isLoggedIn === false ? <ShuhuiPages.Login /> : <></>),
             },
             {
-              path: "/services/serviceDetails/:title",
-              element: isLoggedIn ? (
-                <ZongMingPages.ServiceDetail />
-              ) : (
-                <Navigate to="/authentication/login" replace={false} />
-              ),
-            },
-            {
-              path: "/services/sellerService/add-service",
+              path: "sellerService/add-service",
               element: <ZongMingPages.AddServiceComponent />,
             },
             {
-              path: "/services/sellerService/add-service/:serviceTitle",
+              path: "sellerService/add-service/:serviceTitle",
               element: <ZongMingPages.AddServiceComponent />,
             },
           ],
         },
         {
           path: "/mycart",
-          element: isLoggedIn ? (
-            <ShuminPages.MyCart />
-          ) : (
-            <Navigate to="/authentication/login" replace={false} />
-          ),
+          element: isLoggedIn === true ? <ShuminPages.MyCart /> : (isLoggedIn === false ? <ShuhuiPages.Login /> : <></>),
+        },
+        {
+          path: "/order",
+          element: <CommonPages.Order />,
+          children: [
+            {
+              path: "",
+              element: isLoggedIn === true ? (isAdmin ? <ShuminPages.SellerOrder /> : <ShuminPages.UserOrder />) : (isLoggedIn === false ? <ShuhuiPages.Login /> : <></>
+              ),
+            },
+          ],
+        },
+        {
+          path: "/cartPopup",
+          element: <EditProfilePopup />,
         },
       ],
     },
   ]);
 
-  return <RouterProvider router={router} />;
+  return isLoading ? (<div className="wj-loadingContainer">
+    <PulseLoader size={"1.5rem"} color="#3C95A9" />
+    <p className="wj-loadingText">Loading...</p>
+  </div>) : <RouterProvider router={router} />;
 }
 
 export default App;

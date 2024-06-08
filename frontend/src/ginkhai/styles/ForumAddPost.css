@@ -154,6 +154,7 @@
     width: 100%;
     display: flex;
     justify-content: space-around;
+    gap: 2em;
     margin-bottom: 3vh;
 }
 
@@ -205,7 +206,7 @@
     object-fit: contain;
 }
 
-.addPostDetailsContainer .imageButton .deleteButton{
+.addPostDetailsContainer .imageButton .wjImageDeleteButton{
     border: none;
     top: 10%;
     color: red;
@@ -213,11 +214,37 @@
     right: 5%;
 }
 
-.addPostDetailsContainer .imageButton .deleteButton {
+.addPostDetailsContainer .imageButton .wjImageDeleteButton {
     border: none;
     top: 10%;
     color: red;
     position: absolute;
     right: 5%;
     z-index: 100;
+}
+
+.forumPostAddingLoadingBackground {
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.3);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    left: 0;
+    z-index: 100;
+}
+
+.forumPostAddingLoadingBackground>.forumPostAddingLoadingContainer {
+    background-color: white;
+    padding: 3em 2em;
+    border-radius: 5px;
+    width: 30%;
+    text-align: center;
+    z-index: 50;
+}
+.forumPostAddingLoadingBackground>.forumPostAddingLoadingContainer>p {
+    font-size: 1.25em;
+    margin-bottom: 0;
 }

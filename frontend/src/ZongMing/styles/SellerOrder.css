@@ -1,0 +1,72 @@
+#Upper-section-sellerorder {
+    margin-top: 2.5%;
+    margin-left: 4.5%;
+    display: flex;
+    align-items: center; 
+    margin-bottom: 1%;
+}
+
+#Upper-section-order {
+    color: #3C95A9;
+    text-align: center;
+    font-family: Inter;
+    font-size: 1.12em;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin-left: 0.3%;
+}
+
+.OrderButtonContainer {
+    display: flex;
+    flex: 1;
+    max-width: 50vw;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.OrderButtonContainer .categoryButton {
+    position: relative;
+    padding: 3px 32px;
+    border-radius: 20px;
+    border: 3px solid #3C95A9;
+    color: #3C95A9;
+    background-color: transparent;
+    font-size: 1.125rem;
+    height: fit-content;
+    transition: padding 0.3s ease;
+}
+
+.OrderButtonContainer .categoryButton:hover {
+    color: #f4b701;
+    border: 3px solid #f4b701;
+    cursor: pointer;
+}
+
+.OrderButtonContainer .selected::before {
+    content: "\2714";
+    position: absolute;
+    color: #fff;
+    font-size: 1.125rem;
+    font-weight: bold;
+    left: 8px;
+    bottom: 8%;
+}
+
+.OrderButtonContainer .selected {
+    background-color: #3C95A9;
+    border: 3px solid #3C95A9;
+    color: white;
+    padding: 3px 32px 3px 5.5%;
+}
+
+.OrderButtonContainer .selected:hover {
+    color: white;
+    background-color: #f4b701;
+}
+
+.OrderButtonContainer .buttonContainer {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}

@@ -22,28 +22,32 @@ import axios from "axios";
 
 const ForumPostDetails = () => {
   const { postId } = useParams();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [showErrorPage, setShowErrorPage] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [loadedImageUrls, setLoadedImageUrls] = useState([]);
   const [disableButton, setDisableButton] = useState(false);
+
+  const user = useSelector((state) => state.user.user);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const localPost = useSelector((state) =>
     state.posts?.find((post) => {
-      return post._id === postId;
+      return post._id === postId ;
     })
   );
 
-  const postRef = useRef(localPost); 
-  postRef.current=localPost;
+  const postRef = useRef(localPost);
+  postRef.current = localPost;
   let post = postRef.current;
 
   useEffect(() => {
     const fetchSpecificPost = async () => {
+      console.log("hahaha");
       try {
+        setIsLoading(true);
         if (!postRef.current) {
           const specificPostResponse = await axios.get(
             `http://localhost:4000/api/community/post/${postId}`
@@ -66,8 +70,8 @@ const ForumPostDetails = () => {
       }
     };
 
-    fetchSpecificPost();
-  });
+    !postRef.current && fetchSpecificPost();
+  },[postId]);
 
   useEffect(() => {
     post && setLoadedImageUrls(post.image);
@@ -81,36 +85,40 @@ const ForumPostDetails = () => {
     navigate(-1);
   };
 
+  const handleOnEditClick = () => {
+    navigate(`/community/post/${postId}/edit`, { state: { post: localPost } });
+  };
+
   const handleOnLikeClick = async () => {
-    if (post.peopleWhoLikes.includes("Khai")) {
-      dispatch(removeLike({ postId, userUid: "Khai" }));
+    if (post.peopleWhoLikes.includes(user.userUid)) {
+      dispatch(removeLike({ postId, userUid: user.userUid }));
       await axios.post(
         `http://localhost:4000/api/community/post/${postId}/neutral`,
-        { userUid: "Khai" }
+        { userUid: user.userUid }
       );
     } else {
-      dispatch(addLike({ postId, userUid: "Khai" }));
+      dispatch(addLike({ postId, userUid: user.userUid }));
       await axios.post(
         `http://localhost:4000/api/community/post/${postId}/like`,
-        { userUid: "Khai" }
+        { userUid: user.userUid }
       );
     }
   };
   const handleOnDislikeClick = async () => {
     try {
-      if (post.peopleWhoDislikes.includes("Khai")) {
-        dispatch(removeDislike({ postId, userUid: "Khai" }));
+      if (post.peopleWhoDislikes.includes(user.userUid)) {
+        dispatch(removeDislike({ postId, userUid: user.userUid }));
 
         await axios.post(
           `http://localhost:4000/api/community/post/${postId}/neutral`,
-          { userUid: "Khai" }
+          { userUid: user.userUid }
         );
       } else {
-        dispatch(addDislike({ postId, userUid: "Khai" }));
+        dispatch(addDislike({ postId, userUid: user.userUid }));
 
         await axios.post(
           `http://localhost:4000/api/community/post/${postId}/dislike`,
-          { userUid: "Khai" }
+          { userUid: user.userUid }
         );
       }
     } catch (error) {
@@ -132,12 +140,28 @@ const ForumPostDetails = () => {
           <div>
             <p className="title">{post && post.title}</p>
             <p className="author">
-              By: <span className="authorName">{ post && post.author}</span>
+              By:{" "}
+              <span className="authorName">
+                {post && post.author.split("//useruid//")[0]}
+              </span>
             </p>
           </div>
-          <button className="weijiePostBackButton" onClick={handleOnBackClick}>
-            Back
-          </button>
+          <div className="weijiePostButtonContainer">
+            {post && post.author.split("//useruid//")[1] === user.userUid && (
+              <button
+                className="weijieEditPostButton"
+                onClick={handleOnEditClick}
+              >
+                Edit
+              </button>
+            )}
+            <button
+              className="weijiePostBackButton"
+              onClick={handleOnBackClick}
+            >
+              Back
+            </button>
+          </div>
         </div>
         <div className="floatContainer">
           <div className="imageContainer">
@@ -158,7 +182,7 @@ const ForumPostDetails = () => {
               onClick={handleOnLikeClick}
               disabled={disableButton}
             >
-              {post && post.peopleWhoLikes.includes("Khai") ? (
+              {post && post.peopleWhoLikes.includes(user.userUid) ? (
                 <ThumbUpIcon className="reactionIcon" color="success" />
               ) : (
                 <ThumbUpOffAltIcon className="reactionIcon" color="success" />
@@ -172,7 +196,7 @@ const ForumPostDetails = () => {
               onClick={handleOnDislikeClick}
               disabled={disableButton}
             >
-              {post && post.peopleWhoDislikes.includes("Khai") ? (
+              {post && post.peopleWhoDislikes.includes(user.userUid) ? (
                 <ThumbDownAltIcon className="reactionIcon" color="error" />
               ) : (
                 <ThumbDownOffAltIcon className="reactionIcon" color="error" />
@@ -213,7 +237,8 @@ const ForumPostDetails = () => {
                 <p>The topic have no comment yet! Add yours here!</p>
               </div>
             ) : (
-              post && post.comments
+              post &&
+              post.comments
                 .slice()
                 .reverse()
                 .map((comment) => {

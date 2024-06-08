@@ -2,8 +2,14 @@ import { useState, useEffect } from "react";
 import "../styles/SellerProductCard.css";
 import SellerProductCardSkeleton from "./SellerProductCardSkeleton";
 import { useDispatch } from "react-redux";
-import { editProduct, removeProduct } from "../slices/ProductSlice";
+import {
+  editProduct,
+  removeProduct,
+  updateQuantity,
+} from "../slices/ProductSlice";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import PulseLoader from "react-spinners/PulseLoader";
 
 const SellerProductCard = ({ product }) => {
   const [image, setImage] = useState(null);
@@ -12,29 +18,35 @@ const SellerProductCard = ({ product }) => {
   const initialQuantity = product.stockLevel;
   const [quantity, setQuantity] = useState(initialQuantity);
 
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [showSuccessfulPopup, setShowSuccessfulPopup] = useState(false);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (product.image && product.image[0].includes("jpg")) {
-      let imageDir = product.image[0].substring(
-        0,
-        product.image[0].indexOf(".")
-      );
-      import(`../assets/images/${imageDir}.jpg`)
-        .then((image) => {
-          setImage(image.default);
-        })
-        .catch((error) => {
-          console.error("Error loading image:", error);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    } else if (product.image && product.image[0]) {
-      setImage(product.image[0]);
-      setIsLoading(false);
+    setIsLoading(true);
+    if (product.image && product.image[0]) {
+      const imageUrl = product.image[0];
+      if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+        // For remote images
+        setImage(imageUrl);
+        setIsLoading(false);
+      } else {
+        // For local images
+        const imageDir = imageUrl.substring(0, imageUrl.indexOf("."));
+        import(`../assets/images/${imageDir}.jpg`)
+          .then((image) => {
+            setImage(image.default);
+          })
+          .catch((error) => {
+            console.error("Error loading image:", error);
+          })
+          .finally(() => {
+            setIsLoading(false);
+          });
+      }
     } else {
-      // Handle the case where product.image is not as expected
       console.error(
         "Product image is not defined or not in the expected format:",
         product
@@ -43,36 +55,94 @@ const SellerProductCard = ({ product }) => {
     }
   }, [product]);
 
-  const handleOnRemoveClicked = () => {
-    dispatch(removeProduct(product.id));
-  };
-
-  const handleCheckboxClick = () => {
-    if (!isHidden || quantity >= 1) {
-      const newHiddenValue = !isHidden;
-      setIsHidden(newHiddenValue);
-      dispatch(editProduct({ id: product.id, hidden: newHiddenValue }));
-    } else {
-      alert(
-        "Cannot make the product visible as the stock level is insufficient."
+  const handleOnRemoveClicked = async () => {
+    setIsDeleting(true);
+    try {
+      const response = await axios.delete(
+        `http://localhost:4000/api/product/product/${product._id}`
       );
+      if (response.status === 200) {
+        setShowSuccessfulPopup(true);
+      } else {
+        console.error("Failed to delete product:", response.data);
+      }
+    } catch (error) {
+      console.error("Error deleting product:", error);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
-  useEffect(() => {
-    // Automatically set isHidden to true if quantity is 0 or less
-    if (quantity <= 0 && !isHidden) {
-      console.log("Hi(seller product card)");
-      setIsHidden(true);
-      dispatch(editProduct({ id: product.id, hidden: true }));
+  const handleCheckboxClick = async () => {
+    try {
+      if (!isHidden || quantity >= 1) {
+        const newHiddenValue = !isHidden;
+        setIsHidden(newHiddenValue);
+        const response = await axios.put(
+          `http://localhost:4000/api/product/product/${product._id}`,
+          { hidden: newHiddenValue }
+        );
+        if (response.status === 200) {
+          dispatch(editProduct({ id: product._id, hidden: newHiddenValue }));
+        } else {
+          console.error("Failed to update product hidden status:", response);
+        }
+      } else {
+        alert(
+          "Cannot make the product visible as the stock level is insufficient."
+        );
+      }
+    } catch (error) {
+      console.error("Error updating product:", error);
     }
-  }, [quantity, dispatch, isHidden, product.id]);
+  };
 
-  const handleQuantityChange = (event) => {
-    if (!isNaN(event.target.value)) {
-      const newQuantity = parseInt(event.target.value, 10);
-      setQuantity(newQuantity);
-      dispatch(editProduct({ id: product.id, stockLevel: newQuantity }));
+  // Automatically set isHidden to true if quantity is 0 or less
+  useEffect(() => {
+    async function hideProduct() {
+      try {
+        if (quantity <= 0 && !isHidden) {
+          setIsHidden(true);
+
+          const response = await axios.put(
+            `http://localhost:4000/api/product/product/${product._id}`,
+            {
+              hidden: true,
+            }
+          );
+          if (response.status === 200) {
+            dispatch(editProduct({ id: product._id, hidden: true }));
+          } else {
+            console.error("Failed to hide product:", response);
+          }
+        }
+      } catch (error) {
+        console.error("Error updating product:", error);
+      }
+    }
+    hideProduct();
+  }, [quantity, dispatch, isHidden, product._id]);
+
+  const handleQuantityChange = async (event) => {
+    try {
+      if (!isNaN(event.target.value)) {
+        const newQuantity = parseInt(event.target.value, 10);
+        setQuantity(newQuantity);
+
+        const response = await axios.put(
+          `http://localhost:4000/api/product/product/${product._id}`,
+          {
+            stockLevel: newQuantity,
+          }
+        );
+        if (response.status === 200) {
+          dispatch(updateQuantity({ id: product._id, quantity: newQuantity }));
+        } else {
+          console.error("Failed to update product quantity:", response);
+        }
+      }
+    } catch (error) {
+      console.error("Error updating product:", error);
     }
   };
 
@@ -83,18 +153,28 @@ const SellerProductCard = ({ product }) => {
     }
   };
 
-  const setNewQuantity = (operation) => {
+  const setNewQuantity = async (operation) => {
     let newQuantity = quantity;
     if (operation === "minus") {
       newQuantity -= 1;
     } else if (operation === "plus") {
       newQuantity += 1;
     }
-
     setQuantity(newQuantity);
 
-    // Dispatch editProduct action with updated quantity
-    dispatch(editProduct({ id: product.id, stockLevel: newQuantity }));
+    try {
+      const response = await axios.put(
+        `http://localhost:4000/api/product/product/${product._id}`,
+        { stockLevel: newQuantity }
+      );
+      if (response.status === 200) {
+        dispatch(updateQuantity({ id: product._id, quantity: newQuantity }));
+      } else {
+        console.error("Failed to update product quantity:", response);
+      }
+    } catch (error) {
+      console.error("Error updating product:", error);
+    }
   };
 
   return isLoading ? (
@@ -154,7 +234,7 @@ const SellerProductCard = ({ product }) => {
         </button>
         <img src={image} alt="" className="seller-product-card-image" />
         <Link
-          to={`/product/sellerProduct/add-product/${product.id}`}
+          to={`/product/sellerProduct/add-product/${product._id}`}
           className="seller-product-card-product-name"
           style={{ textDecoration: "none" }}
         >
@@ -186,7 +266,7 @@ const SellerProductCard = ({ product }) => {
         <h4 className="seller-product-card-price">{product.price}</h4>
         <button
           className="seller-product-card-remove-button"
-          onClick={handleOnRemoveClicked}
+          onClick={() => setShowDeletePopup(true)}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -214,6 +294,81 @@ const SellerProductCard = ({ product }) => {
           stroke-width="1"
         />
       </svg>
+      {showDeletePopup && (
+        <div
+          className="forumPostDeleteBackground"
+          onClick={(e) => {
+            setShowDeletePopup(false);
+            e.stopPropagation();
+          }}
+        >
+          <div
+            className="forumPostDeleteContainer"
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            <h2>Are you sure you want to remove this product?</h2>
+            <div className="forumPostDeleteButtonContainer">
+              <button
+                className="deleteForumPostButton"
+                onClick={handleOnRemoveClicked}
+              >
+                Delete
+              </button>
+              <button
+                className="deleteForumCloseButton"
+                onClick={(e) => {
+                  setShowDeletePopup(false);
+                  e.stopPropagation();
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {isDeleting && (
+        <div className="forumPostDeleteLoadingBackground">
+          <div className="forumPostDeleteLoadingContainer">
+            <PulseLoader size={"1.5rem"} color="#3C95A9" />
+            <p className="forumPostDeletingContainerLoadingText">Deleting...</p>
+          </div>
+        </div>
+      )}
+      {showSuccessfulPopup && (
+        <div
+          style={{ zIndex: 100 }}
+          className="forumPostDeleteBackground"
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowSuccessfulPopup(false);
+            dispatch(removeProduct(product._id));
+          }}
+        >
+          <div
+            className="forumPostDeleteContainer"
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            <h2>Product Removed Successfully !</h2>
+            <div className="forumPostDeleteButtonContainer">
+              <button
+                className="deleteForumPostButton"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowSuccessfulPopup(false);
+                  dispatch(removeProduct(product._id));
+                }}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

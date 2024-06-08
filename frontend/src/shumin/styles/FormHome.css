@@ -1,0 +1,79 @@
+.formContainer {
+    padding: 3vh 5vw;
+}
+
+.formContainer .formBody {
+    margin-top: 16px;
+    padding-top: 8px;
+    max-height: 70vh;
+    overflow-y: scroll;
+    padding-right: 1vw;
+}
+
+.formContainer .formBody::-webkit-scrollbar {
+    padding: 20px;
+    width: 0.2vw;
+}
+
+.formContainer .formBody::-webkit-scrollbar-track {
+    background-color: transparent;
+    border-radius: 20px;
+}
+
+.formContainer .formBody::-webkit-scrollbar-thumb {
+    background-color: #F3B801;
+    border-radius: 20px;
+}
+
+.formContainer .formBody::-webkit-scrollbar-thumb:hover {
+    cursor: pointer;
+}
+
+.formContainer .buttonContainer {
+    display: flex;
+    flex: 1;
+    margin-top: 3.5vh;
+}
+
+.formContainer .addPostButton {
+    background-color: #3C95A9;
+    border: none;
+    border-radius: 15px;
+    height: fit-content;
+    width: fit-content;
+    text-align: center;
+    color: #fff;
+    font-size: 2.5rem;
+    padding: 2px 14px;
+}
+
+.formContainer .addPostButton:hover {
+    background-color: #F3B801;
+    cursor: pointer;
+}
+
+.formContainer .formNoDiscussionContainer {
+    height: 66vh;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}
+
+.formContainer .formNoDiscussionContainer p {
+    font-size: 2rem;
+    color: #868686;
+}
+
+.formContainer .circularProgress {
+    color: #3C95A9 !important;
+}
+
+.formContainer .loadingContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 66vh;
+    row-gap: 0;
+    gap: 0;
+}

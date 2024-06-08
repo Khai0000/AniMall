@@ -67,12 +67,19 @@ export const postSlice = createSlice({
     setInitialPost: (state, action) => {
       return [...action.payload];
     },
+    updatePost: (state, action) => {
+      const { updatedPost } = action.payload;
+      const postIndex = state.findIndex((post) => {
+        return post._id === updatedPost._id;
+      });
+      if (postIndex !== -1) {
+        state[postIndex] = updatedPost;
+      }
+    },
     addComment: (state, action) => {
       const { postId, comment } = action.payload;
       const postIndex = state.findIndex((post) => {
-        return (
-          post._id===postId
-        );
+        return post._id === postId;
       });
       if (postIndex !== -1) {
         state[postIndex].comments.push(comment);
@@ -87,7 +94,6 @@ export const postSlice = createSlice({
           return comment._id !== commentId;
         });
       }
-
     },
     addLike: (state, action) => {
       const { postId, userUid } = action.payload;
@@ -153,6 +159,7 @@ export const {
   addPost,
   removePost,
   setInitialPost,
+  updatePost,
   addComment,
   addLike,
   addDislike,

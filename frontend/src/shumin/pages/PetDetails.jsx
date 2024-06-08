@@ -1,6 +1,6 @@
 import React from "react";
 import ImageSlider from "../components/ImageSlider";
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -8,46 +8,35 @@ import "../styles/ProductDetails.css";
 import { addItemToCart } from "../slices/CartSlice";
 import AdvPopUp from "../components/AdvPopUp";
 import AdoptFormPopUp from '../components/AdoptFormPopUp';
+import axios from "axios";
+import SuccessfulModal from "../../ZongMing/components/SuccessfulModal";
+import PulseLoader from "react-spinners/PulseLoader";
 
 const PetDetails = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { title } = useParams(); // Retrieve the service title from URL parameter
+  const { petId } = useParams(); 
 
-  const [imagesLoading, setImagesLoading] = useState(true);
-
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showAd, setShowAd] = useState(false); // State to control the advertisement popup
   const [showForm, setShowForm] = useState(false); // State to control the advertisement popup
 
-  const pet = useSelector((state) =>
-    state.pets.find((pet) => pet.title === title)
-  );
+  const user = useSelector((state)=>state.user.user);
+
   const cartItem = useSelector((state) => state.cart);
+  const pet = useSelector((state) =>
+    state.pets.find((pet) => pet._id === petId)
+  );
 
-  const [loadedImageUrls, setLoadedImageUrls] = useState([]);
-
-  useEffect(() => {
-    const loadImageUrls = async () => {
-      const loadedImages = [];
-      for (const image of pet.image) {
-        try {
-          if (image.includes("jpg")) {
-            let imageDir = image.substring(0, image.indexOf("."));
-            const imageData = await import(`../assets/images/${imageDir}.jpg`);
-            loadedImages.push(imageData.default);
-          } else {
-            loadedImages.push(image);
-          }
-        } catch (error) {
-          console.error("Error loading image:", error);
-        }
-      }
-      setLoadedImageUrls(loadedImages);
-      setImagesLoading(false);
-    };
-    loadImageUrls();
-  }, [pet.image]);
+  if (!pet) {
+    return (
+      <div className="wj-loadingContainer">
+          <PulseLoader size={"1.5rem"} color="#3C95A9" />
+          <p className="wj-loadingText">Loading Pet Details...</p>
+        </div>
+    );
+  }
 
   const handleNavigateBack = () => {
     navigate(-1); // Navigate back one step in history
@@ -58,81 +47,72 @@ const PetDetails = () => {
     if (random === 2) {
       setShowAd(true);
     } else {
-      navigate(-1);
+      
     }
   }
 
   const handleOnAdoptButtonClick = () => {
-    const petDetails = {
-      id: pet.id,
-      title: pet.title,
-      description: pet.description,
-      image: pet.image,
-      birthdate: pet.birthdate,
-      animaltag: pet.animaltag,
-      price: pet.price,
-      stockLevel: pet.stockLevel,
-      hidden: pet.hidden,
-      type: "pet",
-      quantity: 1,
-      checked: true,
-    };
+    // const petDetails = {
+    //   id: pet.id,
+    //   title: pet.title,
+    //   description: pet.description,
+    //   image: pet.image,
+    //   birthdate: pet.birthdate,
+    //   animaltag: pet.animaltag,
+    //   price: pet.price,
+    //   stockLevel: pet.stockLevel,
+    //   hidden: pet.hidden,
+    //   type: "pet",
+    //   quantity: 1,
+    //   checked: true,
+    // };
     setShowForm(true);
     console.log("Form should show"); // Check if this code block is executed
   }
 
-  const handleOnAddToCartButtonClick = () => {
-    const existingCartItem = cartItem.find((item) => item.id === pet.id);
-    if (existingCartItem) {
-      if (existingCartItem.stockLevel > existingCartItem.quantity) {
-        const petDetails = {
-          id: pet.id,
+
+  const handleOnAddToCartButtonClick = async () => {
+      const existingCartItem = cartItem.find(item => item.productId === pet._id);
+      if (existingCartItem && existingCartItem.quantity >= pet.stockLevel) {
+        alert('Cannot add more of this item. Stock level reached.');
+        return;
+      }else if((existingCartItem && existingCartItem.quantity < pet.stockLevel)||!existingCartItem){
+        const petDetails = [{
+          productId:pet._id,
           title: pet.title,
-          description: pet.description,
           image: pet.image,
-          birthdate: pet.birthdate,
-          animaltag: pet.animaltag,
           price: pet.price,
-          stockLevel: pet.stockLevel,
-          hidden: pet.hidden,
-          type: "pet",
-          quantity: existingCartItem.quantity + 1,
           checked: true,
-        };
-        dispatch(addItemToCart(petDetails));
-        randomAdPopup();
-      } else {
-        alert("Stock is not enough!");
+          quantity: 1,
+          type: "pet",
+        }];
+        try {
+            const addItemsResponse = await axios.post('http://localhost:4000/api/cart/add', {
+              username: user.username,
+              userId: user.userUid,
+              items: petDetails,
+            });
+            
+      
+            if (addItemsResponse.status === 201) {
+              randomAdPopup();
+              setShowSuccessModal(true);
+              dispatch(addItemToCart(petDetails));
+            } else {
+              alert("Add to Cart Failed. Please try again.");
+            }
+          } catch (error) {
+            console.error("Error adding items to database:", error);
+            alert("Checkout failed. Please try again.");
+        }
       }
-    } else {
-      const petDetails = {
-        id: pet.id,
-        title: pet.title,
-        description: pet.description,
-        image: pet.image,
-        birthdate: pet.birthdate,
-        animaltag: pet.animaltag,
-        price: pet.price,
-        stockLevel: pet.stockLevel,
-        hidden: pet.hidden,
-        type: "pet",
-        quantity: 1,
-        checked: true,
-      };
-      dispatch(addItemToCart(petDetails));
-      randomAdPopup();
-    }
   };
 
   return (
     <div className="product-details-container">
       <div className="top-side-container">
         <div className="left-side">
-          {imagesLoading ? (
-            <p>Loading images...</p>
-          ) : (
-            <ImageSlider images={loadedImageUrls} />
-          )}
+            <ImageSlider images={pet.image} />
         </div>
         <div className="right-side">
           <p className="product-details-title">{pet.title}</p>
@@ -143,7 +123,7 @@ const PetDetails = () => {
           <span className="product-details-birthdate">Birth Date: </span>
           <p className="product-details-birthdate-content">{pet.birthdate}</p>
           <p className="product-details-price">Price: RM {pet.price}</p>
-          <div className="button-container">
+          <div className="product-button-container">
             <button
               className="add-to-cart-button"
               onClick={pet.price === 0 ? handleOnAdoptButtonClick : handleOnAddToCartButtonClick}
@@ -164,10 +144,12 @@ const PetDetails = () => {
           </div>
         </div>
       </div>
-      <AdoptFormPopUp show={showForm} onClose={() => { setShowForm(false) }} whenSubmit={() => { setShowForm(false); alert("Your form is submitted. Thank you for your kindness."); setShowAd(true); }} />
-      <AdvPopUp show={showAd} onClose={() => { setShowAd(false); navigate(-1); }} />
+      <AdoptFormPopUp show={showForm} onClose={() => { setShowForm(false) }} />
+      <AdvPopUp show={showAd} onClose={() => { setShowAd(false);navigate(-1)}} />
+      <SuccessfulModal show={showSuccessModal} onClose={() => setShowSuccessModal(false)} message={"The pet has been added to your cart."} />
     </div >
   );
 };
 
 export default PetDetails;
+

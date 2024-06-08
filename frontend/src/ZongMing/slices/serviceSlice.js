@@ -1,11 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createSelector } from "reselect";
-// import dummyServiceData from "../data/dummyServiceData";
 
-// Create slice
 export const serviceSlice = createSlice({
   name: "services",
-  initialState: null,
+  initialState: [],
   reducers: {
     setInitialServices: (state, action) => {
       return [...action.payload];
@@ -14,60 +12,55 @@ export const serviceSlice = createSlice({
       return [action.payload, ...state];
     },
     addComment: (state, action) => {
-      const { serviceTitle, comment } = action.payload;
-      const service = state.find(
-        (service) => service.serviceTitle === serviceTitle
-      );
+      const { serviceId, serviceComments } = action.payload;
+      const service = state.find((service) => service._id === serviceId);
       if (service) {
-        service.comments.unshift(comment);
+        service.serviceComments.unshift(serviceComments);
       }
     },
     addRating: (state, action) => {
-      const { serviceTitle, rating } = action.payload;
+      const { serviceTitle, serviceRating } = action.payload;
       const service = state.find(
         (service) => service.serviceTitle === serviceTitle
       );
       if (service) {
-        // Update the total ratings count and specific rating count
-        service.ratings.total++;
-        service.ratings[rating]++;
+        service.serviceRating.total++;
+        service.serviceRating[serviceRating]++;
       }
     },
     removeComment: (state, action) => {
-      const { serviceTitle, commentContent } = action.payload;
-      const service = state.find(
-        (service) => service.serviceTitle === serviceTitle
-      );
+      const { serviceId, commentId } = action.payload;
+      const service = state.find((service) => service._id === serviceId);
       if (service) {
-        service.comments = service.comments.filter(
-          (comment) => comment.content !== commentContent
+        service.serviceComments = service.serviceComments.filter(
+          (comment) => comment._id !== commentId
         );
       }
     },
 
     editService: (state, action) => {
-      const { serviceTitle, updatedService } = action.payload;
+      const { serviceId, updatedService } = action.payload;
       const index = state.findIndex(
-        (service) => service.serviceTitle === serviceTitle
+        (service) => service.serviceId === serviceId
       );
       if (index !== -1) {
         state[index] = { ...state[index], ...updatedService };
       }
     },
     removeService: (state, action) => {
-      return state.filter((service) => service.serviceTitle !== action.payload);
+      return state.filter((service) => service._id !== action.payload);
     },
     hideService(state, action) {
-      const {serviceTitle} = action.payload;
-      const existingService = state.find((service) => service.serviceTitle === serviceTitle);
+      const { serviceId } = action.payload;
+      const existingService = state.find(
+        (service) => service._id === serviceId
+      );
       if (existingService) {
         existingService.hidden = !existingService.hidden;
       }
     },
   },
 });
-
-// Export actions
 export const {
   setInitialServices,
   addService,

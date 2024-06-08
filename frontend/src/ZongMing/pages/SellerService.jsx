@@ -1,13 +1,17 @@
 import "../styles/SellerService.css";
-import { useSelector } from "react-redux";
-import React, { useState, lazy, Suspense } from "react";
+import React, { useState, lazy, Suspense, useEffect } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { setInitialServices } from "../slices/serviceSlice";
+import PulseLoader from "react-spinners/PulseLoader";
 
 const SellerServiceCard = lazy(() => import("../components/SellerServiceCard"));
 
 function SellerService() {
-  const services = useSelector((state) => state.services);
+  const dispatch = useDispatch();
+  const allServices = useSelector((state) => state.services);
 
   const [isLoading] = useState(false);
 
@@ -15,6 +19,19 @@ function SellerService() {
   const handleNavigateToAddProduct = () => {
     navigate("/services/sellerService/add-service");
   };
+
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const response = await axios.get("http://localhost:4000/api/services");
+        dispatch(setInitialServices(response.data));
+      } catch (error) {
+        console.error("Error fetching services:", error);
+      }
+    };
+    fetchServices();
+  }, [dispatch]);
 
   return (
     <div>
@@ -59,12 +76,19 @@ function SellerService() {
           <div className="loadingContainer">
             <CircularProgress className="circularProgress" />
           </div>
-        ) : services.length !== 0 ? (
+        ) : allServices.length !== 0 ? (
           <>
             <div>
-              <Suspense fallback={<div>Loading...</div>}>
-                {services.map((service, index) => (
-                  <SellerServiceCard key={index} service={service} />
+              <Suspense
+                fallback={
+                  <div className="wj-loadingContainer">
+                    <PulseLoader size={"1.5rem"} color="#3C95A9" />
+                    <p className="wj-loadingText">Loading...</p>
+                  </div>
+                }
+              >
+                {allServices.map((service, index) => (
+                  <SellerServiceCard key={service._id} service={service} />
                 ))}
               </Suspense>
             </div>

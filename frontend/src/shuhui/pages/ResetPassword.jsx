@@ -1,9 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/Register.css";
+import axios from "axios";
+import "../styles/ResetPassword.css";
 import YellowTop from "../assets/images/yellow_top.png";
 import VerifyIcon from "../assets/images/verify_icon.png";
 import VerifyIconError from "../assets/images/error_verify_icon.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 function ResetPassword() {
   const [showVerify, setShowVerify] = useState(false);
@@ -14,6 +17,11 @@ function ResetPassword() {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  const [resetError, setResetError] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+
   const [codeError, setCodeError] = useState(false);
   const inputRefs = useRef([]);
   const navigate = useNavigate();
@@ -24,9 +32,9 @@ function ResetPassword() {
         (inputRef) => inputRef === document.activeElement
       );
       if (event.key === "Backspace" && index > 0 && !event.target.value) {
-        event.preventDefault(); // Prevent default backspace behavior
-        inputRefs.current[index - 1].value = ""; // Clear the value of the previous input
-        inputRefs.current[index - 1].focus(); // Focus on the previous input field
+        event.preventDefault();
+        inputRefs.current[index - 1].value = "";
+        inputRefs.current[index - 1].focus();
       }
     };
 
@@ -37,17 +45,23 @@ function ResetPassword() {
     };
   }, []);
 
-  const handleResetClick = (e) => {
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setConfirmPasswordVisible(!confirmPasswordVisible);
+  };
+
+  const handleResetClick = async (e) => {
     e.preventDefault();
 
-    // Validate email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setEmailError("Invalid email format");
       return;
     }
 
-    // Validate password
     const passwordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!passwordRegex.test(password)) {
@@ -62,11 +76,25 @@ function ResetPassword() {
       return;
     }
 
-    setShowVerify(true);
+    try {
+      const response = await axios.post(
+        "http://localhost:4000/api/auth/authentication/send-reset-email",
+        { email }
+      );
+      if (response.data.message) {
+        setShowSuccessMessage(true);
+      }
+    } catch (error) {
+      setResetError("Server is not connected.");
+    }
   };
 
   const handleInputChange = (index, value) => {
-    const newCode = [...verificationCode];
+    if (!/^\d*$/.test(value) || value.length > 1) {
+      return; // Prevent non-numeric input or more than one digit in a single input
+    }
+
+    const newCode = verificationCode.split("");
     newCode[index] = value;
     setVerificationCode(newCode.join(""));
 
@@ -74,41 +102,70 @@ function ResetPassword() {
       inputRefs.current[index + 1].focus();
     }
 
-    if (newCode.length === 6) {
-      if (newCode.join("") === "123456") {
-        navigate("/authentication/login"); // Redirect to product page if code is correct
-      } else {
-        setCodeError(true);
-        // Clear all input fields if code is incorrect
-        setVerificationCode("");
-        inputRefs.current[0].focus(); // Focus on the first input field
-        inputRefs.current.forEach((inputRef) => {
-          inputRef.classList.add("invalid"); // Add "invalid" class to all input fields
-        });
+    setCodeError(false);
 
-        // setTimeout(() => {
-        //   // Reset the input fields to original color after 1 second
-        //   inputRefs.current.forEach((inputRef) => {
-        //     inputRef.classList.remove("invalid"); // Remove "invalid" class
-        //   });
-        // }, 1000); // 1000 milliseconds = 1 second
-      }
+    if (newCode.join("").length === 6) {
+      handleVerificationSubmit(newCode.join(""));
     } else {
       inputRefs.current.forEach((inputRef) => {
-        inputRef.classList.remove("invalid"); // Remove "invalid" class
-      }); // Reset codeError when code is being retyped
+        inputRef.classList.remove("invalid");
+      });
     }
   };
 
-  const handleResendClick = () => {
-    // Add logic to resend verification code
-    setCodeError(false);
-    setTimeout(() => {
-      // Reset the input fields to original color after 1 second
+  const handleVerificationSubmit = async (code) => {
+    try {
+      console.log(code); // This will log the 6-digit code to the console
+      const response = await axios.post(
+        "http://localhost:4000/api/auth/authentication/verify-reset-password",
+        {
+          email,
+          verificationCode: code,
+          newPassword: password,
+        }
+      );
+
+      if (response.data.message === "Password reset successful") {
+        navigate("/authentication/login");
+      } else {
+        setCodeError(true);
+        setVerificationCode("");
+        inputRefs.current[0].focus();
+        inputRefs.current.forEach((inputRef) => {
+          inputRef.classList.add("invalid");
+        });
+      }
+    } catch (error) {
+      setCodeError(true);
+      setVerificationCode("");
+      inputRefs.current[0].focus();
       inputRefs.current.forEach((inputRef) => {
-        inputRef.classList.remove("invalid"); // Remove "invalid" class
+        inputRef.classList.add("invalid");
       });
-    }, 100);
+    }
+  };
+
+  const handleResendClick = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:4000/api/auth/authentication/resend-reset-code",
+        { email: email }
+      );
+      if (response.status === 200) {
+        setCodeError(false);
+        setTimeout(() => {
+          inputRefs.current.forEach((inputRef) => {
+            inputRef.classList.remove("invalid");
+          });
+        }, 100);
+        setShowSuccessMessage(true);
+      }
+    } catch (error) {
+      console.error("Error resending verification code:", error);
+      alert(
+        "An error occurred while resending the verification code. Please try again later."
+      );
+    }
   };
 
   return (
@@ -116,12 +173,12 @@ function ResetPassword() {
       <img className="yellow-top" src={YellowTop} alt="yellowtop" />
       {!showVerify ? (
         <div className="reset-password-pages">
-          <div className="register-component">
-            <h1 className="register-title">Reset Password</h1>
-            <form className="register-container" onSubmit={handleResetClick}>
+          <div className="reset-component">
+            <h1 className="reset-title">Reset Password</h1>
+            <form className="reset-container" onSubmit={handleResetClick}>
               <input
                 required
-                className="register-email"
+                className="reset-email"
                 type="email"
                 placeholder="Email"
                 value={email}
@@ -131,34 +188,50 @@ function ResetPassword() {
                 }}
               />
               {emailError && <p className="error-message">{emailError}</p>}
-              <input
-                required
-                className="register-password"
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  setPasswordError("");
-                }}
-              />
+              <div className="password-container">
+                <input
+                  required
+                  className="reset-password"
+                  type={passwordVisible ? "text" : "password"}
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setPasswordError("");
+                  }}
+                />
+                <FontAwesomeIcon
+                  icon={passwordVisible ? faEyeSlash : faEye}
+                  className="password-toggle-icon"
+                  onClick={togglePasswordVisibility}
+                />
+              </div>
               {passwordError && (
                 <p className="error-message">{passwordError}</p>
               )}
-              <input
-                required
-                className="register-confirmpassword"
-                type="password"
-                placeholder="Confirmed Password"
-                value={confirmedPassword}
-                onChange={(e) => {
-                  setConfirmedPassword(e.target.value);
-                  setPasswordError("");
-                }}
-              />
+              <div className="password-container">
+                <input
+                  required
+                  className="reset-confirmpassword"
+                  type={confirmPasswordVisible ? "text" : "password"}
+                  placeholder="Confirmed Password"
+                  value={confirmedPassword}
+                  onChange={(e) => {
+                    setConfirmedPassword(e.target.value);
+                    setConfirmPasswordError("");
+                  }}
+                />
+                <FontAwesomeIcon
+                  icon={confirmPasswordVisible ? faEyeSlash : faEye}
+                  className="password-toggle-icon"
+                  onClick={toggleConfirmPasswordVisibility}
+                />
+              </div>
               {confirmPasswordError && (
                 <p className="error-message">{confirmPasswordError}</p>
               )}
+
+              {resetError && <div className="error-register">{resetError}</div>}
               <button className="reset-button" type="submit">
                 RESET
               </button>
@@ -166,42 +239,49 @@ function ResetPassword() {
           </div>
         </div>
       ) : (
-        <div className="register-verify">
-          {codeError ? ( // Check if codeError is true
-            <div>
+        <div className="reset-verify">
+          {codeError ? (
+            <div className="icon-container">
               <img
-                className="verify-icon"
+                className="verify-icon-reset"
                 src={VerifyIconError}
                 alt="verifyicon"
               />
-              <p className="verify-text-error">Invalid code. Try again.</p>
+              <p className="verify-text-error-reset">
+                Invalid code. Try again.
+              </p>
             </div>
           ) : (
-            <div>
-              <img className="verify-icon" src={VerifyIcon} alt="verifyicon" />
-              <p className="verify-text">
+            <div className="icon-container">
+              <img
+                className="verify-icon-reset"
+                src={VerifyIcon}
+                alt="verifyicon"
+              />
+              <p className="verify-text-reset">
                 Please enter your verification code here.
               </p>
             </div>
           )}
-          <form className="verification-code-container">
-            {Array.from({ length: 6 }).map((_, index) => (
-              <input
-                key={index}
-                ref={(el) => (inputRefs.current[index] = el)}
-                className="verification-code-input"
-                type="number"
-                min="0"
-                max="9"
-                value={verificationCode[index] || ""}
-                onChange={(e) => handleInputChange(index, e.target.value, e)}
-              />
-            ))}
-          </form>
-          <p className="re-send">
+          <div className="icon-container">
+            <form className="verification-code-container-reset">
+              {Array.from({ length: 6 }).map((_, index) => (
+                <input
+                  key={index}
+                  ref={(el) => (inputRefs.current[index] = el)}
+                  className="verification-code-input-reset"
+                  type="text"
+                  maxLength="1"
+                  value={verificationCode[index] || ""}
+                  onChange={(e) => handleInputChange(index, e.target.value)}
+                />
+              ))}
+            </form>
+          </div>
+          <p className="re-send-reset">
             Didn't receive it ?{" "}
             <button
-              className="resend-button"
+              className="resend-button-reset"
               onClick={handleResendClick}
               type="button"
             >
@@ -210,6 +290,40 @@ function ResetPassword() {
           </p>
         </div>
       )}
+      {showSuccessMessage && (
+        <div style={{ zIndex: 100 }} className="forumPostDeleteBackground">
+          <div className="forumPostDeleteContainer">
+            <h2>The verification code has been sent to your email.</h2>
+            <div className="forumPostDeleteButtonContainer">
+              <button
+                className="deleteForumPostButton"
+                onClick={() => {
+                  setShowSuccessMessage(false);
+                  setShowVerify(true);
+                }}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* {showSuccessMessage && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h2>Success!</h2>
+            <p>The verification code has been sent to your email.</p>
+            <button
+              onClick={() => {
+                setShowSuccessMessage(false);
+                setShowVerify(true);
+              }}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )} */}
     </div>
   );
 }
