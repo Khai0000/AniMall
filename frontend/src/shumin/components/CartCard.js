@@ -20,11 +20,13 @@ const CartCard = ({ product }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
   const productInStock = useSelector((state) =>
-    state.products.find(products => products._id === product.productId)
+    state.products.find((products) => products._id === product.productId)
   );
-  
+
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+
   const petInStock = useSelector((state) =>
-    state.pets.find(pet => pet._id === product.productId)
+    state.pets.find((pet) => pet._id === product.productId)
   );
 
   useEffect(() => {
@@ -57,7 +59,7 @@ const CartCard = ({ product }) => {
         `http://localhost:4000/api/cart/remove/${userId}/${itemIdDeId}`
       );
 
-      if(product.type==="service"){
+      if (product.type === "service") {
         await axios.post(
           `http://localhost:4000/api/services/${serviceId}/update-availability`,
           {
@@ -71,23 +73,31 @@ const CartCard = ({ product }) => {
       dispatch(removeItemFromCart(product._id));
     } catch (error) {
       console.error("Error removing cart item:", error);
+    } finally {
+      setShowDeletePopup(false);
     }
   };
 
   const handleCheckboxClick = async () => {
     const newCheckedValue = !isChecked;
     setIsChecked(newCheckedValue);
-    try{
-       const response = await axios.put(`http://localhost:4000/api/cart/update/checked/${product._id}/${user.userUid}`,{
-        checked:newCheckedValue
-       });
-       if(response.status===200){
-          dispatch(
-            updateChecked({ productId: product.productId, checked: newCheckedValue })
-          );
-          console.log("checkbox update successfully");
-       }
-    }catch(error){
+    try {
+      const response = await axios.put(
+        `http://localhost:4000/api/cart/update/checked/${product._id}/${user.userUid}`,
+        {
+          checked: newCheckedValue,
+        }
+      );
+      if (response.status === 200) {
+        dispatch(
+          updateChecked({
+            productId: product.productId,
+            checked: newCheckedValue,
+          })
+        );
+        console.log("checkbox update successfully");
+      }
+    } catch (error) {
       console.log("Fail to update checkbox in cart");
     }
   };
@@ -96,30 +106,52 @@ const CartCard = ({ product }) => {
     const newQuantity = parseInt(event.target.value, 10);
 
     if (!isNaN(newQuantity) && newQuantity > 0) {
-        if ((product.type === "product" )&& (newQuantity > productInStock.stockLevel)){
-          alert("Cannot add more than available stock! (Only "+productInStock.stockLevel+" available)");
-          return; // Exit early if exceeding stock level
-        }else if((product.type === "pet" )&& (newQuantity > petInStock.stockLevel)){
-          alert("Cannot add more than available stock! (Only "+petInStock.stockLevel+" available)");
-          return; // Exit early if exceeding stock level
-        }else{
-          setQuantity(newQuantity);
-          try{
-            const response = await axios.put(`http://localhost:4000/api/cart/update/quantity/${product._id}/${user.userUid}`,{
-              quantity:newQuantity
-            });
-            if(response.status===200){
-              dispatch(updateQuantity({ id: response.data.data._id, quantity: newQuantity }));
-              console.log("Successfully update the quantity of item in cart");
+      if (
+        product.type === "product" &&
+        newQuantity > productInStock.stockLevel
+      ) {
+        alert(
+          "Cannot add more than available stock! (Only " +
+            productInStock.stockLevel +
+            " available)"
+        );
+        return; // Exit early if exceeding stock level
+      } else if (
+        product.type === "pet" &&
+        newQuantity > petInStock.stockLevel
+      ) {
+        alert(
+          "Cannot add more than available stock! (Only " +
+            petInStock.stockLevel +
+            " available)"
+        );
+        return; // Exit early if exceeding stock level
+      } else {
+        setQuantity(newQuantity);
+        try {
+          const response = await axios.put(
+            `http://localhost:4000/api/cart/update/quantity/${product._id}/${user.userUid}`,
+            {
+              quantity: newQuantity,
             }
-          }catch(error){
-              console.log("Fail to update quantity in cart: "+error);
+          );
+          if (response.status === 200) {
+            dispatch(
+              updateQuantity({
+                id: response.data.data._id,
+                quantity: newQuantity,
+              })
+            );
+            console.log("Successfully update the quantity of item in cart");
           }
+        } catch (error) {
+          console.log("Fail to update quantity in cart: " + error);
         }
-      }else if (event.target.value === "") {
-        // Handle case when input is empty (allow deletion)
-        setQuantity(""); // Assuming quantity is a string in your state
       }
+    } else if (event.target.value === "") {
+      // Handle case when input is empty (allow deletion)
+      setQuantity(""); // Assuming quantity is a string in your state
+    }
   };
 
   const handleKeyPress = (event) => {
@@ -137,25 +169,41 @@ const CartCard = ({ product }) => {
       newQuantity += 1;
     }
 
-    if ((product.type === "product" )&& (newQuantity > productInStock.stockLevel)){
-      alert("Cannot add more than available stock! (Only "+productInStock.stockLevel+" available)");
+    if (product.type === "product" && newQuantity > productInStock.stockLevel) {
+      alert(
+        "Cannot add more than available stock! (Only " +
+          productInStock.stockLevel +
+          " available)"
+      );
       return; // Exit early if exceeding stock level
-    }else if((product.type === "pet" )&& (newQuantity > petInStock.stockLevel)){
-      alert("Cannot add more than available stock! (Only "+petInStock.stockLevel+" available)");
+    } else if (product.type === "pet" && newQuantity > petInStock.stockLevel) {
+      alert(
+        "Cannot add more than available stock! (Only " +
+          petInStock.stockLevel +
+          " available)"
+      );
       return; // Exit early if exceeding stock level
-    }else{
+    } else {
       setQuantity(newQuantity);
-      try{
-        const response = await axios.put(`http://localhost:4000/api/cart/update/quantity/${product._id}/${user.userUid}`,{
-          quantity:newQuantity
-        });
-        if(response.status===200){
+      try {
+        const response = await axios.put(
+          `http://localhost:4000/api/cart/update/quantity/${product._id}/${user.userUid}`,
+          {
+            quantity: newQuantity,
+          }
+        );
+        if (response.status === 200) {
           // Dispatch editProduct action with updated quantity
-          dispatch(updateQuantity({ id: response.data.data._id, quantity: newQuantity }));
+          dispatch(
+            updateQuantity({
+              id: response.data.data._id,
+              quantity: newQuantity,
+            })
+          );
           console.log("Successfully update the quantity of item in cart");
         }
-      }catch(error){
-          console.log("Fail to update quantity in cart: "+error);
+      } catch (error) {
+        console.log("Fail to update quantity in cart: " + error);
       }
     }
   };
@@ -281,7 +329,7 @@ const CartCard = ({ product }) => {
         <div className="seller-product-card-remove-button-container">
           <button
             className="seller-product-card-remove-button"
-            onClick={handleOnRemoveClicked}
+            onClick={() => setShowDeletePopup(true)}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -310,6 +358,41 @@ const CartCard = ({ product }) => {
           stroke-width="1"
         />
       </svg>
+      {showDeletePopup && (
+        <div
+          className="forumPostDeleteBackground"
+          onClick={(e) => {
+            setShowDeletePopup(false);
+            e.stopPropagation();
+          }}
+        >
+          <div
+            className="forumPostDeleteContainer"
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            <h2>Are you sure you want to remove this item?</h2>
+            <div className="forumPostDeleteButtonContainer">
+              <button
+                className="deleteForumPostButton"
+                onClick={handleOnRemoveClicked}
+              >
+                Remove
+              </button>
+              <button
+                className="deleteForumCloseButton"
+                onClick={(e) => {
+                  setShowDeletePopup(false);
+                  e.stopPropagation();
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
