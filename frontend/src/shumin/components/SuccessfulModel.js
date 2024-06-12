@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import "../styles/SuccessModal.css";
 const SuccessfulModal = ({ show, onClose, message }) => {
   if (!show) {
@@ -6,11 +6,28 @@ const SuccessfulModal = ({ show, onClose, message }) => {
   }
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <h2>Success!</h2>
-        <p>{message}</p>
-        <button onClick={onClose}>Close</button>
+    <div
+      style={{ zIndex: 1000 }}
+      className="forumPostDeleteBackground"
+      onClick={onClose}
+    >
+      <div
+        className="forumPostDeleteContainer"
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+      >
+        {message ? (
+          <h2>{message}</h2>
+        ) : (
+          <h2>The service has been added to your cart.</h2>
+        )}
+
+        <div className="forumPostDeleteButtonContainer">
+          <button className="deleteForumPostButton" onClick={onClose}>
+            Close
+          </button>
+        </div>
       </div>
     </div>
   );

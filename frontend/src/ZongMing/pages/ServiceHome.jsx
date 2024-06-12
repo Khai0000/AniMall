@@ -52,23 +52,23 @@ const ServiceHome = () => {
         service.serviceTitle.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    if (minPrice.length !== 0 && maxPrice.length === 0) {
+    if (minPrice !== 0 && maxPrice === 0) {
       filteredData = filteredData.filter(
-        (service) => service.servicePrice > minPrice
+        (service) => service.servicePrice >= minPrice
       );
     }
 
-    if (minPrice.length === 0 && maxPrice.length !== 0) {
+    if (minPrice === 0 && maxPrice !== 0) {
       filteredData = filteredData.filter(
-        (service) => service.servicePrice < maxPrice
+        (service) => service.servicePrice <= maxPrice
       );
     }
 
-    if (minPrice.length !== 0 && maxPrice.length !== 0) {
+    if (minPrice !== 0 && maxPrice !== 0) {
       filteredData = filteredData.filter(
         (service) =>
-          service.servicePrice > minPrice &&
-          service.servicePrice < maxPrice
+          service.servicePrice >= minPrice &&
+          service.servicePrice <= maxPrice
       );
     }
 
@@ -80,8 +80,8 @@ const ServiceHome = () => {
   };
 
   const handlePriceRangeChange = (min, max) => {
-    setMinPrice(min);
-    setMaxPrice(max);
+    setMinPrice(Number(min));
+    setMaxPrice(Number(max));
   };
 
   useEffect(() => {
